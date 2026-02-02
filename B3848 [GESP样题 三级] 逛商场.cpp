@@ -11,12 +11,14 @@ signed main() {
     cin >> n;
     for (int i = 1; i <= n; i++) {
         cin >> a[i];
+    }
+    cin >> x;
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i];
         if (x >= a[i]) {
             x -= a[i];
             cnt++;
-        } else {
-            break;
-        }
+        } 
     }
     cout << cnt;
     return 0;
