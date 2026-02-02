@@ -1,0 +1,59 @@
+\documentclass[a4paper, 12pt, draft]{ctexart}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\begin{document}
+% 封面信息
+\title{\LaTeX 测试代码}
+\author{作者}
+\date{\today}
+\maketitle
+ 
+\newpage
+\setcounter{tocdepth}{2} %设置目录深度
+\tableofcontents
+ 
+\section{题目} 内容
+\subsection{title} 内容
+\subsection{title} 内容
+\subsubsection{小小节} 内容
+\subsubsection{小小节} 内容
+\section{题目} 内容
+\subsection{title} 内容
+\subsection{title} 内容
+\section{题目} 内容
+\subsection{title} 内容
+\subsection{title} 内容
+\section{测试-节} 内容
+\uline{uline}  \uuline{uuline} \uwave{uwave}  \sout{sout}
+\xout{xout}  \dashuline{dashuline} \dotuline{dotuline}
+\emph{emph}
+\begin{flushleft}
+    居左\\段落
+\end{flushleft}
+ 
+\begin{flushright}
+    居右\\段落
+\end{flushright}
+ 
+\begin{center}
+    居中\\段落
+\end{center}
+ 
+\section{数学公式测试}
+\emph{行内公式：}
+$\sum_{i=1}^n i^2 = \frac{1}{6}n(n+1)(2n+1)$
+ 
+ 
+\emph{行间公式：}
+\[\sum_{i=1}^n i^2 = \frac{n(n+1)(2n+1)}{6}\]
+ 
+ 
+\emph{内联公式：}
+给定两个矩阵 \( A \) 和 \( B \)，若要进行矩阵乘法，其中 \( A \) 是一个 \( m \times n \) 矩阵，\( B \) 是一个 \( n \times p \) 矩阵，那么它们的乘积矩阵 \( C = AB \) 是一个 \( m \times p \) 矩阵，其元素 \( c_{ij} \) 的计算方式如下：
+\emph{行间公式：}
+ 
+\[
+c_{ij} = \sum_{k=1}^{n} a_{ik} b_{kj}, \quad i = 1, 2, \ldots, m; \quad j = 1, 2, \ldots, p.  
+\]
+ 
+\end{document}
