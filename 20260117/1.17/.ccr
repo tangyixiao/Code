@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<contest maker="ccr-plus" version="1.1.0">
+    <order>
+        <problem>shirt</problem>
+        <problem>rect</problem>
+        <problem>pali</problem>
+        <problem>sum</problem>
+        <problem>plane</problem>
+    </order>
+</contest>

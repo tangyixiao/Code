@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<task score="0" state="N" time="0.123">
+    <subtask score="0">
+        <point state="W" ratio="0" note="第2行 标准输出:&quot;5 8 10&quot; 选手输出已结尾"/>
+    </subtask>
+    <subtask score="0">
+        <point state="W" ratio="0" note="第2行 标准输出:&quot;10&quot; 选手输出:&quot;Region #2:&quot;"/>
+    </subtask>
+    <subtask score="0">
+        <point state="W" ratio="0" note="第2行 标准输出:&quot;8736&quot; 选手输出:&quot;Region #2:&quot;"/>
+    </subtask>
+    <subtask score="0">
+        <point state="W" ratio="0" note="第2行 标准输出:&quot;312 294 299…&quot; 选手输出:&quot;Region #2:&quot;"/>
+    </subtask>
+    <subtask score="0">
+        <point state="W" ratio="0" note="第2行 标准输出:&quot;173 166 181…&quot; 选手输出:&quot;Region #2:&quot;"/>
+    </subtask>
+    <subtask score="0">
+        <point state="W" ratio="0" note="第2行 标准输出:&quot;9444 9443 9…&quot; 选手输出:&quot;Region #2:&quot;"/>
+    </subtask>
+    <subtask score="0">
+        <point state="W" ratio="0" note="第2行 标准输出:&quot;254663 2546…&quot; 选手输出:&quot;Region #2:&quot;"/>
+    </subtask>
+    <subtask score="0">
+        <point state="W" ratio="0" note="第2行 标准输出:&quot;19836 19835…&quot; 选手输出:&quot;Region #2:&quot;"/>
+    </subtask>
+    <subtask score="0">
+        <point state="W" ratio="0" note="第2行 标准输出:&quot;9929 9936 9…&quot; 选手输出:&quot;Region #2:&quot;"/>
+    </subtask>
+    <subtask score="0">
+        <point state="W" ratio="0" note="第2行 标准输出:&quot;19863 19863…&quot; 选手输出:&quot;Region #2:&quot;"/>
+    </subtask>
+</task>
