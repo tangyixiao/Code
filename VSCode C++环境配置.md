@@ -1,4 +1,7 @@
 # Windows
+
+这里的 Windows 版本默认你是 Windows 8.1 64 位及以上，若是 Windows 7 请自行安装兼容器或兼容版本。
+
 ## VSCode 安装
 [官网](https://code.visualstudio.com/)
 
@@ -35,9 +38,34 @@
 
 记下这个路径，不一定要像我一样装在D盘。
 
-在cmd命令提示符窗口中输入gcc -v查看版本。
+---
 
-出现一下界面说明成功：
+这里 msys2 Windows 7 也可以装。
+
+
+或者还有一种方法，去 [msys2](https://www.msys2.org/) 官网下载[安装包](https://github.com/msys2/msys2-installer/releases/download/2025-12-13/msys2-x86_64-20251213.exe)，注意官网的安装包地址也是在 github 上的，如果下不了检查网络原因。
+
+下载完成后，打开运行程序，有个是添加路径，建议添加到非系统盘，如果你想要断网安装的话请在开始安装前就断网，这样子比较快；如果你想联网安装的话你就可以在后台运行这个程序半个小时到一个小时不等，直到安装完成。
+
+安装完成要勾选 Run MSYS2 或运行 MSYS2，或者再开始菜单运行 MSYS2，然后在终端中输入以下命令安装所有工具包：
+
+```bash
+pacman -Syu
+pacman -Su
+pacman -S --needed base-devel mingw-w64-ucrt-x86_64-toolchain
+pacman -S --needed base-devel mingw-w64-x86_64-toolchain
+```
+
+按回车，输入 `y` 确认安装。
+
+按照以上步骤，添加用户和系统环境变量，如：`D:\msys64\ucrt64\bin` 和 `D:\msys64\mingw64\bin` 。
+
+## 验证
+
+
+在cmd命令提示符窗口中输入`gcc -v`，`g++ -v` 和 `gdb -v` 查看版本。
+
+出现类似于一下界面说明成功：
 ![](https://gitee.com/tangyixiaoqaq/images/raw/master/imgs/202507241411038.png)
 
 下载后非中文的文件已经可以运行了，注意要在终端中的 gdb 进行调试。
@@ -48,7 +76,7 @@
 
 打开VSCode，在你所打开的文件夹下打开或新建 `.vscode` 文件夹，在里面创建 `c_cpp_properties.json` , `tasks.json` 和 `launch.json`。
 
-将下面 `D:\\x86_64-13.2.0-release-win32-seh-msvcrt-rt_v11-rev0\\mingw64\\···` 改成你自己的 MinGW 的路径，注意要使用双反斜杠，尽量不要用中文。
+将下面 `D:\\x86_64-13.2.0-release-win32-seh-msvcrt-rt_v11-rev0\\mingw64\\···` 改成你自己的 MinGW 或 MSYS2 的路径，注意要使用双反斜杠，尽量不要用中文。
 
 ### c_cpp_properties.json
 ```json
