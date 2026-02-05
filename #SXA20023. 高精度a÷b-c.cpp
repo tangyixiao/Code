@@ -5,20 +5,20 @@ using namespace std;
 using namespace __gnu_pbds;
 using namespace __gnu_cxx;
 class ZeroDivisionError : public std::exception {
-public:
-    const char* what() const throw() { return "Division is zero"; }
+  public:
+    const char *what() const throw() { return "Division is zero"; }
 };
 class FFTLimitExceededError : public std::exception {
-public:
-    const char* what() const throw() { return "FFT limit exceeded"; }
+  public:
+    const char *what() const throw() { return "FFT limit exceeded"; }
 };
 class NegativeRadicandError : public std::exception {
-public:
-    const char* what() const throw() { return "Radicand is negative"; }
+  public:
+    const char *what() const throw() { return "Radicand is negative"; }
 };
 
 class BigInteger {
-protected:
+  protected:
     using digit_t = long long;
 
     static constexpr int WIDTH = 8;
@@ -29,11 +29,11 @@ protected:
     static constexpr long long NEWTON_SQRT_LIMIT = 48;
     static constexpr long long NEWTON_SQRT_MIN_LEVEL = 5;
 
-    digit_t* digits;
+    digit_t *digits;
     int capacity, size;
     bool flag;
 
-    BigInteger(const digit_t* in, int len) : digits(nullptr), flag(true) {
+    BigInteger(const digit_t *in, int len) : digits(nullptr), flag(true) {
         while (len > 0 && in[len - 1] == 0)
             len--, in++;
         size = len, digits = new digit_t[len + 1];
@@ -42,49 +42,50 @@ protected:
             digits[i + 1] = in[i];
     }
 
-    inline void push(const digit_t&);
+    inline void push(const digit_t &);
     inline void pop();
 
-    BigInteger& build_binary(const std::vector<bool>&);
+    BigInteger &build_binary(const std::vector<bool> &);
 
-    inline int compare(const BigInteger&) const;
+    inline int compare(const BigInteger &) const;
 
-    static inline BigInteger fft_mul(const BigInteger&, const BigInteger&);
+    static inline BigInteger fft_mul(const BigInteger &, const BigInteger &);
 
     BigInteger newton_inv(int) const;
-    inline std::pair<BigInteger, BigInteger> newton_div(const BigInteger&) const;
+    inline std::pair<BigInteger, BigInteger> newton_div(const BigInteger &) const;
     BigInteger newton_invsqrt() const;
     BigInteger sqrt_normal() const;
 
-public:
-    inline void reserve(const int&);
+  public:
+    inline void reserve(const int &);
 
-protected:
-    inline void resize(const int&);
+  protected:
+    inline void resize(const int &);
 
-public:
+  public:
     BigInteger() : digits(nullptr), flag(true) { *this = 0LL; }
 
-    BigInteger(const BigInteger& x) : digits(nullptr) { *this = x; }
-    BigInteger(const long long& x) : digits(nullptr) { *this = x; }
-    BigInteger(const std::string& s) : digits(nullptr) { *this = s; }
-    BigInteger(const std::vector<bool>& b) : digits(nullptr) { *this = b; }
-    template <class BoolIt>
-    BigInteger(const BoolIt& begin, const BoolIt& end) : digits(nullptr) { *this = std::vector<bool>(begin, end); }
+    BigInteger(const BigInteger &x) : digits(nullptr) { *this = x; }
+    BigInteger(const long long &x) : digits(nullptr) { *this = x; }
+    BigInteger(const std::string &s) : digits(nullptr) { *this = s; }
+    BigInteger(const std::vector<bool> &b) : digits(nullptr) { *this = b; }
+    template <class BoolIt> BigInteger(const BoolIt &begin, const BoolIt &end) : digits(nullptr) {
+        *this = std::vector<bool>(begin, end);
+    }
 
-    BigInteger& operator=(const BigInteger&);
-    BigInteger& operator=(const long long&);
-    BigInteger& operator=(const std::string&);
-    BigInteger& operator=(const std::vector<bool>&);
+    BigInteger &operator=(const BigInteger &);
+    BigInteger &operator=(const long long &);
+    BigInteger &operator=(const std::string &);
+    BigInteger &operator=(const std::vector<bool> &);
 #ifdef __SIZEOF_INT128__
-    BigInteger& from_int128(const __int128&);
+    BigInteger &from_int128(const __int128 &);
     __int128 to_int128() const;
 #endif
 
     void clear();
     ~BigInteger() { clear(); }
 
-    friend std::ostream& operator<<(std::ostream& out, const BigInteger& x) {
+    friend std::ostream &operator<<(std::ostream &out, const BigInteger &x) {
         if (!x.flag)
             out << '-';
         out << (long long)x.digits[x.size];
@@ -92,7 +93,7 @@ public:
             out << std::setw(WIDTH) << std::setfill('0') << (long long)x.digits[i];
         return out;
     }
-    friend std::istream& operator>>(std::istream& in, BigInteger& x) {
+    friend std::istream &operator>>(std::istream &in, BigInteger &x) {
         std::string s;
         in >> s;
         x = s;
@@ -108,78 +109,78 @@ public:
     BigInteger operator~() const;
     BigInteger abs() const;
 
-    bool operator==(const BigInteger&) const;
+    bool operator==(const BigInteger &) const;
 #if __cplusplus >= 202002L
-    auto operator<=>(const BigInteger&) const;
+    auto operator<=>(const BigInteger &) const;
 #else
-    bool operator<(const BigInteger&) const;
-    bool operator>(const BigInteger&) const;
-    bool operator!=(const BigInteger&) const;
-    bool operator<=(const BigInteger&) const;
-    bool operator>=(const BigInteger&) const;
+    bool operator<(const BigInteger &) const;
+    bool operator>(const BigInteger &) const;
+    bool operator!=(const BigInteger &) const;
+    bool operator<=(const BigInteger &) const;
+    bool operator>=(const BigInteger &) const;
 #endif
 
     BigInteger div2() const;
-    std::pair<BigInteger, BigInteger> divmod(const BigInteger&, bool = false) const;
+    std::pair<BigInteger, BigInteger> divmod(const BigInteger &, bool = false) const;
 
-    BigInteger operator+(const BigInteger&) const;
-    BigInteger operator-(const BigInteger&) const;
-    BigInteger operator*(const int&) const;
-    BigInteger operator*(const BigInteger&) const;
-    BigInteger operator/(const long long&) const;
-    BigInteger operator/(const BigInteger&) const;
-    BigInteger operator%(const long long&) const;
-    BigInteger operator%(const BigInteger&) const;
+    BigInteger operator+(const BigInteger &) const;
+    BigInteger operator-(const BigInteger &) const;
+    BigInteger operator*(const int &) const;
+    BigInteger operator*(const BigInteger &) const;
+    BigInteger operator/(const long long &) const;
+    BigInteger operator/(const BigInteger &) const;
+    BigInteger operator%(const long long &) const;
+    BigInteger operator%(const BigInteger &) const;
 
-    BigInteger pow(const long long&) const;
-    BigInteger pow(const long long&, const BigInteger&) const;
+    BigInteger pow(const long long &) const;
+    BigInteger pow(const long long &, const BigInteger &) const;
 
-    BigInteger root(const long long& = 2) const;
+    BigInteger root(const long long & = 2) const;
     BigInteger sqrt() const;
 
-    BigInteger gcd(const BigInteger&) const;
-    BigInteger lcm(const BigInteger&) const;
+    BigInteger gcd(const BigInteger &) const;
+    BigInteger lcm(const BigInteger &) const;
 
     inline BigInteger _move_l(int) const;
     inline BigInteger _move_r(int) const;
 
-    BigInteger& operator+=(const BigInteger&);
-    BigInteger& operator-=(const BigInteger&);
-    BigInteger& operator*=(int);
-    BigInteger& operator*=(const BigInteger&);
-    BigInteger& operator/=(const long long&);
-    BigInteger& operator/=(const BigInteger&);
-    BigInteger& operator%=(const long long&);
-    BigInteger& operator%=(const BigInteger&);
+    BigInteger &operator+=(const BigInteger &);
+    BigInteger &operator-=(const BigInteger &);
+    BigInteger &operator*=(int);
+    BigInteger &operator*=(const BigInteger &);
+    BigInteger &operator/=(const long long &);
+    BigInteger &operator/=(const BigInteger &);
+    BigInteger &operator%=(const long long &);
+    BigInteger &operator%=(const BigInteger &);
 
-    BigInteger operator<<(const long long&);
-    BigInteger operator>>(const long long&);
-    BigInteger& operator<<=(const long long&);
-    BigInteger& operator>>=(const long long&);
+    BigInteger operator<<(const long long &);
+    BigInteger operator>>(const long long &);
+    BigInteger &operator<<=(const long long &);
+    BigInteger &operator>>=(const long long &);
 
-    BigInteger operator&(const BigInteger&);
-    BigInteger operator|(const BigInteger&);
-    BigInteger operator^(const BigInteger&);
-    BigInteger& operator&=(const BigInteger&);
-    BigInteger& operator|=(const BigInteger&);
-    BigInteger& operator^=(const BigInteger&);
+    BigInteger operator&(const BigInteger &);
+    BigInteger operator|(const BigInteger &);
+    BigInteger operator^(const BigInteger &);
+    BigInteger &operator&=(const BigInteger &);
+    BigInteger &operator|=(const BigInteger &);
+    BigInteger &operator^=(const BigInteger &);
 
-    BigInteger& operator++();
+    BigInteger &operator++();
     BigInteger operator++(int);
-    BigInteger& operator--();
+    BigInteger &operator--();
     BigInteger operator--(int);
 
-    static BigInteger factorial(const long long&);
+    static BigInteger factorial(const long long &);
 };
 
-inline void BigInteger::push(const digit_t& val) {
+inline void BigInteger::push(const digit_t &val) {
     if (size == capacity) {
         int new_capacity = 0;
         if (capacity < 256)
             new_capacity = capacity << 1;
         else
             new_capacity = std::pow(capacity + 1, 0.125) * capacity;
-        digit_t* new_digits = new digit_t[new_capacity + 1];
+        digit_t *new_digits = new digit_t[new_capacity + 1];
         std::memcpy(new_digits, digits, sizeof(long long) * (capacity + 1));
         delete[] digits;
         digits = new_digits, capacity = new_capacity;
@@ -188,7 +189,7 @@ inline void BigInteger::push(const digit_t& val) {
 }
 inline void BigInteger::pop() { digits[size--] = 0; }
 
-inline int BigInteger::compare(const BigInteger& x) const {
+inline int BigInteger::compare(const BigInteger &x) const {
     if (flag && !x.flag)
         return 1;
     if (!flag && x.flag)
@@ -209,7 +210,7 @@ inline int BigInteger::compare(const BigInteger& x) const {
     return 0;
 }
 
-inline void BigInteger::reserve(const int& sz) {
+inline void BigInteger::reserve(const int &sz) {
     if (sz < 0)
         return;
     if (digits != nullptr)
@@ -218,15 +219,15 @@ inline void BigInteger::reserve(const int& sz) {
     digits = new digit_t[sz + 1];
     std::memset(digits, 0, sizeof(digit_t) * (sz + 1));
 }
-inline void BigInteger::resize(const int& sz) { reserve(sz), size = sz; }
+inline void BigInteger::resize(const int &sz) { reserve(sz), size = sz; }
 
-BigInteger& BigInteger::operator=(const BigInteger& x) {
+BigInteger &BigInteger::operator=(const BigInteger &x) {
     reserve(x.size + 1);
     flag = x.flag, size = x.size;
     std::memcpy(digits, x.digits, sizeof(digit_t) * (x.size + 1));
     return *this;
 }
-BigInteger& BigInteger::operator=(const long long& x) {
+BigInteger &BigInteger::operator=(const long long &x) {
     flag = (x >= 0), reserve(4);
     if (x == 0)
         return size = 1, digits[1] = 0, *this;
@@ -238,7 +239,7 @@ BigInteger& BigInteger::operator=(const long long& x) {
     } while (n);
     return *this;
 }
-BigInteger& BigInteger::operator=(const std::string& s) {
+BigInteger &BigInteger::operator=(const std::string &s) {
     flag = true, reserve(s.size() / WIDTH + 1);
     if (s.empty() || s == "-")
         return *this = 0;
@@ -254,7 +255,7 @@ BigInteger& BigInteger::operator=(const std::string& s) {
     return *this;
 }
 
-BigInteger& BigInteger::build_binary(const std::vector<bool>& b) {
+BigInteger &BigInteger::build_binary(const std::vector<bool> &b) {
     *this = 0;
     if (b.empty() || (b.size() == 1 && b[0] == 0))
         return *this;
@@ -264,7 +265,7 @@ BigInteger& BigInteger::build_binary(const std::vector<bool>& b) {
             *this += pw2;
     return *this;
 }
-BigInteger& BigInteger::operator=(const std::vector<bool>& a) {
+BigInteger &BigInteger::operator=(const std::vector<bool> &a) {
     if (a == std::vector<bool>{0})
         return *this = 0;
     std::vector<bool> res;
@@ -309,7 +310,7 @@ std::vector<bool> BigInteger::to_binary() const {
 };
 
 #ifdef __SIZEOF_INT128__
-BigInteger& BigInteger::from_int128(const __int128& x) {
+BigInteger &BigInteger::from_int128(const __int128 &x) {
     flag = (x >= 0), reserve(8);
     if (x == 0)
         return size = 1, digits[1] = 0, *this;
@@ -343,18 +344,18 @@ BigInteger BigInteger::abs() const {
 
 int BigInteger::_digit_len() const { return size; }
 
-bool BigInteger::operator==(const BigInteger& x) const { return compare(x) == 0; }
+bool BigInteger::operator==(const BigInteger &x) const { return compare(x) == 0; }
 #if __cplusplus >= 202002L
-auto BigInteger::operator<=>(const BigInteger& x) const { return compare(x); }
+auto BigInteger::operator<=>(const BigInteger &x) const { return compare(x); }
 #else
-bool BigInteger::operator<(const BigInteger& x) const { return compare(x) < 0; }
-bool BigInteger::operator>(const BigInteger& x) const { return compare(x) > 0; }
-bool BigInteger::operator!=(const BigInteger& x) const { return compare(x) != 0; }
-bool BigInteger::operator<=(const BigInteger& x) const { return compare(x) <= 0; }
-bool BigInteger::operator>=(const BigInteger& x) const { return compare(x) >= 0; }
+bool BigInteger::operator<(const BigInteger &x) const { return compare(x) < 0; }
+bool BigInteger::operator>(const BigInteger &x) const { return compare(x) > 0; }
+bool BigInteger::operator!=(const BigInteger &x) const { return compare(x) != 0; }
+bool BigInteger::operator<=(const BigInteger &x) const { return compare(x) <= 0; }
+bool BigInteger::operator>=(const BigInteger &x) const { return compare(x) >= 0; }
 #endif
 
-BigInteger BigInteger::operator+(const BigInteger& x) const {
+BigInteger BigInteger::operator+(const BigInteger &x) const {
     if (!x.flag)
         return *this - x.abs();
     if (!flag)
@@ -375,7 +376,7 @@ BigInteger BigInteger::operator+(const BigInteger& x) const {
         res.pop();
     return res;
 }
-BigInteger BigInteger::operator-(const BigInteger& x) const {
+BigInteger BigInteger::operator-(const BigInteger &x) const {
     if (!x.flag)
         return *this + x.abs();
     if (!flag)
@@ -403,272 +404,275 @@ BigInteger BigInteger::operator-(const BigInteger& x) const {
 }
 
 namespace __FFT {
-    constexpr long long FFT_BASE = 1e4;
-    constexpr double PI2 = 6.283185307179586231995927;
-    constexpr double PI6 = 18.84955592153875869598778;
+constexpr long long FFT_BASE = 1e4;
+constexpr double PI2 = 6.283185307179586231995927;
+constexpr double PI6 = 18.84955592153875869598778;
 
-    constexpr int RECALC_WIDTH = 10;
-    constexpr int RECALC_BASE = (1 << RECALC_WIDTH) - 1;
+constexpr int RECALC_WIDTH = 10;
+constexpr int RECALC_BASE = (1 << RECALC_WIDTH) - 1;
 
-    struct complex {
-        double real, imag;
-        complex(double x = 0.0, double y = 0.0) : real(x), imag(y) {}
-        complex operator+(const complex& other) const { return complex(real + other.real, imag + other.imag); }
-        complex operator-(const complex& other) const { return complex(real - other.real, imag - other.imag); }
-        complex operator*(const complex& other) const { return complex(real * other.real - imag * other.imag, real * other.imag + other.real * imag); }
-        complex& operator+=(const complex& other) { return real += other.real, imag += other.imag, *this; }
-        complex& operator-=(const complex& other) { return real -= other.real, imag -= other.imag, *this; }
-        complex& operator*=(const complex& other) { return *this = *this * other; }
-    };
-    complex* arr = nullptr;
-    inline void init(int n) {
-        if (arr != nullptr)
-            delete[] arr, arr = nullptr;
-        arr = new complex[n + 1];
+struct complex {
+    double real, imag;
+    complex(double x = 0.0, double y = 0.0) : real(x), imag(y) {}
+    complex operator+(const complex &other) const {
+        return complex(real + other.real, imag + other.imag);
     }
-    template <const int n>
-    inline void fft(complex* a) {
-        const int n2 = n >> 1, n4 = n >> 2;
-        complex w(1.0, 0.0), w3(1.0, 0.0);
-        const complex wn(std::cos(PI2 / n), std::sin(PI2 / n)), wn3(std::cos(PI6 / n), std::sin(PI6 / n));
-        for (int i = 0; i < n4; i++, w *= wn, w3 *= wn3) {
-            if (!(i & RECALC_BASE))
-                w = complex(std::cos(PI2 * i / n), std::sin(PI2 * i / n)), w3 = w * w * w;
-            complex x = a[i] - a[i + n2], y = a[i + n4] - a[i + n2 + n4];
-            y = complex(y.imag, -y.real);
-            a[i] += a[i + n2], a[i + n4] += a[i + n2 + n4];
-            a[i + n2] = (x - y) * w, a[i + n2 + n4] = (x + y) * w3;
-        }
-        fft<n2>(a), fft<n4>(a + n2), fft<n4>(a + n2 + n4);
+    complex operator-(const complex &other) const {
+        return complex(real - other.real, imag - other.imag);
     }
-    template <>
-    inline void fft<0>(complex*) {}
-    template <>
-    inline void fft<1>(complex*) {}
-    template <>
-    inline void fft<2>(complex* a) {
-        complex x = a[0], y = a[1];
-        a[0] += y, a[1] = x - y;
+    complex operator*(const complex &other) const {
+        return complex(real * other.real - imag * other.imag,
+                       real * other.imag + other.real * imag);
     }
-    template <>
-    inline void fft<4>(complex* a) {
-        complex a0 = a[0], a1 = a[1], a2 = a[2], a3 = a[3];
-        complex x = a0 - a2, y = a1 - a3;
+    complex &operator+=(const complex &other) {
+        return real += other.real, imag += other.imag, *this;
+    }
+    complex &operator-=(const complex &other) {
+        return real -= other.real, imag -= other.imag, *this;
+    }
+    complex &operator*=(const complex &other) { return *this = *this * other; }
+};
+complex *arr = nullptr;
+inline void init(int n) {
+    if (arr != nullptr)
+        delete[] arr, arr = nullptr;
+    arr = new complex[n + 1];
+}
+template <const int n> inline void fft(complex *a) {
+    const int n2 = n >> 1, n4 = n >> 2;
+    complex w(1.0, 0.0), w3(1.0, 0.0);
+    const complex wn(std::cos(PI2 / n), std::sin(PI2 / n)),
+        wn3(std::cos(PI6 / n), std::sin(PI6 / n));
+    for (int i = 0; i < n4; i++, w *= wn, w3 *= wn3) {
+        if (!(i & RECALC_BASE))
+            w = complex(std::cos(PI2 * i / n), std::sin(PI2 * i / n)), w3 = w * w * w;
+        complex x = a[i] - a[i + n2], y = a[i + n4] - a[i + n2 + n4];
         y = complex(y.imag, -y.real);
-        a[0] += a2, a[1] += a3, a[2] = x - y, a[3] = x + y;
-        fft<2>(a);
+        a[i] += a[i + n2], a[i + n4] += a[i + n2 + n4];
+        a[i + n2] = (x - y) * w, a[i + n2 + n4] = (x + y) * w3;
     }
-    template <const int n>
-    inline void ifft(complex* a) {
-        const int n2 = n >> 1, n4 = n >> 2;
-        ifft<n2>(a), ifft<n4>(a + n2), ifft<n4>(a + n2 + n4);
-        complex w(1.0, 0.0), w3(1.0, 0.0);
-        const complex wn(std::cos(PI2 / n), -std::sin(PI2 / n)), wn3(std::cos(PI6 / n), -std::sin(PI6 / n));
-        for (int i = 0; i < n4; i++, w *= wn, w3 *= wn3) {
-            if (!(i & RECALC_BASE))
-                w = complex(std::cos(PI2 * i / n), -std::sin(PI2 * i / n)), w3 = w * w * w;
-            complex p = w * a[i + n2], q = w3 * a[i + n2 + n4];
-            complex x = a[i], y = p + q, x1 = a[i + n4], y1 = p - q;
-            y1 = complex(y1.imag, -y1.real);
-            a[i] += y, a[i + n4] += y1, a[i + n2] = x - y, a[i + n2 + n4] = x1 - y1;
-        }
-    }
-    template <>
-    inline void ifft<0>(complex*) {}
-    template <>
-    inline void ifft<1>(complex*) {}
-    template <>
-    inline void ifft<2>(complex* a) {
-        complex x = a[0], y = a[1];
-        a[0] += y, a[1] = x - y;
-    }
-    template <>
-    inline void ifft<4>(complex* a) {
-        ifft<2>(a);
-        complex p = a[2], q = a[3];
-        complex x = a[0], y = p + q, x1 = a[1], y1 = p - q;
+    fft<n2>(a), fft<n4>(a + n2), fft<n4>(a + n2 + n4);
+}
+template <> inline void fft<0>(complex *) {}
+template <> inline void fft<1>(complex *) {}
+template <> inline void fft<2>(complex *a) {
+    complex x = a[0], y = a[1];
+    a[0] += y, a[1] = x - y;
+}
+template <> inline void fft<4>(complex *a) {
+    complex a0 = a[0], a1 = a[1], a2 = a[2], a3 = a[3];
+    complex x = a0 - a2, y = a1 - a3;
+    y = complex(y.imag, -y.real);
+    a[0] += a2, a[1] += a3, a[2] = x - y, a[3] = x + y;
+    fft<2>(a);
+}
+template <const int n> inline void ifft(complex *a) {
+    const int n2 = n >> 1, n4 = n >> 2;
+    ifft<n2>(a), ifft<n4>(a + n2), ifft<n4>(a + n2 + n4);
+    complex w(1.0, 0.0), w3(1.0, 0.0);
+    const complex wn(std::cos(PI2 / n), -std::sin(PI2 / n)),
+        wn3(std::cos(PI6 / n), -std::sin(PI6 / n));
+    for (int i = 0; i < n4; i++, w *= wn, w3 *= wn3) {
+        if (!(i & RECALC_BASE))
+            w = complex(std::cos(PI2 * i / n), -std::sin(PI2 * i / n)), w3 = w * w * w;
+        complex p = w * a[i + n2], q = w3 * a[i + n2 + n4];
+        complex x = a[i], y = p + q, x1 = a[i + n4], y1 = p - q;
         y1 = complex(y1.imag, -y1.real);
-        a[0] += y, a[1] += y1, a[2] = x - y, a[3] = x1 - y1;
-    }
-    inline void dft(complex* a, int n) {
-        if (n <= 1)
-            return;
-        switch (n) {
-        case 1 << 2:
-            fft<1 << 2>(a);
-            break;
-        case 1 << 3:
-            fft<1 << 3>(a);
-            break;
-        case 1 << 4:
-            fft<1 << 4>(a);
-            break;
-        case 1 << 5:
-            fft<1 << 5>(a);
-            break;
-        case 1 << 6:
-            fft<1 << 6>(a);
-            break;
-        case 1 << 7:
-            fft<1 << 7>(a);
-            break;
-        case 1 << 8:
-            fft<1 << 8>(a);
-            break;
-        case 1 << 9:
-            fft<1 << 9>(a);
-            break;
-        case 1 << 10:
-            fft<1 << 10>(a);
-            break;
-        case 1 << 11:
-            fft<1 << 11>(a);
-            break;
-        case 1 << 12:
-            fft<1 << 12>(a);
-            break;
-        case 1 << 13:
-            fft<1 << 13>(a);
-            break;
-        case 1 << 14:
-            fft<1 << 14>(a);
-            break;
-        case 1 << 15:
-            fft<1 << 15>(a);
-            break;
-        case 1 << 16:
-            fft<1 << 16>(a);
-            break;
-        case 1 << 17:
-            fft<1 << 17>(a);
-            break;
-        case 1 << 18:
-            fft<1 << 18>(a);
-            break;
-        case 1 << 19:
-            fft<1 << 19>(a);
-            break;
-        case 1 << 20:
-            fft<1 << 20>(a);
-            break;
-        case 1 << 21:
-            fft<1 << 21>(a);
-            break;
-        case 1 << 22:
-            fft<1 << 22>(a);
-            break;
-        case 1 << 23:
-            fft<1 << 23>(a);
-            break;
-        case 1 << 24:
-            fft<1 << 24>(a);
-            break;
-        case 1 << 25:
-            fft<1 << 25>(a);
-            break;
-        case 1 << 26:
-            fft<1 << 26>(a);
-            break;
-        case 1 << 27:
-            fft<1 << 27>(a);
-            break;
-        case 1 << 28:
-            fft<1 << 28>(a);
-            break;
-            throw FFTLimitExceededError();
-        }
-    }
-    inline void idft(complex* a, int n) {
-        if (n <= 1)
-            return;
-        switch (n) {
-        case 1 << 2:
-            ifft<1 << 2>(a);
-            break;
-        case 1 << 3:
-            ifft<1 << 3>(a);
-            break;
-        case 1 << 4:
-            ifft<1 << 4>(a);
-            break;
-        case 1 << 5:
-            ifft<1 << 5>(a);
-            break;
-        case 1 << 6:
-            ifft<1 << 6>(a);
-            break;
-        case 1 << 7:
-            ifft<1 << 7>(a);
-            break;
-        case 1 << 8:
-            ifft<1 << 8>(a);
-            break;
-        case 1 << 9:
-            ifft<1 << 9>(a);
-            break;
-        case 1 << 10:
-            ifft<1 << 10>(a);
-            break;
-        case 1 << 11:
-            ifft<1 << 11>(a);
-            break;
-        case 1 << 12:
-            ifft<1 << 12>(a);
-            break;
-        case 1 << 13:
-            ifft<1 << 13>(a);
-            break;
-        case 1 << 14:
-            ifft<1 << 14>(a);
-            break;
-        case 1 << 15:
-            ifft<1 << 15>(a);
-            break;
-        case 1 << 16:
-            ifft<1 << 16>(a);
-            break;
-        case 1 << 17:
-            ifft<1 << 17>(a);
-            break;
-        case 1 << 18:
-            ifft<1 << 18>(a);
-            break;
-        case 1 << 19:
-            ifft<1 << 19>(a);
-            break;
-        case 1 << 20:
-            ifft<1 << 20>(a);
-            break;
-        case 1 << 21:
-            ifft<1 << 21>(a);
-            break;
-        case 1 << 22:
-            ifft<1 << 22>(a);
-            break;
-        case 1 << 23:
-            ifft<1 << 23>(a);
-            break;
-        case 1 << 24:
-            ifft<1 << 24>(a);
-            break;
-        case 1 << 25:
-            ifft<1 << 25>(a);
-            break;
-        case 1 << 26:
-            ifft<1 << 26>(a);
-            break;
-        case 1 << 27:
-            ifft<1 << 27>(a);
-            break;
-        case 1 << 28:
-            ifft<1 << 28>(a);
-            break;
-            throw FFTLimitExceededError();
-        }
+        a[i] += y, a[i + n4] += y1, a[i + n2] = x - y, a[i + n2 + n4] = x1 - y1;
     }
 }
+template <> inline void ifft<0>(complex *) {}
+template <> inline void ifft<1>(complex *) {}
+template <> inline void ifft<2>(complex *a) {
+    complex x = a[0], y = a[1];
+    a[0] += y, a[1] = x - y;
+}
+template <> inline void ifft<4>(complex *a) {
+    ifft<2>(a);
+    complex p = a[2], q = a[3];
+    complex x = a[0], y = p + q, x1 = a[1], y1 = p - q;
+    y1 = complex(y1.imag, -y1.real);
+    a[0] += y, a[1] += y1, a[2] = x - y, a[3] = x1 - y1;
+}
+inline void dft(complex *a, int n) {
+    if (n <= 1)
+        return;
+    switch (n) {
+    case 1 << 2:
+        fft<1 << 2>(a);
+        break;
+    case 1 << 3:
+        fft<1 << 3>(a);
+        break;
+    case 1 << 4:
+        fft<1 << 4>(a);
+        break;
+    case 1 << 5:
+        fft<1 << 5>(a);
+        break;
+    case 1 << 6:
+        fft<1 << 6>(a);
+        break;
+    case 1 << 7:
+        fft<1 << 7>(a);
+        break;
+    case 1 << 8:
+        fft<1 << 8>(a);
+        break;
+    case 1 << 9:
+        fft<1 << 9>(a);
+        break;
+    case 1 << 10:
+        fft<1 << 10>(a);
+        break;
+    case 1 << 11:
+        fft<1 << 11>(a);
+        break;
+    case 1 << 12:
+        fft<1 << 12>(a);
+        break;
+    case 1 << 13:
+        fft<1 << 13>(a);
+        break;
+    case 1 << 14:
+        fft<1 << 14>(a);
+        break;
+    case 1 << 15:
+        fft<1 << 15>(a);
+        break;
+    case 1 << 16:
+        fft<1 << 16>(a);
+        break;
+    case 1 << 17:
+        fft<1 << 17>(a);
+        break;
+    case 1 << 18:
+        fft<1 << 18>(a);
+        break;
+    case 1 << 19:
+        fft<1 << 19>(a);
+        break;
+    case 1 << 20:
+        fft<1 << 20>(a);
+        break;
+    case 1 << 21:
+        fft<1 << 21>(a);
+        break;
+    case 1 << 22:
+        fft<1 << 22>(a);
+        break;
+    case 1 << 23:
+        fft<1 << 23>(a);
+        break;
+    case 1 << 24:
+        fft<1 << 24>(a);
+        break;
+    case 1 << 25:
+        fft<1 << 25>(a);
+        break;
+    case 1 << 26:
+        fft<1 << 26>(a);
+        break;
+    case 1 << 27:
+        fft<1 << 27>(a);
+        break;
+    case 1 << 28:
+        fft<1 << 28>(a);
+        break;
+        throw FFTLimitExceededError();
+    }
+}
+inline void idft(complex *a, int n) {
+    if (n <= 1)
+        return;
+    switch (n) {
+    case 1 << 2:
+        ifft<1 << 2>(a);
+        break;
+    case 1 << 3:
+        ifft<1 << 3>(a);
+        break;
+    case 1 << 4:
+        ifft<1 << 4>(a);
+        break;
+    case 1 << 5:
+        ifft<1 << 5>(a);
+        break;
+    case 1 << 6:
+        ifft<1 << 6>(a);
+        break;
+    case 1 << 7:
+        ifft<1 << 7>(a);
+        break;
+    case 1 << 8:
+        ifft<1 << 8>(a);
+        break;
+    case 1 << 9:
+        ifft<1 << 9>(a);
+        break;
+    case 1 << 10:
+        ifft<1 << 10>(a);
+        break;
+    case 1 << 11:
+        ifft<1 << 11>(a);
+        break;
+    case 1 << 12:
+        ifft<1 << 12>(a);
+        break;
+    case 1 << 13:
+        ifft<1 << 13>(a);
+        break;
+    case 1 << 14:
+        ifft<1 << 14>(a);
+        break;
+    case 1 << 15:
+        ifft<1 << 15>(a);
+        break;
+    case 1 << 16:
+        ifft<1 << 16>(a);
+        break;
+    case 1 << 17:
+        ifft<1 << 17>(a);
+        break;
+    case 1 << 18:
+        ifft<1 << 18>(a);
+        break;
+    case 1 << 19:
+        ifft<1 << 19>(a);
+        break;
+    case 1 << 20:
+        ifft<1 << 20>(a);
+        break;
+    case 1 << 21:
+        ifft<1 << 21>(a);
+        break;
+    case 1 << 22:
+        ifft<1 << 22>(a);
+        break;
+    case 1 << 23:
+        ifft<1 << 23>(a);
+        break;
+    case 1 << 24:
+        ifft<1 << 24>(a);
+        break;
+    case 1 << 25:
+        ifft<1 << 25>(a);
+        break;
+    case 1 << 26:
+        ifft<1 << 26>(a);
+        break;
+    case 1 << 27:
+        ifft<1 << 27>(a);
+        break;
+    case 1 << 28:
+        ifft<1 << 28>(a);
+        break;
+        throw FFTLimitExceededError();
+    }
+}
+} // namespace __FFT
 
-BigInteger BigInteger::fft_mul(const BigInteger& a, const BigInteger& b) {
+BigInteger BigInteger::fft_mul(const BigInteger &a, const BigInteger &b) {
     int least = (a.size + b.size) << 1, lim = 1 << std::__lg(least);
     if (lim < least)
         lim <<= 1;
@@ -700,7 +704,7 @@ BigInteger BigInteger::fft_mul(const BigInteger& a, const BigInteger& b) {
     return res;
 }
 
-BigInteger BigInteger::operator*(const BigInteger& x) const {
+BigInteger BigInteger::operator*(const BigInteger &x) const {
     BigInteger zero = 0;
     if (*this == zero || x == zero)
         return zero;
@@ -732,7 +736,7 @@ BigInteger BigInteger::operator*(const BigInteger& x) const {
     return res;
 }
 
-BigInteger& BigInteger::operator*=(int x) {
+BigInteger &BigInteger::operator*=(int x) {
     if (x == 0 || *this == 0)
         return *this = 0;
     if (x < 0)
@@ -749,7 +753,7 @@ BigInteger& BigInteger::operator*=(int x) {
         pop();
     return *this;
 }
-BigInteger BigInteger::operator*(const int& x) const {
+BigInteger BigInteger::operator*(const int &x) const {
     BigInteger t = *this;
     return t *= x;
 }
@@ -765,7 +769,7 @@ BigInteger BigInteger::div2() const {
         res.pop();
     return res;
 }
-BigInteger BigInteger::operator/(const long long& x) const {
+BigInteger BigInteger::operator/(const long long &x) const {
     if (x == 0)
         throw ZeroDivisionError();
     if (*this == 0)
@@ -837,7 +841,7 @@ BigInteger BigInteger::newton_inv(int n) const {
     return a._move_l(n - n2 - k2) - b._move_r(2 * (n2 + k2) - n) - 1;
 }
 
-std::pair<BigInteger, BigInteger> BigInteger::newton_div(const BigInteger& x) const {
+std::pair<BigInteger, BigInteger> BigInteger::newton_div(const BigInteger &x) const {
     int k = size - x.size + 2, k2 = k > x.size ? 0 : x.size - k;
     BigInteger x2 = x._move_r(k2);
     if (k2 != 0)
@@ -850,7 +854,7 @@ std::pair<BigInteger, BigInteger> BigInteger::newton_div(const BigInteger& x) co
     return std::make_pair(q, r);
 }
 
-std::pair<BigInteger, BigInteger> BigInteger::divmod(const BigInteger& x, bool dis_newton) const {
+std::pair<BigInteger, BigInteger> BigInteger::divmod(const BigInteger &x, bool dis_newton) const {
     static const int base = BigInteger::BASE;
     BigInteger a = abs(), b = x.abs();
     if (b == 0)
@@ -879,15 +883,15 @@ std::pair<BigInteger, BigInteger> BigInteger::divmod(const BigInteger& x, bool d
         q.pop();
     return std::make_pair(q, r / t);
 }
-BigInteger BigInteger::operator/(const BigInteger& x) const { return divmod(x).first; }
+BigInteger BigInteger::operator/(const BigInteger &x) const { return divmod(x).first; }
 
-BigInteger BigInteger::operator%(const long long& x) const {
+BigInteger BigInteger::operator%(const long long &x) const {
     if (x == 2 || x == 4 || x == 5)
         return digits[1] % x;
     return *this - (*this / x * x);
 }
-BigInteger BigInteger::operator%(const BigInteger& x) const { return divmod(x).second; }
-BigInteger BigInteger::pow(const long long& x) const {
+BigInteger BigInteger::operator%(const BigInteger &x) const { return divmod(x).second; }
+BigInteger BigInteger::pow(const long long &x) const {
     BigInteger res = 1, a = *this;
     for (long long t = x; t != 0; t >>= 1) {
         if (t & 1)
@@ -896,7 +900,7 @@ BigInteger BigInteger::pow(const long long& x) const {
     }
     return res;
 }
-BigInteger BigInteger::pow(const long long& x, const BigInteger& p) const {
+BigInteger BigInteger::pow(const long long &x, const BigInteger &p) const {
     BigInteger res = 1, a = *this % p;
     for (long long t = x; t != 0; t >>= 1) {
         if (t & 1)
@@ -906,7 +910,7 @@ BigInteger BigInteger::pow(const long long& x, const BigInteger& p) const {
     return res;
 }
 
-BigInteger BigInteger::root(const long long& m) const {
+BigInteger BigInteger::root(const long long &m) const {
     if (!flag && m % 2 == 0)
         throw NegativeRadicandError();
     if (m == 1 || *this == 0)
@@ -952,7 +956,8 @@ BigInteger BigInteger::root(const long long& m) const {
     int n = size, t = n / m / 2;
     BigInteger s = (_move_r(t * m).root(m) + 1)._move_l(t);
     BigInteger res = (s * (m - 1) + *this / s.pow(m - 1)) / m;
-    digit_t l = std::max<digit_t>(res.digits[1] - 100, 0), r = std::min(res.digits[1] + 100, base - 1);
+    digit_t l = std::max<digit_t>(res.digits[1] - 100, 0),
+            r = std::min(res.digits[1] + 100, base - 1);
     while (l < r) {
         digit_t mid = (l + r + 1) >> 1;
         res.digits[1] = mid;
@@ -964,7 +969,7 @@ BigInteger BigInteger::root(const long long& m) const {
     return res.digits[1] = l, res;
 }
 BigInteger BigInteger::newton_invsqrt() const {
-    const BigInteger& x = *this;
+    const BigInteger &x = *this;
     static constexpr long long base = BigInteger::BASE;
     if (x.size <= 2) {
         if (x.size == 0)
@@ -1021,7 +1026,7 @@ BigInteger BigInteger::sqrt() const {
         return *this;
     if (size <= NEWTON_SQRT_LIMIT)
         return sqrt_normal();
-    const BigInteger& x = *this;
+    const BigInteger &x = *this;
     int n2 = x.size % 2 == 0 ? x.size : x.size + 1;
     BigInteger res = (x * x.newton_invsqrt())._move_r(n2);
     BigInteger r = x - res * res, delta = 1;
@@ -1039,7 +1044,7 @@ BigInteger BigInteger::sqrt() const {
     return res;
 }
 
-BigInteger BigInteger::gcd(const BigInteger& x) const {
+BigInteger BigInteger::gcd(const BigInteger &x) const {
     BigInteger a = *this, b = x;
     if (a < b)
         std::swap(a, b);
@@ -1062,22 +1067,22 @@ BigInteger BigInteger::gcd(const BigInteger& x) const {
         a += a;
     return a;
 }
-BigInteger BigInteger::lcm(const BigInteger& x) const { return *this / gcd(x) * x; }
+BigInteger BigInteger::lcm(const BigInteger &x) const { return *this / gcd(x) * x; }
 
-BigInteger& BigInteger::operator+=(const BigInteger& x) { return *this = *this + x; }
-BigInteger& BigInteger::operator-=(const BigInteger& x) { return *this = *this - x; }
-BigInteger& BigInteger::operator*=(const BigInteger& x) { return *this = *this * x; }
-BigInteger& BigInteger::operator/=(const long long& x) { return *this = *this / x; }
-BigInteger& BigInteger::operator/=(const BigInteger& x) { return *this = *this / x; }
-BigInteger& BigInteger::operator%=(const long long& x) { return *this = *this / x; }
-BigInteger& BigInteger::operator%=(const BigInteger& x) { return *this = *this % x; }
+BigInteger &BigInteger::operator+=(const BigInteger &x) { return *this = *this + x; }
+BigInteger &BigInteger::operator-=(const BigInteger &x) { return *this = *this - x; }
+BigInteger &BigInteger::operator*=(const BigInteger &x) { return *this = *this * x; }
+BigInteger &BigInteger::operator/=(const long long &x) { return *this = *this / x; }
+BigInteger &BigInteger::operator/=(const BigInteger &x) { return *this = *this / x; }
+BigInteger &BigInteger::operator%=(const long long &x) { return *this = *this / x; }
+BigInteger &BigInteger::operator%=(const BigInteger &x) { return *this = *this % x; }
 
-BigInteger BigInteger::operator<<(const long long& x) { return *this * BigInteger(2).pow(x); }
-BigInteger BigInteger::operator>>(const long long& x) { return *this / BigInteger(2).pow(x); }
-BigInteger& BigInteger::operator<<=(const long long& x) { return *this = *this << x; }
-BigInteger& BigInteger::operator>>=(const long long& x) { return *this = *this >> x; }
+BigInteger BigInteger::operator<<(const long long &x) { return *this * BigInteger(2).pow(x); }
+BigInteger BigInteger::operator>>(const long long &x) { return *this / BigInteger(2).pow(x); }
+BigInteger &BigInteger::operator<<=(const long long &x) { return *this = *this << x; }
+BigInteger &BigInteger::operator>>=(const long long &x) { return *this = *this >> x; }
 
-BigInteger BigInteger::operator&(const BigInteger& x) {
+BigInteger BigInteger::operator&(const BigInteger &x) {
     std::vector<bool> a = to_binary(), b = x.to_binary();
     int n = a.size(), m = b.size(), lim = std::max(n, m);
     std::vector<bool> res(lim), temp(lim);
@@ -1096,7 +1101,7 @@ BigInteger BigInteger::operator&(const BigInteger& x) {
         res[i] = a[i] & b[i];
     return res;
 }
-BigInteger BigInteger::operator|(const BigInteger& x) {
+BigInteger BigInteger::operator|(const BigInteger &x) {
     std::vector<bool> a = to_binary(), b = x.to_binary();
     int n = a.size(), m = b.size(), lim = std::max(n, m);
     std::vector<bool> res(lim), temp(lim);
@@ -1115,7 +1120,7 @@ BigInteger BigInteger::operator|(const BigInteger& x) {
         res[i] = a[i] | b[i];
     return res;
 }
-BigInteger BigInteger::operator^(const BigInteger& x) {
+BigInteger BigInteger::operator^(const BigInteger &x) {
     std::vector<bool> a = to_binary(), b = x.to_binary();
     int n = a.size(), m = b.size(), lim = std::max(n, m);
     std::vector<bool> res(lim), temp(lim);
@@ -1135,22 +1140,22 @@ BigInteger BigInteger::operator^(const BigInteger& x) {
     return res;
 }
 
-BigInteger& BigInteger::operator&=(const BigInteger& x) { return *this = *this & x; }
-BigInteger& BigInteger::operator|=(const BigInteger& x) { return *this = *this | x; }
-BigInteger& BigInteger::operator^=(const BigInteger& x) { return *this = *this ^ x; }
+BigInteger &BigInteger::operator&=(const BigInteger &x) { return *this = *this & x; }
+BigInteger &BigInteger::operator|=(const BigInteger &x) { return *this = *this | x; }
+BigInteger &BigInteger::operator^=(const BigInteger &x) { return *this = *this ^ x; }
 
-BigInteger& BigInteger::operator++() { return *this += 1; }
+BigInteger &BigInteger::operator++() { return *this += 1; }
 BigInteger BigInteger::operator++(int) {
     BigInteger t = *this;
     return *this += 1, t;
 }
-BigInteger& BigInteger::operator--() { return *this -= 1; }
+BigInteger &BigInteger::operator--() { return *this -= 1; }
 BigInteger BigInteger::operator--(int) {
     BigInteger t = *this;
     return *this -= 1, t;
 }
 
-BigInteger BigInteger::factorial(const long long& x) {
+BigInteger BigInteger::factorial(const long long &x) {
     BigInteger res = 1;
     for (long long i = 2; i <= x; i++)
         res *= i;

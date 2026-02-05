@@ -1,0 +1,560 @@
+\documentclass[12pt]{article}                               % 字体大小
+\usepackage[heading,UTF8,fontset=windows]{ctex}             % 中文支持
+\usepackage{geometry}                                       % 页面设置
+\usepackage{fancyhdr,lastpage}                              % 页眉页脚
+\usepackage{fontspec}                                       % 字体
+\usepackage{tabularx,multirow,booktabs}                     % 表格
+\usepackage{multicol}                                       % 分栏
+\usepackage{listings}                                       % 代码
+\usepackage{algorithm,algorithmicx,algpseudocode}           % 伪代码
+\usepackage{amsmath,amsthm,amsfonts,amssymb,bm}             % 数学公式
+\usepackage{epigraph}                                       % 引用
+\usepackage{hyperref}                                       % 超链接
+\usepackage{tikz}                                           % TikZ 画图
+\usepackage{tcolorbox}                                      % Color Box
+\usepackage{enumitem}                                       % 列表样式
+\usepackage{xeCJKfntef,xcolor}                              % 文字加点
+
+\hypersetup{                                                % 超链接样式
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=blue,
+	urlcolor=blue,
+	citecolor=cyan,
+}
+\usetikzlibrary{arrows.meta}                                % 附加箭头样式
+\tikzset{                                                   % TikZ 设置
+	global scale/.style={                                     % 整张图放缩
+		scale=#1,
+		every node/.append style={scale=#1}
+  }
+}
+\tcbset{                                                    % Color Box 样式
+	colback=white,
+	colframe=black,
+	boxrule=0.5pt
+}
+\lstset{                                                    % 代码框格式设置
+	breaklines = true,
+	keepspaces = true,
+	basicstyle = \ttfamily,
+	numberstyle = \footnotesize\ttfamily\color{gray},
+	numbers = left,
+	columns = flexible,
+	framexleftmargin = 0pt,
+	xleftmargin = 12pt,
+	numbersep = 10pt,
+	keywordstyle = \color{black}, %\color{blue!70},
+	commentstyle = \color{black}, %\color{green!70},
+	frame = single,
+	% frameround = tttt,
+	rulecolor = \color{blue},
+	language = c++,
+	escapeinside = {(*@}{@*)}
+}
+\xeCJKsetup{                                                % 文字下方加点样式
+	underdot/symbol = {\color{black}.}
+}
+\newcommand{\filename}[1]{{\textbf{\textit{#1}}}}           % 自定义文件名样式
+\newcommand{\myemph}[1]{{\textbf{\CJKunderdot{#1}}}}        % 自定义强调样式
+\ctexset{                                                   % 标题设置
+	section = {
+		format = \centering\Large\heiti,
+		numbering = true,
+		number = {},
+		aftername = {}
+	},
+	subsection = {
+		format = \fontsize{13pt}{\baselineskip}\heiti,
+		numbering = true,
+		number = {},
+		aftername = {\quad【},
+		aftertitle = {】}
+	},
+	subsubsection = {
+		format = \myemph,
+		numbering = true,
+		number = {},
+		aftername = {\qquad}
+	}
+}
+\geometry{                                                  % 页面设置
+	a4paper,
+	left = 70pt,
+	right = 70pt,
+	top = 80pt,
+	bottom = 65pt,
+	footskip = 30pt
+}
+
+\floatname{algorithm}{算法}
+\renewcommand{\algorithmicrequire}{\textbf{输入：}}
+\renewcommand{\algorithmicensure}{\textbf{输出：}}
+
+\setmonofont{Consolas}                                      % 等宽字体
+
+\setlist[itemize]{itemsep=0pt,partopsep=0pt,parsep=0pt,topsep=10pt}
+\setlist[enumerate]{itemsep=0pt,partopsep=0pt,parsep=0pt,topsep=10pt}
+\setlist[itemize,1]{leftmargin=35pt}
+\setlist[enumerate,1]{leftmargin=35pt}
+
+\newcommand{\docTitle}{第 39 届全国青少年信息学奥林匹克竞赛模拟赛}
+\newcommand{\docSecTitle}{NOI2022 统一省选}
+\newcommand{\docThiTitle}{第一试}
+\newcommand{\docAuthor}{AutumnKite}
+\newcommand{\docDate}{2022 年 4 月 7 日 7:30 $\sim$ 12:00}
+
+\newcommand{\fancyheadLeftText}{\docTitle}
+\newcommand{\fancyheadRightText}{\docThiTitle}
+
+\title{\docTitle}
+\author{\docAuthor}
+\date{\docDate}
+
+\hypersetup{
+	pdftitle={\docTitle},
+	pdfauthor={\docAuthor}
+}
+
+\makeatletter
+\renewcommand*\maketitle{                                   % 标题页格式设置
+	\begin{center}
+		{\LARGE \bfseries \@title \par}
+		{\Huge \heiti \docSecTitle \par}
+		{\LARGE \kaishu \docThiTitle \par}
+		{\large \@author \par}
+	  {\large \heiti 时间：\@date \par}
+	\end{center}
+	\setcounter{footnote}{0}
+}
+\makeatother
+
+\begin{document}
+	\maketitle
+	\thispagestyle{fancy}
+	\pagestyle{fancy}
+	\renewcommand\headrulewidth{0pt}
+	\fancyhf{}
+	\fancyfoot[C]{\footnotesize 第 \thepage 页\qquad 共 \pageref{LastPage} 页}
+
+	% \textwidth=457pt
+	% \tabcolsep=6pt
+	% 总和 = 457 - 2 * 列数 * 6 - (列数 + 1) * 0.5
+
+	\begin{center}
+		\begin{tabular}{|m{100.5pt}|m{102pt}|m{102pt}|m{102pt}|}
+			\hline
+			题目名称 & 染 & 江 & 记 \\
+			\hline
+			题目类型 & 传统型 & 传统型 & 传统型 \\
+			\hline
+			目录 & \lstinline|color| & \lstinline|river| & \lstinline|story| \\
+			\hline
+			可执行文件名 & \lstinline|color| & \lstinline|river| & \lstinline|story| \\
+			\hline
+			输入文件名 & \lstinline|color.in| & \lstinline|river.in| & \lstinline|story.in| \\
+			\hline
+			输出文件名 & \lstinline|color.out| & \lstinline|river.out| & \lstinline|story.out| \\
+			\hline
+			每个测试点时限 & $1.0$ 秒 & $1.0$ 秒 & $3.0$ 秒 \\
+			\hline
+			内存限制 & $256$ MB & $256$ MB & $256$ MB \\
+			\hline
+			子任务数目 & $20$ & $20$ & $20$ \\
+			\hline
+			子任务是否等分 & 是 & 是 & 是 \\
+			\hline
+		\end{tabular}\\
+	\end{center}
+
+	提交源程序文件名
+	\begin{center}
+		\begin{tabular}{|m{100.5pt}|m{102pt}|m{102pt}|m{102pt}|}
+			\hline
+			对于 C++ 语言 & \lstinline|color.cpp| & \lstinline|river.cpp| & \lstinline|story.cpp| \\
+			\hline
+		\end{tabular}\\
+	\end{center}
+
+	编译选项
+	\begin{center}
+		\begin{tabular}{|m{100.5pt}|m{331pt}<{\centering}|}
+		\hline
+		对于 C++ 语言 & \lstinline|-lm -O2| \\
+		\hline
+		\end{tabular}\\
+	\end{center}
+
+	\subsubsection{注意事项（请仔细阅读）}
+
+	\begin{enumerate}
+		\item 文件名（包括程序名和输入输出文件名）必须使用英文小写。
+		\item C++ 中函数 main() 的返回值类型必须是 int，值必须为 0。
+		\item \myemph{对于因未遵守以上规则对成绩造成的影响，相关申诉不予受理。}
+		\item 若无特殊说明，输入文件中同一行内的多个整数、浮点数、字符串等均使用一个空格进行分隔。
+		\item 若无特殊说明，结果比较方式为\myemph{忽略行末空格、文末回车后的全文比较。}
+		\item 程序可使用的栈空间大小与该题内存空间限制一致。
+		\item 在终端下可使用命令 \lstinline|ulimit -s unlimited| 将栈空间限制放大，但你使用的栈空间大小不应超过题目限制。
+		\item 评测在最新公布的 NOI Linux 下进行，使用 LemonLime 评测。
+		\item 由于某种原因，题目不一定按难度顺序排列。
+	\end{enumerate}
+
+	\newpage
+	\renewcommand\headrulewidth{0.2pt}
+	\fancyhead[L]{\footnotesize \fancyheadLeftText}
+
+	\section{染（color）}
+	\fancyhead[R]{\footnotesize \fancyheadRightText~染（color）}
+
+	\subsection{题目描述}
+
+	曾经，染江岸边，高楼林立。
+
+	苒琵记得，当年一共有 $n$ 栋高楼。高楼从左到右编号 $1$ 到 $n$，高楼 $i$ 有高度 $a_i$，\myemph{其中 $a_i$ 是非负整数。}
+
+	建造这些高楼的总花费 $S$，可以表示成 $a_1+a_2+\cdots+a_n$。在苒琵心中，这些高楼有一个总美观度 $X$，可以表示为 $a_1\oplus a_2\oplus \cdots \oplus a_n$，其中 $\oplus$ 表示二进制按位异或运算。
+
+	若干年后，一场地震，染江枯竭，高楼倒塌……
+
+	苒琵希望还原当年的盛景，但她只能回忆出 $S$ 和 $X$ 的具体数值。苒琵希望你帮她求出，在所有可能的情况中，最高的高楼高度的最小值。
+
+	苒琵的记忆不一定准确，若不存在符合苒琵记忆的方案，输出 $-1$ 表示无解。
+
+	\subsection{输入格式}
+
+	从文件 \filename{color.in} 中读入数据。
+
+	\myemph{输入包含多组测试数据。}
+
+	第一行一个整数 $T$，表示数据组数。每组数据格式如下：
+
+	一行，三个整数 $n,S,X$，表示高楼数量、总花费和总美观度。
+
+	\subsection{输出格式}
+
+	输出到文件 \filename{color.out} 中。
+
+	对于每组数据，输出一行，表示最高的高楼高度的最小值。若无解则输出 $-1$。
+
+	\subsection{样例 1 输入}
+
+\begin{lstlisting}
+3
+1 7 7
+2 6 5
+6 19 1
+\end{lstlisting}
+
+	\subsection{样例 1 输出}
+
+\begin{lstlisting}
+7
+-1
+4
+\end{lstlisting}
+
+	\subsection{样例 1 解释}
+
+	每组数据的方案如下：
+
+	\begin{itemize}
+		\item $a=[7]$；
+		\item 无解；
+		\item $a=[3,4,2,4,3,3]$。
+	\end{itemize}
+
+	注意方案并不唯一，但可以证明不存在最高的高楼高度更小的方案。
+
+	\subsection{样例 2}
+
+	见选手目录下的 \filename{color/color2.in} 与 \filename{color/color2.ans}。
+
+	\subsection{数据范围}
+
+	对于 $100\%$ 的数据，$1\le T\le 1000,1\le n \le 2^{60},0\le S,X < 2^{60}$。
+
+	各测试点的附加限制如下表所示：
+
+	\begin{center}
+		\begin{tabular}{c|c|c|c}
+			\specialrule{2pt}{0em}{0em}
+			测试点编号 & $n\le $ & $S,X < $ & 特殊性质 \\
+			\specialrule{1pt}{0em}{0em}
+			$1\sim 2$ & $8$ & $8$ & \multirow{6}{*}{无} \\
+			\cline{1-3}
+			$3\sim 4$ & $64$ & $64$ & \\
+			\cline{1-3}
+			$5\sim 6$ & $256$ & $256$ & \\
+			\cline{1-3}
+			$7\sim 8$ & $32$ & $2^{30}$ & \\
+			\cline{1-3}
+			$9\sim 11$ & $3$ & \multirow{5}{*}{$2^{60}$} & \\
+			\cline{1-2}
+			$12\sim 14$ & $64$ & & \\
+			\cline{1-2} \cline{4-4}
+			$15\sim 16$ & \multirow{3}{*}{$2^{60}$} & & $X=0$ \\
+			\cline{1-1} \cline{4-4}
+			$17$ & & & $S=X$ \\
+			\cline{1-1} \cline{4-4}
+			$18\sim 20$ & & & 无 \\
+			\specialrule{2pt}{0em}{0em}
+		\end{tabular}
+	\end{center}
+
+	\newpage
+
+	\section{江（river）}
+	\fancyhead[R]{\footnotesize \fancyheadRightText~江（river）}
+
+	\subsection{题目描述}
+
+	在你的帮助下，苒琵成功恢复了当年的盛景。为了庆祝，苒琵邀请了 $m$ 个朋友来染江游玩。为方便描述，我们把苒琵的 $m$ 个朋友编号 $1$ 到 $m$。
+
+	苒琵准备了 $n$ 块饼干招待朋友们，编号 $1$ 到 $n$。饼干 $i$ 的甜度为 $a_i$。
+
+	苒琵的朋友们知道苒琵喜欢饼干，所以朋友 $j$ 会带来一块甜味为 $b_j$ 的饼干。每个朋友有一个偏好的口味，可以用一个长为 $m$ 的字符串 $s$ 表示。若 $s_j=\mathtt{S}$ 表示朋友 $j$ 喜爱甜的饼干；若 $s_j=\mathtt{B}$ 表示朋友 $j$ 喜爱苦的饼干。
+
+	一开始，苒琵会选择一个整数 $k$，将饼干 $1,2,\ldots,k$ 放在桌上用来招待朋友。然后朋友 $1,2,\ldots,m$ \myemph{依次}到达染江。当朋友 $j$ 到达时，会将带来的饼干送给苒琵，而苒琵会慷慨地将这块饼干也放到桌上。接着朋友 $j$ 会在桌上的饼干中（\myemph{包括朋友 $j$ 带来的}）找到最甜或最苦的吃掉（取决于其口味），甜度越高的饼干越甜，反之则越苦。最后苒琵会将桌上剩下的饼干吃掉。
+
+	苒琵忙着给朋友们制订游玩计划，所以想请你帮她求出对于每个 $k=1,2,\ldots,n$，她最后吃掉的饼干的甜味度之和 $f_k$。
+
+	\subsection{输入格式}
+
+	从文件 \filename{river.in} 中读入数据。
+
+	第一行两个整数 $n,t$，表示苒琵准备的饼干数量和还原 $a$ 需要的参数。
+
+	第二行 $n$ 个整数 $a_1',a_2',\ldots,a_n'$，描述 $a$ 加密后的序列。$a$ 的真实值定义为 $a_i=(a_i'+t\cdot f_{i-1})\bmod 10^9$，其中我们假设 $f_0=0$。
+
+	第三行一个整数 $m$，表示朋友数量。
+
+	第四行 $m$ 个整数 $b_1,b_2,\ldots,b_m$，$b_j$ 表示朋友 $j$ 带来的饼干的甜度。
+
+	第五行一个长度为 $m$ 的字符串 $s$，描述每个朋友的口味。
+
+	\subsection{输出格式}
+
+	输出到文件 \filename{river.out} 中。
+
+	输出一行，$n$ 个用空格隔开的整数，第 $i$ 个整数为 $f_i$，即 $k=i$ 时的答案。
+
+	\subsection{样例 1 输入}
+
+\begin{lstlisting}
+3 0
+3 1 5
+2
+4 2
+BS
+\end{lstlisting}
+
+	\subsection{样例 1 输出}
+
+\begin{lstlisting}
+2 5 9
+\end{lstlisting}
+
+	\subsection{样例 1 解释}
+
+	对于 $k=2$ 的情况，过程如下：
+
+	\begin{itemize}
+		\item 苒琵在桌上放了两个饼干，甜度分别为 $3$ 和 $1$。
+		\item 朋友 $1$ 到达，苒琵将朋友 $1$ 带来的甜度为 $4$ 的饼干放在桌上，朋友 $1$ 吃掉一块甜度为 $1$ 的饼干。
+		\item 朋友 $2$ 到达，苒琵将朋友 $2$ 带来的甜度为 $2$ 的饼干放在桌上，朋友 $2$ 吃掉一块甜度为 $4$ 的饼干。
+		\item 苒琵吃掉甜度为 $2$ 和 $3$ 的饼干。
+	\end{itemize}
+
+	\subsection{样例 2 输入}
+
+\begin{lstlisting}
+3 1
+3 999999999 0
+2
+4 2
+BS
+\end{lstlisting}
+
+	\subsection{样例 2 输出}
+
+\begin{lstlisting}
+2 5 9
+\end{lstlisting}
+
+	\subsection{样例 2 解释}
+
+	该样例为样例 $1$ 将 $t$ 设为 $1$ 的版本。
+
+	\subsection{样例 3}
+
+	见选手目录下的 \filename{river/river3.in} 与 \filename{river/river3.ans}。
+
+	\subsection{样例 4}
+
+	见选手目录下的 \filename{river/river4.in} 与 \filename{river/river4.ans}。
+
+	\subsection{数据范围}
+
+	对于 $100\%$ 的数据，$1\le n,m\le 2\times 10^5,0\le t\le 1,0\le a_i',b_j < 10^9,s_j\in \{\mathtt{S},\mathtt{B}\}$。
+
+	设 $C$ 为 $1\le i < m$ 且 $s_i\ne s_{i+1}$ 的 $i$ 的数量，$V$ 为 $\max\{a_i\},\max\{b_j\}$ 的较大值。
+
+	各测试点的附加限制如下表所示：
+
+	\begin{center}
+		\begin{tabular}{c|c|c|c}
+			\specialrule{2pt}{0em}{0em}
+			测试点编号 & $n,m\le $ & $t=$ & 特殊性质 \\
+			\specialrule{1pt}{0em}{0em}
+			$1\sim 2$ & $100$ & \multirow{4}{*}{$0$} & \multirow{5}{*}{无} \\
+			\cline{1-2}
+			$3\sim 4$ & $1000$ & & \\
+			\cline{1-2}
+			$5\sim 6$ & $10^4$ & & \\
+			\cline{1-2}
+			$7\sim 8$ & \multirow{2}{*}{$10^5$} & & \\
+			\cline{1-1} \cline{3-3}
+			$9$ & & \multirow{3}{*}{$1$} & \\
+			\cline{1-2} \cline{4-4}
+			$10$ & \multirow{7}{*}{$2\times 10^5$} & & $C=0$ \\
+			\cline{1-1} \cline{4-4}
+			$11\sim 12$ & & & $C\le 30$ \\
+			\cline{1-1} \cline{3-4}
+			$13$ & & \multirow{2}{*}{$0$} & $V=0$ \\
+			\cline{1-1} \cline{4-4}
+			$14\sim 15$ & & & \multirow{2}{*}{$V\le 30$} \\
+			\cline{1-1} \cline{3-3}
+			$16\sim 17$ & & $1$ & \\
+			\cline{1-1} \cline{3-4}
+			$18$ & & $0$ & \multirow{2}{*}{无} \\
+			\cline{1-1} \cline{3-3}
+			$19\sim 20$ & & $1$ & \\
+			\specialrule{2pt}{0em}{0em}
+		\end{tabular}
+	\end{center}
+
+	\newpage
+
+	\section{记（story）}
+	\fancyhead[R]{\footnotesize \fancyheadRightText~记（story）}
+
+	\subsection{题目描述}
+
+	在你埋头苦算时，苒琵制订完了与朋友们的游玩计划。在这个长长的计划表中，有一项叫做“双色球”的游戏项目。
+
+	游戏界面是一个二维平面。平面上有 $n$ 个红球和 $n$ 个蓝球。每个球的位置可以用一个坐标来表示，第 $i\ (1\le i\le n)$ 个红球的坐标为 $(r_i^x,r_i^y)$，第 $j\ (1\le j\le n)$ 个蓝球的坐标为 $(b_j^x,b_j^y)$。每个球上有一个数字，第 $i$ 个红球上的数为 $r_i^w$，第 $j$ 个蓝球上的数为 $b_j^w$。
+
+	游戏中会给出两个参数 $R,B$，游戏目标是选出一个红球 $i$ 和一个蓝球 $j$，\myemph{同时满足以下条件}：
+
+	\begin{itemize}
+		\item $r_i^y < b_j^y$；
+		\item $r_i^x < R < B < b_j^x$ 或 $R < r_i^x < b_j^x < B$。
+		\item 在满足以上两个条件的基础上，$r_i^w+b_j^w$ 最大。
+	\end{itemize}
+
+	\myemph{注意以上条件可能无法同时满足，此时游戏无解。}
+
+	每次游戏球的位置和球上的数不会改变，但是参数 $R,B$ 可能会发生改变。
+
+	共有 $m$ 个朋友参加了这个游戏。对于第 $k\ (1\le k\le m)$ 个朋友，游戏中的参数为 $R=R_k,B=B_k$。苒琵希望你能事先帮她求出每个朋友最终选到的两个球上的数之和。
+
+	\subsection{输入格式}
+
+	从文件 \filename{story.in} 中读入数据。
+
+  第一行一个整数 $n$，表示红球和蓝球的数量。
+
+	接下来 $n$ 行，第 $i$ 行三个整数 $r_i^x,r_i^y,r_i^w$，描述第 $i$ 个红球。
+
+	接下来 $n$ 行，第 $j$ 行三个整数 $b_j^x,b_j^y,b_j^w$，描述第 $j$ 个蓝球。
+
+	接下来一行，一个整数 $m$，表示朋友数量。
+
+	接下来 $m$ 行，第 $k$ 行两个整数 $R_k,B_k$，表示第 $k$ 个朋友参加游戏时游戏中的参数。
+
+	\subsection{输出格式}
+
+	输出到文件 \filename{story.out} 中。
+
+  输出 $m$ 行，第 $k$ 行一个整数，表示第 $k$ 个朋友选到的两个球上的数字之和。若无解，则输出 $-1$。
+
+	\subsection{样例 1 输入}
+
+\begin{lstlisting}
+2
+-3 1 2
+-6 3 8
+5 2 15
+3 4 6
+5
+-5 4
+-2 6
+-4 1
+-9 8
+-1 2
+\end{lstlisting}
+
+	\subsection{样例 1 输出}
+
+\begin{lstlisting}
+8
+-1
+14
+17
+17
+\end{lstlisting}
+
+	\subsection{样例 1 解释}
+
+	$5$ 个朋友的选择分别如下：
+
+	\begin{itemize}
+		\item 选择第 $1$ 个红球和第 $2$ 个蓝球；
+		\item 无解；
+		\item 选择第 $2$ 个红球和第 $2$ 个蓝球；
+		\item 选择第 $1$ 个红球和第 $1$ 个蓝球；
+		\item 选择第 $1$ 个红球和第 $1$ 个蓝球。
+	\end{itemize}
+
+	\subsection{样例 2}
+
+	见选手目录下的 \filename{story/story2.in} 与 \filename{story/story2.ans}。
+
+	\subsection{样例 3}
+
+	见选手目录下的 \filename{story/story3.in} 与 \filename{story/story3.ans}。
+
+	\subsection{数据范围}
+
+	对于 $100\%$ 的数据，$1\le n\le 5\times 10^5,1\le m\le 10^6,-10^9\le r_i^x,R_k\le -1,1\le b_j^x,B_k\le 10^9,1\le r_i^y,b_j^y\le 10^9,1\le r_i^w,b_j^w\le 10^9$，$r_1^x,\ldots,r_n^x,b_1^x,\ldots,b_n^x,R_1,\ldots,R_m,B_1,\ldots,B_m$ 互不相同，$r_1^y,\ldots,r_n^y,b_1^y,\ldots,b_n^y$ 互不相同。
+
+	各测试点的附加限制如下表所示：
+
+	\begin{center}
+		\begin{tabular}{c|c|c|c}
+			\specialrule{2pt}{0em}{0em}
+			测试点编号 & $n\le $ & $m\le $ & 特殊性质 \\
+			\specialrule{1pt}{0em}{0em}
+			$1\sim 2$ & $300$ & $300$ & \multirow{4}{*}{无} \\
+			\cline{1-3}
+			$3$ & $1000$ & $1000$ & \\
+			\cline{1-3}
+			$4$ & \multirow{2}{*}{$5000$} & $5000$ & \\
+			\cline{1-1} \cline{3-3}
+			$5\sim 6$ & & $10^6$ & \\
+			\hline
+			$7\sim 8$ & \multirow{5}{*}{$10^5$} & $10$ & \multirow{3}{*}{$\forall 1\le i,j\le n:r_i^y<b_j^y$} \\
+			\cline{1-1} \cline{3-3}
+			$9\sim 10$ & & $10^5$ & \\
+			\cline{1-1} \cline{3-3}
+			$11\sim 12$ & & $10^6$ & \\
+			\cline{1-1} \cline{3-4}
+			$13\sim 14$ & & $10$ & \multirow{3}{*}{无} \\
+			\cline{1-1} \cline{3-3}
+			$15\sim 17$ & & $5\times 10^5$ & \\
+			\cline{1-3}
+			$18\sim 20$ & $5\times 10^5$ & $10^6$ & \\
+			\specialrule{2pt}{0em}{0em}
+		\end{tabular}
+	\end{center}
+\end{document}
