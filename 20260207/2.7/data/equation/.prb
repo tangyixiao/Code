@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<problem type="TRA_0_4" maker="ccr-plus" version="1.1.0">
+    <source code="100" file="equation" dir="equation">
+        <language file="equation.cpp" cmd="g++ -o equation equation.cpp -lm -std=c++14  -Wl,--stack=512000000" time="10"/>
+    </source>
+    <task input="equation.in" checker="fulltext" time="10" output="equation.out">
+        <subtask score="5">
+            <point in="equation1.in" out="equation1.ans" time="1" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="equation2.in" out="equation2.ans" time="1" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="equation3.in" out="equation3.ans" time="1" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="equation4.in" out="equation4.ans" time="1" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="equation5.in" out="equation5.ans" time="1" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="equation6.in" out="equation6.ans" time="1" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="equation7.in" out="equation7.ans" time="1" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="equation8.in" out="equation8.ans" time="1" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="equation9.in" out="equation9.ans" time="1" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="equation10.in" out="equation10.ans" time="1" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="equation11.in" out="equation11.ans" time="1" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="equation12.in" out="equation12.ans" time="1" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="equation13.in" out="equation13.ans" time="1" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="equation14.in" out="equation14.ans" time="1" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="equation15.in" out="equation15.ans" time="1" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="equation16.in" out="equation16.ans" time="1" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="equation17.in" out="equation17.ans" time="1" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="equation18.in" out="equation18.ans" time="1" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="equation19.in" out="equation19.ans" time="1" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="equation20.in" out="equation20.ans" time="1" mem="512"/>
+        </subtask>
+    </task>
+</problem>

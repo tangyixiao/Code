@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<problem type="TRA_0_4" maker="ccr-plus" version="1.1.0">
+    <source code="100" file="scan" dir="scan">
+        <language file="scan.pas" cmd="fpc scan.pas" time="10"/>
+        <language file="scan.cpp" cmd="g++ -o scan scan.cpp -lm -std=c++14  -Wl,--stack=512000000" time="10"/>
+        <language file="scan.c" cmd="gcc -o scan scan.c -lm" time="10"/>
+    </source>
+    <task input="scan.in" checker="fulltext" time="10" output="scan.out">
+        <subtask score="10">
+            <point in="scan.in0" out="scan.ou0" time="1" mem="512"/>
+        </subtask>
+        <subtask score="10">
+            <point in="scan.in1" out="scan.ou1" time="1" mem="512"/>
+        </subtask>
+        <subtask score="10">
+            <point in="scan.in2" out="scan.ou2" time="1" mem="512"/>
+        </subtask>
+        <subtask score="10">
+            <point in="scan.in3" out="scan.ou3" time="1" mem="512"/>
+        </subtask>
+        <subtask score="10">
+            <point in="scan.in4" out="scan.ou4" time="1" mem="512"/>
+        </subtask>
+        <subtask score="10">
+            <point in="scan.in5" out="scan.ou5" time="1" mem="512"/>
+        </subtask>
+        <subtask score="10">
+            <point in="scan.in6" out="scan.ou6" time="1" mem="512"/>
+        </subtask>
+        <subtask score="10">
+            <point in="scan.in7" out="scan.ou7" time="1" mem="512"/>
+        </subtask>
+        <subtask score="10">
+            <point in="scan.in8" out="scan.ou8" time="1" mem="512"/>
+        </subtask>
+        <subtask score="10">
+            <point in="scan.in9" out="scan.ou9" time="1" mem="512"/>
+        </subtask>
+    </task>
+</problem>

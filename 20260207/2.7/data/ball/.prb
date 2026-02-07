@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<problem type="TRA_0_4" maker="ccr-plus" version="1.1.0">
+    <source code="100" file="ball" dir="ball">
+        <language file="ball.c" cmd="gcc -o ball ball.c -lm -static" time="10"/>
+        <language file="ball.cpp" cmd="g++ -o ball ball.cpp -lm -std=c++14  -Wl,--stack=512000000" time="10"/>
+        <language file="ball.pas" cmd="fpc ball.pas" time="10"/>
+    </source>
+    <task input="ball.in" checker="fulltext" time="10" output="ball.out">
+        <subtask score="10">
+            <point in="ball0.in" out="ball0.out" time="1" mem="512"/>
+        </subtask>
+        <subtask score="10">
+            <point in="ball1.in" out="ball1.out" time="1" mem="512"/>
+        </subtask>
+        <subtask score="10">
+            <point in="ball2.in" out="ball2.out" time="1" mem="512"/>
+        </subtask>
+        <subtask score="10">
+            <point in="ball3.in" out="ball3.out" time="1" mem="512"/>
+        </subtask>
+        <subtask score="10">
+            <point in="ball4.in" out="ball4.out" time="1" mem="512"/>
+        </subtask>
+        <subtask score="10">
+            <point in="ball5.in" out="ball5.out" time="1" mem="512"/>
+        </subtask>
+        <subtask score="10">
+            <point in="ball6.in" out="ball6.out" time="1" mem="512"/>
+        </subtask>
+        <subtask score="10">
+            <point in="ball7.in" out="ball7.out" time="1" mem="512"/>
+        </subtask>
+        <subtask score="10">
+            <point in="ball8.in" out="ball8.out" time="1" mem="512"/>
+        </subtask>
+        <subtask score="10">
+            <point in="ball9.in" out="ball9.out" time="1" mem="512"/>
+        </subtask>
+    </task>
+</problem>

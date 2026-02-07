@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<contest maker="ccr-plus" version="1.1.0">
+    <order>
+        <problem>ball</problem>
+        <problem>scan</problem>
+        <problem>piranhas</problem>
+        <problem>equation</problem>
+    </order>
+</contest>

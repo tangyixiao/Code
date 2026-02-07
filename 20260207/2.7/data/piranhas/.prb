@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<problem type="TRA_0_4" maker="ccr-plus" version="1.1.0">
+    <source code="100" file="piranhas" dir="piranhas">
+        <language file="piranhas.c" cmd="gcc -o piranhas piranhas.c -lm -static" time="10"/>
+        <language file="piranhas.cpp" cmd="g++ -o piranhas piranhas.cpp -lm -std=c++14  -Wl,--stack=512000000" time="10"/>
+        <language file="piranhas.pas" cmd="fpc piranhas.pas" time="10"/>
+    </source>
+    <task input="piranhas.in" checker="fulltext" time="10" output="piranhas.out">
+        <subtask score="5">
+            <point in="piranhas1.in" out="piranhas1.ans" time="2" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="piranhas2.in" out="piranhas2.ans" time="2" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="piranhas3.in" out="piranhas3.ans" time="2" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="piranhas4.in" out="piranhas4.ans" time="2" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="piranhas5.in" out="piranhas5.ans" time="2" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="piranhas6.in" out="piranhas6.ans" time="2" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="piranhas7.in" out="piranhas7.ans" time="2" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="piranhas8.in" out="piranhas8.ans" time="2" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="piranhas9.in" out="piranhas9.ans" time="2" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="piranhas10.in" out="piranhas10.ans" time="2" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="piranhas11.in" out="piranhas11.ans" time="2" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="piranhas12.in" out="piranhas12.ans" time="2" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="piranhas13.in" out="piranhas13.ans" time="2" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="piranhas14.in" out="piranhas14.ans" time="2" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="piranhas15.in" out="piranhas15.ans" time="2" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="piranhas16.in" out="piranhas16.ans" time="2" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="piranhas17.in" out="piranhas17.ans" time="2" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="piranhas18.in" out="piranhas18.ans" time="2" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="piranhas19.in" out="piranhas19.ans" time="2" mem="512"/>
+        </subtask>
+        <subtask score="5">
+            <point in="piranhas20.in" out="piranhas20.ans" time="2" mem="512"/>
+        </subtask>
+    </task>
+</problem>
