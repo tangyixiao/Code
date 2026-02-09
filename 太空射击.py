@@ -69,8 +69,8 @@ class Bullet:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.radius = 5
-        self.speed = 10
+        self.radius = 50 # rad 5
+        self.speed = 100 # 速度 10
         self.color = GREEN
         
     def draw(self):
