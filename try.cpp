@@ -1,7 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
-int T,n;
+int n;
 signed main() {
-
-    return 0;
+    cin >> n;
+    cout << !n;
+    return 1;
 }
+

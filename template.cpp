@@ -9,8 +9,6 @@ Copyright (C) 2026 TangYixiao
 #define DEBUG
 #define TIME_COUNT
 #define FILE_NAME ""
-#define TEMPLATES template <class T> \
-inline T
 
 /*
 
@@ -135,9 +133,12 @@ inline void Debug_Print(string Debug_Message) { cerr << "\n" + Debug_Message + "
 } // namespace DEBUGS
 using namespace DEBUGS;
 namespace BITS {
-TEMPLATES lowbit(T x) { return x & (-x); }
-TEMPLATES highbit(T x) { return (T)(log2(x) + 1); }
-TEMPLATES Pop_Count(T x) { return __builtin_popcount(x); }
+template <class T>
+inline T lowbit(T x) { return x & (-x); }
+template <class T>
+inline T highbit(T x) { return (T)(log2(x) + 1); }
+template <class T>
+inline T Pop_Count(T x) { return __builtin_popcount(x); }
 } // namespace BITS
 using namespace BITS;
 inline void solve(int Task_Id);
