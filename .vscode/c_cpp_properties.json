@@ -3,10 +3,10 @@
         {
             "name": "Win32",
             "includePath": [
-                "D:\\g++15.2.0\\mingw64\\include",
-                "D:\\g++15.2.0\\mingw64\\x86_64-w64-mingw32\\include",
-                "D:\\g++15.2.0\\mingw64\\lib\\g++\\x86_64-w64-mingw32\\15.2.0\\include",
-                "D:\\g++15.2.0\\mingw64\\lib\\g++\\x86_64-w64-mingw32\\15.2.0\\include\\c++",
+                "D:\\mingw64\\include",
+                "D:\\mingw64\\x86_64-w64-mingw32\\include",
+                "D:\\mingw64\\lib\\g++\\x86_64-w64-mingw32\\15.2.0\\include",
+                "D:\\mingw64\\lib\\g++\\x86_64-w64-mingw32\\15.2.0\\include\\c++",
                 "${workspaceFolder}/**"
             ],
             "defines": [
@@ -14,7 +14,7 @@
                 "UNICODE",
                 "_UNICODE"
             ],
-            "compilerPath": "D:\\g++15.2.0\\mingw64\\bin\\g++.exe",
+            "compilerPath": "D:\\mingw64\\bin\\g++.exe",
             "cStandard": "c17",
             "cppStandard": "c++23",
             "intelliSenseMode": "windows-clang-x64"
