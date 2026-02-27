@@ -1,0 +1,1 @@
+print(sum(map(eval, input().split("+"))) % 10000)

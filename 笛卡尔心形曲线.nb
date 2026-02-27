@@ -1,0 +1,93 @@
+(* Content-type: application/vnd.wolfram.cdf.text *)
+
+(*** Wolfram CDF File ***)
+(* http://www.wolfram.com/cdf *)
+
+(* CreatedBy='Wolfram 14.3' *)
+
+(*************************************************************************)
+(*                                                                       *)
+(*                                                                       *)
+(*  This file was created under the Wolfram Enterprise licensing terms.  *)
+(*                                                                       *)
+(*       For additional information concerning CDF licensing see:        *)
+(*                                                                       *)
+(*        www.wolfram.com/cdf/adopting-cdf/licensing-options.html        *)
+(*                                                                       *)
+(*                                                                       *)
+(*                                                                       *)
+(*************************************************************************)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[      1060,         20]
+NotebookDataLength[      2133,         72]
+NotebookOptionsPosition[      2664,         70]
+NotebookOutlinePosition[      3082,         87]
+CellTagsIndexPosition[      3039,         84]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{"ContourPlot3D", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"x", "^", "2"}], "+", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"9", " ", 
+           RowBox[{"y", "^", "2"}]}], ")"}], "/", "4"}], "+", 
+        RowBox[{"z", "^", "2"}], "-", "1"}], "}"}], "^", "3"}], "-", 
+     RowBox[{
+      RowBox[{"x", "^", "2"}], " ", 
+      RowBox[{"z", "^", "3"}]}], "-", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"9", " ", 
+        RowBox[{"y", "^", "2"}], " ", 
+        RowBox[{"z", "^", "3"}]}], ")"}], "/", "80"}]}], "==", "0"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"x", ",", 
+     RowBox[{"-", "2"}], ",", "2"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"y", ",", 
+     RowBox[{"-", "2"}], ",", "2"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"z", ",", 
+     RowBox[{"-", "2"}], ",", "2"}], "}"}], ",", 
+   RowBox[{"PlotTheme", "->", "\"\<Classic\>\""}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.978731366858061*^9, 3.978731366858061*^9}, {
+  3.9787316459019947`*^9, 3.978731647565468*^9}, {3.978731906195368*^9, 
+  3.978731919320633*^9}},ExpressionUUID->"90a93ae0-dbf2-e54b-becc-\
+03c394ec8e2d"]
+},
+WindowSize->{569.25, 549.75},
+WindowMargins->{{309, Automatic}, {18, Automatic}},
+FrontEndVersion->"14.3 for Microsoft Windows (64-bit) (2025\:5e747\:67088\
+\:65e5)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"2c568921-8233-5544-aacb-86961ee11043"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[1460, 33, 1200, 35, 96, "Input",ExpressionUUID->"90a93ae0-dbf2-e54b-becc-03c394ec8e2d"]
+}
+]
+*)
+
