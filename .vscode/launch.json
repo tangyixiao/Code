@@ -39,13 +39,9 @@
       "detail": "调试器生成的任务。"
     }
   ],
-<<<<<<< HEAD
-  "configurations": []
-=======
   "configurations": [
     
     
 
   ]
->>>>>>> b2c636da15104ce8d22aa73a84106b5a0c41b701
 }

@@ -107,49 +107,21 @@ Copyright (C) 2026 TangYixiao
 #endif
 using namespace std;
 
-/*
-
-注意在用 priority_queue 时，可能会和 std 的冲突。
-
-*/
-
 #ifdef PD_DS_USED
-#ifdef BITS_NOT_ALLOWED
-
-// __gnu_pbds 常用头文件及功能注释
-#include <ext/pb_ds/assoc_container.hpp>    // 关联容器：hash、tree等基类
-#include <ext/pb_ds/exception.hpp>          // 异常类
-#include <ext/pb_ds/hash_fn>                // 哈希函数（如直接、取模等）
-#include <ext/pb_ds/hash_policy.hpp>        // 哈希策略：cc_hash_table（链地址），gp_hash_table（开放地址）
-#include <ext/pb_ds/list_update_policy.hpp> // 列表更新策略（用于哈希表冲突处理）
-#include <ext/pb_ds/priority_queue.hpp>     // 优先队列：pairing_heap（配对堆），binomial_heap等，支持 merge、modify
-#include <ext/pb_ds/tag_and_trait.hpp>      // 标签与特性，如 rb_tree_tag 等
-#include <ext/pb_ds/tree_policy.hpp>        // 树策略：实现 order_of_key 和 find_by_order
-#include <ext/pb_ds/trie_policy.hpp>        // Trie 树策略（较少用）
-#include <ext/rope>                         // 可持久化块状链表（属于 __gnu_cxx，但常与 pbds 一起使用）
-using namespace __gnu_pbds;
-
-#else
-
-#include <bits/extc++.h> // 万能扩展头文件（包含大部分 pbds 和 rope）
+#include <bits/extc++.h>
 using namespace __gnu_pbds;
 #endif
 namespace TANGYIXIAO {
 namespace IO {
 inline void Init_IO() { cin.tie(0)->sync_with_stdio(false); }
+} // namespace IO
+using namespace IO;
 namespace FILE_IO {
 const string Insuffix = ".in", Outsuffix = ".out", Anssuffix = ".ans";
 inline void Judge_File(string File_Name) { freopen((File_Name + Insuffix).c_str(), "r", stdin), freopen((File_Name + Outsuffix).c_str(), "w", stdout); }
 inline void Local_File(string File_Name, int File_Idx) { freopen((File_Name + to_string(File_Idx) + Insuffix).c_str(), "r", stdin), freopen((File_Name + to_string(File_Idx) + Outsuffix).c_str(), "w", stdout); }
 } // namespace FILE_IO
 using namespace FILE_IO;
-namespace INT128_IO{
-istream&operator>>(istream&is,__int128&x){string s;is>>s;bool neg=false;x=0;for(char c:s){if(c=='-')neg=true;else x=x*10+(c-'0');}if(neg)x=-x;return is;}
-ostream&operator<<(ostream&os,__int128 x){if(x==0)os<<0;else{string s,t;if(x<0)x=-x,t="-";while(x)s.push_back('0'+x%10),x/=10;reverse(s.begin(),s.end());os<<t<<s;}return os;}
-} // namespace INT128_IO
-using namespace INT128_IO;
-} // namespace IO
-using namespace IO;
 namespace TIME {
 clock_t Start_Time, End_Time;
 inline void Start_Time_Count() { Start_Time = clock(); }
@@ -199,8 +171,123 @@ signed main() {
     return EXIT_SUCCESS;
 }
 namespace TANGYIXIAO {
+
+const int MOD = 1e9;
+
+int mod_pow(int a, int b) {
+    long long res = 1, base = a;
+    while (b) {
+        if (b & 1)
+            res = res * base % MOD;
+        base = base * base % MOD;
+        b >>= 1;
+    }
+    return res;
+}
+
+struct DSU {
+    vector<int> parent;
+    vector<int> xor_to_parent;
+
+    DSU(int n) {
+        parent.resize(n);
+        xor_to_parent.resize(n, 0);
+        for (int i = 0; i < n; ++i)
+            parent[i] = i;
+    }
+
+    pair<int, int> find(int x) {
+        if (parent[x] != x) {
+            auto [r, val] = find(parent[x]);
+            xor_to_parent[x] ^= val;
+            parent[x] = r;
+            return {r, xor_to_parent[x]};
+        } else {
+            return {x, 0};
+        }
+    }
+
+    bool unite(int u, int v, int w) {
+        auto [ru, du] = find(u);
+        auto [rv, dv] = find(v);
+        if (ru == rv) {
+            return (du ^ dv) == w;
+        }
+        parent[ru] = rv;
+        xor_to_parent[ru] = du ^ dv ^ w;
+        return true;
+    }
+};
 inline void solve(int Task_Id) {
-    // do something here
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+
+    int n, m, k;
+    cin >> n >> m >> k;
+
+    vector<tuple<int, int, int>> cells(k);
+    for (int i = 0; i < k; ++i) {
+        int x, y, c;
+        cin >> x >> y >> c;
+        cells[i] = {x, y, c};
+    }
+
+    int row_offset = 0;
+    int col_offset = n - 1;
+    int root_id = n + m - 2;
+    int total_nodes = n + m - 1;
+
+    auto solve_for_x = [&](int x) -> int {
+        DSU dsu(total_nodes);
+
+        bool ok = true;
+        for (auto [i, j, c] : cells) {
+            if (i == 1 && j == 1) {
+                if (c != x) {
+                    ok = false;
+                    break;
+                }
+                continue;
+            }
+            if (i == 1) {
+                int node = col_offset + (j - 2);
+
+                if (!dsu.unite(node, root_id, c)) {
+                    ok = false;
+                    break;
+                }
+            } else if (j == 1) {
+                int node = row_offset + (i - 2);
+                if (!dsu.unite(node, root_id, c)) {
+                    ok = false;
+                    break;
+                }
+            } else {
+                int u = col_offset + (j - 2);
+                int v = row_offset + (i - 2);
+                int d = ((i % 2 == 0) && (j % 2 == 0)) ? 1 : 0;
+                int w = c ^ x ^ d;
+                if (!dsu.unite(u, v, w)) {
+                    ok = false;
+                    break;
+                }
+            }
+        }
+
+        if (!ok)
+            return 0;
+
+        unordered_set<int> roots;
+        for (int id = 0; id < total_nodes; ++id) {
+            roots.insert(dsu.find(id).first);
+        }
+        int comps = roots.size();
+
+        return mod_pow(2, comps - 1);
+    };
+
+    int ans = (solve_for_x(0) + solve_for_x(1)) % MOD;
+    cout << ans << '\n';
     return;
 }
 } // namespace TANGYIXIAO
