@@ -7,8 +7,8 @@ Copyright (C) 2026 TangYixiao
 #define FILE_IDX 1 // the index of the file in the local file system
 // #define MULTIPLE_TEST
 // #define DEBUG
-// #define TIME_COUNT
-#define FILE_NAME ""
+#define TIME_COUNT
+#define FILE_NAME "P3620"
 // #define BITS_NOT_ALLOWED
 // #define PD_DS_USED
 // #define TESTLIB
@@ -285,7 +285,7 @@ inline void Judge_File(string File_Name) { freopen((File_Name + Insuffix).c_str(
 inline void Local_File(string File_Name, int File_Idx) { freopen((File_Name + to_string(File_Idx) + Insuffix).c_str(), "r", stdin), freopen((File_Name + to_string(File_Idx) + Outsuffix).c_str(), "w", stdout); }
 } // namespace FILE_IO
 using namespace FILE_IO;
-namespace INT128_IO{
+namespace INT128_IO {
 // clang-format off
 istream&operator>>(istream&is,__int128&x){string s;is>>s;bool neg=false;x=0;for(char c:s){if(c=='-')neg=true;else x=x*10+(c-'0');}if(neg)x=-x;return is;}
 ostream&operator<<(ostream&os,__int128 x){if(x==0)os<<0;else{string s,t;if(x<0)x=-x,t="-";while(x)s.push_back('0'+x%10),x/=10;reverse(s.begin(),s.end());os<<t<<s;}return os;}
@@ -343,8 +343,41 @@ signed main(int argc, char *argv[]) {
     return EXIT_SUCCESS;
 }
 namespace TANGYIXIAO {
+int read() {
+    int a = 0, ch = getchar();
+    while (ch < 48 || ch > 57)
+        ch = getchar();
+    while (48 <= ch && ch <= 57) {
+        a = a * 10 + (ch ^ 48);
+        ch = getchar();
+    }
+    return a;
+}
+void print(int a) {
+    if (a >= 10)
+        print(a / 10);
+    putchar((a % 10) | 48);
+    return;
+}
+int n, k;
+int s[100010];
+int dp[2][50010][2];
 inline void solve(int Task_Id) {
-    // do something here
+    n = read();
+    k = read();
+    for (int i = 1; i <= n; i++)
+        s[i] = read();
+    dp[1][0][0] = 0;
+    for (int i = 2; i <= n; i++) {
+        dp[i & 1][0][0] = dp[i & 1][0][1] = 0;
+        for (int j = (1 >= (k - ((n - i) >> 1) - 1) ? 1 : (k - ((n - i) >> 1) - 1)), t = (k <= (i - 1 >> 1) ? k : (i - 1 >> 1)); j <= t; j++) {
+            dp[i & 1][j][0] = dp[i - 1 & 1][j][0] < dp[i - 1 & 1][j][1] ? dp[i - 1 & 1][j][0] : dp[i - 1 & 1][j][1];
+            dp[i & 1][j][1] = dp[i - 1 & 1][j - 1][0] + s[i] - s[i - 1];
+        }
+        (i & 1) ? 0 : (dp[i & 1][i >> 1][0] = 1e9, dp[i & 1][i >> 1][1] = dp[i - 1 & 1][(i >> 1) - 1][0] + s[i] - s[i - 1]);
+    }
+    print(dp[n & 1][k][0] < dp[n & 1][k][1] ? dp[n & 1][k][0] : dp[n & 1][k][1]);
+
     return;
 }
 } // namespace TANGYIXIAO

@@ -285,7 +285,7 @@ inline void Judge_File(string File_Name) { freopen((File_Name + Insuffix).c_str(
 inline void Local_File(string File_Name, int File_Idx) { freopen((File_Name + to_string(File_Idx) + Insuffix).c_str(), "r", stdin), freopen((File_Name + to_string(File_Idx) + Outsuffix).c_str(), "w", stdout); }
 } // namespace FILE_IO
 using namespace FILE_IO;
-namespace INT128_IO{
+namespace INT128_IO {
 // clang-format off
 istream&operator>>(istream&is,__int128&x){string s;is>>s;bool neg=false;x=0;for(char c:s){if(c=='-')neg=true;else x=x*10+(c-'0');}if(neg)x=-x;return is;}
 ostream&operator<<(ostream&os,__int128 x){if(x==0)os<<0;else{string s,t;if(x<0)x=-x,t="-";while(x)s.push_back('0'+x%10),x/=10;reverse(s.begin(),s.end());os<<t<<s;}return os;}
@@ -343,8 +343,82 @@ signed main(int argc, char *argv[]) {
     return EXIT_SUCCESS;
 }
 namespace TANGYIXIAO {
+typedef long long ll;
+const int MAXB = 31;   // 最多 30 位，加上第 30 位共 31 位
+const int MAXS = 2000; // 状态容量上限，所有物品的 a 之和 ≤ 1000，进位后也在此范围内
+const ll INF = -1e18;  // 负无穷
+
 inline void solve(int Task_Id) {
-    // do something here
+    int n, W;
+    while (cin >> n >> W) {
+        if (n == -1 && W == -1)
+            break;
+
+        // 按 b 分组，每组存储 (a, v)
+        vector<pair<int, int>> groups[MAXB];
+        for (int i = 0; i < n; ++i) {
+            int w, v;
+            cin >> w >> v;
+            int b = 0;
+            while (w % 2 == 0) {
+                w /= 2;
+                ++b;
+            }
+            int a = w; // 此时 a ≤ 10
+            groups[b].push_back({a, v});
+        }
+
+        // 预处理每个组的背包：val[b][s] 表示该组恰好用重量 s 的最大价值
+        vector<vector<ll>> val(MAXB);
+        vector<int> maxs(MAXB, 0); // 每组最大可能重量和
+        for (int b = 0; b < MAXB; ++b) {
+            int sum = 0;
+            for (auto &p : groups[b])
+                sum += p.first;
+            maxs[b] = sum;
+            vector<ll> dp(sum + 1, INF);
+            dp[0] = 0;
+            for (auto &p : groups[b]) {
+                int a = p.first;
+                ll v = p.second;
+                for (int j = sum; j >= a; --j) {
+                    if (dp[j - a] != INF)
+                        dp[j] = max(dp[j], dp[j - a] + v);
+                }
+            }
+            val[b] = dp;
+        }
+
+        // 数位 DP，从低位到高位
+        vector<ll> cur(MAXS, INF);
+        cur[0] = 0; // 初始进位为 0
+
+        for (int bit = 0; bit < MAXB; ++bit) {
+            int wbit = (W >> bit) & 1; // W 的第 bit 位
+            vector<ll> nxt(MAXS, INF);
+            for (int c = 0; c < MAXS; ++c) {
+                if (cur[c] == INF)
+                    continue;
+                // 枚举该位上的物品总重量 s
+                for (int s = 0; s <= maxs[bit]; ++s) {
+                    if (val[bit][s] == INF)
+                        continue;
+                    int total = s + c;
+                    if ((total & 1) != wbit)
+                        continue;          // 必须与 W 的该位相等
+                    int newc = total >> 1; // 向高位的进位
+                    if (newc < MAXS) {
+                        nxt[newc] = max(nxt[newc], cur[c] + val[bit][s]);
+                    }
+                }
+            }
+            cur = move(nxt);
+        }
+
+        // 最终进位必须为 0
+        ll ans = cur[0];
+        cout << ans << endl;
+    }
     return;
 }
 } // namespace TANGYIXIAO
