@@ -1,50 +1,54 @@
 #include <bits/stdc++.h>
-#define int long long
 using namespace std;
-const int N = 5e3 + 5, M = 2e5 + 10;
-struct node {
+const int N = 5e3 + 5, M = 2e5 + 5;
+int cnt, fa[N];
+long long ans;
+struct Edge {
     int u, v, w;
-} e[M];
-bool operator<(const node& x, const node& y) {
-    return x.w < y.w;
-}
-int n, m, father[N];
-int findfather(int v) {
-    if (father[v] == v)
-        return v;
-    else {
-        father[v] = findfather(father[v]);
-        return father[v];
+    bool operator<(const Edge &other) const {
+        return w < other.w;
     }
-}
-int Kruskal() {
-    int ans = 0, num_edge = 0;
+} edges[M];
+inline void init(int n) {
     for (int i = 1; i <= n; i++) {
-        father[i] = i;
+        fa[i] = i;
     }
-    sort(e + 1, e + 1 + m);
+    return;
+}
+inline int find(int x) {
+    if (fa[x] != x) {
+        fa[x] = find(fa[x]);
+    }
+    return fa[x];
+}
+inline bool unite(int x, int y) {
+    x = find(x), y = find(y);
+    if (x == y) {
+        return false;
+    }
+    fa[x] = y;
+    return true;
+}
+signed main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    int n, m;
+    cin >> n >> m;
     for (int i = 1; i <= m; i++) {
-        int fu = findfather(e[i].u), fv = findfather(e[i].v);
-        if (fu != fv) {
-            ans += e[i].w;
-            father[fu] = fv;
-            num_edge++;
-            if (num_edge == n - 1)
-                break;
+        cin >> edges[i].u >> edges[i].v >> edges[i].w;
+    }
+    sort(edges + 1, edges + 1 + m);
+    init(n);
+    for (int i = 1; i <= m && cnt < n - 1; i++) {
+        if (unite(edges[i].u, edges[i].v)) {
+            ans += edges[i].w;
+            cnt++;
         }
     }
-    if (num_edge != n - 1) {
-        printf("orz");
-        exit(0);
+    if (cnt == n - 1) {
+        cout << ans << "\n";
+    } else {
+        cout << "orz\n";
     }
-    return ans;
-}
-
-signed main() {
-    scanf("%lld%lld", &n, &m);
-    for (int i = 1; i <= m; i++) {
-        scanf("%lld%lld%lld", &e[i].u, &e[i].v, &e[i].w);
-    }
-    printf("%lld\n", Kruskal());
     return 0;
 }
