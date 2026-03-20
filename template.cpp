@@ -12,7 +12,8 @@ Copyright (C) 2026 TangYixiao
 // #define BITS_NOT_ALLOWED
 // #define PD_DS_USED
 // #define TESTLIB
-
+#pragma region PREPROCESSOR
+#pragma region INCLUDES
 #ifdef TESTLIB
 #include <testlib.h> // 自定义测试库
 #endif
@@ -275,7 +276,9 @@ using namespace __gnu_pbds;
 #endif
 
 #endif
+#pragma endregion INCLUDES
 
+#pragma region TANGYIXIAO
 namespace TANGYIXIAO {
 namespace IO {
 inline void Init_IO() { cin.tie(0)->sync_with_stdio(false); }
@@ -318,6 +321,8 @@ using namespace BITS;
 inline void solve(int Task_Id);
 } // namespace TANGYIXIAO
 using namespace TANGYIXIAO;
+#pragma endregion TANGYIXIAO
+#pragma region MAIN
 signed main(int argc, char *argv[]) {
 #ifdef TIME_COUNT
     Start_Time_Count();
@@ -342,6 +347,8 @@ signed main(int argc, char *argv[]) {
 #endif
     return EXIT_SUCCESS;
 }
+#pragma endregion MAIN
+#pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 inline void solve(int Task_Id) {
     // do something here
