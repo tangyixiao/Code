@@ -280,14 +280,18 @@ using namespace __gnu_pbds;
 
 #pragma region TANGYIXIAO
 namespace TANGYIXIAO {
+#pragma region IO
 namespace IO {
 inline void Init_IO() { cin.tie(0)->sync_with_stdio(false); }
+#pragma region FILE_IO
 namespace FILE_IO {
 const string Insuffix = ".in", Outsuffix = ".out", Anssuffix = ".ans";
 inline void Judge_File(string File_Name) { freopen((File_Name + Insuffix).c_str(), "r", stdin), freopen((File_Name + Outsuffix).c_str(), "w", stdout); }
 inline void Local_File(string File_Name, int File_Idx) { freopen((File_Name + to_string(File_Idx) + Insuffix).c_str(), "r", stdin), freopen((File_Name + to_string(File_Idx) + Outsuffix).c_str(), "w", stdout); }
 } // namespace FILE_IO
 using namespace FILE_IO;
+#pragma endregion FILE_IO
+#pragma region INT128_IO
 namespace INT128_IO{
 // clang-format off
 istream&operator>>(istream&is,__int128&x){string s;is>>s;bool neg=false;x=0;for(char c:s){if(c=='-')neg=true;else x=x*10+(c-'0');}if(neg)x=-x;return is;}
@@ -295,8 +299,11 @@ ostream&operator<<(ostream&os,__int128 x){if(x==0)os<<0;else{string s,t;if(x<0)x
 // clang-format on
 } // namespace INT128_IO
 using namespace INT128_IO;
+#pragma endregion INT128_IO
 } // namespace IO
 using namespace IO;
+#pragma endregion IO
+#pragma region TIME
 namespace TIME {
 clock_t Start_Time, End_Time;
 inline void Start_Time_Count() { Start_Time = clock(); }
@@ -305,10 +312,14 @@ inline double Time_Count() { return (double)(End_Time - Start_Time) / CLOCKS_PER
 inline void Print_Time_Count(string Programe_Name) { cerr << fixed << setprecision(4) << "\n" + Programe_Name + " Time: " << Time_Count() << "s\n"; }
 } // namespace TIME
 using namespace TIME;
+#pragma endregion TIME
+#pragma region DEBUGS
 namespace DEBUGS {
 inline void Debug_Print(string Debug_Message) { cerr << "\n" + Debug_Message + "\n"; }
 } // namespace DEBUGS
 using namespace DEBUGS;
+#pragma endregion DEBUGS
+#pragma region BITS
 namespace BITS {
 template <class T>
 inline T lowbit(T x) { return x & (-x); }
@@ -318,6 +329,7 @@ template <class T>
 inline T Pop_Count(T x) { return __builtin_popcount(x); }
 } // namespace BITS
 using namespace BITS;
+#pragma endregion BITS
 inline void solve(int Task_Id);
 } // namespace TANGYIXIAO
 using namespace TANGYIXIAO;
