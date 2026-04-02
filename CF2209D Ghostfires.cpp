@@ -5,7 +5,7 @@ Copyright (C) 2026 TangYixiao
 
 #define JUDGE 0    // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_IDX 1 // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -288,7 +288,7 @@ inline void Judge_File(string File_Name) { freopen((File_Name + Insuffix).c_str(
 inline void Local_File(string File_Name, int File_Idx) { freopen((File_Name + to_string(File_Idx) + Insuffix).c_str(), "r", stdin), freopen((File_Name + to_string(File_Idx) + Outsuffix).c_str(), "w", stdout); }
 } // namespace FILE_IO
 using namespace FILE_IO;
-namespace INT128_IO{
+namespace INT128_IO {
 // clang-format off
 istream&operator>>(istream&is,__int128&x){string s;is>>s;bool neg=false;x=0;for(char c:s){if(c=='-')neg=true;else x=x*10+(c-'0');}if(neg)x=-x;return is;}
 ostream&operator<<(ostream&os,__int128 x){if(x==0)os<<0;else{string s,t;if(x<0)x=-x,t="-";while(x)s.push_back('0'+x%10),x/=10;reverse(s.begin(),s.end());os<<t<<s;}return os;}
@@ -306,12 +306,6 @@ inline void Print_Time_Count(string Programe_Name) { cerr << fixed << setprecisi
 } // namespace TIME
 using namespace TIME;
 namespace DEBUGS {
-#define all(x) (x).begin(), (x).end()
-#define fprint(...) cout << format(__VA_ARGS__)
-#define fprintln(...) cout << format(__VA_ARGS__) << '\n'
-#define ferr(...) cerr << format(__VA_ARGS__)
-#define ferrln(...) cerr << format(__VA_ARGS__) << '\n'
-#define funct(name, ret, ...) function<ret(__VA_ARGS__)> name = [&](__VA_ARGS__)
 inline void Debug_Print(string Debug_Message) { cerr << "\n" + Debug_Message + "\n"; }
 } // namespace DEBUGS
 using namespace DEBUGS;
@@ -356,8 +350,84 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+int idx(char c) {
+    if (c == 'R')
+        return 0;
+    if (c == 'G')
+        return 1;
+    return 2;
+}
+string build(int r, int g, int b, char start) {
+    int cnt[3] = {r, g, b};
+    string s;
+    s.push_back(start);
+    cnt[idx(start)]--;
+    while (true) {
+        int n = s.size();
+        bool allow[3] = {false, false, false};
+        if (n == 1) {
+            for (int i = 0; i < 3; ++i) {
+                char c = "RGB"[i];
+                if (c != s[0] && cnt[i] > 0)
+                    allow[i] = true;
+            }
+        } else if (n == 2) {
+            for (int i = 0; i < 3; ++i) {
+                char c = "RGB"[i];
+                if (c != s[1] && cnt[i] > 0)
+                    allow[i] = true;
+            }
+        } else {
+            char prev = s[n - 1];
+            char prev3 = s[n - 3];
+            for (int i = 0; i < 3; ++i) {
+                char c = "RGB"[i];
+                if (c != prev && c != prev3 && cnt[i] > 0)
+                    allow[i] = true;
+            }
+        }
+        int best = -1;
+        int maxcnt = -1;
+        for (int i = 0; i < 3; ++i) {
+            if (allow[i] && cnt[i] > maxcnt) {
+                maxcnt = cnt[i];
+                best = i;
+            }
+        }
+        if (best == -1) {
+            break;
+        }
+        if (n >= 2) {
+            char two_back = s[n - 2];
+            int two_idx = idx(two_back);
+            if (allow[two_idx] && cnt[two_idx] == maxcnt) {
+                best = two_idx;
+            }
+        }
+        s.push_back("RGB"[best]);
+        cnt[best]--;
+    }
+    return s;
+}
 inline void solve(int Task_Id) {
-    // do something here
+    int r, g, b;
+    cin >> r >> g >> b;
+    string ans;
+    for (char start : {'R', 'G', 'B'}) {
+        int cnt = 0;
+        if (start == 'R')
+            cnt = r;
+        else if (start == 'G')
+            cnt = g;
+        else
+            cnt = b;
+        if (cnt == 0)
+            continue;
+        string cur = build(r, g, b, start);
+        if (cur.size() > ans.size())
+            ans = cur;
+    }
+    cout << ans << endl;
     return;
 }
 } // namespace TANGYIXIAO

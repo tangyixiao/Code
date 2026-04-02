@@ -288,7 +288,7 @@ inline void Judge_File(string File_Name) { freopen((File_Name + Insuffix).c_str(
 inline void Local_File(string File_Name, int File_Idx) { freopen((File_Name + to_string(File_Idx) + Insuffix).c_str(), "r", stdin), freopen((File_Name + to_string(File_Idx) + Outsuffix).c_str(), "w", stdout); }
 } // namespace FILE_IO
 using namespace FILE_IO;
-namespace INT128_IO{
+namespace INT128_IO {
 // clang-format off
 istream&operator>>(istream&is,__int128&x){string s;is>>s;bool neg=false;x=0;for(char c:s){if(c=='-')neg=true;else x=x*10+(c-'0');}if(neg)x=-x;return is;}
 ostream&operator<<(ostream&os,__int128 x){if(x==0)os<<0;else{string s,t;if(x<0)x=-x,t="-";while(x)s.push_back('0'+x%10),x/=10;reverse(s.begin(),s.end());os<<t<<s;}return os;}
@@ -306,12 +306,6 @@ inline void Print_Time_Count(string Programe_Name) { cerr << fixed << setprecisi
 } // namespace TIME
 using namespace TIME;
 namespace DEBUGS {
-#define all(x) (x).begin(), (x).end()
-#define fprint(...) cout << format(__VA_ARGS__)
-#define fprintln(...) cout << format(__VA_ARGS__) << '\n'
-#define ferr(...) cerr << format(__VA_ARGS__)
-#define ferrln(...) cerr << format(__VA_ARGS__) << '\n'
-#define funct(name, ret, ...) function<ret(__VA_ARGS__)> name = [&](__VA_ARGS__)
 inline void Debug_Print(string Debug_Message) { cerr << "\n" + Debug_Message + "\n"; }
 } // namespace DEBUGS
 using namespace DEBUGS;
@@ -357,7 +351,89 @@ signed main(int argc, char *argv[]) {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 inline void solve(int Task_Id) {
-    // do something here
+
+    int n, m;
+    cin >> n >> m;
+    vector<vector<int>> g(n + 1);
+    vector<pair<int, int>> edges(m);
+    vector<int> deg(n + 1, 0);
+
+    for (int i = 0; i < m; ++i) {
+        int u, v;
+        cin >> u >> v;
+        edges[i] = {u, v};
+        g[u].push_back(v);
+        g[v].push_back(u);
+        deg[u]++;
+        deg[v]++;
+    }
+
+    int N = n - 1; // 未知数个数，对应顶点 1..n-1
+    vector<vector<double>> A(N, vector<double>(N, 0.0));
+    vector<double> b(N, 0.0);
+
+    for (int i = 1; i <= n - 1; ++i) {
+        int idx = i - 1;
+        A[idx][idx] = 1.0;
+        if (i == 1)
+            b[idx] = 1.0;
+        for (int j : g[i]) {
+            if (j != n) {
+                A[idx][j - 1] -= 1.0 / deg[j];
+            }
+        }
+    }
+
+    // 高斯消元解线性方程组
+    for (int i = 0; i < N; ++i) {
+        // 选主元
+        int maxRow = i;
+        for (int k = i + 1; k < N; ++k) {
+            if (fabs(A[k][i]) > fabs(A[maxRow][i]))
+                maxRow = k;
+        }
+        if (maxRow != i) {
+            swap(A[i], A[maxRow]);
+            swap(b[i], b[maxRow]);
+        }
+        // 归一化当前行
+        double div = A[i][i];
+        for (int j = i; j < N; ++j)
+            A[i][j] /= div;
+        b[i] /= div;
+        // 消去其他行
+        for (int k = 0; k < N; ++k) {
+            if (k != i && fabs(A[k][i]) > 1e-12) {
+                double factor = A[k][i];
+                for (int j = i; j < N; ++j)
+                    A[k][j] -= factor * A[i][j];
+                b[k] -= factor * b[i];
+            }
+        }
+    }
+
+    vector<double> E(n + 1, 0.0);
+    for (int i = 1; i <= n - 1; ++i)
+        E[i] = b[i - 1];
+    E[n] = 1.0; // 终点访问一次
+
+    vector<double> freq(m);
+    for (int i = 0; i < m; ++i) {
+        int u = edges[i].first, v = edges[i].second;
+        double cnt = 0.0;
+        if (u != n)
+            cnt += E[u] / deg[u];
+        if (v != n)
+            cnt += E[v] / deg[v];
+        freq[i] = cnt;
+    }
+
+    sort(freq.begin(), freq.end(), greater<double>());
+    double ans = 0.0;
+    for (int i = 0; i < m; ++i) {
+        ans += freq[i] * (i + 1);
+    }
+    cout << fixed<< setprecision(3) << ans << '\n';
     return;
 }
 } // namespace TANGYIXIAO

@@ -306,12 +306,6 @@ inline void Print_Time_Count(string Programe_Name) { cerr << fixed << setprecisi
 } // namespace TIME
 using namespace TIME;
 namespace DEBUGS {
-#define all(x) (x).begin(), (x).end()
-#define fprint(...) cout << format(__VA_ARGS__)
-#define fprintln(...) cout << format(__VA_ARGS__) << '\n'
-#define ferr(...) cerr << format(__VA_ARGS__)
-#define ferrln(...) cerr << format(__VA_ARGS__) << '\n'
-#define funct(name, ret, ...) function<ret(__VA_ARGS__)> name = [&](__VA_ARGS__)
 inline void Debug_Print(string Debug_Message) { cerr << "\n" + Debug_Message + "\n"; }
 } // namespace DEBUGS
 using namespace DEBUGS;
@@ -357,7 +351,98 @@ signed main(int argc, char *argv[]) {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 inline void solve(int Task_Id) {
-    // do something here
+    int n;
+    cin >> n;
+
+    vector<vector<pair<int, double>>> adj(n + 1);
+    for (int i = 0; i < n - 1; ++i) {
+        int a, b, p;
+        cin >> a >> b >> p;
+        double prob = p / 100.0;
+        adj[a].emplace_back(b, prob);
+        adj[b].emplace_back(a, prob);
+    }
+
+    vector<double> q(n + 1);
+    for (int i = 1; i <= n; ++i) {
+        int qi;
+        cin >> qi;
+        q[i] = qi / 100.0;
+    }
+
+    vector<int> parent(n + 1, 0);
+    vector<vector<pair<int, double>>> children(n + 1); // (child, edge_prob)
+
+    // 第一次DFS (后序遍历) 计算 down
+    vector<double> down(n + 1, 0.0);
+    struct State {
+        int id;
+        int state; // 0: 未处理子节点, 1: 已处理子节点
+    };
+    stack<State> st;
+    st.push({1, 0});
+    parent[1] = 0;
+
+    while (!st.empty()) {
+        State &cur = st.top();
+        int u = cur.id;
+        if (cur.state == 0) {
+            cur.state = 1;
+            for (auto &[v, p] : adj[u]) {
+                if (v == parent[u])
+                    continue;
+                parent[v] = u;
+                children[u].emplace_back(v, p);
+                st.push({v, 0});
+            }
+        } else {
+            // 计算 down[u]
+            double prod = 1.0;
+            for (auto &[v, p] : children[u]) {
+                prod *= (1.0 - down[v] * p);
+            }
+            down[u] = 1.0 - (1.0 - q[u]) * prod;
+            st.pop();
+        }
+    }
+
+    // 第二次DFS (前序遍历) 计算 up
+    vector<double> up(n + 1, 0.0);
+    stack<int> st2;
+    st2.push(1);
+    while (!st2.empty()) {
+        int u = st2.top();
+        st2.pop();
+        int k = children[u].size();
+        if (k == 0)
+            continue;
+
+        // 计算前缀积和后缀积
+        vector<double> pre(k + 1, 1.0), suf(k + 1, 1.0);
+        for (int i = 0; i < k; ++i) {
+            double fac = 1.0 - down[children[u][i].first] * children[u][i].second;
+            pre[i + 1] = pre[i] * fac;
+        }
+        for (int i = k - 1; i >= 0; --i) {
+            double fac = 1.0 - down[children[u][i].first] * children[u][i].second;
+            suf[i] = suf[i + 1] * fac;
+        }
+
+        for (int i = 0; i < k; ++i) {
+            int v = children[u][i].first;
+            double p_edge = children[u][i].second;
+            double prob_exclude = (1.0 - q[u]) * (1.0 - up[u]) * pre[i] * suf[i + 1];
+            up[v] = p_edge * (1.0 - prob_exclude);
+            st2.push(v);
+        }
+    }
+
+    // 计算期望
+    double ans = 0.0;
+    for (int i = 1; i <= n; ++i) {
+        ans += 1.0 - (1.0 - down[i]) * (1.0 - up[i]);
+    }
+    cout << fixed << setprecision(6) << ans << '\n';
     return;
 }
 } // namespace TANGYIXIAO

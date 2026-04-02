@@ -288,7 +288,7 @@ inline void Judge_File(string File_Name) { freopen((File_Name + Insuffix).c_str(
 inline void Local_File(string File_Name, int File_Idx) { freopen((File_Name + to_string(File_Idx) + Insuffix).c_str(), "r", stdin), freopen((File_Name + to_string(File_Idx) + Outsuffix).c_str(), "w", stdout); }
 } // namespace FILE_IO
 using namespace FILE_IO;
-namespace INT128_IO{
+namespace INT128_IO {
 // clang-format off
 istream&operator>>(istream&is,__int128&x){string s;is>>s;bool neg=false;x=0;for(char c:s){if(c=='-')neg=true;else x=x*10+(c-'0');}if(neg)x=-x;return is;}
 ostream&operator<<(ostream&os,__int128 x){if(x==0)os<<0;else{string s,t;if(x<0)x=-x,t="-";while(x)s.push_back('0'+x%10),x/=10;reverse(s.begin(),s.end());os<<t<<s;}return os;}
@@ -306,12 +306,6 @@ inline void Print_Time_Count(string Programe_Name) { cerr << fixed << setprecisi
 } // namespace TIME
 using namespace TIME;
 namespace DEBUGS {
-#define all(x) (x).begin(), (x).end()
-#define fprint(...) cout << format(__VA_ARGS__)
-#define fprintln(...) cout << format(__VA_ARGS__) << '\n'
-#define ferr(...) cerr << format(__VA_ARGS__)
-#define ferrln(...) cerr << format(__VA_ARGS__) << '\n'
-#define funct(name, ret, ...) function<ret(__VA_ARGS__)> name = [&](__VA_ARGS__)
 inline void Debug_Print(string Debug_Message) { cerr << "\n" + Debug_Message + "\n"; }
 } // namespace DEBUGS
 using namespace DEBUGS;
@@ -357,7 +351,39 @@ signed main(int argc, char *argv[]) {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 inline void solve(int Task_Id) {
-    // do something here
+    int k, n;
+    cin >> k >> n;
+    vector<int> p(n + 1);
+    vector<int> pre(n + 1, 0); // 前提宝物集合的位掩码
+    for (int i = 1; i <= n; ++i) {
+        cin >> p[i];
+        int x;
+        while (cin >> x && x) {
+            pre[i] |= (1 << (x - 1));
+        }
+    }
+
+    int total = 1 << n;
+    vector<vector<double>> dp(k + 2, vector<double>(total, 0.0));
+
+    for (int i = k; i >= 1; --i) {
+        for (int mask = 0; mask < total; ++mask) {
+            double sum = 0.0;
+            for (int j = 1; j <= n; ++j) {
+                if ((mask & pre[j]) == pre[j]) {
+                    // 可以选择吃或不吃，取最大值
+                    sum += max(dp[i + 1][mask],
+                               dp[i + 1][mask | (1 << (j - 1))] + p[j]);
+                } else {
+                    // 不能吃，只能跳过
+                    sum += dp[i + 1][mask];
+                }
+            }
+            dp[i][mask] = sum / n;
+        }
+    }
+
+    cout << fixed << setprecision(6) << dp[1][0] << endl;
     return;
 }
 } // namespace TANGYIXIAO

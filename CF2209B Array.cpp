@@ -5,7 +5,7 @@ Copyright (C) 2026 TangYixiao
 
 #define JUDGE 0    // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_IDX 1 // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -279,6 +279,7 @@ using namespace __gnu_pbds;
 #pragma endregion INCLUDES
 
 #pragma region TANGYIXIAO
+#define int long long
 namespace TANGYIXIAO {
 namespace IO {
 inline void Init_IO() { cin.tie(0)->sync_with_stdio(false); }
@@ -288,7 +289,7 @@ inline void Judge_File(string File_Name) { freopen((File_Name + Insuffix).c_str(
 inline void Local_File(string File_Name, int File_Idx) { freopen((File_Name + to_string(File_Idx) + Insuffix).c_str(), "r", stdin), freopen((File_Name + to_string(File_Idx) + Outsuffix).c_str(), "w", stdout); }
 } // namespace FILE_IO
 using namespace FILE_IO;
-namespace INT128_IO{
+namespace INT128_IO {
 // clang-format off
 istream&operator>>(istream&is,__int128&x){string s;is>>s;bool neg=false;x=0;for(char c:s){if(c=='-')neg=true;else x=x*10+(c-'0');}if(neg)x=-x;return is;}
 ostream&operator<<(ostream&os,__int128 x){if(x==0)os<<0;else{string s,t;if(x<0)x=-x,t="-";while(x)s.push_back('0'+x%10),x/=10;reverse(s.begin(),s.end());os<<t<<s;}return os;}
@@ -306,12 +307,6 @@ inline void Print_Time_Count(string Programe_Name) { cerr << fixed << setprecisi
 } // namespace TIME
 using namespace TIME;
 namespace DEBUGS {
-#define all(x) (x).begin(), (x).end()
-#define fprint(...) cout << format(__VA_ARGS__)
-#define fprintln(...) cout << format(__VA_ARGS__) << '\n'
-#define ferr(...) cerr << format(__VA_ARGS__)
-#define ferrln(...) cerr << format(__VA_ARGS__) << '\n'
-#define funct(name, ret, ...) function<ret(__VA_ARGS__)> name = [&](__VA_ARGS__)
 inline void Debug_Print(string Debug_Message) { cerr << "\n" + Debug_Message + "\n"; }
 } // namespace DEBUGS
 using namespace DEBUGS;
@@ -329,7 +324,7 @@ inline void solve(int Task_Id);
 using namespace TANGYIXIAO;
 #pragma endregion TANGYIXIAO
 #pragma region MAIN
-signed main(int argc, char *argv[]) {
+signed main() {
 #ifdef TIME_COUNT
     Start_Time_Count();
 #endif
@@ -357,7 +352,40 @@ signed main(int argc, char *argv[]) {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 inline void solve(int Task_Id) {
-    // do something here
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (int i = 0; i < n; ++i)
+        cin >> a[i];
+
+    for (int i = 0; i < n; ++i) {
+        vector<pair<int, int>> b;
+        int L = 0, R = 0, ans = 0;
+        for (int j = i + 1; j < n; ++j) {
+            if (a[j] > a[i]) {
+                ++R;
+                b.emplace_back(a[i] + a[j], 1);
+            } else if (a[j] < a[i]) {
+                ++L;
+                b.emplace_back(a[i] + a[j], -1);
+            }
+        }
+
+        sort(b.begin(), b.end());
+
+        int cnt = L, ns = max(L, R), idx = 0;
+        for (; idx < (int)b.size();) {
+            int cur = b[idx].first;
+            ans = max(ans, cnt);
+            while (idx < (int)b.size() && b[idx].first == cur) {
+                cnt += b[idx].second;
+                ++idx;
+            }
+            ans = max(ans, cnt);
+        }
+
+        cout << ans << " \n"[i == n - 1];
+    }
     return;
 }
 } // namespace TANGYIXIAO

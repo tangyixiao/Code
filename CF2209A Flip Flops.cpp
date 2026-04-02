@@ -5,7 +5,7 @@ Copyright (C) 2026 TangYixiao
 
 #define JUDGE 0    // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_IDX 1 // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -288,7 +288,7 @@ inline void Judge_File(string File_Name) { freopen((File_Name + Insuffix).c_str(
 inline void Local_File(string File_Name, int File_Idx) { freopen((File_Name + to_string(File_Idx) + Insuffix).c_str(), "r", stdin), freopen((File_Name + to_string(File_Idx) + Outsuffix).c_str(), "w", stdout); }
 } // namespace FILE_IO
 using namespace FILE_IO;
-namespace INT128_IO{
+namespace INT128_IO {
 // clang-format off
 istream&operator>>(istream&is,__int128&x){string s;is>>s;bool neg=false;x=0;for(char c:s){if(c=='-')neg=true;else x=x*10+(c-'0');}if(neg)x=-x;return is;}
 ostream&operator<<(ostream&os,__int128 x){if(x==0)os<<0;else{string s,t;if(x<0)x=-x,t="-";while(x)s.push_back('0'+x%10),x/=10;reverse(s.begin(),s.end());os<<t<<s;}return os;}
@@ -306,12 +306,6 @@ inline void Print_Time_Count(string Programe_Name) { cerr << fixed << setprecisi
 } // namespace TIME
 using namespace TIME;
 namespace DEBUGS {
-#define all(x) (x).begin(), (x).end()
-#define fprint(...) cout << format(__VA_ARGS__)
-#define fprintln(...) cout << format(__VA_ARGS__) << '\n'
-#define ferr(...) cerr << format(__VA_ARGS__)
-#define ferrln(...) cerr << format(__VA_ARGS__) << '\n'
-#define funct(name, ret, ...) function<ret(__VA_ARGS__)> name = [&](__VA_ARGS__)
 inline void Debug_Print(string Debug_Message) { cerr << "\n" + Debug_Message + "\n"; }
 } // namespace DEBUGS
 using namespace DEBUGS;
@@ -356,8 +350,60 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+typedef long long ll;
+int n;
+ll c, k, ans;
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> c >> k;
+    vector<ll> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+    }
+    sort(a.begin(), a.end());
+
+    vector<pair<ll, ll>> st;
+    st.emplace_back(c, k);
+
+    for (ll ai : a) {
+        vector<pair<ll, ll>> nxt;
+        for (auto [cc, cr] : st) {
+            nxt.emplace_back(cc, cr);
+            if (ai <= cc) {
+                ll b = min(ai + cr, cc), new_c = cc + b, new_rem = cr - (b - ai);
+                nxt.emplace_back(new_c, new_rem);
+            }
+        }
+
+        sort(nxt.begin(), nxt.end());
+        vector<pair<ll, ll>> tmp;
+        for (size_t i = 0; i < nxt.size();) {
+            ll cc = nxt[i].first, ma = nxt[i].second;
+            size_t j = i + 1;
+            for (; j < nxt.size() && nxt[j].first == cc;) {
+                ma = max(ma, nxt[j].second);
+                ++j;
+            }
+            tmp.emplace_back(cc, ma);
+            i = j;
+        }
+
+        vector<pair<ll, ll>> fi;
+        ll ma = -1;
+        for (int i = (int)tmp.size() - 1; i >= 0; --i) {
+            ll cc = tmp[i].first, cr = tmp[i].second;
+            if (cr > ma) {
+                fi.emplace_back(cc, cr);
+                ma = cr;
+            }
+        }
+
+        st.swap(fi);
+    }
+    ans = 0;
+    for (auto [cc, _] : st) {
+        ans = max(ans, cc);
+    }
+    cout << ans << '\n';
     return;
 }
 } // namespace TANGYIXIAO

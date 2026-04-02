@@ -306,12 +306,6 @@ inline void Print_Time_Count(string Programe_Name) { cerr << fixed << setprecisi
 } // namespace TIME
 using namespace TIME;
 namespace DEBUGS {
-#define all(x) (x).begin(), (x).end()
-#define fprint(...) cout << format(__VA_ARGS__)
-#define fprintln(...) cout << format(__VA_ARGS__) << '\n'
-#define ferr(...) cerr << format(__VA_ARGS__)
-#define ferrln(...) cerr << format(__VA_ARGS__) << '\n'
-#define funct(name, ret, ...) function<ret(__VA_ARGS__)> name = [&](__VA_ARGS__)
 inline void Debug_Print(string Debug_Message) { cerr << "\n" + Debug_Message + "\n"; }
 } // namespace DEBUGS
 using namespace DEBUGS;
@@ -357,7 +351,55 @@ signed main(int argc, char *argv[]) {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 inline void solve(int Task_Id) {
-    // do something here
+    cout << fixed << setprecision(10);
+
+    int T;
+    cin >> T;
+    while (T--) {
+        int n, r;
+        cin >> n >> r;
+        vector<double> p(n + 1);
+        vector<int> d(n + 1);
+        for (int i = 1; i <= n; ++i) {
+            cin >> p[i] >> d[i];
+        }
+
+        // 预处理 (1 - p[i])^t
+        vector<vector<double>> pow1(n + 1, vector<double>(r + 1, 1.0));
+        for (int i = 1; i <= n; ++i) {
+            double q = 1.0 - p[i];
+            for (int t = 1; t <= r; ++t) {
+                pow1[i][t] = pow1[i][t - 1] * q;
+            }
+        }
+
+        // dp[i][j] 表示前 i 张牌恰好发动 j 次的概率
+        vector<vector<double>> dp(n + 1, vector<double>(r + 1, 0.0));
+        dp[0][0] = 1.0;
+        double ans = 0.0;
+
+        for (int i = 1; i <= n; ++i) {
+            // 计算第 i 张牌发动的概率贡献
+            int lim = min(i - 1, r);
+            for (int j = 0; j <= lim; ++j) {
+                double prob = dp[i - 1][j] * (1.0 - pow1[i][r - j]);
+                ans += d[i] * prob;
+            }
+            // 更新 dp[i][*]
+            int lim2 = min(i, r);
+            for (int j = 0; j <= lim2; ++j) {
+                dp[i][j] = 0.0;
+                if (j <= i - 1) {
+                    dp[i][j] += dp[i - 1][j] * pow1[i][r - j];
+                }
+                if (j >= 1) {
+                    dp[i][j] += dp[i - 1][j - 1] * (1.0 - pow1[i][r - (j - 1)]);
+                }
+            }
+        }
+
+        cout << ans << '\n';
+    }
     return;
 }
 } // namespace TANGYIXIAO

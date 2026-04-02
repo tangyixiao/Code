@@ -5,7 +5,7 @@ Copyright (C) 2026 TangYixiao
 
 #define JUDGE 0    // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_IDX 1 // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -288,7 +288,7 @@ inline void Judge_File(string File_Name) { freopen((File_Name + Insuffix).c_str(
 inline void Local_File(string File_Name, int File_Idx) { freopen((File_Name + to_string(File_Idx) + Insuffix).c_str(), "r", stdin), freopen((File_Name + to_string(File_Idx) + Outsuffix).c_str(), "w", stdout); }
 } // namespace FILE_IO
 using namespace FILE_IO;
-namespace INT128_IO{
+namespace INT128_IO {
 // clang-format off
 istream&operator>>(istream&is,__int128&x){string s;is>>s;bool neg=false;x=0;for(char c:s){if(c=='-')neg=true;else x=x*10+(c-'0');}if(neg)x=-x;return is;}
 ostream&operator<<(ostream&os,__int128 x){if(x==0)os<<0;else{string s,t;if(x<0)x=-x,t="-";while(x)s.push_back('0'+x%10),x/=10;reverse(s.begin(),s.end());os<<t<<s;}return os;}
@@ -306,12 +306,6 @@ inline void Print_Time_Count(string Programe_Name) { cerr << fixed << setprecisi
 } // namespace TIME
 using namespace TIME;
 namespace DEBUGS {
-#define all(x) (x).begin(), (x).end()
-#define fprint(...) cout << format(__VA_ARGS__)
-#define fprintln(...) cout << format(__VA_ARGS__) << '\n'
-#define ferr(...) cerr << format(__VA_ARGS__)
-#define ferrln(...) cerr << format(__VA_ARGS__) << '\n'
-#define funct(name, ret, ...) function<ret(__VA_ARGS__)> name = [&](__VA_ARGS__)
 inline void Debug_Print(string Debug_Message) { cerr << "\n" + Debug_Message + "\n"; }
 } // namespace DEBUGS
 using namespace DEBUGS;
@@ -356,8 +350,110 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 0xAE3803 - 0xAA5100;
+
+struct Segtree {
+    pair<long long, int> val[N << 2];
+    long long tag[N << 2];
+    inline void Build(int p, int pl, int pr, long long *a) {
+        tag[p] = 0;
+        if (pl == pr) {
+            val[p] = make_pair(a[pl], pl);
+            return;
+        }
+        int mid = pl + pr >> 1;
+        Build(p << 1, pl, mid, a);
+        Build(p << 1 | 1, mid + 1, pr, a);
+        val[p] = min(val[p << 1], val[p << 1 | 1]);
+    }
+    inline void Pushdown(int p) {
+        tag[p << 1] += tag[p];
+        val[p << 1].first += tag[p];
+        tag[p << 1 | 1] += tag[p];
+        val[p << 1 | 1].first += tag[p];
+        tag[p] = 0;
+    }
+    inline void Modify(int p, int pl, int pr, int l, int r, long long v) {
+        if (pl == l && pr == r) {
+            tag[p] += v;
+            val[p].first += v;
+            return;
+        }
+        Pushdown(p);
+        int mid = pl + pr >> 1;
+        if (mid >= r)
+            Modify(p << 1, pl, mid, l, r, v);
+        else if (mid + 1 <= l)
+            Modify(p << 1 | 1, mid + 1, pr, l, r, v);
+        else {
+            Modify(p << 1, pl, mid, l, mid, v);
+            Modify(p << 1 | 1, mid + 1, pr, mid + 1, r, v);
+        }
+        val[p] = min(val[p << 1], val[p << 1 | 1]);
+    }
+    inline void setLeq(int p, int pl, int pr, int idx) {
+        if (pl == pr) {
+            val[p].second = 0xAE3803;
+            return;
+        }
+        Pushdown(p);
+        int mid = pl + pr >> 1;
+        if (mid >= idx)
+            setLeq(p << 1, pl, mid, idx);
+        else
+            setLeq(p << 1 | 1, mid + 1, pr, idx);
+        val[p] = min(val[p << 1], val[p << 1 | 1]);
+    }
+    inline pair<long long, int> qMin(int p, int pl, int pr, int l, int r) {
+        if (pl == l && pr == r)
+            return val[p];
+        Pushdown(p);
+        int mid = pl + pr >> 1;
+        if (mid >= r)
+            return qMin(p << 1, pl, mid, l, r);
+        else if (mid + 1 <= l)
+            return qMin(p << 1 | 1, mid + 1, pr, l, r);
+        else
+            return min(qMin(p << 1, pl, mid, l, mid), qMin(p << 1 | 1, mid + 1, pr, mid + 1, r));
+    }
+};
+int n, q, opt[N], l[N], r[N];
+long long a[N], x[N], ad[N];
+Segtree sgt;
+
+inline void Read() {
+    cin >> n >> q;
+    for (int i = 1; i <= n; i++)
+        cin >> a[i];
+    for (int i = 1; i <= q; i++) {
+        cin >> opt[i] >> l[i] >> r[i];
+        if (opt[i] == 1)
+            cin >> x[i];
+    }
+    for (int i = 1; i <= n; i++)
+        cin >> ad[i];
+}
+
 inline void solve(int Task_Id) {
-    // do something here
+    Read();
+    sgt.Build(1, 1, n, ad);
+    for (int i = q; i >= 1; i--) {
+        if (opt[i] == 1)
+            sgt.Modify(1, 1, n, l[i], r[i], -x[i]);
+        else {
+            pair<long long, int> res = sgt.qMin(1, 1, n, l[i], r[i]), cur = res;
+            while (cur.first == res.first && cur.second <= n) {
+                sgt.setLeq(1, 1, n, cur.second);
+                cur = sgt.qMin(1, 1, n, l[i], r[i]);
+            }
+            x[i] = res.first;
+        }
+    }
+    for (int i = 1; i <= q; i++) {
+        if (opt[i] == 2)
+            cout << x[i] << " ";
+    }
+    cout << endl;
     return;
 }
 } // namespace TANGYIXIAO
