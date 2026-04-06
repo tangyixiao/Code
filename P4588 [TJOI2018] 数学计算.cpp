@@ -3,11 +3,11 @@
 Copyright (C) 2026 TangYixiao
 */
 
-#define PRAGMA_TYPE 2 // 0 for no pragma, 1 for Real optimize, 2 for All optimize
-#define PRAGMA_GCC_or_GPlusPlus_ALLOWED 2// 0 for no pragma, 1 for GCC optimize, 2 for G++ optimize
+#define PRAGMA_TYPE 0 // 0 for no pragma, 1 for Real optimize, 2 for All optimize
+//#define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0    // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -17,8 +17,8 @@ Copyright (C) 2026 TangYixiao
 #pragma region PREPROCESSOR
 #pragma region PRAGMAS
 #if PRAGMA_TYPE == 2
-#if PRAGMA_GCC_or_GPlusPlus_ALLOWED == 1
 #pragma region PRAGMA_GCC
+
 #pragma GCC optimize(1)
 #pragma GCC optimize(2)
 #pragma GCC optimize(3)
@@ -66,11 +66,10 @@ Copyright (C) 2026 TangYixiao
 #pragma GCC optimize("-funsafe-loop-optimizations")
 #pragma GCC optimize("inline-functions-called-once")
 #pragma GCC optimize("-fdelete-null-pointer-checks")
+
 #pragma endregion PRAGMA_GCC
-
-#elif PRAGMA_GCC_or_GPlusPlus_ALLOWED == 2
-
 #pragma region PRAGMA_GPlusPlus
+#ifdef PRAGMA_GPlusPlus_ALLOWED
 #pragma G++ optimize(1)
 #pragma G++ optimize(2)
 #pragma G++ optimize(3)
@@ -118,9 +117,8 @@ Copyright (C) 2026 TangYixiao
 #pragma G++ optimize("-funsafe-loop-optimizations")
 #pragma G++ optimize("inline-functions-called-once")
 #pragma G++ optimize("-fdelete-null-pointer-checks")
-#pragma endregion PRAGMA_GPlusPlus
-#else
 #endif
+#pragma endregion PRAGMA_GPlusPlus
 #elif PRAGMA_TYPE == 1
 
 #pragma GCC optimize("O3")
@@ -498,8 +496,52 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+typedef long long ll;
+const int MAXN = 1e5 + 5;
+ll M;
+int Q;
+ll tree[MAXN * 4];
+
+void build(int node, int l, int r) {
+    if (l == r) {
+        tree[node] = 1;
+        return;
+    }
+    int mid = (l + r) >> 1;
+    build(node << 1, l, mid);
+    build(node << 1 | 1, mid + 1, r);
+    tree[node] = (tree[node << 1] * tree[node << 1 | 1]) % M;
+}
+
+void update(int node, int l, int r, int idx, ll v) {
+    if (l == r) {
+        tree[node] = v % M;
+        return;
+    }
+    int mid = (l + r) >> 1;
+    if (idx <= mid)
+        update(node << 1, l, mid, idx, v);
+    else
+        update(node << 1 | 1, mid + 1, r, idx, v);
+    tree[node] = (tree[node << 1] * tree[node << 1 | 1]) % M;
+}
+
 inline void solve(int Task_Id) {
-    // do something here
-    return;
+    cin >> Q >> M;
+    build(1, 1, Q);
+    for (int i = 1; i <= Q; ++i) {
+        int typ;
+        cin >> typ;
+        if (typ == 1) {
+            ll m;
+            cin >> m;
+            update(1, 1, Q, i, m);
+        } else {
+            int pos;
+            cin >> pos;
+            update(1, 1, Q, pos, 1);
+        }
+        cout << tree[1] % M << "\n";
+    }
 }
 } // namespace TANGYIXIAO

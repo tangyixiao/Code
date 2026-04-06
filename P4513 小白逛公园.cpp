@@ -3,9 +3,9 @@
 Copyright (C) 2026 TangYixiao
 */
 
-#define PRAGMA_TYPE 2 // 0 for no pragma, 1 for Real optimize, 2 for All optimize
-#define PRAGMA_GCC_or_GPlusPlus_ALLOWED 2// 0 for no pragma, 1 for GCC optimize, 2 for G++ optimize
-#define JUDGE_TYPE 0    // 0 for online judge, 1 for judge file , 2 for local file
+#define PRAGMA_TYPE 0 // 0 for no pragma, 1 for Real optimize, 2 for All optimize
+// #define PRAGMA_GPlusPlus_ALLOWED
+#define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
 // #define MULTIPLE_TEST
 // #define DEBUG
@@ -17,8 +17,8 @@ Copyright (C) 2026 TangYixiao
 #pragma region PREPROCESSOR
 #pragma region PRAGMAS
 #if PRAGMA_TYPE == 2
-#if PRAGMA_GCC_or_GPlusPlus_ALLOWED == 1
 #pragma region PRAGMA_GCC
+
 #pragma GCC optimize(1)
 #pragma GCC optimize(2)
 #pragma GCC optimize(3)
@@ -66,11 +66,10 @@ Copyright (C) 2026 TangYixiao
 #pragma GCC optimize("-funsafe-loop-optimizations")
 #pragma GCC optimize("inline-functions-called-once")
 #pragma GCC optimize("-fdelete-null-pointer-checks")
+
 #pragma endregion PRAGMA_GCC
-
-#elif PRAGMA_GCC_or_GPlusPlus_ALLOWED == 2
-
 #pragma region PRAGMA_GPlusPlus
+#ifdef PRAGMA_GPlusPlus_ALLOWED
 #pragma G++ optimize(1)
 #pragma G++ optimize(2)
 #pragma G++ optimize(3)
@@ -118,9 +117,8 @@ Copyright (C) 2026 TangYixiao
 #pragma G++ optimize("-funsafe-loop-optimizations")
 #pragma G++ optimize("inline-functions-called-once")
 #pragma G++ optimize("-fdelete-null-pointer-checks")
-#pragma endregion PRAGMA_GPlusPlus
-#else
 #endif
+#pragma endregion PRAGMA_GPlusPlus
 #elif PRAGMA_TYPE == 1
 
 #pragma GCC optimize("O3")
@@ -422,7 +420,7 @@ inline void Local_File(string File_Name, int File_Idx) { freopen((File_Name + to
 using namespace FILE_IO;
 #pragma endregion FILE_IO
 #pragma region INT128_IO
-namespace INT128_IO{
+namespace INT128_IO {
 // clang-format off
 istream&operator>>(istream&is,__int128&x){string s;is>>s;bool neg=false;x=0;for(char c:s){if(c=='-')neg=true;else x=x*10+(c-'0');}if(neg)x=-x;return is;}
 ostream&operator<<(ostream&os,__int128 x){if(x==0)os<<0;else{string s,t;if(x<0)x=-x,t="-";while(x)s.push_back('0'+x%10),x/=10;reverse(s.begin(),s.end());os<<t<<s;}return os;}
@@ -498,8 +496,84 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int MAXN = 5e5 + 5, INF = 1e9;
+
+struct Node {
+    int sum, pre, suf, maxv;
+} tree[MAXN * 4];
+
+int a[MAXN];
+
+Node merge(Node l, Node r) {
+    Node res;
+    res.sum = l.sum + r.sum;
+    res.pre = max(l.pre, l.sum + r.pre);
+    res.suf = max(r.suf, r.sum + l.suf);
+    res.maxv = max({l.maxv, r.maxv, l.suf + r.pre});
+    return res;
+}
+
+void build(int idx, int l, int r) {
+    if (l == r) {
+        tree[idx].sum = a[l];
+        tree[idx].pre = a[l];
+        tree[idx].suf = a[l];
+        tree[idx].maxv = a[l];
+        return;
+    }
+    int mid = (l + r) >> 1;
+    build(idx << 1, l, mid);
+    build(idx << 1 | 1, mid + 1, r);
+    tree[idx] = merge(tree[idx << 1], tree[idx << 1 | 1]);
+}
+
+void update(int idx, int l, int r, int pos, int val) {
+    if (l == r) {
+        tree[idx].sum = val, tree[idx].pre = val, tree[idx].suf = val, tree[idx].maxv = val;
+        return;
+    }
+    int mid = (l + r) >> 1;
+    if (pos <= mid) {
+        update(idx << 1, l, mid, pos, val);
+    } else {
+        update(idx << 1 | 1, mid + 1, r, pos, val);
+    }
+    tree[idx] = merge(tree[idx << 1], tree[idx << 1 | 1]);
+    return;
+}
+
+Node query(int idx, int l, int r, int ql, int qr) {
+    if (ql <= l && r <= qr)
+        return tree[idx];
+    int mid = (l + r) >> 1;
+    if (qr <= mid) {
+        return query(idx << 1, l, mid, ql, qr);
+    }
+    if (ql > mid) {
+        return query(idx << 1 | 1, mid + 1, r, ql, qr);
+    }
+    Node left = query(idx << 1, l, mid, ql, qr);
+    Node right = query(idx << 1 | 1, mid + 1, r, ql, qr);
+    return merge(left, right);
+}
 inline void solve(int Task_Id) {
-    // do something here
+
+    int n, m;
+    cin >> n >> m;
+    for (int i = 1; i <= n; ++i) {
+        cin >> a[i];
+    }
+    build(1, 1, n);
+
+    for (; m--;) {
+        int k, x, y;
+        cin >> k >> x >> y;
+        if (k == 1) {
+            cout << query(1, 1, n, min(x, y), max(x, y)).maxv << endl;
+        } else {
+            update(1, 1, n, x, y);
+        }
+    }
     return;
 }
 } // namespace TANGYIXIAO
