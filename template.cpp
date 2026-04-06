@@ -3,8 +3,8 @@
 Copyright (C) 2026 TangYixiao
 */
 
-#define PRAGMA_TYPE 2 // 0 for no pragma, 1 for Real optimize, 2 for All optimize
-#define PRAGMA_GCC_or_GPlusPlus_ALLOWED 2// 0 for no pragma, 1 for GCC optimize, 2 for G++ optimize
+#define PRAGMA_TYPE 1 // 0 for no pragma, 1 for Real optimize, 2 for All optimize
+//#define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0    // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
 // #define MULTIPLE_TEST
