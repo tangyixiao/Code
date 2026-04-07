@@ -623,7 +623,36 @@ signed main(int argc, char *argv[]) {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 inline void solve(int Task_Id) {
-    // do something here
-    return;
+    int n, m;
+    cin >> n >> m;
+    vector<vector<int>> rev(n + 1);
+    vector<int> deg(n + 1, 0);
+    for (int i = 0; i < m; ++i) {
+        int v, u;
+        cin >> v >> u;
+        deg[v]++;
+        rev[u].push_back(v);
+    }
+    const long long INF = 1e18;
+    vector<long long> dist(n + 1, INF);
+    vector<int> cnt(n + 1, 0);
+    dist[n] = 0;
+    priority_queue<pair<long long, int>, vector<pair<long long, int>>, greater<pair<long long, int>>> pq;
+    pq.push({0, n});
+    while (!pq.empty()) {
+        auto [d, v] = pq.top();
+        pq.pop();
+        if (d != dist[v])
+            continue;
+        for (int u : rev[v]) {
+            cnt[u]++;
+            long long cand = (deg[u] - cnt[u]) + 1 + d;
+            if (cand < dist[u]) {
+                dist[u] = cand;
+                pq.push({cand, u});
+            }
+        }
+    }
+    cout << dist[1] << '\n';
 }
 } // namespace TANGYIXIAO

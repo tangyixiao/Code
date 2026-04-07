@@ -623,7 +623,63 @@ signed main(int argc, char *argv[]) {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 inline void solve(int Task_Id) {
-    // do something here
-    return;
+    using namespace std;
+    const int MOD = 998244353;
+    int H, W;
+    cin >> H >> W;
+    vector<string> S(H);
+    for (int i = 0; i < H; ++i)
+        cin >> S[i];
+    // dp[i][j][0]: 以X结尾, dp[i][j][1]: 以Y结尾
+    // 每个状态: cnt, sum1, sum2
+    vector<vector<array<array<long long, 3>, 2>>> dp(H, vector<array<array<long long, 3>, 2>>(W));
+    // 初始化起点
+    char c0 = S[0][0];
+    if (c0 == 'X') {
+        dp[0][0][0] = {1, 0, 0};
+        dp[0][0][1] = {0, 0, 0};
+    } else {
+        dp[0][0][0] = {0, 0, 0};
+        dp[0][0][1] = {1, 0, 0};
+    }
+    for (int i = 0; i < H; ++i) {
+        for (int j = 0; j < W; ++j) {
+            if (i == 0 && j == 0)
+                continue;
+            char ch = S[i][j];
+            // 从上方来
+            if (i > 0) {
+                for (int pc = 0; pc < 2; ++pc) { // 上一个字符类型
+                    auto &src = dp[i - 1][j][pc];
+                    if (src[0] == 0)
+                        continue;
+                    long long cnt = src[0], s1 = src[1], s2 = src[2];
+                    int delta = (pc == 1 && ch == 'Y') ? 1 : 0;
+                    int nxt = (ch == 'Y') ? 1 : 0;
+                    dp[i][j][nxt][0] = (dp[i][j][nxt][0] + cnt) % MOD;
+                    dp[i][j][nxt][1] = (dp[i][j][nxt][1] + s1 + delta * cnt) % MOD;
+                    long long add = (s2 + 2 * delta * s1 + 1LL * delta * delta * cnt) % MOD;
+                    dp[i][j][nxt][2] = (dp[i][j][nxt][2] + add) % MOD;
+                }
+            }
+            // 从左方来
+            if (j > 0) {
+                for (int pc = 0; pc < 2; ++pc) {
+                    auto &src = dp[i][j - 1][pc];
+                    if (src[0] == 0)
+                        continue;
+                    long long cnt = src[0], s1 = src[1], s2 = src[2];
+                    int delta = (pc == 1 && ch == 'Y') ? 1 : 0;
+                    int nxt = (ch == 'Y') ? 1 : 0;
+                    dp[i][j][nxt][0] = (dp[i][j][nxt][0] + cnt) % MOD;
+                    dp[i][j][nxt][1] = (dp[i][j][nxt][1] + s1 + delta * cnt) % MOD;
+                    long long add = (s2 + 2 * delta * s1 + 1LL * delta * delta * cnt) % MOD;
+                    dp[i][j][nxt][2] = (dp[i][j][nxt][2] + add) % MOD;
+                }
+            }
+        }
+    }
+    long long ans = (dp[H - 1][W - 1][0][2] + dp[H - 1][W - 1][1][2]) % MOD;
+    cout << ans << '\n';
 }
 } // namespace TANGYIXIAO

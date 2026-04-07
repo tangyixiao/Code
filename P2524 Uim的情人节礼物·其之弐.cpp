@@ -623,7 +623,24 @@ signed main(int argc, char *argv[]) {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 inline void solve(int Task_Id) {
-    // do something here
-    return;
+    int n;
+    string s;
+    cin >> n >> s;
+    vector<int> fact(n + 1);
+    fact[0] = 1;
+    for (int i = 1; i <= n; ++i)
+        fact[i] = fact[i - 1] * i;
+    vector<bool> used(n + 1, false);
+    int ans = 1;
+    for (int i = 0; i < n; ++i) {
+        int x = s[i] - '0';
+        int less = 0;
+        for (int j = 1; j < x; ++j)
+            if (!used[j])
+                ++less;
+        ans += less * fact[n - i - 1];
+        used[x] = true;
+    }
+    cout << ans << '\n';
 }
 } // namespace TANGYIXIAO

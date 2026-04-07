@@ -599,7 +599,7 @@ signed main(int argc, char *argv[]) {
 #ifdef TIME_COUNT
     Start_Time_Count();
 #endif
-    Init_IO();
+    // Init_IO();
 #if JUDGE == 1
     Judge_File(FILE_NAME);
 #elif JUDGE == 2
@@ -623,7 +623,26 @@ signed main(int argc, char *argv[]) {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 inline void solve(int Task_Id) {
-    // do something here
+    int N, Q, i, j;
+
+    scanf("%d%d", &N, &Q);
+
+    string s;
+    for (i = 0; i < N; i++)
+        s += (char)('A' + i);
+
+    for (i = 0; i < N; i++)
+        for (j = 0; j < N - 1; j++) {
+            printf("? %c %c\n", s[j], s[j + 1]);
+            fflush(stdout);
+            char ans;
+            scanf(" %c", &ans);
+            if (ans == '>')
+                swap(s[j], s[j + 1]);
+        }
+
+    printf("! %s\n", s.c_str());
+    fflush(stdout);
     return;
 }
 } // namespace TANGYIXIAO
