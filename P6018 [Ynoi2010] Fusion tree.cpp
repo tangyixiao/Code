@@ -299,15 +299,15 @@ Copyright (C) 2026 TangYixiao
 #include <functional> // 函数对象、绑定器 (function, bind, plus 等)
 #include <iterator>   // 迭代器定义与操作 (iterator_traits, begin, end)
 #include <limits>     // 数值类型的极限 (numeric_limits)
-#include <memodry>    // 智能指针、内存管理工具 (unique_ptr, shared_ptr, allocator)
+#include <memory>     // 智能指针、内存管理工具 (unique_ptr, shared_ptr, allocator)
 #include <new>        // 动态内存管理 (operator new, bad_alloc)
 #include <numeric>    // 数值算法 (accumulate, iota, gcd 等)
 #include <typeinfo>   // 运行时类型信息 (typeid, type_info)
-#include <utility>    // 实用组件 (pair, modve, forward, swap)
+#include <utility>    // 实用组件 (pair, move, forward, swap)
 
 #if __cplusplus >= 201103L
 #include <array>            // 固定大小容器 (array)
-#include <atomic>           // 原子操作 (atomic<T>, memodry_order)
+#include <atomic>           // 原子操作 (atomic<T>, memory_order)
 #include <initializer_list> // 初始化列表支持 (initializer_list)
 #include <ratio>            // 编译期有理数 (ratio, 用于 chrono)
 #include <scoped_allocator> // 多级分配器 (scoped_allocator_adaptor)
@@ -333,7 +333,7 @@ Copyright (C) 2026 TangYixiao
 #if __cplusplus >= 202002L
 #include <bit>             // 位操作函数 (bit_cast, popcount, endian)
 #include <compare>         // 三路比较运算符支持 (strong_ordering 等)
-#include <concepts>        // 概念 (integral, modvable, invocable 等)
+#include <concepts>        // 概念 (integral, movable, invocable 等)
 #include <numbers>         // 数学常数 (pi, e, sqrt2)
 #include <ranges>          // 范围库 (views, ranges::sort 等)
 #include <source_location> // 源代码位置信息 (source_location)
@@ -401,7 +401,7 @@ Copyright (C) 2026 TangYixiao
 #include <list>       // 双向链表 (list)
 #include <locale>     // 本地化 (locale, facet)
 #include <map>        // 关联容器 map (map, multimap)
-#include <memodry>    // 智能指针、内存管理工具
+#include <memory>     // 智能指针、内存管理工具
 #include <new>        // 动态内存管理
 #include <numeric>    // 数值算法
 #include <ostream>    // 输出流 (ostream)
@@ -449,10 +449,10 @@ Copyright (C) 2026 TangYixiao
 #include <any>      // 可存储任意类型的对象
 #include <charconv> // 字符与数值转换 (from_chars, to_chars)
 // #include <execution>         // 并行算法策略 [需 TBB，默认不包含]
-#include <filesystem>       // 文件系统库 (path, directory_entry)
-#include <memodry_resource> // 多态内存资源 (pmr::memodry_resource)
-#include <optional>         // 可能包含值的对象
-#include <variant>          // 类型安全的联合
+#include <filesystem>      // 文件系统库 (path, directory_entry)
+#include <memory_resource> // 多态内存资源 (pmr::memory_resource)
+#include <optional>        // 可能包含值的对象
+#include <variant>         // 类型安全的联合
 
 #endif
 
@@ -515,7 +515,7 @@ using namespace std;
 #include <ext/pb_ds/hash_fn>                // 哈希函数（如直接、取模等）
 #include <ext/pb_ds/hash_policy.hpp>        // 哈希策略：cc_hash_table（链地址），gp_hash_table（开放地址）
 #include <ext/pb_ds/list_update_policy.hpp> // 列表更新策略（用于哈希表冲突处理）
-#include <ext/pb_ds/priority_queue.hpp>     // 优先队列：pairing_heap（配对堆），binomial_heap等，支持 merge、moddify
+#include <ext/pb_ds/priority_queue.hpp>     // 优先队列：pairing_heap（配对堆），binomial_heap等，支持 merge、modify
 #include <ext/pb_ds/tag_and_trait.hpp>      // 标签与特性，如 rb_tree_tag 等
 #include <ext/pb_ds/tree_policy.hpp>        // 树策略：实现 order_of_key 和 find_by_order
 #include <ext/pb_ds/trie_policy.hpp>        // Trie 树策略（较少用）
@@ -622,52 +622,183 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 800000;
-int n, tot, sum, f = 1, c[N + 5], m, ans;
-pair<int, int> a[N + 5];
-const int inf = 1e9, mod = 998244353;
-inline void solve(int Task_Id) {
-    tot = 0;
-    sum = 0;
-    f = 1;
-    m = 0;
-    ans = 0;
-    cin >> n;
-    for (int i = 1; i <= n; ++i) {
-        cin >> a[i].first;
-        if (a[i].first < 3) {
-            cin >> a[i].second;
-        }
-        if (a[i].first == 2) {
-            tot = min(tot + a[i].second, inf);
-        } else if (a[i].first == 3) {
-            a[i].second = tot;
-            tot = min(tot << 1, inf);
+
+const int MAXN = 500005;
+const int B = 400; 
+
+int n, m;
+vector<int> adj[MAXN];
+int val[MAXN];        
+int add[MAXN];       
+int fa[MAXN];          
+vector<int> son[MAXN];  
+int deg[MAXN];          
+int sons_xor[MAXN];
+
+
+int center = -1;
+vector<int> leaves;
+int leaf_block_sz;
+vector<int> leaf_val;
+int leaf_offset = 0;
+int leaf_xor_sum = 0; 
+
+void build_fa(int u, int p) {
+    fa[u] = p;
+    for (int v : adj[u]) {
+        if (v != p) {
+            son[u].push_back(v);
+            build_fa(v, u);
         }
     }
-    for (int i = n; i >= 1; --i) {
-        if (a[i].first == 2) {
-            sum = min(sum + a[i].second, inf);
-        } else if (a[i].first == 3) {
-            if (!a[i].second) {
-                f = (f << 1) % mod;
-            } else if (a[i].second < inf) {
-                c[++m] = a[i].second;
+}
+
+inline void solve(int Task_Id) {
+    cin >> n >> m;
+    for (int i = 1; i < n; ++i) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+        deg[u]++; deg[v]++;
+    }
+    for (int i = 1; i <= n; ++i) {
+        cin >> val[i];
+    }
+
+
+    for (int i = 1; i <= n; ++i) {
+        if (deg[i] > n / 2) {
+            center = i;
+            break;
+        }
+    }
+
+    if (center != -1) {
+
+        for (int v : adj[center]) {
+            leaves.push_back(v);
+        }
+        leaf_block_sz = max(1, (int)sqrt(leaves.size()));
+        leaf_val.resize(leaves.size());
+        leaf_xor_sum = 0;
+        for (int i = 0; i < (int)leaves.size(); ++i) {
+            leaf_val[i] = val[leaves[i]];
+            leaf_xor_sum ^= leaf_val[i];
+        }
+
+        int center_val = val[center];
+        while (m--) {
+            int opt, x, v;
+            cin >> opt;
+            if (opt == 1) {
+                cin >> x;
+                if (x == center) {
+                    leaf_offset++;
+                } else {
+                    center_val++;
+                }
+            } else if (opt == 2) {
+                cin >> x >> v;
+                if (x == center) {
+                    center_val -= v;
+                } else {
+                    int idx = lower_bound(leaves.begin(), leaves.end(), x) - leaves.begin();
+                    leaf_val[idx] -= v;
+                }
+            } else {
+                cin >> x;
+                if (x == center) {
+                    int ans = 0;
+                    for (int i = 0; i < (int)leaves.size(); i += leaf_block_sz) {
+                        int r = min(i + leaf_block_sz, (int)leaves.size());
+                        int block_xor = 0;
+                        for (int j = i; j < r; ++j) {
+                            block_xor ^= (leaf_val[j] + leaf_offset);
+                        }
+                        ans ^= block_xor;
+                    }
+                    cout << ans << '\n';
+                } else {
+ 
+                    cout << center_val << '\n';
+                }
             }
+        }
+        return;
+    }
+
+    build_fa(1, 0);
+    for (int u = 1; u <= n; ++u) {
+        if (son[u].size() <= B) {
+            int xr = 0;
+            for (int v : son[u]) {
+                xr ^= val[v];
+            }
+            sons_xor[u] = xr;
         } else {
-            if ((a[i].second -= sum) > 0) {
-                int o = 1;
-                for (int j = 1; j <= m; ++j) {
-                    if (a[i].second > c[j]) {
-                        a[i].second -= c[j];
-                        o = (o + (1 << (m - j)) % mod) % mod;
+            int xr = 0;
+            for (int v : son[u]) {
+                xr ^= val[v];
+            }
+            sons_xor[u] = xr;
+        }
+    }
+
+    while (m--) {
+        int opt, x, v;
+        cin >> opt;
+        if (opt == 1) {
+            cin >> x;
+            if (fa[x]) {
+                int f = fa[x];
+                int old_val = val[f];
+                val[f]++;
+                if (fa[f]) {
+                    int gf = fa[f];
+                    if (son[gf].size() <= B) {
+                        sons_xor[gf] ^= old_val ^ val[f];
+                    } else {
+                        sons_xor[gf] ^= old_val ^ val[f];
                     }
                 }
-                ans = (ans + 1ll * o * f % mod) % mod;
             }
+            if (son[x].size() <= B) {
+                for (int y : son[x]) {
+                    int old_val = val[y];
+                    val[y]++;
+                    sons_xor[x] ^= old_val ^ val[y];
+                 
+                }
+            } else {
+                for (int y : son[x]) {
+                    int old_val = val[y];
+                    val[y]++;
+                    sons_xor[x] ^= old_val ^ val[y];
+                }
+            }
+        } else if (opt == 2) {
+            cin >> x >> v;
+            int f = fa[x];
+            int old_val = val[x];
+            val[x] -= v;
+            if (f) {
+                if (son[f].size() <= B) {
+                    sons_xor[f] ^= old_val ^ val[x];
+                } else {
+                    sons_xor[f] ^= old_val ^ val[x];
+                }
+            }
+        } else {
+            cin >> x;
+            int ans = 0;
+            if (fa[x]) {
+                ans ^= val[fa[x]];
+            }
+            ans ^= sons_xor[x];
+            cout << ans << '\n';
         }
     }
-    cout << ans << '\n';
     return;
 }
 } // namespace TANGYIXIAO
