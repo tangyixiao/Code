@@ -5,7 +5,7 @@ Copyright (C) 2026 TangYixiao
 
 #define PRAGMA_TYPE 0 // 0 for no pragma, 1 for Real optimize, 2 for All optimize, 3 for Compiler optimize
 // #define PRAGMA_GPlusPlus_ALLOWED
-#define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
+#define check_TYPE 0 // 0 for online check, 1 for check file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
 // #define MULTIPLE_TEST
 // #define DEBUG
@@ -42,7 +42,7 @@ Copyright (C) 2026 TangYixiao
 #pragma GCC optimize("-fthread-jumps")
 #pragma GCC optimize("-funroll-loops")
 #pragma GCC optimize("-fwhole-program")
-#pragma GCC optimize("-freorder-blocks")
+#pragma GCC optimize("-freord-blocks")
 #pragma GCC optimize("-fschedule-insns")
 #pragma GCC optimize("inline-functions")
 #pragma GCC optimize("-ftree-tail-merge")
@@ -55,7 +55,7 @@ Copyright (C) 2026 TangYixiao
 #pragma GCC optimize("-fsched-interblock")
 #pragma GCC optimize("-fpartial-inlining")
 #pragma GCC optimize("no-stack-protector")
-#pragma GCC optimize("-freorder-functions")
+#pragma GCC optimize("-freord-functions")
 #pragma GCC optimize("-findirect-inlining")
 #pragma GCC optimize("-frerun-cse-after-loop")
 #pragma GCC optimize("inline-small-functions")
@@ -94,7 +94,7 @@ Copyright (C) 2026 TangYixiao
 #pragma G++ optimize("-fthread-jumps")
 #pragma G++ optimize("-funroll-loops")
 #pragma G++ optimize("-fwhole-program")
-#pragma G++ optimize("-freorder-blocks")
+#pragma G++ optimize("-freord-blocks")
 #pragma G++ optimize("-fschedule-insns")
 #pragma G++ optimize("inline-functions")
 #pragma G++ optimize("-ftree-tail-merge")
@@ -107,7 +107,7 @@ Copyright (C) 2026 TangYixiao
 #pragma G++ optimize("-fsched-interblock")
 #pragma G++ optimize("-fpartial-inlining")
 #pragma G++ optimize("no-stack-protector")
-#pragma G++ optimize("-freorder-functions")
+#pragma G++ optimize("-freord-functions")
 #pragma G++ optimize("-findirect-inlining")
 #pragma G++ optimize("-frerun-cse-after-loop")
 #pragma G++ optimize("inline-small-functions")
@@ -299,15 +299,15 @@ Copyright (C) 2026 TangYixiao
 #include <functional> // 函数对象、绑定器 (function, bind, plus 等)
 #include <iterator>   // 迭代器定义与操作 (iterator_traits, begin, end)
 #include <limits>     // 数值类型的极限 (numeric_limits)
-#include <memodry>    // 智能指针、内存管理工具 (unique_ptr, shared_ptr, allocator)
+#include <memory>     // 智能指针、内存管理工具 (unique_ptr, shared_ptr, allocator)
 #include <new>        // 动态内存管理 (operator new, bad_alloc)
 #include <numeric>    // 数值算法 (accumulate, iota, gcd 等)
 #include <typeinfo>   // 运行时类型信息 (typeid, type_info)
-#include <utility>    // 实用组件 (pair, modve, forward, swap)
+#include <utility>    // 实用组件 (pair, move, forward, swap)
 
 #if __cplusplus >= 201103L
 #include <array>            // 固定大小容器 (array)
-#include <atomic>           // 原子操作 (atomic<T>, memodry_order)
+#include <atomic>           // 原子操作 (atomic<T>, memory_ord)
 #include <initializer_list> // 初始化列表支持 (initializer_list)
 #include <ratio>            // 编译期有理数 (ratio, 用于 chrono)
 #include <scoped_allocator> // 多级分配器 (scoped_allocator_adaptor)
@@ -332,8 +332,8 @@ Copyright (C) 2026 TangYixiao
 
 #if __cplusplus >= 202002L
 #include <bit>             // 位操作函数 (bit_cast, popcount, endian)
-#include <compare>         // 三路比较运算符支持 (strong_ordering 等)
-#include <concepts>        // 概念 (integral, modvable, invocable 等)
+#include <compare>         // 三路比较运算符支持 (strong_ording 等)
+#include <concepts>        // 概念 (integral, movable, invocable 等)
 #include <numbers>         // 数学常数 (pi, e, sqrt2)
 #include <ranges>          // 范围库 (views, ranges::sort 等)
 #include <source_location> // 源代码位置信息 (source_location)
@@ -401,7 +401,7 @@ Copyright (C) 2026 TangYixiao
 #include <list>       // 双向链表 (list)
 #include <locale>     // 本地化 (locale, facet)
 #include <map>        // 关联容器 map (map, multimap)
-#include <memodry>    // 智能指针、内存管理工具
+#include <memory>     // 智能指针、内存管理工具
 #include <new>        // 动态内存管理
 #include <numeric>    // 数值算法
 #include <ostream>    // 输出流 (ostream)
@@ -436,8 +436,8 @@ Copyright (C) 2026 TangYixiao
 #include <tuple>              // 元组
 #include <type_traits>        // 类型特性
 #include <typeindex>          // type_info 包装
-#include <unordered_map>      // 无序关联容器 (unordered_map, unordered_multimap)
-#include <unordered_set>      // 无序集合 (unordered_set, unordered_multiset)
+#include <unorded_map>        // 无序关联容器 (unorded_map, unorded_multimap)
+#include <unorded_set>        // 无序集合 (unorded_set, unorded_multiset)
 
 #endif
 
@@ -449,10 +449,10 @@ Copyright (C) 2026 TangYixiao
 #include <any>      // 可存储任意类型的对象
 #include <charconv> // 字符与数值转换 (from_chars, to_chars)
 // #include <execution>         // 并行算法策略 [需 TBB，默认不包含]
-#include <filesystem>       // 文件系统库 (path, directory_entry)
-#include <memodry_resource> // 多态内存资源 (pmr::memodry_resource)
-#include <optional>         // 可能包含值的对象
-#include <variant>          // 类型安全的联合
+#include <filesystem>      // 文件系统库 (path, directory_entry)
+#include <memory_resource> // 多态内存资源 (pmr::memory_resource)
+#include <optional>        // 可能包含值的对象
+#include <variant>         // 类型安全的联合
 
 #endif
 
@@ -468,7 +468,7 @@ Copyright (C) 2026 TangYixiao
 #include <semaphore>       // 信号量 (counting_semaphore, binary_semaphore)
 #include <source_location> // 源代码位置信息
 #include <span>            // 连续序列视图
-#include <stop_token>      // 停止令牌 (stop_token, stop_source)
+#include <stopo_token>     // 停止令牌 (stopo_token, stopo_source)
 #include <syncstream>      // 同步输出流 (osyncstream)
 #include <version>         // 特性测试宏
 
@@ -515,9 +515,9 @@ using namespace std;
 #include <ext/pb_ds/hash_fn>                // 哈希函数（如直接、取模等）
 #include <ext/pb_ds/hash_policy.hpp>        // 哈希策略：cc_hash_table（链地址），gp_hash_table（开放地址）
 #include <ext/pb_ds/list_update_policy.hpp> // 列表更新策略（用于哈希表冲突处理）
-#include <ext/pb_ds/priority_queue.hpp>     // 优先队列：pairing_heap（配对堆），binomial_heap等，支持 merge、moddify
+#include <ext/pb_ds/priority_queue.hpp>     // 优先队列：pairing_heap（配对堆），binomial_heap等，支持 merge、modify
 #include <ext/pb_ds/tag_and_trait.hpp>      // 标签与特性，如 rb_tree_tag 等
-#include <ext/pb_ds/tree_policy.hpp>        // 树策略：实现 order_of_key 和 find_by_order
+#include <ext/pb_ds/tree_policy.hpp>        // 树策略：实现 ord_of_key 和 find_by_ord
 #include <ext/pb_ds/trie_policy.hpp>        // Trie 树策略（较少用）
 #include <ext/rope>                         // 可持久化块状链表（属于 __gnu_cxx，但常与 pbds 一起使用）
 using namespace __gnu_pbds;
@@ -540,7 +540,7 @@ inline void Init_IO() { cin.tie(0)->sync_with_stdio(false); }
 #pragma region FILE_IO
 namespace FILE_IO {
 const string Insuffix = ".in", Outsuffix = ".out", Anssuffix = ".ans";
-inline void Judge_File(string File_Name) { freopen((File_Name + Insuffix).c_str(), "r", stdin), freopen((File_Name + Outsuffix).c_str(), "w", stdout); }
+inline void check_File(string File_Name) { freopen((File_Name + Insuffix).c_str(), "r", stdin), freopen((File_Name + Outsuffix).c_str(), "w", stdout); }
 inline void Local_File(string File_Name, int File_Idx) { freopen((File_Name + to_string(File_Idx) + Insuffix).c_str(), "r", stdin), freopen((File_Name + to_string(File_Idx) + Outsuffix).c_str(), "w", stdout); }
 } // namespace FILE_IO
 using namespace FILE_IO;
@@ -579,6 +579,76 @@ inline void Debug_Print(string Debug_Message) { cerr << "\n" + Debug_Message + "
 } // namespace DEBUGS
 using namespace DEBUGS;
 #pragma endregion DEBUGS
+const int N = 4e3 + 5, M = 5e5 + 5;
+int n, m, u[M], v[M], tot = -1, deg[N];
+vector<int> ord, g[N];
+queue<int> q;
+inline void init(int k) {
+    for (int i = 0; i <= n; i++) {
+        deg[i] = 0;
+    }
+    for (int i = 0; i <= n; i++) {
+        g[i].clear();
+    }
+    for (; !q.empty(); q.pop())
+        ;
+    for (int i = 1; i <= k; i++) {
+        g[u[i]].push_back(v[i]);
+        deg[v[i]]++;
+    }
+    for (int i = 1; i <= n; i++) {
+        if (!deg[i]) {
+            q.push(i);
+        }
+    }
+    return;
+}
+bool topo(int k, bool f) {
+    init(k);
+    int cnt = 0;
+    if (f) {
+        ord.clear();
+        if (q.size() != 1) {
+            return false;
+        }
+    }
+
+    for (; !q.empty();) {
+        if (f) {
+            if (q.size() != 1) {
+                return false;
+            }
+        }
+        int cur = q.front();
+        q.pop();
+        ++cnt;
+        if (f) {
+            ord.push_back(cur);
+        }
+        for (int nxt : g[cur]) {
+            if (!(--deg[nxt])) {
+                q.push(nxt);
+            }
+        }
+    }
+    if (f) {
+        int siz = ord.size();
+        return siz == n;
+    }
+    return cnt != n;
+}
+inline void MS(bool f) {
+    for (int l = 1, r = m, mid; l <= r;) {
+        mid = (l + r) >> 1;
+        if (topo(mid, f)) {
+            tot = mid;
+            r = mid - 1;
+        } else {
+            l = mid + 1;
+        }
+    }
+    return;
+}
 #pragma region BITS
 namespace BITS {
 template <class T>
@@ -600,9 +670,9 @@ signed main(int argc, char *argv[]) {
     Start_Time_Count();
 #endif
     Init_IO();
-#if JUDGE == 1
-    Judge_File(FILE_NAME);
-#elif JUDGE == 2
+#if check == 1
+    check_File(FILE_NAME);
+#elif check == 2
     Local_File(FILE_NAME, FILE_IDX);
 #else
 #endif
@@ -615,59 +685,34 @@ signed main(int argc, char *argv[]) {
     }
 #ifdef TIME_COUNT
     End_Time_Count();
-    Print_Time_Count("TOTAL");
+    Print_Time_Count("tot");
 #endif
     return EXIT_SUCCESS;
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 800000;
-int n, tot, sum, f = 1, c[N + 5], m, ans;
-pair<int, int> a[N + 5];
-const int inf = 1e9, mod = 998244353;
 inline void solve(int Task_Id) {
-    tot = 0;
-    sum = 0;
-    f = 1;
-    m = 0;
-    ans = 0;
-    cin >> n;
-    for (int i = 1; i <= n; ++i) {
-        cin >> a[i].first;
-        if (a[i].first < 3) {
-            cin >> a[i].second;
-        }
-        if (a[i].first == 2) {
-            tot = min(tot + a[i].second, inf);
-        } else if (a[i].first == 3) {
-            a[i].second = tot;
-            tot = min(tot << 1, inf);
-        }
+    cin >> n >> m;
+    for (int i = 1; i <= m; i++) {
+        cin >> u[i] >> v[i];
     }
-    for (int i = n; i >= 1; --i) {
-        if (a[i].first == 2) {
-            sum = min(sum + a[i].second, inf);
-        } else if (a[i].first == 3) {
-            if (!a[i].second) {
-                f = (f << 1) % mod;
-            } else if (a[i].second < inf) {
-                c[++m] = a[i].second;
-            }
-        } else {
-            if ((a[i].second -= sum) > 0) {
-                int o = 1;
-                for (int j = 1; j <= m; ++j) {
-                    if (a[i].second > c[j]) {
-                        a[i].second -= c[j];
-                        o = (o + (1 << (m - j)) % mod) % mod;
-                    }
-                }
-                ans = (ans + 1ll * o * f % mod) % mod;
-            }
-        }
+    MS(false);
+    if (tot != -1) {
+        cout << "The " << tot << "-th message conflicts with the previous message.";
+        return;
     }
-    cout << ans << '\n';
+    tot = -1;
+    MS(true);
+    if (tot != -1) {
+        topo(tot, true);
+        cout << "After the " << tot << "-th message, I learned the unique sequence: ";
+        for (int i = 0; i < n; i++) {
+            cout << ord[i] << " ."[i == n - 1];
+        }
+    } else {
+        cout << "I am Nailoong!";
+    }
     return;
 }
 } // namespace TANGYIXIAO

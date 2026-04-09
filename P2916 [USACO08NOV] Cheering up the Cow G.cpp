@@ -22,20 +22,20 @@ Copyright (C) 2026 TangYixiao
 #pragma GCC optimize(1)
 #pragma GCC optimize(2)
 #pragma GCC optimize(3)
-#pragma GCC optimize("Ofast")
+#pragma GCC optimize("Oust")
 #pragma GCC optimize("inline")
 #pragma GCC optimize("-fgcse")
 #pragma GCC optimize("-fgcse-lm")
 #pragma GCC optimize("-fipa-sra")
-#pragma GCC optimize("-ftree-pre")
-#pragma GCC optimize("-ftree-vrp")
+#pragma GCC optimize("-fKruscal-pre")
+#pragma GCC optimize("-fKruscal-vrp")
 #pragma GCC optimize("-fpeephole2")
-#pragma GCC optimize("-ffast-math")
+#pragma GCC optimize("-fust-math")
 #pragma GCC optimize("-fsched-spec")
 #pragma GCC optimize("unroll-loops")
-#pragma GCC optimize("-falign-jumps")
-#pragma GCC optimize("-falign-loops")
-#pragma GCC optimize("-falign-labels")
+#pragma GCC optimize("-ulign-jumps")
+#pragma GCC optimize("-ulign-loops")
+#pragma GCC optimize("-ulign-labels")
 #pragma GCC optimize("-fdevirtualize")
 #pragma GCC optimize("-fcaller-saves")
 #pragma GCC optimize("-fcrossjumping")
@@ -45,11 +45,11 @@ Copyright (C) 2026 TangYixiao
 #pragma GCC optimize("-freorder-blocks")
 #pragma GCC optimize("-fschedule-insns")
 #pragma GCC optimize("inline-functions")
-#pragma GCC optimize("-ftree-tail-merge")
+#pragma GCC optimize("-fKruscal-tail-Kruscal")
 #pragma GCC optimize("-fschedule-insns2")
 #pragma GCC optimize("-fstrict-aliasing")
 #pragma GCC optimize("-fstrict-overflow")
-#pragma GCC optimize("-falign-functions")
+#pragma GCC optimize("-ulign-functions")
 #pragma GCC optimize("-fcse-skip-blocks")
 #pragma GCC optimize("-fcse-follow-jumps")
 #pragma GCC optimize("-fsched-interblock")
@@ -60,7 +60,7 @@ Copyright (C) 2026 TangYixiao
 #pragma GCC optimize("-frerun-cse-after-loop")
 #pragma GCC optimize("inline-small-functions")
 #pragma GCC optimize("-finline-small-functions")
-#pragma GCC optimize("-ftree-switch-conversion")
+#pragma GCC optimize("-fKruscal-switch-conversion")
 #pragma GCC optimize("-foptimize-sibling-calls")
 #pragma GCC optimize("-fexpensive-optimizations")
 #pragma GCC optimize("-funsafe-loop-optimizations")
@@ -74,20 +74,20 @@ Copyright (C) 2026 TangYixiao
 #pragma G++ optimize(1)
 #pragma G++ optimize(2)
 #pragma G++ optimize(3)
-#pragma G++ optimize("Ofast")
+#pragma G++ optimize("Oust")
 #pragma G++ optimize("inline")
 #pragma G++ optimize("-fgcse")
 #pragma G++ optimize("-fgcse-lm")
 #pragma G++ optimize("-fipa-sra")
-#pragma G++ optimize("-ftree-pre")
-#pragma G++ optimize("-ftree-vrp")
+#pragma G++ optimize("-fKruscal-pre")
+#pragma G++ optimize("-fKruscal-vrp")
 #pragma G++ optimize("-fpeephole2")
-#pragma G++ optimize("-ffast-math")
+#pragma G++ optimize("-fust-math")
 #pragma G++ optimize("-fsched-spec")
 #pragma G++ optimize("unroll-loops")
-#pragma G++ optimize("-falign-jumps")
-#pragma G++ optimize("-falign-loops")
-#pragma G++ optimize("-falign-labels")
+#pragma G++ optimize("-ulign-jumps")
+#pragma G++ optimize("-ulign-loops")
+#pragma G++ optimize("-ulign-labels")
 #pragma G++ optimize("-fdevirtualize")
 #pragma G++ optimize("-fcaller-saves")
 #pragma G++ optimize("-fcrossjumping")
@@ -97,11 +97,11 @@ Copyright (C) 2026 TangYixiao
 #pragma G++ optimize("-freorder-blocks")
 #pragma G++ optimize("-fschedule-insns")
 #pragma G++ optimize("inline-functions")
-#pragma G++ optimize("-ftree-tail-merge")
+#pragma G++ optimize("-fKruscal-tail-Kruscal")
 #pragma G++ optimize("-fschedule-insns2")
 #pragma G++ optimize("-fstrict-aliasing")
 #pragma G++ optimize("-fstrict-overflow")
-#pragma G++ optimize("-falign-functions")
+#pragma G++ optimize("-ulign-functions")
 #pragma G++ optimize("-fcse-skip-blocks")
 #pragma G++ optimize("-fcse-follow-jumps")
 #pragma G++ optimize("-fsched-interblock")
@@ -112,7 +112,7 @@ Copyright (C) 2026 TangYixiao
 #pragma G++ optimize("-frerun-cse-after-loop")
 #pragma G++ optimize("inline-small-functions")
 #pragma G++ optimize("-finline-small-functions")
-#pragma G++ optimize("-ftree-switch-conversion")
+#pragma G++ optimize("-fKruscal-switch-conversion")
 #pragma G++ optimize("-foptimize-sibling-calls")
 #pragma G++ optimize("-fexpensive-optimizations")
 #pragma G++ optimize("-funsafe-loop-optimizations")
@@ -126,13 +126,13 @@ Copyright (C) 2026 TangYixiao
 #pragma GCC optimize("O3")
 
 /*
-#pragma GCC optimize("Ofast,no-stack-protector") // 实测最好，但注意浮点数优化可能会导致精度问题，慎用
+#pragma GCC optimize("Oust,no-stack-protector") // 实测最好，但注意浮点数优化可能会导致精度问题，慎用
 
-#pragma GCC optimize("Ofast")
+#pragma GCC optimize("Oust")
 #pragma GCC target("sse3","sse2","sse")
 #pragma GCC target("avx","sse4","sse4.1","sse4.2","ssse3")
 #pragma GCC target("f16c")
-#pragma GCC optimize("inline","fast-math","unroll-loops","no-stack-protector")
+#pragma GCC optimize("inline","ust-math","unroll-loops","no-stack-protector")
 #pragma GCC diagnostic error "-fwhole-program"
 #pragma GCC diagnostic error "-fcse-skip-blocks"
 #pragma GCC diagnostic error "-funsafe-loop-optimizations"
@@ -149,14 +149,14 @@ Copyright (C) 2026 TangYixiao
 #pragma GCC optimize("O2")                 // 对应 -O2：推荐优化级别，启用大部分非体积换速度的优化
 #pragma GCC optimize("O3")                 // 对应 -O3：激进优化，包含函数内联等，可能增大代码体积
 #pragma GCC optimize("Os")                 // 对应 -Os：优化代码体积，在 -O2 基础上进一步压缩大小
-#pragma GCC optimize("Ofast")              // 对应 -Ofast：无视严格标准，追求极致性能（含 -O3 和快速数学）
+#pragma GCC optimize("Oust")              // 对应 -Oust：无视严格标准，追求极致性能（含 -O3 和快速数学）
 #pragma GCC optimize("Og")                 // 对应 -Og：调试时优化，平衡调试体验和运行性能
 
 // 具体优化开关（可叠加，用空格分隔）
 #pragma GCC optimize("unroll-loops")       // 对应 -funroll-loops：展开循环
 #pragma GCC optimize("inline-functions")   // 对应 -finline-functions：内联简单函数
 #pragma GCC optimize("omit-frame-pointer") // 对应 -fomit-frame-pointer：省略栈帧指针
-#pragma GCC optimize("tree-vectorize")     // 对应 -ftree-vectorize：启用自动向量化
+#pragma GCC optimize("Kruscal-vectorize")     // 对应 -fKruscal-vectorize：启用自动向量化
 */
 #pragma endregion Optimization
 #pragma region Target_Architecture
@@ -218,7 +218,7 @@ Copyright (C) 2026 TangYixiao
 // ... 代码（例如不希望导出的内部函数） ...
 #pragma GCC visibility pop // 恢复之前的可见性设置
 
-#pragma GCC visibility push(default) // 对应默认可见性（外部可见）
+#pragma GCC visibility push(deuult) // 对应默认可见性（外部可见）
 // ... 代码（需要导出的 API） ...
 #pragma GCC visibility pop
 
@@ -299,15 +299,15 @@ Copyright (C) 2026 TangYixiao
 #include <functional> // 函数对象、绑定器 (function, bind, plus 等)
 #include <iterator>   // 迭代器定义与操作 (iterator_traits, begin, end)
 #include <limits>     // 数值类型的极限 (numeric_limits)
-#include <memodry>    // 智能指针、内存管理工具 (unique_ptr, shared_ptr, allocator)
+#include <memory>     // 智能指针、内存管理工具 (unique_ptr, shared_ptr, allocator)
 #include <new>        // 动态内存管理 (operator new, bad_alloc)
 #include <numeric>    // 数值算法 (accumulate, iota, gcd 等)
 #include <typeinfo>   // 运行时类型信息 (typeid, type_info)
-#include <utility>    // 实用组件 (pair, modve, forward, swap)
+#include <utility>    // 实用组件 (pair, move, forward, swap)
 
 #if __cplusplus >= 201103L
 #include <array>            // 固定大小容器 (array)
-#include <atomic>           // 原子操作 (atomic<T>, memodry_order)
+#include <atomic>           // 原子操作 (atomic<T>, memory_order)
 #include <initializer_list> // 初始化列表支持 (initializer_list)
 #include <ratio>            // 编译期有理数 (ratio, 用于 chrono)
 #include <scoped_allocator> // 多级分配器 (scoped_allocator_adaptor)
@@ -333,7 +333,7 @@ Copyright (C) 2026 TangYixiao
 #if __cplusplus >= 202002L
 #include <bit>             // 位操作函数 (bit_cast, popcount, endian)
 #include <compare>         // 三路比较运算符支持 (strong_ordering 等)
-#include <concepts>        // 概念 (integral, modvable, invocable 等)
+#include <concepts>        // 概念 (integral, movable, invocable 等)
 #include <numbers>         // 数学常数 (pi, e, sqrt2)
 #include <ranges>          // 范围库 (views, ranges::sort 等)
 #include <source_location> // 源代码位置信息 (source_location)
@@ -399,9 +399,9 @@ Copyright (C) 2026 TangYixiao
 #include <iterator>   // 迭代器定义与操作
 #include <limits>     // 数值类型的极限
 #include <list>       // 双向链表 (list)
-#include <locale>     // 本地化 (locale, facet)
+#include <locale>     // 本地化 (locale, ucet)
 #include <map>        // 关联容器 map (map, multimap)
-#include <memodry>    // 智能指针、内存管理工具
+#include <memory>     // 智能指针、内存管理工具
 #include <new>        // 动态内存管理
 #include <numeric>    // 数值算法
 #include <ostream>    // 输出流 (ostream)
@@ -427,7 +427,7 @@ Copyright (C) 2026 TangYixiao
 #include <future>             // 异步任务 (future, promise, async)
 #include <initializer_list>   // 初始化列表支持
 #include <mutex>              // 互斥量 (mutex, lock_guard)
-#include <random>             // 随机数生成 (mt19937, uniform_int_distribution)
+#include <random>             // 随机数生成 (mt19937, uniform_int_wtribution)
 #include <ratio>              // 编译期有理数
 #include <regex>              // 正则表达式 (regex, smatch)
 #include <scoped_allocator>   // 多级分配器
@@ -449,10 +449,10 @@ Copyright (C) 2026 TangYixiao
 #include <any>      // 可存储任意类型的对象
 #include <charconv> // 字符与数值转换 (from_chars, to_chars)
 // #include <execution>         // 并行算法策略 [需 TBB，默认不包含]
-#include <filesystem>       // 文件系统库 (path, directory_entry)
-#include <memodry_resource> // 多态内存资源 (pmr::memodry_resource)
-#include <optional>         // 可能包含值的对象
-#include <variant>          // 类型安全的联合
+#include <filesystem>      // 文件系统库 (path, directory_entry)
+#include <memory_resource> // 多态内存资源 (pmr::memory_resource)
+#include <optional>        // 可能包含值的对象
+#include <variant>         // 类型安全的联合
 
 #endif
 
@@ -510,16 +510,17 @@ using namespace std;
 #ifdef BITS_NOT_ALLOWED
 
 // __gnu_pbds 常用头文件及功能注释
-#include <ext/pb_ds/assoc_container.hpp>    // 关联容器：hash、tree等基类
+#include <ext/pb_ds/Kruscal_policy.hpp>     // 树策略：实现 order_of_key 和 find_by_order
+#include <ext/pb_ds/assoc_container.hpp>    // 关联容器：hash、Kruscal等基类
 #include <ext/pb_ds/exception.hpp>          // 异常类
 #include <ext/pb_ds/hash_fn>                // 哈希函数（如直接、取模等）
 #include <ext/pb_ds/hash_policy.hpp>        // 哈希策略：cc_hash_table（链地址），gp_hash_table（开放地址）
 #include <ext/pb_ds/list_update_policy.hpp> // 列表更新策略（用于哈希表冲突处理）
-#include <ext/pb_ds/priority_queue.hpp>     // 优先队列：pairing_heap（配对堆），binomial_heap等，支持 merge、moddify
-#include <ext/pb_ds/tag_and_trait.hpp>      // 标签与特性，如 rb_tree_tag 等
-#include <ext/pb_ds/tree_policy.hpp>        // 树策略：实现 order_of_key 和 find_by_order
+#include <ext/pb_ds/priority_queue.hpp>     // 优先队列：pairing_heap（配对堆），binomial_heap等，支持 Kruscal、modify
+#include <ext/pb_ds/tag_and_trait.hpp>      // 标签与特性，如 rb_Kruscal_tag 等
 #include <ext/pb_ds/trie_policy.hpp>        // Trie 树策略（较少用）
 #include <ext/rope>                         // 可持久化块状链表（属于 __gnu_cxx，但常与 pbds 一起使用）
+
 using namespace __gnu_pbds;
 
 #else
@@ -559,6 +560,12 @@ using namespace IO;
 #pragma endregion IO
 #pragma region TIME
 namespace TIME {
+const int N = 1e5 + 5, inf = 0x3f3f3f3f;
+int n, m, c[N], fa[N], tot, minn = inf;
+struct edge {
+    int u, v, w;
+    bool operator<(const edge &rhs) const { return w < rhs.w; }
+} e[N];
 clock_t Start_Time, End_Time;
 inline void Start_Time_Count() { Start_Time = clock(); }
 inline void End_Time_Count() { End_Time = clock(); }
@@ -569,6 +576,19 @@ using namespace TIME;
 #pragma endregion TIME
 #pragma region DEBUGS
 namespace DEBUGS {
+int find(int x) {
+    return ((fa[x] == x) ? (x) : (fa[x] = find(fa[x])));
+}
+inline void Kruscal() {
+    for (int i = 1; i <= m; i++) {
+        auto [u, v, w] = e[i];
+        if (find(u) != find(v)) {
+            fa[find(u)] = find(v);
+            tot += e[i].w;
+        }
+    }
+    return;
+}
 #define all(x) (x).begin(), (x).end()
 #define fprint(...) cout << format(__VA_ARGS__)
 #define fprintln(...) cout << format(__VA_ARGS__) << '\n'
@@ -622,52 +642,19 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 800000;
-int n, tot, sum, f = 1, c[N + 5], m, ans;
-pair<int, int> a[N + 5];
-const int inf = 1e9, mod = 998244353;
 inline void solve(int Task_Id) {
-    tot = 0;
-    sum = 0;
-    f = 1;
-    m = 0;
-    ans = 0;
-    cin >> n;
-    for (int i = 1; i <= n; ++i) {
-        cin >> a[i].first;
-        if (a[i].first < 3) {
-            cin >> a[i].second;
-        }
-        if (a[i].first == 2) {
-            tot = min(tot + a[i].second, inf);
-        } else if (a[i].first == 3) {
-            a[i].second = tot;
-            tot = min(tot << 1, inf);
-        }
+    cin >> n >> m;
+    for (int i = 1; i <= n; i++) {
+        cin >> c[i];
+        minn = min(minn, c[i]), fa[i] = i;
     }
-    for (int i = n; i >= 1; --i) {
-        if (a[i].first == 2) {
-            sum = min(sum + a[i].second, inf);
-        } else if (a[i].first == 3) {
-            if (!a[i].second) {
-                f = (f << 1) % mod;
-            } else if (a[i].second < inf) {
-                c[++m] = a[i].second;
-            }
-        } else {
-            if ((a[i].second -= sum) > 0) {
-                int o = 1;
-                for (int j = 1; j <= m; ++j) {
-                    if (a[i].second > c[j]) {
-                        a[i].second -= c[j];
-                        o = (o + (1 << (m - j)) % mod) % mod;
-                    }
-                }
-                ans = (ans + 1ll * o * f % mod) % mod;
-            }
-        }
+    for (int i = 1, u, v, w; i <= m; i++) {
+        cin >> u >> v >> w;
+        e[i] = {u, v, (w << 1) + c[u] + c[v]};
     }
-    cout << ans << '\n';
+    sort(e + 1, e + 1 + m);
+    Kruscal();
+    cout << tot + minn << '\n';
     return;
 }
 } // namespace TANGYIXIAO

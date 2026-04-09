@@ -267,7 +267,6 @@ Copyright (C) 2026 TangYixiao
 #pragma endregion PRAGMAS
 
 #pragma region INCLUDES
-
 #ifdef TESTLIB
 #include <testlib.h> // 自定义测试库
 #endif
@@ -299,15 +298,15 @@ Copyright (C) 2026 TangYixiao
 #include <functional> // 函数对象、绑定器 (function, bind, plus 等)
 #include <iterator>   // 迭代器定义与操作 (iterator_traits, begin, end)
 #include <limits>     // 数值类型的极限 (numeric_limits)
-#include <memodry>    // 智能指针、内存管理工具 (unique_ptr, shared_ptr, allocator)
+#include <memory>     // 智能指针、内存管理工具 (unique_ptr, shared_ptr, allocator)
 #include <new>        // 动态内存管理 (operator new, bad_alloc)
 #include <numeric>    // 数值算法 (accumulate, iota, gcd 等)
 #include <typeinfo>   // 运行时类型信息 (typeid, type_info)
-#include <utility>    // 实用组件 (pair, modve, forward, swap)
+#include <utility>    // 实用组件 (pair, move, forward, swap)
 
 #if __cplusplus >= 201103L
 #include <array>            // 固定大小容器 (array)
-#include <atomic>           // 原子操作 (atomic<T>, memodry_order)
+#include <atomic>           // 原子操作 (atomic<T>, memory_order)
 #include <initializer_list> // 初始化列表支持 (initializer_list)
 #include <ratio>            // 编译期有理数 (ratio, 用于 chrono)
 #include <scoped_allocator> // 多级分配器 (scoped_allocator_adaptor)
@@ -333,7 +332,7 @@ Copyright (C) 2026 TangYixiao
 #if __cplusplus >= 202002L
 #include <bit>             // 位操作函数 (bit_cast, popcount, endian)
 #include <compare>         // 三路比较运算符支持 (strong_ordering 等)
-#include <concepts>        // 概念 (integral, modvable, invocable 等)
+#include <concepts>        // 概念 (integral, movable, invocable 等)
 #include <numbers>         // 数学常数 (pi, e, sqrt2)
 #include <ranges>          // 范围库 (views, ranges::sort 等)
 #include <source_location> // 源代码位置信息 (source_location)
@@ -401,7 +400,7 @@ Copyright (C) 2026 TangYixiao
 #include <list>       // 双向链表 (list)
 #include <locale>     // 本地化 (locale, facet)
 #include <map>        // 关联容器 map (map, multimap)
-#include <memodry>    // 智能指针、内存管理工具
+#include <memory>     // 智能指针、内存管理工具
 #include <new>        // 动态内存管理
 #include <numeric>    // 数值算法
 #include <ostream>    // 输出流 (ostream)
@@ -449,10 +448,10 @@ Copyright (C) 2026 TangYixiao
 #include <any>      // 可存储任意类型的对象
 #include <charconv> // 字符与数值转换 (from_chars, to_chars)
 // #include <execution>         // 并行算法策略 [需 TBB，默认不包含]
-#include <filesystem>       // 文件系统库 (path, directory_entry)
-#include <memodry_resource> // 多态内存资源 (pmr::memodry_resource)
-#include <optional>         // 可能包含值的对象
-#include <variant>          // 类型安全的联合
+#include <filesystem>      // 文件系统库 (path, directory_entry)
+#include <memory_resource> // 多态内存资源 (pmr::memory_resource)
+#include <optional>        // 可能包含值的对象
+#include <variant>         // 类型安全的联合
 
 #endif
 
@@ -515,7 +514,7 @@ using namespace std;
 #include <ext/pb_ds/hash_fn>                // 哈希函数（如直接、取模等）
 #include <ext/pb_ds/hash_policy.hpp>        // 哈希策略：cc_hash_table（链地址），gp_hash_table（开放地址）
 #include <ext/pb_ds/list_update_policy.hpp> // 列表更新策略（用于哈希表冲突处理）
-#include <ext/pb_ds/priority_queue.hpp>     // 优先队列：pairing_heap（配对堆），binomial_heap等，支持 merge、moddify
+#include <ext/pb_ds/priority_queue.hpp>     // 优先队列：pairing_heap（配对堆），binomial_heap等，支持 merge、modify
 #include <ext/pb_ds/tag_and_trait.hpp>      // 标签与特性，如 rb_tree_tag 等
 #include <ext/pb_ds/tree_policy.hpp>        // 树策略：实现 order_of_key 和 find_by_order
 #include <ext/pb_ds/trie_policy.hpp>        // Trie 树策略（较少用）
@@ -532,6 +531,7 @@ using namespace __gnu_pbds;
 #endif
 #pragma endregion INCLUDES
 
+#define int long long
 #pragma region TANGYIXIAO
 namespace TANGYIXIAO {
 #pragma region IO
@@ -595,7 +595,7 @@ inline void solve(int Task_Id);
 using namespace TANGYIXIAO;
 #pragma endregion TANGYIXIAO
 #pragma region MAIN
-signed main(int argc, char *argv[]) {
+signed main() {
 #ifdef TIME_COUNT
     Start_Time_Count();
 #endif
@@ -622,52 +622,40 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 800000;
-int n, tot, sum, f = 1, c[N + 5], m, ans;
-pair<int, int> a[N + 5];
-const int inf = 1e9, mod = 998244353;
+const int mod = 998244353ll;
+long long l, r;
 inline void solve(int Task_Id) {
-    tot = 0;
-    sum = 0;
-    f = 1;
-    m = 0;
-    ans = 0;
-    cin >> n;
-    for (int i = 1; i <= n; ++i) {
-        cin >> a[i].first;
-        if (a[i].first < 3) {
-            cin >> a[i].second;
+    long long L, R;
+    cin >> L >> R;
+    long long l = sqrtl(L);
+    while (l * l < L)
+        ++l;
+    long long r = sqrtl(R);
+    while (r * r > R)
+        --r;
+
+    bool found = false;
+    int ans = 1ll;
+    auto is_prime = [](int x) {
+        if (x < 2)
+            return false;
+        for (int i = 2; i * i <= x; i++) {
+            if (x % i == 0ll)
+                return false;
         }
-        if (a[i].first == 2) {
-            tot = min(tot + a[i].second, inf);
-        } else if (a[i].first == 3) {
-            a[i].second = tot;
-            tot = min(tot << 1, inf);
-        }
-    }
-    for (int i = n; i >= 1; --i) {
-        if (a[i].first == 2) {
-            sum = min(sum + a[i].second, inf);
-        } else if (a[i].first == 3) {
-            if (!a[i].second) {
-                f = (f << 1) % mod;
-            } else if (a[i].second < inf) {
-                c[++m] = a[i].second;
-            }
-        } else {
-            if ((a[i].second -= sum) > 0) {
-                int o = 1;
-                for (int j = 1; j <= m; ++j) {
-                    if (a[i].second > c[j]) {
-                        a[i].second -= c[j];
-                        o = (o + (1 << (m - j)) % mod) % mod;
-                    }
-                }
-                ans = (ans + 1ll * o * f % mod) % mod;
-            }
+        return true;
+    };
+    for (long long i = l; i <= r; ++i) {
+        long long x = i * i;
+        int sum = 0ll;
+        for (long long t = x; t; t /= 10ll)
+            sum += t % 10ll;
+        if (is_prime(sum)) {
+            found = true;
+            ans = 1LL * ans * (x % mod) % mod;
         }
     }
-    cout << ans << '\n';
+    cout << (found ? ans : 0ll) << '\n';
     return;
 }
 } // namespace TANGYIXIAO
