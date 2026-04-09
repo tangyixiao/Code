@@ -7,7 +7,7 @@ Copyright (C) 2026 TangYixiao
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -625,59 +625,54 @@ namespace TANGYIXIAO {
 inline void solve(int Task_Id) {
     int n;
     cin >> n;
-    vector<tuple<int, long long>> ops(n);
-    for (int i = 0; i < n; ++i) {
-        int t;
-        cin >> t;
-        if (t == 1) {
-            long long x;
-            cin >> x;
-            ops[i] = {1, x};
-        } else if (t == 2) {
-            long long x;
-            cin >> x;
-            ops[i] = {2, x};
-        } else
-            ops[i] = {3, 0};
-    }
-    const long long INF = 1e18;
-    map<long long, int> cnt;
-    long long add = 0;
-    const int MOD = 998244353;
-    long long ans = 0;
-    for (int i = n - 1; i >= 0; --i) {
-        auto [typ, x] = ops[i];
-        if (typ == 1) {
-            long long val = x - add;
-            if (val > 0) {
-                ans = (ans + 1) % MOD;
-                auto it = cnt.lower_bound(val);
-                for (auto jt = cnt.begin(); jt != it; ++jt)
-                    ans = (ans + jt->second) % MOD;
-            }
-        } else if (typ == 2) {
-            map<long long, int> new_cnt;
-            for (auto &[k, v] : cnt) {
-                long long nk = k + x;
-                if (nk <= INF)
-                    new_cnt[nk] = (new_cnt[nk] + v) % MOD;
-            }
-            new_cnt[x] = (new_cnt[x] + 1) % MOD;
-            cnt = move(new_cnt);
-        } else {
-            if (cnt.empty())
-                continue;
-            long long mx = cnt.rbegin()->first;
-            map<long long, int> new_cnt;
-            for (auto &[k, v] : cnt) {
-                long long nk = k + mx;
-                if (nk <= INF)
-                    new_cnt[nk] = (new_cnt[nk] + v) % MOD;
-                new_cnt[k] = (new_cnt[k] + v) % MOD;
-            }
-            cnt = move(new_cnt);
+    vector<int> p(n + 1), d(n + 1);
+    for (int i = 1; i <= n; ++i)
+        cin >> p[i];
+    for (int i = 1; i <= n; ++i)
+        cin >> d[i];
+
+    vector<int> outdeg(n + 1, 0);
+    for (int i = 1; i <= n; ++i)
+        for (int j = i + 1; j <= n; ++j)
+            if (p[j] > p[i])
+                ++outdeg[i];
+
+    for (int i = 1; i <= n; ++i) {
+        if (d[i] > outdeg[i]) {
+            cout << "-1\n";
+            return;
         }
     }
-    cout << ans % MOD << '\n';
+
+    vector<int> cnt(n + 1, 0);      
+    vector<bool> used(n + 1, false);
+    vector<int> q(n + 1, 0);         
+    int cur = n;                   
+
+    for (int step = 1; step <= n; ++step) {
+        int best = -1, best_out = -1;
+        for (int i = 1; i <= n; ++i) {
+            if (!used[i] && cnt[i] == d[i]) {
+                if (outdeg[i] > best_out) {
+                    best_out = outdeg[i];
+                    best = i;
+                }
+            }
+        }
+        if (best == -1) { 
+            cout << "-1\n";
+            return;
+        }
+        q[best] = cur--;
+        used[best] = true;
+        for (int v = 1; v < best; ++v) {
+            if (p[v] < p[best])
+                ++cnt[v];
+        }
+    }
+
+    for (int i = 1; i <= n; ++i)
+        cout << q[i] << " \n"[i == n];
+    return;
 }
 } // namespace TANGYIXIAO

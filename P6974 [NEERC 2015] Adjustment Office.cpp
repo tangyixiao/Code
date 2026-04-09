@@ -623,61 +623,38 @@ signed main(int argc, char *argv[]) {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 inline void solve(int Task_Id) {
-    int n;
-    cin >> n;
-    vector<tuple<int, long long>> ops(n);
-    for (int i = 0; i < n; ++i) {
-        int t;
-        cin >> t;
-        if (t == 1) {
-            long long x;
-            cin >> x;
-            ops[i] = {1, x};
-        } else if (t == 2) {
-            long long x;
-            cin >> x;
-            ops[i] = {2, x};
-        } else
-            ops[i] = {3, 0};
-    }
-    const long long INF = 1e18;
-    map<long long, int> cnt;
-    long long add = 0;
-    const int MOD = 998244353;
-    long long ans = 0;
-    for (int i = n - 1; i >= 0; --i) {
-        auto [typ, x] = ops[i];
-        if (typ == 1) {
-            long long val = x - add;
-            if (val > 0) {
-                ans = (ans + 1) % MOD;
-                auto it = cnt.lower_bound(val);
-                for (auto jt = cnt.begin(); jt != it; ++jt)
-                    ans = (ans + jt->second) % MOD;
+    int n, q;
+    cin >> n >> q;
+    long long total_sum = 1LL * n * (n + 1) / 2;
+    vector<bool> row_cleared(n + 1, false), col_cleared(n + 1, false);
+    long long row_cnt = 0, row_sum = 0, col_cnt = 0, col_sum = 0;
+    for (int i = 0; i < q; ++i) {
+        char op;
+        int idx;
+        cin >> op >> idx;
+        if (op == 'R') {
+            if (row_cleared[idx]) {
+                cout << "0\n";
+            } else {
+                long long ans = 1LL * n * idx + total_sum;
+                ans -= (idx * col_cnt + col_sum);
+                cout << ans << '\n';
+                row_cleared[idx] = true;
+                row_cnt++;
+                row_sum += idx;
             }
-        } else if (typ == 2) {
-            map<long long, int> new_cnt;
-            for (auto &[k, v] : cnt) {
-                long long nk = k + x;
-                if (nk <= INF)
-                    new_cnt[nk] = (new_cnt[nk] + v) % MOD;
+        } else { // 'C'
+            if (col_cleared[idx]) {
+                cout << "0\n";
+            } else {
+                long long ans = 1LL * n * idx + total_sum;
+                ans -= (idx * row_cnt + row_sum);
+                cout << ans << '\n';
+                col_cleared[idx] = true;
+                col_cnt++;
+                col_sum += idx;
             }
-            new_cnt[x] = (new_cnt[x] + 1) % MOD;
-            cnt = move(new_cnt);
-        } else {
-            if (cnt.empty())
-                continue;
-            long long mx = cnt.rbegin()->first;
-            map<long long, int> new_cnt;
-            for (auto &[k, v] : cnt) {
-                long long nk = k + mx;
-                if (nk <= INF)
-                    new_cnt[nk] = (new_cnt[nk] + v) % MOD;
-                new_cnt[k] = (new_cnt[k] + v) % MOD;
-            }
-            cnt = move(new_cnt);
         }
     }
-    cout << ans % MOD << '\n';
 }
 } // namespace TANGYIXIAO

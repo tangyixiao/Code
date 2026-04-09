@@ -3,9 +3,9 @@
 Copyright (C) 2026 TangYixiao
 */
 
-#define PRAGMA_TYPE 0 // 0 for no pragma, 1 for Real optimize, 2 for All optimize, 3 for Compiler optimize
-// #define PRAGMA_GPlusPlus_ALLOWED
-#define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
+#define PRAGMA_TYPE 0 // 0 for no pragma, 1 for Real optimize, 2 for All optimize
+//#define PRAGMA_GPlusPlus_ALLOWED
+#define JUDGE_TYPE 0    // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
 // #define MULTIPLE_TEST
 // #define DEBUG
@@ -138,130 +138,6 @@ Copyright (C) 2026 TangYixiao
 #pragma GCC diagnostic error "-funsafe-loop-optimizations"
 #pragma GCC diagnostic error "-std=c++14" // 注意版本
 */
-#elif PRAGMA_TYPE == 3
-
-#pragma region PRAGMA_COMPILER
-#pragma region Optimization
-
-/*
-#pragma GCC optimize("O0")                 // 对应 -O0：关闭所有优化（默认）
-#pragma GCC optimize("O1")                 // 对应 -O1：基本优化，不显著增加编译时间
-#pragma GCC optimize("O2")                 // 对应 -O2：推荐优化级别，启用大部分非体积换速度的优化
-#pragma GCC optimize("O3")                 // 对应 -O3：激进优化，包含函数内联等，可能增大代码体积
-#pragma GCC optimize("Os")                 // 对应 -Os：优化代码体积，在 -O2 基础上进一步压缩大小
-#pragma GCC optimize("Ofast")              // 对应 -Ofast：无视严格标准，追求极致性能（含 -O3 和快速数学）
-#pragma GCC optimize("Og")                 // 对应 -Og：调试时优化，平衡调试体验和运行性能
-
-// 具体优化开关（可叠加，用空格分隔）
-#pragma GCC optimize("unroll-loops")       // 对应 -funroll-loops：展开循环
-#pragma GCC optimize("inline-functions")   // 对应 -finline-functions：内联简单函数
-#pragma GCC optimize("omit-frame-pointer") // 对应 -fomit-frame-pointer：省略栈帧指针
-#pragma GCC optimize("tree-vectorize")     // 对应 -ftree-vectorize：启用自动向量化
-*/
-#pragma endregion Optimization
-#pragma region Target_Architecture
-/*
-#pragma GCC target("arch=native")  // 对应 -march=native：针对本机CPU优化指令集
-#pragma GCC target("arch=core2")   // 对应 -march=core2：针对 Core2 架构
-#pragma GCC target("tune=generic") // 对应 -mtune=generic：通用调度优化
-#pragma GCC target("tune=intel")   // 对应 -mtune=intel：为 Intel CPU 优化调度
-#pragma GCC target("sse2")         // 对应 -msse2：启用 SSE2 指令集
-#pragma GCC target("sse4.2")       // 对应 -msse4.2：启用 SSE4.2
-#pragma GCC target("avx")          // 对应 -mavx：启用 AVX 指令集
-#pragma GCC target("avx2")         // 对应 -mavx2：启用 AVX2
-#pragma GCC target("fma")          // 对应 -mfma：启用 FMA（融合乘加）指令
-#pragma GCC target("bmi2")         // 对应 -mbmi2：启用 BMI2 指令集
-#pragma GCC target("popcnt")       // 对应 -mpopcnt：启用 POPCNT 指令
-#pragma GCC target("crc32")        // 对应 -mcrc32：启用 CRC32 指令
-#pragma GCC target("no-sse")       // 对应 -mno-sse：禁用 SSE 指令集
-
-// 嵌入式 / ARM 相关
-#pragma GCC target("thumb")           // 对应 -mthumb：生成 Thumb 指令集代码
-#pragma GCC target("arm")             // 对应 -marm：生成 ARM 指令集代码
-#pragma GCC target("arch=armv7-a")    // 对应 -march=armv7-a
-#pragma GCC target("mfpu=neon")       // 对应 -mfpu=neon：使用 NEON 向量单元
-#pragma GCC target("mfloat-abi=hard") // 对应 -mfloat-abi=hard：硬件浮点 ABI
-*/
-#pragma endregion Target_Architecture
-#pragma region Diagnostic_Warnings
-/*
-// 基本警告控制：忽略、警告、错误
-#pragma GCC diagnostic ignored "-Wunused-variable"  // 忽略未使用变量警告
-#pragma GCC diagnostic warning "-Wunused-parameter" // 将“未使用参数”作为警告（默认级别）
-#pragma GCC diagnostic error "-Wformat-security"    // 将格式字符串安全问题提升为错误
-
-// 常用警告组（部分组名可作为整体控制，但更推荐单独控制具体警告）
-#pragma GCC diagnostic ignored "-Wall" // 忽略绝大部分常见警告（不推荐）
-#pragma GCC diagnostic error "-Wextra" // 将 -Wextra 中的警告视为错误
-
-// 其他常见警告
-#pragma GCC diagnostic ignored "-Wconversion"        // 忽略隐式类型转换警告
-#pragma GCC diagnostic ignored "-Wsign-compare"      // 忽略有符号/无符号比较警告
-#pragma GCC diagnostic warning "-Wshadow"            // 变量遮蔽警告（警告级别）
-#pragma GCC diagnostic error "-Wnull-dereference"    // 空指针解引用错误
-#pragma GCC diagnostic error "-Wmaybe-uninitialized" // 可能未初始化变量错误
-
-// 严格标准警告
-#pragma GCC diagnostic error "-Wpedantic"   // 对应 -pedantic-errors：严格遵循标准
-#pragma GCC diagnostic warning "-Wpedantic" // 对应 -pedantic：发出严格标准警告
-
-// 保存/恢复诊断状态（用于局部临时修改）
-#pragma GCC diagnostic push                        // 保存当前诊断设置
-#pragma GCC diagnostic ignored "-Wunused-variable" // 临时忽略
-// ... 代码 ...
-#pragma GCC diagnostic pop // 恢复之前设置
-*/
-#pragma endregion Diagnostic_Warnings
-#pragma region Visibility_Linking
-/*
-#pragma GCC visibility push(hidden) // 对应 -fvisibility=hidden：隐藏后续所有符号
-// ... 代码（例如不希望导出的内部函数） ...
-#pragma GCC visibility pop // 恢复之前的可见性设置
-
-#pragma GCC visibility push(default) // 对应默认可见性（外部可见）
-// ... 代码（需要导出的 API） ...
-#pragma GCC visibility pop
-
-// 注意：无法通过 #pragma 直接控制 -static, -shared, -l 等链接器选项
-*/
-#pragma endregion Visibility_Linking
-#pragma region Stack Protection_Security
-/*
-// 使用 optimize pragma 控制栈保护（GCC 4.9+ 支持）
-#pragma GCC optimize("stack-protector-strong") // 对应 -fstack-protector-strong：强栈保护
-#pragma GCC optimize("no-stack-protector")     // 对应 -fno-stack-protector：禁用栈保护
-
-// 地址消毒剂（AddressSanitizer）无法通过 #pragma 在函数级开关，需要全局 -fsanitize=address
-// 但可以在函数上使用 __attribute__((no_sanitize_address))，此处不展开
-*/
-#pragma endregion Stack Protection_Security
-#pragma region Miscellaneous_Code_Generation
-/*
-
-// 位置无关代码（PIC）不支持函数级 #pragma，但可以这样尝试（效果有限）
-#pragma GCC optimize("fPIC")             // 可能无效，实际需全局 -fPIC，此处仅为示例
-
-// 禁止异常展开（C++）
-#pragma GCC optimize("no-exceptions")    // 对应 -fno-exceptions，仅在 C++ 中生效
-
-// 禁止 RTTI（C++）
-#pragma GCC optimize("no-rtti")          // 对应 -fno-rtti
-
-// 函数内联阈值调整
-#pragma GCC optimize("inline-limit=100") // 对应 --param inline-min-speedup=100（近似）
-*/
-#pragma endregion Miscellaneous_Code_Generation
-#pragma region Pushing_Popping_Options
-/*
-
-#pragma GCC push_options   // 保存当前所有优化和目标选项
-#pragma GCC optimize("O3") // 临时启用 O3
-#pragma GCC target("avx2") // 临时启用 AVX2
-// ... 需要高性能的代码段 ...
-#pragma GCC pop_options    // 恢复之前保存的选项
-*/
-#pragma endregion Pushing_Popping_Options
-#pragma endregion PRAGMA_COMPILER
 #else
 #endif
 #pragma endregion PRAGMAS
@@ -546,7 +422,7 @@ inline void Local_File(string File_Name, int File_Idx) { freopen((File_Name + to
 using namespace FILE_IO;
 #pragma endregion FILE_IO
 #pragma region INT128_IO
-namespace INT128_IO {
+namespace INT128_IO{
 // clang-format off
 istream&operator>>(istream&is,__int128&x){string s;is>>s;bool neg=false;x=0;for(char c:s){if(c=='-')neg=true;else x=x*10+(c-'0');}if(neg)x=-x;return is;}
 ostream&operator<<(ostream&os,__int128 x){if(x==0)os<<0;else{string s,t;if(x<0)x=-x,t="-";while(x)s.push_back('0'+x%10),x/=10;reverse(s.begin(),s.end());os<<t<<s;}return os;}
@@ -622,62 +498,85 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-inline void solve(int Task_Id) {
-    int n;
-    cin >> n;
-    vector<tuple<int, long long>> ops(n);
-    for (int i = 0; i < n; ++i) {
-        int t;
-        cin >> t;
-        if (t == 1) {
-            long long x;
-            cin >> x;
-            ops[i] = {1, x};
-        } else if (t == 2) {
-            long long x;
-            cin >> x;
-            ops[i] = {2, x};
-        } else
-            ops[i] = {3, 0};
-    }
-    const long long INF = 1e18;
-    map<long long, int> cnt;
-    long long add = 0;
-    const int MOD = 998244353;
-    long long ans = 0;
-    for (int i = n - 1; i >= 0; --i) {
-        auto [typ, x] = ops[i];
-        if (typ == 1) {
-            long long val = x - add;
-            if (val > 0) {
-                ans = (ans + 1) % MOD;
-                auto it = cnt.lower_bound(val);
-                for (auto jt = cnt.begin(); jt != it; ++jt)
-                    ans = (ans + jt->second) % MOD;
-            }
-        } else if (typ == 2) {
-            map<long long, int> new_cnt;
-            for (auto &[k, v] : cnt) {
-                long long nk = k + x;
-                if (nk <= INF)
-                    new_cnt[nk] = (new_cnt[nk] + v) % MOD;
-            }
-            new_cnt[x] = (new_cnt[x] + 1) % MOD;
-            cnt = move(new_cnt);
-        } else {
-            if (cnt.empty())
-                continue;
-            long long mx = cnt.rbegin()->first;
-            map<long long, int> new_cnt;
-            for (auto &[k, v] : cnt) {
-                long long nk = k + mx;
-                if (nk <= INF)
-                    new_cnt[nk] = (new_cnt[nk] + v) % MOD;
-                new_cnt[k] = (new_cnt[k] + v) % MOD;
-            }
-            cnt = move(new_cnt);
+    inline void solve(int Task_Id) {
+        const int MOD = 10000;
+        int N, M, Start, End;
+        long long K;
+        scanf("%d%d%d%d%lld", &N, &M, &Start, &End, &K);
+        int adj[50][50] = {0};
+        for (int i = 0; i < M; ++i) {
+            int u, v;
+            scanf("%d%d", &u, &v);
+            adj[u][v] = adj[v][u] = 1;
         }
+        int NFish;
+        scanf("%d", &NFish);
+        int fish[12][50] = {0};
+        for (int i = 0; i < NFish; ++i) {
+            int T;
+            scanf("%d", &T);
+            int pos[4];
+            for (int j = 0; j < T; ++j) scanf("%d", &pos[j]);
+            for (int t = 0; t < 12; ++t) {
+                int p = pos[t % T];
+                fish[t][p] = 1;
+            }
+        }
+        int M_t[12][50][50] = {0};
+        for (int t = 0; t < 12; ++t) {
+            int forbid = (t + 1) % 12;
+            for (int i = 0; i < N; ++i) {
+                for (int j = 0; j < N; ++j) {
+                    if (adj[i][j] && !fish[forbid][j]) {
+                        M_t[t][i][j] = 1;
+                    }
+                }
+            }
+        }
+        auto matmul = [&](int a[50][50], int b[50][50], int c[50][50]) {
+            int tmp[50][50] = {0};
+            for (int i = 0; i < N; ++i) {
+                for (int k = 0; k < N; ++k) {
+                    if (a[i][k]) {
+                        for (int j = 0; j < N; ++j) {
+                            tmp[i][j] = (tmp[i][j] + a[i][k] * b[k][j]) % MOD;
+                        }
+                    }
+                }
+            }
+            memcpy(c, tmp, sizeof(tmp));
+        };
+        int period[50][50];
+        memcpy(period, M_t[0], sizeof(period));
+        for (int t = 1; t < 12; ++t) {
+            int tmp[50][50];
+            matmul(period, M_t[t], tmp);
+            memcpy(period, tmp, sizeof(period));
+        }
+        int cnt = K / 12;
+        int rem = K % 12;
+        int res[50][50];
+        for (int i = 0; i < N; ++i)
+            for (int j = 0; j < N; ++j)
+                res[i][j] = (i == j);
+        int base[50][50];
+        memcpy(base, period, sizeof(base));
+        while (cnt) {
+            if (cnt & 1) {
+                int tmp[50][50];
+                matmul(res, base, tmp);
+                memcpy(res, tmp, sizeof(tmp));
+            }
+            int tmp[50][50];
+            matmul(base, base, tmp);
+            memcpy(base, tmp, sizeof(tmp));
+            cnt >>= 1;
+        }
+        for (int t = 0; t < rem; ++t) {
+            int tmp[50][50];
+            matmul(res, M_t[t], tmp);
+            memcpy(res, tmp, sizeof(tmp));
+        }
+        printf("%d\n", res[Start][End] % MOD);
     }
-    cout << ans % MOD << '\n';
 }
-} // namespace TANGYIXIAO
