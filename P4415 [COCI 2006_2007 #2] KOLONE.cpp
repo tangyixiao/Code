@@ -622,38 +622,26 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-
-const int N = 2e5 + 5, inf = 0x3f3f3f3f;
-//  int n, q, a[N], mex, minn, maxn;
-int n, q;
+int n1, n2, t, a[100005], len;
+string s1, s2, s3;
 inline void solve(int Task_Id) {
-    cin >> n >> q;
-    /*
-    for (int i = 1; i <= n; i++) {
-        cin >> a[i];
-       //maxn = max(maxn, a[i]);
-    }
-    */
-    for (int l, r; q--;) {
-        // cin >> l >> r;
-        /*
-
-        minn = inf, mex = 1;
-        map<int, int> mp;
-        for (int i = l; i <= r; i++) {
-            minn = min(minn, a[i]);
-            mp[a[i]]++;
+    cin >> n1 >> n2 >> s1 >> s2 >> t;
+    for (int i = 0; i < s1.size() / 2; i++)
+        swap(s1[i], s1[s1.size() - 1 - i]);
+    s3 = s1 + s2;
+    len = s3.size();
+    for (int i = s1.size(); i < len; i++)
+        a[i] = 1;
+    for (int i = 0; i < t; i++) {
+        int j = 0;
+        while (j < len) {
+            if (!a[j] && a[j + 1])
+                swap(a[j], a[j + 1]), swap(s3[j], s3[j + 1]), j += 2;
+            else
+                j++;
         }
-        for (int i = 0; i <= maxn + 1; i++) {
-            if (!mp[i]) {
-                mex = i;
-                break;
-            }
-        }
-        cout << mex * minn << '\n';
-        */
-        cout << 0 << "\n"; // 重要性质，当 0 属于取值范围时，mex和min之积等于0，因为要么有0，min为0；要无0，mex为0
     }
+    cout << s3;
     return;
 }
 } // namespace TANGYIXIAO
