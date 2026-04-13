@@ -188,7 +188,7 @@ Copyright (C) 2026 TangYixiao
 // 基本警告控制：忽略、警告、错误
 #pragma GCC diagnostic ignored "-Wunused-variable"  // 忽略未使用变量警告
 #pragma GCC diagnostic warning "-Wunused-parameter" // 将“未使用参数”作为警告（默认级别）
-#pragma GCC diagnostic error "-Wformat-security"    // 将格式字符串安全问题提升为错误
+#pragma GCC diagnostic error "-Wformat-seuity"    // 将格式字符串安全问题提升为错误
 
 // 常用警告组（部分组名可作为整体控制，但更推荐单独控制具体警告）
 #pragma GCC diagnostic ignored "-Wall" // 忽略绝大部分常见警告（不推荐）
@@ -225,7 +225,7 @@ Copyright (C) 2026 TangYixiao
 // 注意：无法通过 #pragma 直接控制 -static, -shared, -l 等链接器选项
 */
 #pragma endregion Visibility_Linking
-#pragma region Stack Protection_Security
+#pragma region Stack Protection_Seuity
 /*
 // 使用 optimize pragma 控制栈保护（GCC 4.9+ 支持）
 #pragma GCC optimize("stack-protector-strong") // 对应 -fstack-protector-strong：强栈保护
@@ -234,7 +234,7 @@ Copyright (C) 2026 TangYixiao
 // 地址消毒剂（AddressSanitizer）无法通过 #pragma 在函数级开关，需要全局 -fsanitize=address
 // 但可以在函数上使用 __attribute__((no_sanitize_address))，此处不展开
 */
-#pragma endregion Stack Protection_Security
+#pragma endregion Stack Protection_Seuity
 #pragma region Miscellaneous_Code_Generation
 /*
 
@@ -533,6 +533,7 @@ using namespace __gnu_pbds;
 #pragma endregion INCLUDES
 
 #pragma region TANGYIXIAO
+#define int long long
 namespace TANGYIXIAO {
 #pragma region IO
 namespace IO {
@@ -621,30 +622,75 @@ signed main(int argc, char *argv[]) {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
-#include <iostream>
-#include <vector>
-
 namespace TANGYIXIAO {
+int n, np = 1, rp = 1, a[25], ans;
 inline void solve(int Task_Id) {
-    int N;
-    cin >> N;
-    vector<long long> L(N);
-    for (int i = 0; i < N; ++i) {
-        cin >> L[i];
+    cin >> n;
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+        a[i] <<= 1;
     }
-
-    long long x = 0;
-    int ans = 0;
-
-    for (int i = 0; i < N; ++i) {
-        if (L[i] > x) {
-            ++ans;
-            x = L[i] - x - 1;
-        } else {
-            x = x - L[i];
+    int ga = 1 << n;
+    for (int i = 0; i < ga; i++) {
+        np = rp = 1;
+        int cnt = 0;
+        for (int j = 0; j < n; j++) {
+            if (i & (1 << j)) {
+                np = rp - a[j];
+            } else {
+                np = rp + a[j];
+            }
+            if (rp < 0 && np > 0 || rp > 0 && np < 0) {
+                cnt++;
+            }
+            rp = np;
         }
+        ans = max(ans, cnt);
     }
-
-    cout << ans << "\n";
+    cout << ans << '\n';
+    return;
 }
+/*
+const int N = 25;
+int n, ans, a[N];
+
+inline void dfs(int st, int u, int cnt) {
+    if (st == n) {
+        ans = max(ans, cnt);
+        return;
+    }
+    int nxt = u + a[st];
+    dfs(st + 1, nxt, cnt + (u * nxt < 0));
+
+    nxt = u - a[st];
+    dfs(st + 1, nxt, cnt + (u * nxt < 0));
+    return;
+}
+
+inline void solve(int Task_Id) {
+    cin >> n;
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+        a[i] <<= 1;
+    }
+    dfs(0, 1, 0);
+    cout << ans << '\n';
+    return;
+}
+*/
+/*
+int ans = 0;
+for (int mask = 0; mask < (1 << n); mask++) {
+    ll cur = 1;
+    int cnt = 0;
+    for (int i = 0; i < n; i++) {
+        ll nxt;
+        if (mask & (1 << i)) nxt = cur + a[i];
+        else nxt = cur - a[i];
+        if (cur * nxt < 0) cnt++;
+        cur = nxt;
+    }
+    ans = max(ans, cnt);
+}
+*/
 } // namespace TANGYIXIAO
