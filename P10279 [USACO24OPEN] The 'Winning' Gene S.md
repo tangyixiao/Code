@@ -1,0 +1,190 @@
+# P10279 [USACO24OPEN] The 'Winning' Gene S
+
+## 题目背景
+
+**注意：本题的内存限制为 512MB，通常限制的 2 倍。**
+
+## 题目描述
+
+在多年举办比赛并看着 Bessie 一次又一次地获得第一名后，Farmer John 意识到这绝非偶然。他得出结论，Bessie 一定将胜利写进了 DNA，于是他开始寻找这种「胜利」基因。
+
+他设计了一个过程来识别这个「胜利」基因的可能候选。他获取了 Bessie 的基因组，为一个长为 $N$ 的字符串 $S$，其中 $1\le N\le 3000$。他选择某个数对 $(K,L)$，其中 $1\le L\le K\le N$，表示「胜利」基因候选的长度将为 $L$，并且将在一个较大的 $K$ 长度子串中进行寻找。为了识别这一基因，他从 $S$ 中取出所有 $K$ 长度的子串，我们将称这样的子串为一个 $K$-mer。对于一个给定的 $K$-mer，他取出其所有长度为 $L$ 的子串，将字典序最小的子串识别为胜利基因候选（如果存在并列则选择其中最左边的子串），然后将该字串在 $S$ 中的起始位置 $p_i$（从 $0$ 开始索引）写入一个集合 $P$。
+
+由于他还没有选定 $K$ 和 $L$，他想知道每对 $(K,L)$ 将有多少个候选。
+
+对于 $1\ldots N$ 中的每一个 $v$，帮助他求出满足 $|P|=v$ 的 $(K,L)$ 对的数量。
+
+## 输入格式
+
+输入的第一行包含 $N$，为字符串的长度。第二行包含 $S$，为给定的字符串。输入保证所有字符均为大写字符，其中 $s_i\in \texttt A-\texttt Z$，因为奶牛遗传学远比我们的高级。
+
+## 输出格式
+
+对于 $1\ldots N$ 中的每一个 $v$，输出满足 $|P|=v$ 的 $(K,L)$ 对的数量，每行输出一个数。
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+8
+AGTCAACG
+```
+
+### 输出 #1
+
+```
+11
+10
+5
+4
+2
+2
+1
+1
+```
+
+## 说明/提示
+
+### 样例解释 1
+
+在这个测试用例中，输出的第三行为 $5$ 是因为我们发现恰好有 $5$ 对 $K$ 和 $L$ 存在三个「胜利」基因候选。这些候选为（其中 $p_i$ 从 $0$ 开始索引）：
+
+```plain
+(4,2) -> P = [0,3,4]
+(5,3) -> P = [0,3,4]
+(6,4) -> P = [0,3,4]
+(6,5) -> P = [0,1,3]
+(6,6) -> P = [0,1,2]
+```
+
+为了了解 $(4,2)$ 如何得到这些结果，我们取出所有的 $4$-mer
+
+```plain
+AGTC
+GTCA
+TCAA
+CAAC
+AACG
+```
+
+对于每一个 $4$-mer，我们识别出字典序最小的长度为 $2$ 的子串
+
+```plain
+AGTC -> AG
+GTCA -> CA
+TCAA -> AA
+CAAC -> AA
+AACG -> AA
+```
+
+我们取出所有这些子串在原字符串中的位置并将它们添加到集合 $P$ 中，得到 $P=[0,3,4]$。
+
+另一方面，如果我们关注 $(4,1)$ 对，我们会发现这只会得到总共 $2$ 个「胜利」基因候选。如果我们取出所有的 $4$-mer 并识别字典序最小的长度为 $1$ 的子串（用 A，A' 和 A* 来区分不同的 A），我们得到
+
+```plain
+AGTC -> A
+GTCA' -> A'
+TCA'A* -> A'
+CA'A*C -> A'
+A'A*CG -> A'
+```
+
+尽管 A' 和 A* 在最后 3 种情况下字典序均为最小，但最左边的子串优先，因此仅有 A' 在所有这些情况中被视为候选。这意味着 $P=[0,4]$。
+
+### 测试点性质
+
+- 测试点 $2-4$：$N\le 100$。
+- 测试点 $5-7$：$N\le 500$。
+- 测试点 $8-16$：没有额外限制。
+
+---
+
+# P10279 [USACO24OPEN] The 'Winning' Gene S
+
+## 题目描述
+
+****Note: The memory limit for this problem is 512MB, twice the default.****  
+
+After years of hosting games and watching Bessie get first place over and over, Farmer John has realized that this can't be accidental. Instead, he concludes that Bessie must have winning coded into her DNA so he sets out to find this "winning" gene.  
+
+He devises a process to identify possible candidates for this "winning" gene. He takes Bessie's genome, which is a string $S$ of length $N$ where $1 \leq N \leq 3000$. He picks some pair $(K,L)$ where $1 \leq L \leq K \leq N$ representing that the "winning" gene candidates will have length $L$ and will be found within a larger $K$ length substring. To identify the gene, he takes all $K$ length substrings from $S$ which we will call a $k$-mer. For a given $k$-mer, he takes all length $L$ substrings, identifies the lexicographically minimal substring as a winning gene candidate (choosing the leftmost such substring if there is a tie),  and then writes down the $0$-indexed position $p_i$ where that substring starts in $S$ to a set $P$.   
+
+Since he hasn't picked $K$ and $L$ yet, he wants to know how many candidates there will be for every pair of $(K,L)$.  
+
+For each $v$ in $1\dots N$, help him determine the number of $(K,L)$ pairs with $|P|=v$.
+
+## 输入格式
+
+$N$ representing the length of the string. $S$ representing the given string. All characters are guaranteed to be uppercase characters where $s_i \in A-Z$ since bovine genetics are far more advanced than ours.
+
+## 输出格式
+
+For each $v$ in $1\dots N$, output the number of $(K,L)$ pairs with $|P|=v$, with each number on a separate line.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+8
+AGTCAACG
+```
+
+### 输出 #1
+
+```
+11
+10
+5
+4
+2
+2
+1
+1
+```
+
+## 说明/提示
+
+In this test case, the third line of the output is 5 because we see that there are exactly 5 pairs of $K$ and $L$ that allow for three "winning" gene candidates.  These candidates are (where $p_i$ is $0$-indexed):  
+```text
+(4,2) -> P = [0,3,4]
+(5,3) -> P = [0,3,4]
+(6,4) -> P = [0,3,4]
+(6,5) -> P = [0,1,3]
+(6,6) -> P = [0,1,2]
+```
+To see how (4,2) leads to these results, we take all $4$-mers 
+```text
+AGTC
+GTCA
+TCAA
+CAAC
+AACG
+```
+For each $4$-mer, we identify the lexicographically minimal length 2 substring 
+```text
+AGTC -> AG
+GTCA -> CA
+TCAA -> AA
+CAAC -> AA
+AACG -> AA
+```
+We take the positions of all these substrings in the original string and add them to a set $P$ to get $P = [0,3,4]$.  
+
+On the other hand, if we focus on the pair $(4,1)$, we see that this only leads to $2$ total "winning" gene candidates. If we take all $4$-mers and identify the lexicographically minimum length $1$ substring (using A and A' and A* to distinguish the different As), we get 
+```text
+AGTC -> A
+GTCA' -> A'
+TCA'A* -> A'
+CA'A*C -> A'
+A'A*CG -> A'
+```
+While both A' and A* are lexicographically minimal in the last 3 cases, the leftmost substring takes precedence so A' is counted as the only candidate in all of these cases. This means that $P = [0,4]$.  
+
+
+#### SCORING:
+
+- Inputs 2-4: $N \leq 100$ 
+- Inputs 5-7: $N \leq 500$ 
+- Inputs 8-16: No additional constraints.
