@@ -1,0 +1,4 @@
+#include <iostream>
+main() {
+    std::cout << "1+2+3+4=10";
+}
