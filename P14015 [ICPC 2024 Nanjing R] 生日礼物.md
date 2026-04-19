@@ -46,3 +46,53 @@ Grammy 的生日快要来了，她从她的朋友那里获得了一个序列 $A$
 6
 0
 ```
+
+---
+
+# P14015 [ICPC 2024 Nanjing R] Birthday Gift
+
+## 题目描述
+
+Grammy's birthday is approaching, and she gets a sequence $A$ from her friends as a gift. The sequence consists of only $0$, $1$, and $2$. Grammy thinks that the sequence is too long, so she decides to modify $A$ to make it shorter.
+
+Formally, Grammy can perform an arbitrary number of operations. Each time she can choose one of the following three operations to perform:
+- Change any $2$ into $0$ or $1$.
+- Choose two adjacent $0$s, erase them, and concatenate the rest of the parts.
+- Choose two adjacent $1$s, erase them, and concatenate the rest of the parts.
+
+Calculate the minimum sequence length Grammy can get.
+
+## 输入格式
+
+There are multiple test cases. The first line of the input contains an integer $T$ indicating the number of test cases. For each test case:
+
+The first and only line contains a string of length $n$ ($1\leq n\leq 2 \times 10^5$) consisting of digits $0$, $1$, and $2$, indicating the initial sequence $A$.
+
+It is guaranteed that the sum of $n$ of all test cases will not exceed $5 \times 10^5$.
+
+## 输出格式
+
+For each test case, output one line containing one integer indicating the minimum sequence length Grammy can get.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+5
+0110101
+01020102
+0000021111
+1012121010
+0100202010
+```
+
+### 输出 #1
+
+```
+3
+4
+0
+6
+0
+```

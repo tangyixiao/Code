@@ -7,7 +7,7 @@ Copyright (C) 2026 TangYixiao
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-#define MULTIPLE_TEST
+// #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -622,30 +622,85 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 2e5 + 10;
-int n, a[N], cnt[N];
-char c[N];
+const int N = 3e5 + 10;
+int n, s[N];
+char c[N], t[N];
 inline void solve(int Task_Id) {
+    scanf("%d", &n);
     scanf("%s", c + 1);
-    n = strlen(c + 1);
-    cnt[0] = cnt[1] = cnt[2] = 0;
+    int mn = n, d = 1;
     for (int i = 1; i <= n; i++) {
-        a[i] = c[i] - '0';
-        if (a[i] != 2) {
-            if (i % 2 == 0) {
-                a[i] ^= 1;
-            }
+        s[i] = s[i - 1];
+        if (c[i] == '(')
+            s[i]++;
+        else
+            s[i]--;
+        if (s[i] < mn)
+            mn = s[i], d = i;
+    }
+    if (s[n]) {
+        return puts("0\n1 1\n"), void();
+    }
+    for (int i = d + 1; i <= n; i++) {
+        t[i - d] = c[i];
+    }
+    for (int i = 1; i <= d; i++) {
+        t[(n - d) + i] = c[i];
+    }
+    int ans = 0, sl = 1, sr = 1, sum = 0, mx = 0, l = 0;
+    int cnt = 0;
+    for (int i = 1; i <= n; i++) {
+        s[i] = s[i - 1];
+        if (t[i] == '(')
+            s[i]++;
+        else
+            s[i]--;
+        ans += (s[i] == 0);
+    }
+    bool flag = 0;
+    for (int i = 1; i <= n; i++) {
+        if (t[i] == ')') {
+            if (sum > mx)
+                sl = l, sr = i, mx = sum;
         }
-        cnt[a[i]]++;
+        if (s[i] <= 1)
+            l = i, sum = 0, flag = 0;
+        else {
+            if (t[i] == '(' and !flag) {
+                l = i;
+                flag = 1;
+            }
+            if (s[i] == 2 and flag)
+                sum++;
+        }
     }
-    int ans = abs(cnt[0] - cnt[1]);
-    if (ans >= cnt[2]) {
-        ans -= cnt[2];
+    ans += mx;
+    flag = 0, sum = 0, mx = 0, l = 0;
+    int pl = 1, pr = 1;
+    for (int i = 1; i <= n; i++) {
+        if (t[i] == ')') {
+            if (sum > mx)
+                pl = l, pr = i, mx = sum;
+        }
+        if (s[i] < 1)
+            l = i, sum = 0, flag = 0;
+        else {
+            if (t[i] == '(' and !flag) {
+                l = i;
+                flag = 1;
+            }
+            if (s[i] == 1 and flag)
+                sum++;
+        }
+    }
+    cnt += mx;
+    if (cnt >= ans) {
+        cout << cnt << '\n'
+             << (pl + d - 1) % n + 1 << ' ' << (pr + d - 1) % n + 1 << '\n';
     } else {
-        ans = cnt[2] - ans;
-        ans &= 1;
+        cout << ans << '\n'
+             << (sl + d - 1) % n + 1 << ' ' << (sr + d - 1) % n + 1 << '\n';
     }
-    cout << ans << '\n';
     return;
 }
 } // namespace TANGYIXIAO
