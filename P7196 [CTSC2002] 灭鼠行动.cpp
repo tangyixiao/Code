@@ -662,19 +662,25 @@ bool has_pipe(int x, int y, int dir) {
 
 vector<pair<int, int>> getBombRange(int x, int y) {
     vector<pair<int, int>> res;
-    res.push_back({x, y});
-    for (int d = 0; d < 4; ++d) {
-        int cx = x, cy = y;
-        for (int step = 1; step <= L; ++step) {
-            if (!has_pipe(cx, cy, d))
-                break;
-            int nx = cx + dx[d];
-            int ny = cy + dy[d];
-            if (nx < 1 || nx > m || ny < 1 || ny > n)
-                break;
-            res.push_back({nx, ny});
-            cx = nx;
-            cy = ny;
+    vector<vector<bool>> vis(m + 1, vector<bool>(n + 1, false));
+    queue<pair<int, int>> q;
+    q.push({x, y});
+    vis[x][y] = true;
+    while (!q.empty()) {
+        auto [cx, cy] = q.front();
+        q.pop();
+        res.push_back({cx, cy});
+        int dist = abs(cx - x) + abs(cy - y);
+        if (dist >= L)
+            continue;
+        for (int d = 0; d < 4; ++d) {
+            if (has_pipe(cx, cy, d)) {
+                int nx = cx + dx[d], ny = cy + dy[d];
+                if (nx >= 1 && nx <= m && ny >= 1 && ny <= n && !vis[nx][ny]) {
+                    vis[nx][ny] = true;
+                    q.push({nx, ny});
+                }
+            }
         }
     }
     return res;
