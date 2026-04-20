@@ -686,7 +686,7 @@ vector<pair<int, int>> getBombRange(int x, int y) {
     return res;
 }
 
-void removeDeadAndCheck(vector<Mouse> &mice, int limit) {
+inline void removeDeadAndCheck(vector<Mouse> &mice, int limit) {
     vector<Mouse> alive;
     for (auto &mo : mice)
         if (mo.alive)
@@ -696,6 +696,7 @@ void removeDeadAndCheck(vector<Mouse> &mice, int limit) {
         cout << -1 << '\n';
         exit(0);
     }
+    return;
 }
 
 inline void solve(int Task_Id) {
@@ -714,14 +715,19 @@ inline void solve(int Task_Id) {
         cin >> mo.x >> mo.y;
         char dir_c;
         cin >> dir_c >> mo.gender;
-        if (dir_c == 'N')
+        if (dir_c == 'N') {
             mo.dir = 0;
-        else if (dir_c == 'E')
-            mo.dir = 1;
-        else if (dir_c == 'S')
-            mo.dir = 2;
-        else
-            mo.dir = 3;
+        } else {
+            if (dir_c == 'E') {
+                mo.dir = 1;
+            } else {
+                if (dir_c == 'S') {
+                    mo.dir = 2;
+                } else {
+                    mo.dir = 3;
+                }
+            }
+        }
         mo.birth_time = -100;
         mo.freeze_until = 0;
         mo.wake_time = -1;
@@ -754,35 +760,43 @@ inline void solve(int Task_Id) {
             if (w.type == 1) {
                 auto affected = getBombRange(w.x, w.y);
                 for (auto &mo : mice) {
-                    if (!mo.alive)
+                    if (!mo.alive) {
                         continue;
-                    for (auto &p : affected)
+                    }
+                    for (auto &p : affected) {
                         if (mo.x == p.first && mo.y == p.second) {
                             mo.alive = false;
                             break;
                         }
-                }
-            } else if (w.type == 2) {
-                for (auto &mo : mice) {
-                    if (!mo.alive)
-                        continue;
-                    int dx = mo.x - w.x, dy = mo.y - w.y;
-                    if (dx * dx + dy * dy <= R * R) {
-                        if (mo.wake_time <= t)
-                            mo.wake_time = t + 3;
-                        else
-                            mo.wake_time += 3;
                     }
                 }
-            } else if (w.type == 3) {
-                if (t + 3 <= Time)
-                    bomb_events[t + 3].push_back({w.x, w.y});
-            } else if (w.type == 4) {
-                for (auto &mo : mice) {
-                    if (!mo.alive)
-                        continue;
-                    if (mo.x == w.x && mo.y == w.y)
-                        mo.gender = (mo.gender == 'X') ? 'Y' : 'X';
+            } else {
+                if (w.type == 2) {
+                    for (auto &mo : mice) {
+                        if (!mo.alive)
+                            continue;
+                        int dx = mo.x - w.x, dy = mo.y - w.y;
+                        if (dx * dx + dy * dy <= R * R) {
+                            if (mo.wake_time <= t)
+                                mo.wake_time = t + 3;
+                            else
+                                mo.wake_time += 3;
+                        }
+                    }
+                } else {
+                    if (w.type == 3) {
+                        if (t + 3 <= Time)
+                            bomb_events[t + 3].push_back({w.x, w.y});
+                    } else {
+                        if (w.type == 4) {
+                            for (auto &mo : mice) {
+                                if (!mo.alive)
+                                    continue;
+                                if (mo.x == w.x && mo.y == w.y)
+                                    mo.gender = (mo.gender == 'X') ? 'Y' : 'X';
+                            }
+                        }
+                    }
                 }
             }
             weapon_idx++;
@@ -790,9 +804,11 @@ inline void solve(int Task_Id) {
 
         for (auto &bomb : bomb_events[t]) {
             int x = bomb.first, y = bomb.second;
-            for (auto &mo : mice)
-                if (mo.alive && mo.x == x && mo.y == y)
+            for (auto &mo : mice) {
+                if (mo.alive && mo.x == x && mo.y == y) {
                     mo.alive = false;
+                }
+            }
         }
 
         for (auto &breed : breed_events[t]) {
@@ -809,8 +825,9 @@ inline void solve(int Task_Id) {
         if (t < Time) {
 
             for (auto &mo : mice) {
-                if (!mo.alive)
+                if (!mo.alive) {
                     continue;
+                }
                 if (mo.freeze_until <= t && mo.wake_time <= t) {
                     int x = mo.x, y = mo.y, dir = mo.dir;
                     if (has_pipe(x, y, dir)) {
@@ -832,10 +849,11 @@ inline void solve(int Task_Id) {
                             mo.freeze_until = t + 1;
                         } else {
                             mo.turn_counter++;
-                            if (mo.turn_counter % 2 == 1)
+                            if (mo.turn_counter % 2 == 1) {
                                 mo.dir = left;
-                            else
+                            } else {
                                 mo.dir = right;
+                            }
                             mo.freeze_until = t + 1;
                         }
                     }
@@ -843,15 +861,18 @@ inline void solve(int Task_Id) {
             }
 
             map<pair<int, int>, vector<int>> grid;
-            for (int i = 0; i < (int)mice.size(); ++i)
-                if (mice[i].alive)
+            for (int i = 0; i < (int)mice.size(); ++i) {
+                if (mice[i].alive) {
                     grid[{mice[i].x, mice[i].y}].push_back(i);
+                }
+            }
 
             for (auto &entry : grid) {
                 int x = entry.first.first, y = entry.first.second;
                 auto &vec = entry.second;
-                if (vec.size() != 2)
+                if (vec.size() != 2) {
                     continue;
+                }
                 Mouse &m1 = mice[vec[0]];
                 Mouse &m2 = mice[vec[1]];
                 if ((t - m1.birth_time >= 5) && (t - m2.birth_time >= 5) &&
