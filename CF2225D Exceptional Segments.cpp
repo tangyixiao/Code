@@ -622,42 +622,34 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-long long count0(long long m) {
-    if (m < 0)
+typedef long long ll;
+const int MOD = 998244353;
+
+ll cmod(ll L, ll R, int rem) {
+    if (L > R)
         return 0;
-    long long res = 1;
-    if (m >= 3) {
-        res += (m - 3) / 4 + 1;
-    }
-    return res;
+    ll first = L;
+    while (first <= R && (first % 4 + 4) % 4 != rem)
+        ++first;
+    if (first > R)
+        return 0;
+    ll last = R;
+    while (last >= L && (last % 4 + 4) % 4 != rem)
+        --last;
+    return (last - first) / 4 + 1;
 }
 
-long long count1(long long m) {
-    if (m < 0)
-        return 0;
-    if (m >= 1) {
-        return (m - 1) / 4 + 1;
-    }
-    return 0;
-}
 inline void solve(int Task_Id) {
 
-    long long n, x;
+    ll n, x;
     cin >> n >> x;
-
-    long long MOD = 998294353;
-
-    long long L0 = count0(x - 1) % MOD;
-    long long L1 = count1(x - 1) % MOD;
-
-    long long R0 = (count0(n) - count0(x - 1)) % MOD;
-    long long R1 = (count1(n) - count1(x - 1)) % MOD;
-
-    long long ans = (L0 * R0) % MOD;
-    ans = (ans + L1 * R1 % MOD) % MOD;
-
-    cout << ans << "\n";
-
+    ll cnta = 1 + cmod(0, x - 1, 3);
+    ll countA1 = cmod(0, x - 1, 1);
+    ll countB0 = cmod(x, n, 3);
+    ll countB1 = cmod(x, n, 1);
+    ll ans = (cnta % MOD) * (countB0 % MOD) % MOD;
+    ans = (ans + (countA1 % MOD) * (countB1 % MOD)) % MOD;
+    cout << ans << '\n';
     return;
 }
 } // namespace TANGYIXIAO

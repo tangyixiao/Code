@@ -622,35 +622,22 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-bool check(const string &s, char c0) {
-    int n = s.size();
-    int first = -1, last = -1;
-    for (int i = 0; i < n; ++i) {
-        char target = (i % 2 == 0) ? c0 : (c0 ^ 'a' ^ 'b');
-        if (s[i] != target) {
-            if (first == -1)
-                first = i;
-            last = i;
-        }
-    }
-    if (first == -1)
-        return true;
-    for (int i = first; i <= last; ++i) {
-        char target = (i % 2 == 0) ? c0 : (c0 ^ 'a' ^ 'b');
-        if (s[i] == target)
-            return false;
-    }
-    return true;
-}
-
 inline void solve(int Task_Id) {
-    string s;
-    cin >> s;
-    if (check(s, 'a') || check(s, 'b')) {
-        cout << "YES\n";
-    } else {
-        cout << "NO\n";
+    int n;
+    cin >> n;
+    string top, bt;
+    cin >> top >> bt;
+
+    vector<int> dp(n + 1);
+    dp[0] = 0;
+    dp[1] = (top[0] != bt[0]);
+
+    for (int i = 2; i <= n; ++i) {
+        int cost_vert = (top[i - 1] != bt[i - 1]);
+        int cost_horiz = (top[i - 2] != top[i - 1]) + (bt[i - 2] != bt[i - 1]);
+        dp[i] = min(dp[i - 1] + cost_vert, dp[i - 2] + cost_horiz);
     }
+    cout << dp[n] << '\n';
     return;
 }
 } // namespace TANGYIXIAO
