@@ -622,62 +622,41 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-using ll = long long;
-
-const ll INF = 1e18;
-
+using namespace std;
 inline void solve(int Task_Id) {
     int n, m;
     cin >> n >> m;
-    vector<ll> a(n + 1);
-    for (int i = 1; i <= n; ++i)
-        cin >> a[i];
-
+    vector<int> a(n + 1);
     set<int> st;
-    ll cur = INF;
+    int cur = INT_MAX;
     for (int i = 1; i <= n; ++i) {
+        cin >> a[i];
         if (a[i] < cur) {
             st.insert(i);
             cur = a[i];
         }
     }
-
     for (int q = 0; q < m; ++q) {
         int k, d;
         cin >> k >> d;
         a[k] -= d;
-
         auto it = st.lower_bound(k);
-        ll left_val = INF;
-        if (it != st.begin()) {
-            int prev_pos = *prev(it);
-            left_val = a[prev_pos];
+        int left_val = INT_MAX;
+        if (it != st.begin())
+            left_val = a[*prev(it)];
+        bool in = (it != st.end() && *it == k);
+        if (!in && a[k] < left_val) {
+            st.insert(k);
+            in = true;
         }
-
-        bool inset = (it != st.end() && *it == k);
-        if (!inset) {
-            if (a[k] < left_val) {
-                st.insert(k);
-                inset = true;
-            }
-        }
-
-        if (inset) {
-            ll cur_min = a[k];
+        if (in) {
+            int cur_min = a[k];
             auto it2 = st.upper_bound(k);
-            while (it2 != st.end()) {
-                int pos = *it2;
-                if (a[pos] >= cur_min) {
-                    it2 = st.erase(it2);
-                } else {
-                    cur_min = a[pos];
-                    ++it2;
-                }
+            while (it2 != st.end() && a[*it2] >= cur_min) {
+                it2 = st.erase(it2);
             }
         }
         cout << st.size() << " \n"[q == m - 1];
     }
-
-    return;
 }
 } // namespace TANGYIXIAO
