@@ -654,15 +654,15 @@ inline void solve(int Task_Id) {
             left_val = a[prev_pos];
         }
 
-        bool in_set = (it != st.end() && *it == k);
-        if (!in_set) {
+        bool inset = (it != st.end() && *it == k);
+        if (!inset) {
             if (a[k] < left_val) {
                 st.insert(k);
-                in_set = true;
+                inset = true;
             }
         }
 
-        if (in_set) {
+        if (inset) {
             ll cur_min = a[k];
             auto it2 = st.upper_bound(k);
             while (it2 != st.end()) {
