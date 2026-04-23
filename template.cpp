@@ -569,7 +569,7 @@ using namespace TIME;
 #pragma endregion TIME
 #pragma region DEBUGS
 namespace DEBUGS {
-#define all(x) (x).begin(), (x).end()
+#define All(x) (x).begin(), (x).end()
 #define fprint(...) cout << format(__VA_ARGS__)
 #define fprintln(...) cout << format(__VA_ARGS__) << '\n'
 #define ferr(...) cerr << format(__VA_ARGS__)
