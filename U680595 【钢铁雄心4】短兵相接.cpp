@@ -6,8 +6,7 @@ using pll = pair<ll, ll>;
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-    freopen("1.in", "r", stdin);
-    freopen("1.out", "w", stdout);
+    
     int N, M;
     cin >> N >> M;
     vector<pll> A(N), B(M);

@@ -4,7 +4,6 @@ using namespace std;
 int main(int argc, char *argv[]) {
     // 参数：N最大值 M最大值 hp最大值 atk最大值 随机种子
 
-    freopen("1.in", "w", stdout);
     int maxN = 200000, maxM = 200000;
     int maxHp = 1000000000, maxAtk = 1000000000;
     unsigned seed = chrono::system_clock::now().time_since_epoch().count();
