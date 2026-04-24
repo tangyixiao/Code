@@ -6,7 +6,7 @@ using pll = pair<ll, ll>;
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-    
+
     int N, M;
     cin >> N >> M;
     vector<pll> A(N), B(M);
@@ -23,6 +23,7 @@ int main() {
         sumB_atk += atk;
     }
 
+    // 按组织度升序，便于快速找出最早溃退的师
     sort(A.begin(), A.end());
     sort(B.begin(), B.end());
 
@@ -31,38 +32,34 @@ int main() {
     const double eps = 1e-12;
 
     while (na > 0 && nb > 0) {
-        double vA = (double)sumB_atk / na;
-        double vB = (double)sumA_atk / nb;
+        double vA = (double)sumB_atk / na; // 红军每个师受损速率
+        double vB = (double)sumA_atk / nb; // 蓝军每个师受损速率
 
         double curA = A[ia].first - DA;
         double curB = B[ib].first - DB;
         double dtA = curA / vA;
         double dtB = curB / vB;
+        double dt = min(dtA, dtB); // 统一取最小死亡时间
 
-        if (dtA <= dtB + eps) {
-            double dt = dtA;
-            DA += vA * dt;
-            DB += vB * dt;
-            while (ia < N && A[ia].first <= DA + eps) {
-                sumA_atk -= A[ia].second;
-                sumA_hp -= A[ia].first; // 可选，用于最后计算剩余
-                --na;
-                ++ia;
-            }
-        } else {
-            double dt = dtB;
-            DB += vB * dt;
-            DA += vA * dt;
-            while (ib < M && B[ib].first <= DB + eps) {
-                sumB_atk -= B[ib].second;
-                sumB_hp -= B[ib].first;
-                --nb;
-                ++ib;
-            }
+        DA += vA * dt;
+        DB += vB * dt;
+
+        // 同时移除双方所有血量为0的师
+        while (ia < N && A[ia].first <= DA + eps) {
+            sumA_atk -= A[ia].second;
+            sumA_hp -= A[ia].first;
+            --na;
+            ++ia;
+        }
+        while (ib < M && B[ib].first <= DB + eps) {
+            sumB_atk -= B[ib].second;
+            sumB_hp -= B[ib].first;
+            --nb;
+            ++ib;
         }
     }
 
-    // 清理胜方可能同时死亡的师
+    // 清理胜方可能在最后一段时间同时阵亡的师
     if (na > 0) {
         while (ia < N && A[ia].first <= DA + eps) {
             sumA_hp -= A[ia].first;

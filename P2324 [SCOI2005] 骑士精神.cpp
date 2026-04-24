@@ -4,10 +4,10 @@ Copyright (C) 2026 TangYixiao
 */
 
 #define PRAGMA_TYPE 0
-#define MULTIPLE_TEST
+
 #define JUDGE_TYPE 0
 #define FILE_INDEX 1
-
+#define MULTIPLE_TEST
 #define FILE_NAME ""
 
 #pragma region PREPROCESSOR
@@ -393,8 +393,8 @@ Copyright (C) 2026 TangYixiao
 #include <limits>
 #include <list>
 #include <locale>
-#include <map>
 #include <memory>
+#include <mp>
 #include <new>
 #include <numeric>
 #include <ostream>
@@ -409,6 +409,7 @@ Copyright (C) 2026 TangYixiao
 #include <utility>
 #include <valarray>
 #include <vector>
+
 
 #if __cplusplus >= 201103L
 #include <array>
@@ -523,7 +524,6 @@ using namespace __gnu_pbds;
 
 #endif
 #pragma endregion INCLUDES
-
 #pragma region TANGYIXIAO
 namespace TANGYIXIAO {
 #pragma region IO
@@ -618,7 +618,7 @@ signed main(int argc, char *argv[]) {
 #ifdef TIME_COUNT
     Start_Time_Count();
 #endif
-    Init_IO();
+
 #if JUDGE == 1
     Judge_File(FILE_NAME);
 #elif JUDGE == 2
@@ -641,69 +641,104 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int dx[8] = {1, 1, 2, 2, -1, -1, -2, -2};
-const int dy[8] = {2, -2, 1, -1, 2, -2, 1, -1};
-
-const char goal[5][6] = {
-    "11111",
-    "01111",
-    "00*11",
-    "00001",
-    "00000"};
-
-char a[5][6];
-int sx, sy;
-bool ok;
-
-int h() {
-    int cnt = 0;
-    for (int i = 0; i < 5; ++i)
-        for (int j = 0; j < 5; ++j)
-            if (a[i][j] != goal[i][j])
-                cnt++;
-    return cnt;
+string mp[6];
+char check[6][6] = {
+    '0',
+    '0',
+    '0',
+    '0',
+    '0',
+    '0',
+    '0',
+    '1',
+    '1',
+    '1',
+    '1',
+    '1',
+    '0',
+    '0',
+    '1',
+    '1',
+    '1',
+    '1',
+    '0',
+    '0',
+    '0',
+    '*',
+    '1',
+    '1',
+    '0',
+    '0',
+    '0',
+    '0',
+    '0',
+    '1',
+    '0',
+    '0',
+    '0',
+    '0',
+    '0',
+    '0',
+};
+int xm[9] = {0, -2, -2, -1, -1, 1, 1, 2, 2};
+int ym[9] = {0, -1, 1, -2, 2, -2, 2, -1, 1};
+int ans;
+inline void swap(char &p1, char &p2) {
+    char mid = p1;
+    p1 = p2;
+    p2 = mid;
 }
-
-void dfs(int x, int y, int dep, int maxd) {
-    if (ok)
+inline int dif() {
+    int ret = 0;
+    for (int i = 1; i <= 5; i++) {
+        for (int j = 1; j <= 5; j++) {
+            if (mp[i][j] != check[i][j])
+                ret++;
+        }
+    }
+    return ret;
+}
+inline void dfs(int x, int y, int d, int f) {
+    int l = dif();
+    if (d + l > 16)
         return;
-    int diff = h();
-    if (diff == 0) {
-        ok = true;
-        cout << maxd << '\n';
+    if (d >= ans)
+        return;
+    if (l == 0) {
+        ans = d;
         return;
     }
-    if (dep + diff > maxd)
-        return;
-
-    for (int i = 0; i < 8; ++i) {
-        int nx = x + dx[i], ny = y + dy[i];
-        if (nx < 0 || nx >= 5 || ny < 0 || ny >= 5)
+    for (int i = 1; i <= 8; i++) {
+        if ((x + xm[i] < 1) || (x + xm[i] > 5))
             continue;
-        swap(a[x][y], a[nx][ny]);
-        dfs(nx, ny, dep + 1, maxd);
-        swap(a[x][y], a[nx][ny]);
-        if (ok)
-            return;
+        if ((y + ym[i] < 1) || (y + ym[i] > 5))
+            continue;
+        if (f + i != 9) {
+            swap(mp[y + ym[i]][x + xm[i]], mp[y][x]);
+            dfs(x + xm[i], y + ym[i], d + 1, i);
+            swap(mp[y + ym[i]][x + xm[i]], mp[y][x]);
+        }
     }
 }
-
 inline void solve(int Task_Id) {
-    for (int i = 0; i < 5; ++i) {
-        cin >> a[i];
-        for (int j = 0; j < 5; ++j)
-            if (a[i][j] == '*')
-                sx = i, sy = j;
-    }
-    ok = false;
-    for (int maxd = 0; maxd <= 15; ++maxd) {
-        dfs(sx, sy, 0, maxd);
-        if (ok)
-            break;
-    }
-    if (!ok)
-        cout << "-1\n";
 
+    int x, y;
+    for (int i = 1; i <= 5; i++) {
+        cin >> mp[i];
+        mp[i] = " " + mp[i];
+    }
+    for (int i = 1; i <= 5; i++) {
+        for (int j = 1; j <= 5; j++) {
+            if (mp[i][j] == '*') {
+                x = j;
+                y = i;
+            }
+        }
+    }
+    ans = 25;
+    dfs(x, y, 0, 0);
+    printf("%d\n", ans == 25 ? -1 : ans);
     return;
 }
+
 } // namespace TANGYIXIAO
