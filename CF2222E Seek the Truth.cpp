@@ -3,22 +3,22 @@
 Copyright (C) 2026 TangYixiao
 */
 
-#define PRAGMA_TYPE 0 // 0 for no pragma, 1 for Real optimize, 2 for All optimize, 3 for Compiler optimize
-// #define PRAGMA_GPlusPlus_ALLOWED
+#define PRAGmA_TYPE 0 // 0 for no pragma, 1 for Real optimize, 2 for All optimize, 3 for Compiler optimize
+// #define PRAGmA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define mULTIPLE_mask
 // #define DEBUG
-// #define TIME_COUNT
-#define FILE_NAME ""
+// #define TImE_COUNT
+#define FILE_NAmE ""
 // #define BITS_NOT_ALLOWED
 // #define PD_DS_USED
-// #define TESTLIB
+// #define maskLIB
 #pragma region PREPROCESSOR
-#pragma region PRAGMAS
-#if PRAGMA_TYPE == 2
-#if PRAGMA_GCC_or_GPlusPlus_ALLOWED == 1
-#pragma region PRAGMA_GCC
+#pragma region PRAGmAS
+#if PRAGmA_TYPE == 2
+#if PRAGmA_GCC_or_GPlusPlus_ALLOWED == 1
+#pragma region PRAGmA_GCC
 #pragma GCC optimize(1)
 #pragma GCC optimize(2)
 #pragma GCC optimize(3)
@@ -66,11 +66,11 @@ Copyright (C) 2026 TangYixiao
 #pragma GCC optimize("-funsafe-loop-optimizations")
 #pragma GCC optimize("inline-functions-called-once")
 #pragma GCC optimize("-fdelete-null-pointer-checks")
-#pragma endregion PRAGMA_GCC
+#pragma endregion PRAGmA_GCC
 
-#elif PRAGMA_GCC_or_GPlusPlus_ALLOWED == 2
+#elif PRAGmA_GCC_or_GPlusPlus_ALLOWED == 2
 
-#pragma region PRAGMA_GPlusPlus
+#pragma region PRAGmA_GPlusPlus
 #pragma G++ optimize(1)
 #pragma G++ optimize(2)
 #pragma G++ optimize(3)
@@ -118,10 +118,10 @@ Copyright (C) 2026 TangYixiao
 #pragma G++ optimize("-funsafe-loop-optimizations")
 #pragma G++ optimize("inline-functions-called-once")
 #pragma G++ optimize("-fdelete-null-pointer-checks")
-#pragma endregion PRAGMA_GPlusPlus
+#pragma endregion PRAGmA_GPlusPlus
 #else
 #endif
-#elif PRAGMA_TYPE == 1
+#elif PRAGmA_TYPE == 1
 
 #pragma GCC optimize("O3")
 
@@ -138,9 +138,9 @@ Copyright (C) 2026 TangYixiao
 #pragma GCC diagnostic error "-funsafe-loop-optimizations"
 #pragma GCC diagnostic error "-std=c++14" // 注意版本
 */
-#elif PRAGMA_TYPE == 3
+#elif PRAGmA_TYPE == 3
 
-#pragma region PRAGMA_COMPILER
+#pragma region PRAGmA_COmPILER
 #pragma region Optimization
 
 /*
@@ -169,15 +169,15 @@ Copyright (C) 2026 TangYixiao
 #pragma GCC target("sse4.2")       // 对应 -msse4.2：启用 SSE4.2
 #pragma GCC target("avx")          // 对应 -mavx：启用 AVX 指令集
 #pragma GCC target("avx2")         // 对应 -mavx2：启用 AVX2
-#pragma GCC target("fma")          // 对应 -mfma：启用 FMA（融合乘加）指令
-#pragma GCC target("bmi2")         // 对应 -mbmi2：启用 BMI2 指令集
+#pragma GCC target("fma")          // 对应 -mfma：启用 FmA（融合乘加）指令
+#pragma GCC target("bmi2")         // 对应 -mbmi2：启用 BmI2 指令集
 #pragma GCC target("popcnt")       // 对应 -mpopcnt：启用 POPCNT 指令
 #pragma GCC target("crc32")        // 对应 -mcrc32：启用 CRC32 指令
 #pragma GCC target("no-sse")       // 对应 -mno-sse：禁用 SSE 指令集
 
-// 嵌入式 / ARM 相关
+// 嵌入式 / ARm 相关
 #pragma GCC target("thumb")           // 对应 -mthumb：生成 Thumb 指令集代码
-#pragma GCC target("arm")             // 对应 -marm：生成 ARM 指令集代码
+#pragma GCC target("arm")             // 对应 -marm：生成 ARm 指令集代码
 #pragma GCC target("arch=armv7-a")    // 对应 -march=armv7-a
 #pragma GCC target("mfpu=neon")       // 对应 -mfpu=neon：使用 NEON 向量单元
 #pragma GCC target("mfloat-abi=hard") // 对应 -mfloat-abi=hard：硬件浮点 ABI
@@ -235,7 +235,7 @@ Copyright (C) 2026 TangYixiao
 // 但可以在函数上使用 __attribute__((no_sanitize_address))，此处不展开
 */
 #pragma endregion Stack Protection_Security
-#pragma region Miscellaneous_Code_Generation
+#pragma region miscellaneous_Code_Generation
 /*
 
 // 位置无关代码（PIC）不支持函数级 #pragma，但可以这样尝试（效果有限）
@@ -250,7 +250,7 @@ Copyright (C) 2026 TangYixiao
 // 函数内联阈值调整
 #pragma GCC optimize("inline-limit=100") // 对应 --param inline-min-speedup=100（近似）
 */
-#pragma endregion Miscellaneous_Code_Generation
+#pragma endregion miscellaneous_Code_Generation
 #pragma region Pushing_Popping_Options
 /*
 
@@ -261,15 +261,15 @@ Copyright (C) 2026 TangYixiao
 #pragma GCC pop_options    // 恢复之前保存的选项
 */
 #pragma endregion Pushing_Popping_Options
-#pragma endregion PRAGMA_COMPILER
+#pragma endregion PRAGmA_COmPILER
 #else
 #endif
-#pragma endregion PRAGMAS
+#pragma endregion PRAGmAS
 
 #pragma region INCLUDES
 
-#ifdef TESTLIB
-#include <testlib.h> // 自定义测试库
+#ifdef maskLIB
+#include <masklib.h> // 自定义测试库
 #endif
 
 #ifdef BITS_NOT_ALLOWED
@@ -279,8 +279,8 @@ Copyright (C) 2026 TangYixiao
 #include <cassert> // 断言支持 (assert)
 #endif
 #include <cctype>  // 字符处理函数 (isalpha, toupper 等)
-#include <cfloat>  // 浮点数类型极限 (FLT_MAX, DBL_MIN 等)
-#include <climits> // 整数类型极限 (INT_MAX, LONG_MIN 等)
+#include <cfloat>  // 浮点数类型极限 (FLT_mAX, DBL_mIN 等)
+#include <climits> // 整数类型极限 (INT_mAX, LONG_mIN 等)
 #include <csetjmp> // 非局部跳转 (setjmp, longjmp)
 #include <cstdarg> // 可变参数处理 (va_list, va_start 等)
 #include <cstddef> // 基础类型定义 (size_t, nullptr_t, offsetof)
@@ -557,16 +557,16 @@ using namespace INT128_IO;
 } // namespace IO
 using namespace IO;
 #pragma endregion IO
-#pragma region TIME
-namespace TIME {
+#pragma region TImE
+namespace TImE {
 clock_t Start_Time, End_Time;
 inline void Start_Time_Count() { Start_Time = clock(); }
 inline void End_Time_Count() { End_Time = clock(); }
 inline double Time_Count() { return (double)(End_Time - Start_Time) / CLOCKS_PER_SEC; }
 inline void Print_Time_Count(string Programe_Name) { cerr << fixed << setprecision(4) << "\n" + Programe_Name + " Time: " << Time_Count() << "s\n"; }
-} // namespace TIME
-using namespace TIME;
-#pragma endregion TIME
+} // namespace TImE
+using namespace TImE;
+#pragma endregion TImE
 #pragma region DEBUGS
 namespace DEBUGS {
 #define All(x) (x).begin(), (x).end()
@@ -575,7 +575,7 @@ namespace DEBUGS {
 #define ferr(...) cerr << format(__VA_ARGS__)
 #define ferrln(...) cerr << format(__VA_ARGS__) << '\n'
 #define funct(name, ret, ...) function<ret(__VA_ARGS__)> name = [&](__VA_ARGS__)
-inline void Debug_Print(string Debug_Message) { cerr << "\n" + Debug_Message + "\n"; }
+inline void Debug_Print(string Debug_message) { cerr << "\n" + Debug_message + "\n"; }
 } // namespace DEBUGS
 using namespace DEBUGS;
 #pragma endregion DEBUGS
@@ -594,36 +594,90 @@ inline void solve(int Task_Id);
 } // namespace TANGYIXIAO
 using namespace TANGYIXIAO;
 #pragma endregion TANGYIXIAO
-#pragma region MAIN
+#pragma region mAIN
 signed main(int argc, char *argv[]) {
-#ifdef TIME_COUNT
+#ifdef TImE_COUNT
     Start_Time_Count();
 #endif
     Init_IO();
 #if JUDGE == 1
-    Judge_File(FILE_NAME);
+    Judge_File(FILE_NAmE);
 #elif JUDGE == 2
-    Local_File(FILE_NAME, FILE_IDX);
+    Local_File(FILE_NAmE, FILE_IDX);
 #else
 #endif
     int T = 1;
-#ifdef MULTIPLE_TEST
+#ifdef mULTIPLE_mask
     cin >> T;
 #endif
     for (int Tasks_Id = 1; Tasks_Id <= T; Tasks_Id++) {
         solve(Tasks_Id);
     }
-#ifdef TIME_COUNT
+#ifdef TImE_COUNT
     End_Time_Count();
     Print_Time_Count("TOTAL");
 #endif
     return EXIT_SUCCESS;
 }
-#pragma endregion MAIN
+#pragma endregion mAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+typedef long long ll;
+
+int n;
+ll m, sz1, sz2, v;
+ll query(char type, ll val) {
+    cout << type << " " << val << endl;
+    ll res;
+    cin >> res;
+    if (res == -1) {
+        exit(0);
+    }
+    return res;
+}
+
+ll f(int n) {
+    ll v = 0;
+    for (int bit = n - 1; bit >= 0; --bit) {
+        ll mask = v | (1LL << bit);
+        if (query('Q', mask) == 2) {
+            v = mask;
+        }
+    }
+    return v;
+}
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n;
+    m = (1LL << n) - 1;
+    cout << m << endl;
+    sz1 = query('I', m);
+
+    if (sz1 == 1) {
+        sz2 = query('I', 0);
+        if (sz2 == 1) {
+            cout << "A 2 " << m << endl;
+        } else {
+            v = f(n);
+            if (!v) {
+                cout << "A 1 " << m << endl;
+            } else {
+                cout << "A 2 " << v << endl;
+            }
+        }
+    } else {
+        v = f(n);
+        if (!v) {
+            cout << "A 3 " << m << endl;
+        } else {
+            query('I', 0);
+            if (query('Q', 1) == 2) {
+                cout << "A 1 " << v << endl;
+            } else {
+                cout << "A 3 " << (m ^ v) << endl;
+            }
+        }
+    }
     return;
 }
 } // namespace TANGYIXIAO
