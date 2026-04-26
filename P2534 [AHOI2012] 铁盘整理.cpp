@@ -622,8 +622,64 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+int N;
+int a[20];
+
+int h() {
+    int cnt = 0;
+    for (int i = 1; i <= N + 1; ++i)
+        if (abs(a[i] - a[i - 1]) != 1)
+            ++cnt;
+    return cnt;
+}
+
+bool dfs(int d, int maxd, int last) {
+    int hv = h();
+    if (hv == 0)
+        return true;
+    if (d + hv > maxd)
+        return false;
+
+    for (int k = 2; k <= N; ++k) {
+        if (k == last)
+            continue;
+        reverse(a + 1, a + k + 1);
+        if (dfs(d + 1, maxd, k))
+            return true;
+        reverse(a + 1, a + k + 1);
+    }
+    return false;
+}
+
 inline void solve(int Task_Id) {
-    // do something here
+
+    cin >> N;
+    vector<int> raw(N);
+    for (int i = 0; i < N; ++i)
+        cin >> raw[i];
+
+    vector<int> sorted = raw;
+    sort(sorted.begin(), sorted.end());
+    for (int i = 0; i < N; ++i) {
+
+        int rank = lower_bound(sorted.begin(), sorted.end(), raw[i]) - sorted.begin() + 1;
+        a[i + 1] = rank;
+    }
+
+    a[0] = 0;
+    a[N + 1] = N + 1;
+
+    if (h() == 0) {
+        cout << 0 << endl;
+        return;
+    }
+
+    for (int maxd = 1;; ++maxd) {
+        if (dfs(0, maxd, -1)) {
+            cout << maxd << endl;
+            break;
+        }
+    }
     return;
 }
 } // namespace TANGYIXIAO

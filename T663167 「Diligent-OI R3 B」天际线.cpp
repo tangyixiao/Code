@@ -7,12 +7,12 @@ Copyright (C) 2026 TangYixiao
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-#define MULTIPLE_TEST
+// #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
 // #define BITS_NOT_ALLOWED
-// #define PD_DS_vis
+// #define PD_DS_USED
 // #define TESTLIB
 #pragma region PREPROCESSOR
 #pragma region PRAGMAS
@@ -186,8 +186,8 @@ Copyright (C) 2026 TangYixiao
 #pragma region Diagnostic_Warnings
 /*
 // 基本警告控制：忽略、警告、错误
-#pragma GCC diagnostic ignored "-Wunvis-variable"  // 忽略未使用变量警告
-#pragma GCC diagnostic warning "-Wunvis-parameter" // 将“未使用参数”作为警告（默认级别）
+#pragma GCC diagnostic ignored "-Wunused-variable"  // 忽略未使用变量警告
+#pragma GCC diagnostic warning "-Wunused-parameter" // 将“未使用参数”作为警告（默认级别）
 #pragma GCC diagnostic error "-Wformat-security"    // 将格式字符串安全问题提升为错误
 
 // 常用警告组（部分组名可作为整体控制，但更推荐单独控制具体警告）
@@ -207,7 +207,7 @@ Copyright (C) 2026 TangYixiao
 
 // 保存/恢复诊断状态（用于局部临时修改）
 #pragma GCC diagnostic push                        // 保存当前诊断设置
-#pragma GCC diagnostic ignored "-Wunvis-variable" // 临时忽略
+#pragma GCC diagnostic ignored "-Wunused-variable" // 临时忽略
 // ... 代码 ...
 #pragma GCC diagnostic pop // 恢复之前设置
 */
@@ -248,7 +248,7 @@ Copyright (C) 2026 TangYixiao
 #pragma GCC optimize("no-rtti")          // 对应 -fno-rtti
 
 // 函数内联阈值调整
-#pragma GCC optimize("inline-limit=100") // 对应 p--aram inline-min-speedup=100（近似）
+#pragma GCC optimize("inline-limit=100") // 对应 --param inline-min-speedup=100（近似）
 */
 #pragma endregion Miscellaneous_Code_Generation
 #pragma region Pushing_Popping_Options
@@ -279,11 +279,11 @@ Copyright (C) 2026 TangYixiao
 #include <cassert> // 断言支持 (assert)
 #endif
 #include <cctype>  // 字符处理函数 (isalpha, toupper 等)
-#include <cfloat>  // 浮点数类型极限 (FLTma, DBLmi 等)
-#include <climits> // 整数类型极限 (INTma, LONGmi 等)
+#include <cfloat>  // 浮点数类型极限 (FLT_MAX, DBL_MIN 等)
+#include <climits> // 整数类型极限 (INT_MAX, LONG_MIN 等)
 #include <csetjmp> // 非局部跳转 (setjmp, longjmp)
 #include <cstdarg> // 可变参数处理 (va_list, va_start 等)
-#include <cstddef> // 基础类型定义 (size_t, nullp_t, offsetof)
+#include <cstddef> // 基础类型定义 (size_t, nullptr_t, offsetof)
 #include <cstdlib> // 通用工具 (malloc, exit, atoi, rand 等)
 
 #if __cplusplus >= 201103L
@@ -299,7 +299,7 @@ Copyright (C) 2026 TangYixiao
 #include <functional> // 函数对象、绑定器 (function, bind, plus 等)
 #include <iterator>   // 迭代器定义与操作 (iterator_traits, begin, end)
 #include <limits>     // 数值类型的极限 (numeric_limits)
-#include <memory>     // 智能指针、内存管理工具 (unique_p, shared_p, allocator)
+#include <memory>     // 智能指针、内存管理工具 (unique_ptr, shared_ptr, allocator)
 #include <new>        // 动态内存管理 (operator new, bad_alloc)
 #include <numeric>    // 数值算法 (accumulate, iota, gcd 等)
 #include <typeinfo>   // 运行时类型信息 (typeid, type_info)
@@ -414,7 +414,7 @@ Copyright (C) 2026 TangYixiao
 #include <string>     // 字符串 (string)
 #include <typeinfo>   // 运行时类型信息
 #include <utility>    // 实用组件
-#include <vaarray>    // 数值数组 (vaarray)
+#include <valarray>   // 数值数组 (valarray)
 #include <vector>     // 动态数组 (vector)
 
 #if __cplusplus >= 201103L
@@ -506,7 +506,7 @@ using namespace std;
 
 */
 
-#ifdef PD_DS_vis
+#ifdef PD_DS_USED
 #ifdef BITS_NOT_ALLOWED
 
 // __gnu_pbds 常用头文件及功能注释
@@ -590,168 +590,245 @@ inline T Pop_Count(T x) { return __builtin_popcount(x); }
 } // namespace BITS
 using namespace BITS;
 #pragma endregion BITS
-inline void solve(int Task_Id);
+inline void solve(int Task_Id) {
+    return;
+}
 } // namespace TANGYIXIAO
 using namespace TANGYIXIAO;
 #pragma endregion TANGYIXIAO
-#pragma region MAIN
-signed main(int argc, char *argv[]) {
-#ifdef TIME_COUNT
-    Start_Time_Count();
-#endif
-    Init_IO();
-#if JUDGE == 1
-    Judge_File(FILE_NAME);
-#elif JUDGE == 2
-    Local_File(FILE_NAME, FILE_IDX);
-#else
-#endif
-    int T = 1;
-#ifdef MULTIPLE_TEST
-    cin >> T;
-#endif
-    for (int Tasks_Id = 1; Tasks_Id <= T; Tasks_Id++) {
-        solve(Tasks_Id);
-    }
-#ifdef TIME_COUNT
-    End_Time_Count();
-    Print_Time_Count("TOTAL");
-#endif
-    return EXIT_SUCCESS;
-}
-#pragma endregion MAIN
-#pragma endregion PREPROCESSOR
-namespace TANGYIXIAO {
-
 const int N = 100005;
+
 int ans[N];
 
-bool solve_left(int L, const string &a, const string &c, vector<int> &res) {
-    res.resize(L + 1);
-    set<int> s;
+struct BIT {
+    vector<int> bit;
+    int n;
+    void init(int sz) {
+        n = sz;
+        bit.assign(n + 1, 0);
+    }
+    void add(int x, int v) {
+        for (; x <= n; x += x & -x)
+            bit[x] += v;
+    }
+    int sum(int x) {
+        int s = 0;
+        for (; x > 0; x -= x & -x)
+            s += bit[x];
+        return s;
+    }
+    int kth(int k) {
+        int idx = 0;
+        for (int i = 17; i >= 0; --i) {
+            int nxt = idx + (1 << i);
+            if (nxt <= n && bit[nxt] < k) {
+                k -= bit[nxt];
+                idx = nxt;
+            }
+        }
+        return idx + 1;
+    }
+};
+
+bool solve_left(int L, const string &a, const string &c, vector<int> &out) {
+    out.resize(L + 1);
+    BIT bit;
+    bit.init(L);
     for (int i = 1; i <= L; ++i)
-        s.insert(i);
+        bit.add(i, 1);
+
+    vector<int> remC(L + 2, 0);
+    for (int i = L; i >= 1; --i)
+        remC[i] = remC[i + 1] + (c[i] == '1');
+
     int cur = 0;
     for (int i = 1; i <= L; ++i) {
+        int need = remC[i + 1];
         int val;
         if (a[i] == '1') {
-            auto it = s.upper_bound(cur);
-            if (it == s.end())
+            int idx = bit.sum(cur) + 1;
+            int total = bit.sum(L);
+            if (idx > total)
                 return false;
-            val = *it;
+            int v = bit.kth(idx);
+
+            int target = need + 1;
+            if (bit.sum(v) < target) {
+                if (total < target)
+                    return false;
+                v = bit.kth(target);
+            }
+            val = v;
             cur = val;
         } else if (c[i] == '1') {
-            auto it = s.lower_bound(cur);
-            if (it == s.begin())
+            if (cur == 0)
                 return false;
-            --it;
-            val = *it;
+            int cnt_cur = bit.sum(cur);
+            if (cnt_cur - 1 < need)
+                return false;
+            val = bit.kth(1);
+            if (val > cur)
+                return false;
 
         } else {
-            auto it = s.begin();
-            val = *it;
-            if (val > cur)
-                cur = val;
+            int cnt_cur = bit.sum(cur);
+            if (cnt_cur > 0 && cnt_cur - 1 >= need) {
+                val = bit.kth(1);
+            } else {
+                int idx = bit.sum(cur) + 1;
+                int total = bit.sum(L);
+                if (idx > total)
+                    return false;
+                int v = bit.kth(idx);
+                int target = need + 1;
+                if (bit.sum(v) < target) {
+                    if (total < target)
+                        return false;
+                    v = bit.kth(target);
+                }
+                val = v;
+                cur = v;
+            }
         }
-        res[i] = val;
-        s.erase(val);
+        out[i] = val;
+        bit.add(val, -1);
     }
     return true;
 }
 
-bool solve_right(int R, const string &a, const string &c, vector<int> &res) {
-    return solve_left(R, a, c, res);
-}
-inline void solve(int Task_Id) {
-    int n;
-    cin >> n;
-    string a, b, c;
-    cin >> a >> b >> c;
-    a = " " + a;
-    b = " " + b;
-    c = " " + c;
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
 
-    if (c[1] == '1' || c[n] == '1') {
-        cout << "-1\n";
-        return;
-    }
+    int T;
+    cin >> T;
+    while (T--) {
+        int n;
+        cin >> n;
+        string a, b, c;
+        cin >> a >> b >> c;
 
-    bool conflict = false;
-    for (int i = 1; i <= n; ++i) {
-        if ((a[i] == '1' && c[i] == '1') || (b[i] == '1' && c[i] == '1'))
-            conflict = true;
-    }
-    if (conflict) {
-        cout << "-1\n";
-        return;
-    }
+        a = " " + a;
+        b = " " + b;
+        c = " " + c;
 
-    int max_a = 1, min_b = n;
-    for (int i = 1; i <= n; ++i) {
-        if (a[i] == '1') {
-            max_a = max(max_a, i);
+        if (c[1] == '1' || c[n] == '1') {
+            cout << "-1\n";
+            continue;
         }
-    }
-    for (int i = 1; i <= n; ++i) {
-        if (b[i] == '1') {
-            min_b = i;
+
+        bool conf = false;
+        for (int i = 1; i <= n; ++i)
+            if ((a[i] == '1' && c[i] == '1') || (b[i] == '1' && c[i] == '1'))
+                conf = true;
+        if (conf) {
+            cout << "-1\n";
+            continue;
+        }
+
+        bool all0 = true;
+        for (int i = 1; i <= n; ++i)
+            if (a[i] == '1' || b[i] == '1' || c[i] == '1') {
+                all0 = false;
+                break;
+            }
+        if (all0) {
+            for (int i = 1; i <= n; ++i)
+                cout << i << " \n"[i == n];
+            continue;
+        }
+
+        int max_a = 0, min_b = n + 1;
+        for (int i = 1; i <= n; ++i)
+            if (a[i] == '1')
+                max_a = max(max_a, i);
+        for (int i = 1; i <= n; ++i)
+            if (b[i] == '1') {
+                min_b = i;
+                break;
+            }
+
+        int low = max(1, max_a);
+        int high = min(n, min_b);
+        if (low > high) {
+            cout << "-1\n";
+            continue;
+        }
+
+        vector<int> pre_b(n + 2, 0), suf_a(n + 2, 0);
+        for (int i = 1; i <= n; ++i)
+            pre_b[i] = pre_b[i - 1] | (b[i] == '1');
+        for (int i = n; i >= 1; --i)
+            suf_a[i] = suf_a[i + 1] | (a[i] == '1');
+
+        bool found = false;
+        for (int p = high; p >= low; --p) {
+            if (c[p] == '1')
+                continue;
+            if (pre_b[p - 1] == 1)
+                continue;
+            if (suf_a[p + 1] == 1)
+                continue;
+
+            int L = p - 1, R = n - p;
+            vector<int> left_ans, right_ans;
+
+            if (L > 0) {
+                string la = a.substr(1, L);
+                string lc = c.substr(1, L);
+                la = " " + la;
+                lc = " " + lc;
+                if (!solve_left(L, la, lc, left_ans))
+                    continue;
+            }
+
+            if (R > 0) {
+
+                set<int> S;
+                for (int i = p + 1; i <= n; ++i)
+                    if (b[i] == '1')
+                        S.insert(i);
+                S.insert(n);
+                int m = S.size();
+
+                vector<int> s_pos(S.begin(), S.end());
+                int cur_val = n - 1;
+                vector<int> tmp(R + 1);
+                for (int idx : s_pos) {
+                    int pos_rel = idx - p;
+                    tmp[pos_rel] = cur_val;
+                    --cur_val;
+                }
+
+                int min_non = p;
+                int max_non = n - m - 1;
+                int ptr = min_non;
+                for (int i = 1; i <= R; ++i) {
+                    if (tmp[i] == 0) {
+                        tmp[i] = ptr++;
+                    }
+                }
+
+                right_ans.resize(R + 1);
+                for (int i = 1; i <= R; ++i)
+                    right_ans[i] = tmp[i];
+            }
+
+            memset(ans, 0, sizeof(ans));
+            for (int i = 1; i <= L; ++i)
+                ans[i] = left_ans[i];
+            ans[p] = n;
+            for (int i = 1; i <= R; ++i)
+                ans[p + i] = right_ans[i];
+
+            found = true;
+            for (int i = 1; i <= n; ++i)
+                cout << ans[i] << " \n"[i == n];
             break;
         }
+
+        if (!found)
+            cout << "-1\n";
     }
-    if (max_a > min_b) {
-        cout << "-1\n";
-        return;
-    }
-
-    bool found = false;
-    for (int p = min_b; p >= max_a; --p) {
-        if (c[p] == '1')
-            return;
-
-        int L = p - 1, R = n - p;
-
-        string la = " " + a.substr(1, L), lc = " " + c.substr(1, L);
-        vector<int> left_ans;
-        if (L > 0) {
-            if (!solve_left(L, la, lc, left_ans)) {
-                continue;
-            }
-        }
-
-        string ra, rc;
-        ra.push_back(' ');
-        rc.push_back(' ');
-        for (int i = n; i > p; --i) {
-            ra.push_back(b[i]);
-            rc.push_back(c[i]);
-        }
-
-        vector<int> right_ans;
-        if (R > 0) {
-            if (!solve_right(R, ra, rc, right_ans)) {
-                continue;
-            }
-        }
-
-        for (int i = 1; i <= L; ++i) {
-            ans[i] = left_ans[i];
-        }
-        ans[p] = n;
-        for (int i = 1; i <= R; ++i) {
-
-            int idx = p + i;
-            ans[idx] = L + right_ans[R - i + 1];
-        }
-
-        found = true;
-        for (int i = 1; i <= n; ++i) {
-            cout << ans[i] << " \n"[i == n];
-        }
-        break;
-    }
-    if (!found) {
-        cout << "-1\n";
-    }
-    return;
+    return 0;
 }
-} // namespace TANGYIXIAO
