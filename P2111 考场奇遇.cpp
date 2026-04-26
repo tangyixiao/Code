@@ -623,26 +623,34 @@ signed main(int argc, char *argv[]) {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 inline void solve(int Task_Id) {
-    int n;
-    string s;
-    cin >> n >> s;
+    int N, A, Q;
+    string S;
+    cin >> N >> A >> Q >> S;
 
-    double len = 0.0;
-    double ans = 0.0;
-
-    for (char c : s) {
-        if (c == 'o') {
-            ans += 2.0 * len + 1.0;
-            len += 1.0;
-        } else if (c == 'x') {
-            len = 0.0;
-        } else {
-            ans += (2.0 * len + 1.0) * 0.5;
-            len = (len + 1.0) * 0.5;
-        }
+    if (Q == 0) {
+        cout << "1.000" << endl;
+        return 0;
     }
 
-    cout << fixed << setprecision(4) << ans << endl;
+    double p = A / 100.0; 
+    double q = 1.0 - p;  
+
+    vector<double> dp(N + 1, 0.0);
+    dp[0] = 1.0;
+
+    for (int i = 0; i < N; ++i) {
+        double prob = (S[i] == '1') ? p : q; /
+        for (int j = i + 1; j >= 1; --j) {
+            dp[j] = dp[j] * (1.0 - prob) + dp[j - 1] * prob;
+        }
+        dp[0] = dp[0] * (1.0 - prob);
+    }
+
+    double ans = 0.0;
+    for (int j = Q; j <= N; ++j)
+        ans += dp[j];
+
+    cout << fixed << setprecision(3) << ans << endl;
     return;
 }
 } // namespace TANGYIXIAO
