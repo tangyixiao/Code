@@ -7,12 +7,12 @@ Copyright (C) 2026 TangYixiao
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-#define MULTIPLE_TEST
+// #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
 // #define BITS_NOT_ALLOWED
-// #define PD_DS_vis
+// #define PD_DS_USED
 // #define TESTLIB
 #pragma region PREPROCESSOR
 #pragma region PRAGMAS
@@ -186,8 +186,8 @@ Copyright (C) 2026 TangYixiao
 #pragma region Diagnostic_Warnings
 /*
 // 基本警告控制：忽略、警告、错误
-#pragma GCC diagnostic ignored "-Wunvis-variable"  // 忽略未使用变量警告
-#pragma GCC diagnostic warning "-Wunvis-parameter" // 将“未使用参数”作为警告（默认级别）
+#pragma GCC diagnostic ignored "-Wunused-variable"  // 忽略未使用变量警告
+#pragma GCC diagnostic warning "-Wunused-parameter" // 将“未使用参数”作为警告（默认级别）
 #pragma GCC diagnostic error "-Wformat-security"    // 将格式字符串安全问题提升为错误
 
 // 常用警告组（部分组名可作为整体控制，但更推荐单独控制具体警告）
@@ -207,7 +207,7 @@ Copyright (C) 2026 TangYixiao
 
 // 保存/恢复诊断状态（用于局部临时修改）
 #pragma GCC diagnostic push                        // 保存当前诊断设置
-#pragma GCC diagnostic ignored "-Wunvis-variable" // 临时忽略
+#pragma GCC diagnostic ignored "-Wunused-variable" // 临时忽略
 // ... 代码 ...
 #pragma GCC diagnostic pop // 恢复之前设置
 */
@@ -248,7 +248,7 @@ Copyright (C) 2026 TangYixiao
 #pragma GCC optimize("no-rtti")          // 对应 -fno-rtti
 
 // 函数内联阈值调整
-#pragma GCC optimize("inline-limit=100") // 对应 p--aram inline-min-speedup=100（近似）
+#pragma GCC optimize("inline-limit=100") // 对应 --param inline-min-speedup=100（近似）
 */
 #pragma endregion Miscellaneous_Code_Generation
 #pragma region Pushing_Popping_Options
@@ -279,11 +279,11 @@ Copyright (C) 2026 TangYixiao
 #include <cassert> // 断言支持 (assert)
 #endif
 #include <cctype>  // 字符处理函数 (isalpha, toupper 等)
-#include <cfloat>  // 浮点数类型极限 (FLTma, DBLmi 等)
-#include <climits> // 整数类型极限 (INTma, LONGmi 等)
+#include <cfloat>  // 浮点数类型极限 (FLT_MAX, DBL_MIN 等)
+#include <climits> // 整数类型极限 (INT_MAX, LONG_MIN 等)
 #include <csetjmp> // 非局部跳转 (setjmp, longjmp)
 #include <cstdarg> // 可变参数处理 (va_list, va_start 等)
-#include <cstddef> // 基础类型定义 (size_t, nullp_t, offsetof)
+#include <cstddef> // 基础类型定义 (size_t, nullptr_t, offsetof)
 #include <cstdlib> // 通用工具 (malloc, exit, atoi, rand 等)
 
 #if __cplusplus >= 201103L
@@ -299,7 +299,7 @@ Copyright (C) 2026 TangYixiao
 #include <functional> // 函数对象、绑定器 (function, bind, plus 等)
 #include <iterator>   // 迭代器定义与操作 (iterator_traits, begin, end)
 #include <limits>     // 数值类型的极限 (numeric_limits)
-#include <memory>     // 智能指针、内存管理工具 (unique_p, shared_p, allocator)
+#include <memory>     // 智能指针、内存管理工具 (unique_ptr, shared_ptr, allocator)
 #include <new>        // 动态内存管理 (operator new, bad_alloc)
 #include <numeric>    // 数值算法 (accumulate, iota, gcd 等)
 #include <typeinfo>   // 运行时类型信息 (typeid, type_info)
@@ -414,7 +414,7 @@ Copyright (C) 2026 TangYixiao
 #include <string>     // 字符串 (string)
 #include <typeinfo>   // 运行时类型信息
 #include <utility>    // 实用组件
-#include <vaarray>    // 数值数组 (vaarray)
+#include <valarray>   // 数值数组 (valarray)
 #include <vector>     // 动态数组 (vector)
 
 #if __cplusplus >= 201103L
@@ -449,7 +449,7 @@ Copyright (C) 2026 TangYixiao
 #include <any>      // 可存储任意类型的对象
 #include <charconv> // 字符与数值转换 (from_chars, to_chars)
 // #include <execution>         // 并行算法策略 [需 TBB，默认不包含]
-#include <filesystem>      // 文件系统库 (path, directory_entry)
+#include <filesystem>      // 文件系统库 (pth, directory_entry)
 #include <memory_resource> // 多态内存资源 (pmr::memory_resource)
 #include <optional>        // 可能包含值的对象
 #include <variant>         // 类型安全的联合
@@ -506,7 +506,7 @@ using namespace std;
 
 */
 
-#ifdef PD_DS_vis
+#ifdef PD_DS_USED
 #ifdef BITS_NOT_ALLOWED
 
 // __gnu_pbds 常用头文件及功能注释
@@ -622,136 +622,128 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-
-const int N = 100005;
-int ans[N];
-
-bool solve_left(int L, const string &a, const string &c, vector<int> &res) {
-    res.resize(L + 1);
-    set<int> s;
-    for (int i = 1; i <= L; ++i)
-        s.insert(i);
-    int cur = 0;
-    for (int i = 1; i <= L; ++i) {
-        int val;
-        if (a[i] == '1') {
-            auto it = s.upper_bound(cur);
-            if (it == s.end())
-                return false;
-            val = *it;
-            cur = val;
-        } else if (c[i] == '1') {
-            auto it = s.lower_bound(cur);
-            if (it == s.begin())
-                return false;
-            --it;
-            val = *it;
-
-        } else {
-            auto it = s.begin();
-            val = *it;
-            if (val > cur)
-                cur = val;
-        }
-        res[i] = val;
-        s.erase(val);
-    }
-    return true;
-}
-
-bool solve_right(int R, const string &a, const string &c, vector<int> &res) {
-    return solve_left(R, a, c, res);
-}
-inline void solve(int Task_Id) {
-    int n;
-    cin >> n;
-    string a, b, c;
-    cin >> a >> b >> c;
-    a = " " + a;
-    b = " " + b;
-    c = " " + c;
-
-    if (c[1] == '1' || c[n] == '1') {
-        cout << "-1\n";
+const int N = 3e5 + 5, V = 3e5 + 5, inf = -1e9;
+int n, L, a[N], dep[N], par[N], pth[N], dp[N], seg[V << 2], cmv[V], ma;
+multiset<int> mv[V], sdp;
+vector<int> g[N];
+inline void upd(int i, int l, int r, int p, int v) {
+    if (l == r) {
+        seg[i] = v;
         return;
     }
+    int m = (l + r) >> 1;
+    if (p <= m) {
+        upd(i << 1, l, m, p, v);
+    } else {
+        upd(i << 1 | 1, m + 1, r, p, v);
+    }
+    seg[i] = max(seg[i << 1], seg[i << 1 | 1]);
+}
+inline int qry(int i, int l, int r, int ql, int qr) {
+    if (ql <= l && r <= qr) {
+        return seg[i];
+    }
+    int m = (l + r) >> 1, res = inf;
+    if (ql <= m) {
+        res = max(res, qry(i << 1, l, m, ql, qr));
+    }
+    if (qr > m) {
+        res = max(res, qry(i << 1 | 1, m + 1, r, ql, qr));
+    }
+    return res;
+}
 
-    bool conflict = false;
-    for (int i = 1; i <= n; ++i) {
-        if ((a[i] == '1' && c[i] == '1') || (b[i] == '1' && c[i] == '1'))
-            conflict = true;
+inline void addn(int u) {
+    int v = dp[u] + a[u];
+    int x = a[u];
+    mv[x].insert(v);
+    int nm = *mv[x].rbegin();
+    if (nm != cmv[x]) {
+        cmv[x] = nm;
+        upd(1, 1, ma, x, nm);
     }
-    if (conflict) {
-        cout << "-1\n";
-        return;
-    }
+    sdp.insert(dp[u]);
+    return;
+}
 
-    int max_a = 1, min_b = n;
-    for (int i = 1; i <= n; ++i) {
-        if (a[i] == '1') {
-            max_a = max(max_a, i);
-        }
+inline void dele(int u) {
+    int v = dp[u] + a[u], x = a[u];
+    mv[x].erase(mv[x].find(v));
+    int nm = mv[x].empty() ? inf : *mv[x].rbegin();
+    if (nm != cmv[x]) {
+        cmv[x] = nm;
+        upd(1, 1, ma, x, nm);
     }
-    for (int i = 1; i <= n; ++i) {
-        if (b[i] == '1') {
-            min_b = i;
+    sdp.erase(sdp.find(dp[u]));
+    return;
+}
+
+inline int query(int u) {
+    int m = a[u];
+    if (m == 1) {
+        return sdp.empty() ? 0 : *sdp.rbegin();
+    }
+    int ans = 0;
+    for (int k = 0;; ++k) {
+        int L = k * m;
+        if (L > ma) {
             break;
         }
+        int R = min((k + 1) * m - 1, ma);
+        if (L == 0) {
+            L = 1;
+        }
+        if (L > R) {
+            continue;
+        }
+        int M = qry(1, 1, ma, L, R);
+        if (M > inf) {
+            ans = max(ans, M - k * m);
+        }
     }
-    if (max_a > min_b) {
-        cout << "-1\n";
-        return;
+    return ans;
+}
+
+inline void dfs(int u, int p) {
+    par[u] = p;
+    dep[u] = (p == 0 ? 0 : dep[p] + 1);
+    dp[u] = query(u);
+    addn(u);
+    pth[dep[u]] = u;
+    int flag = -1;
+    if (dep[u] >= L) {
+        flag = pth[dep[u] - L];
+        dele(flag);
     }
-
-    bool found = false;
-    for (int p = min_b; p >= max_a; --p) {
-        if (c[p] == '1')
-            return;
-
-        int L = p - 1, R = n - p;
-
-        string la = " " + a.substr(1, L), lc = " " + c.substr(1, L);
-        vector<int> left_ans;
-        if (L > 0) {
-            if (!solve_left(L, la, lc, left_ans)) {
-                continue;
-            }
+    for (int v : g[u]) {
+        if (v != p) {
+            dfs(v, u);
         }
-
-        string ra, rc;
-        ra.push_back(' ');
-        rc.push_back(' ');
-        for (int i = n; i > p; --i) {
-            ra.push_back(b[i]);
-            rc.push_back(c[i]);
-        }
-
-        vector<int> right_ans;
-        if (R > 0) {
-            if (!solve_right(R, ra, rc, right_ans)) {
-                continue;
-            }
-        }
-
-        for (int i = 1; i <= L; ++i) {
-            ans[i] = left_ans[i];
-        }
-        ans[p] = n;
-        for (int i = 1; i <= R; ++i) {
-
-            int idx = p + i;
-            ans[idx] = L + right_ans[R - i + 1];
-        }
-
-        found = true;
-        for (int i = 1; i <= n; ++i) {
-            cout << ans[i] << " \n"[i == n];
-        }
-        break;
     }
-    if (!found) {
-        cout << "-1\n";
+    if (flag != -1) {
+        addn(flag);
     }
+    dele(u);
+    return;
+}
+inline void solve(int Task_Id) {
+    cin >> n >> L;
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i];
+        ma = max(a[i], ma);
+    }
+    for (int i = 1, u, v; i < n; i++) {
+        cin >> u >> v;
+        g[u].push_back(v), g[v].push_back(u);
+    }
+    for (int i = 1; i <= 4 * ma; i++) {
+        seg[i] = inf;
+    }
+    for (int i = 1; i <= ma; i++) {
+        cmv[i] = inf;
+    }
+    dfs(1, 0);
+    cout << *max_element(dp + 1, dp + n + 1) << "\n";
     return;
 }
 } // namespace TANGYIXIAO

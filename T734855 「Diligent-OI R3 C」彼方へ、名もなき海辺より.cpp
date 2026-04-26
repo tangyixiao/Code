@@ -623,77 +623,81 @@ signed main() {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 typedef long long ll;
-const int mods = 998244353, N = 500005;
+typedef long long ll;
+const int MOD = 998244353, N = 500005;
 
-ll qpow(ll a, ll b, ll mod) {
+int n, head[N], to[N << 1], nxt[N << 1], tot_e;
+void add(int u, int v) {
+    to[++tot_e] = v;
+    nxt[tot_e] = head[u];
+    head[u] = tot_e;
+}
+
+int par[N], dep[N], cc[N], S[N], ord[N];
+ll invS[N], f[N];
+
+ll qpow(ll a, ll b) {
     ll r = 1;
-    a %= mod;
-    while (b) {
+    for (; b; b >>= 1) {
         if (b & 1)
-            r = r * a % mod;
-        a = a * a % mod;
-        b >>= 1;
+            r = r * a % MOD;
+        a = a * a % MOD;
     }
     return r;
 }
-ll qinv(ll a, ll mod) { return qpow(a, mod - 2, mod); }
-
-vector<int> g[N];
-int dep[N], par[N], cc[N], s[N], ord[N];
-ll invs[N], p[N], ip[N], asum[N];
-
 inline void solve(int Task_Id) {
-
-    int n;
     cin >> n;
     for (int i = 1; i < n; ++i) {
         int u, v;
         cin >> u >> v;
-        g[u].push_back(v);
-        g[v].push_back(u);
+        add(u, v);
+        add(v, u);
     }
 
-    int q[N], h = 0, t = 0;
-    q[t++] = 1;
+    int *q = new int[n + 1], l = 0, r = 0;
+    q[r++] = 1;
     par[1] = -1;
     dep[1] = 0;
     int oc = 0;
-    while (h < t) {
-        int u = q[h++];
+    while (l < r) {
+        int u = q[l++];
         ord[oc++] = u;
-        for (int v : g[u]) {
+        for (int e = head[u]; e; e = nxt[e]) {
+            int v = to[e];
             if (v == par[u])
                 continue;
             par[v] = u;
             dep[v] = dep[u] + 1;
-            q[t++] = v;
+            q[r++] = v;
         }
     }
+    delete[] q;
 
-    for (int i = 1; i <= n; ++i)
-        cc[i] = g[i].size() - (par[i] != -1 ? 1 : 0);
+    for (int i = 1; i <= n; ++i) {
+        int c = 0;
+        for (int e = head[i]; e; e = nxt[e])
+            if (to[e] != par[i])
+                ++c;
+        cc[i] = c;
+        S[i] = dep[i] + cc[i];
+    }
 
     ll tot = 1;
     for (int i = 1; i <= n; ++i) {
-        s[i] = dep[i] + cc[i];
-        tot = tot * s[i] % mods;
+        tot = tot * S[i] % MOD;
+        invS[i] = qpow(S[i], MOD - 2);
     }
-    for (int i = 1; i <= n; ++i) {
-        invs[i] = qinv(s[i], mods);
+    ll sumf = 0;
+    f[1] = 0;
+    for (int i = 1; i < oc; ++i) {
+        int u = ord[i], p = par[u];
+        ll val = (invS[p] + f[p]) % MOD;
+        f[u] = invS[u] * val % MOD;
+        sumf = (sumf + f[u]) % MOD;
     }
 
-    p[1] = invs[1];
-    ip[1] = qinv(p[1], mods);
-    asum[1] = 0;
-    ll sum = 0;
-    for (int i = 1; i < oc; ++i) {
-        int u = ord[i], pa = par[u];
-        asum[u] = (asum[pa] + ip[pa]) % mods;
-        p[u] = p[pa] * invs[u] % mods;
-        ip[u] = qinv(p[u], mods);
-        sum = (sum + p[u] * asum[u]) % mods;
-    }
-    cout << tot * sum % mods << '\n';
+    ll ans = tot * sumf % MOD;
+    cout << ans << '\n';
     return;
 }
 } // namespace TANGYIXIAO

@@ -7,12 +7,12 @@ Copyright (C) 2026 TangYixiao
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-#define MULTIPLE_TEST
+// #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
 // #define BITS_NOT_ALLOWED
-// #define PD_DS_vis
+// #define PD_DS_USED
 // #define TESTLIB
 #pragma region PREPROCESSOR
 #pragma region PRAGMAS
@@ -186,8 +186,8 @@ Copyright (C) 2026 TangYixiao
 #pragma region Diagnostic_Warnings
 /*
 // 基本警告控制：忽略、警告、错误
-#pragma GCC diagnostic ignored "-Wunvis-variable"  // 忽略未使用变量警告
-#pragma GCC diagnostic warning "-Wunvis-parameter" // 将“未使用参数”作为警告（默认级别）
+#pragma GCC diagnostic ignored "-Wunused-variable"  // 忽略未使用变量警告
+#pragma GCC diagnostic warning "-Wunused-parameter" // 将“未使用参数”作为警告（默认级别）
 #pragma GCC diagnostic error "-Wformat-security"    // 将格式字符串安全问题提升为错误
 
 // 常用警告组（部分组名可作为整体控制，但更推荐单独控制具体警告）
@@ -207,7 +207,7 @@ Copyright (C) 2026 TangYixiao
 
 // 保存/恢复诊断状态（用于局部临时修改）
 #pragma GCC diagnostic push                        // 保存当前诊断设置
-#pragma GCC diagnostic ignored "-Wunvis-variable" // 临时忽略
+#pragma GCC diagnostic ignored "-Wunused-variable" // 临时忽略
 // ... 代码 ...
 #pragma GCC diagnostic pop // 恢复之前设置
 */
@@ -248,7 +248,7 @@ Copyright (C) 2026 TangYixiao
 #pragma GCC optimize("no-rtti")          // 对应 -fno-rtti
 
 // 函数内联阈值调整
-#pragma GCC optimize("inline-limit=100") // 对应 p--aram inline-min-speedup=100（近似）
+#pragma GCC optimize("inline-limit=100") // 对应 --param inline-min-speedup=100（近似）
 */
 #pragma endregion Miscellaneous_Code_Generation
 #pragma region Pushing_Popping_Options
@@ -279,11 +279,11 @@ Copyright (C) 2026 TangYixiao
 #include <cassert> // 断言支持 (assert)
 #endif
 #include <cctype>  // 字符处理函数 (isalpha, toupper 等)
-#include <cfloat>  // 浮点数类型极限 (FLTma, DBLmi 等)
-#include <climits> // 整数类型极限 (INTma, LONGmi 等)
+#include <cfloat>  // 浮点数类型极限 (FLT_MAX, DBL_MIN 等)
+#include <climits> // 整数类型极限 (INT_MAX, LONG_MIN 等)
 #include <csetjmp> // 非局部跳转 (setjmp, longjmp)
 #include <cstdarg> // 可变参数处理 (va_list, va_start 等)
-#include <cstddef> // 基础类型定义 (size_t, nullp_t, offsetof)
+#include <cstddef> // 基础类型定义 (size_t, nullptr_t, offsetof)
 #include <cstdlib> // 通用工具 (malloc, exit, atoi, rand 等)
 
 #if __cplusplus >= 201103L
@@ -299,7 +299,7 @@ Copyright (C) 2026 TangYixiao
 #include <functional> // 函数对象、绑定器 (function, bind, plus 等)
 #include <iterator>   // 迭代器定义与操作 (iterator_traits, begin, end)
 #include <limits>     // 数值类型的极限 (numeric_limits)
-#include <memory>     // 智能指针、内存管理工具 (unique_p, shared_p, allocator)
+#include <memory>     // 智能指针、内存管理工具 (unique_ptr, shared_ptr, allocator)
 #include <new>        // 动态内存管理 (operator new, bad_alloc)
 #include <numeric>    // 数值算法 (accumulate, iota, gcd 等)
 #include <typeinfo>   // 运行时类型信息 (typeid, type_info)
@@ -386,6 +386,7 @@ Copyright (C) 2026 TangYixiao
 #endif
 
 // C++
+#include <blarray>    // 数值数组 (blarray)
 #include <complex>    // 复数 (complex)
 #include <deque>      // 双端队列 (deque)
 #include <exception>  // 异常处理 (exception, bad_exception)
@@ -414,7 +415,6 @@ Copyright (C) 2026 TangYixiao
 #include <string>     // 字符串 (string)
 #include <typeinfo>   // 运行时类型信息
 #include <utility>    // 实用组件
-#include <vaarray>    // 数值数组 (vaarray)
 #include <vector>     // 动态数组 (vector)
 
 #if __cplusplus >= 201103L
@@ -506,7 +506,7 @@ using namespace std;
 
 */
 
-#ifdef PD_DS_vis
+#ifdef PD_DS_USED
 #ifdef BITS_NOT_ALLOWED
 
 // __gnu_pbds 常用头文件及功能注释
@@ -622,135 +622,159 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+int grid[4][4];
+bool fixed[4][4];
+int rl[4], cl[4];
+int dl, dile;
+int ru[4], cu[4];
+int du, d1u;
+int rem;
 
-const int N = 100005;
-int ans[N];
+bool dfs() {
+    if (rem == 0)
+        return true;
 
-bool solve_left(int L, const string &a, const string &c, vector<int> &res) {
-    res.resize(L + 1);
-    set<int> s;
-    for (int i = 1; i <= L; ++i)
-        s.insert(i);
-    int cur = 0;
-    for (int i = 1; i <= L; ++i) {
-        int val;
-        if (a[i] == '1') {
-            auto it = s.upper_bound(cur);
-            if (it == s.end())
+    for (int i = 0; i < 4; ++i) {
+        if (ru[i] == 0) {
+            if (rl[i] != 0)
                 return false;
-            val = *it;
-            cur = val;
-        } else if (c[i] == '1') {
-            auto it = s.lower_bound(cur);
-            if (it == s.begin())
+        } else if (rl[i] < ru[i])
+            return false;
+        if (cu[i] == 0) {
+            if (cl[i] != 0)
                 return false;
-            --it;
-            val = *it;
+        } else if (cl[i] < cu[i])
+            return false;
+    }
+    if (du == 0) {
+        if (dl != 0)
+            return false;
+    } else if (dl < du)
+        return false;
+    if (d1u == 0) {
+        if (dile != 0)
+            return false;
+    } else if (dile < d1u)
+        return false;
 
-        } else {
-            auto it = s.begin();
-            val = *it;
-            if (val > cur)
-                cur = val;
+    int bi = -1, bj = -1, bmax = 1000;
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            if (!fixed[i][j]) {
+                int mbl = rl[i] - (ru[i] - 1);
+                mbl = min(mbl, cl[j] - (cu[j] - 1));
+                if (i == j)
+                    mbl = min(mbl, dl - (du - 1));
+                if (i + j == 3)
+                    mbl = min(mbl, dile - (d1u - 1));
+                if (mbl < 1)
+                    return false;
+                if (mbl < bmax) {
+                    bmax = mbl;
+                    bi = i;
+                    bj = j;
+                    if (bmax == 1)
+                        break;
+                }
+            }
         }
-        res[i] = val;
-        s.erase(val);
-    }
-    return true;
-}
-
-bool solve_right(int R, const string &a, const string &c, vector<int> &res) {
-    return solve_left(R, a, c, res);
-}
-inline void solve(int Task_Id) {
-    int n;
-    cin >> n;
-    string a, b, c;
-    cin >> a >> b >> c;
-    a = " " + a;
-    b = " " + b;
-    c = " " + c;
-
-    if (c[1] == '1' || c[n] == '1') {
-        cout << "-1\n";
-        return;
-    }
-
-    bool conflict = false;
-    for (int i = 1; i <= n; ++i) {
-        if ((a[i] == '1' && c[i] == '1') || (b[i] == '1' && c[i] == '1'))
-            conflict = true;
-    }
-    if (conflict) {
-        cout << "-1\n";
-        return;
-    }
-
-    int max_a = 1, min_b = n;
-    for (int i = 1; i <= n; ++i) {
-        if (a[i] == '1') {
-            max_a = max(max_a, i);
-        }
-    }
-    for (int i = 1; i <= n; ++i) {
-        if (b[i] == '1') {
-            min_b = i;
+        if (bmax == 1) {
             break;
         }
     }
-    if (max_a > min_b) {
-        cout << "-1\n";
-        return;
+    if (bi == -1) {
+        return false;
     }
 
-    bool found = false;
-    for (int p = min_b; p >= max_a; --p) {
-        if (c[p] == '1')
-            return;
+    int i = bi, j = bj;
+    for (int vl = 1; vl <= bmax; ++vl) {
+        grid[i][j] = vl;
+        fixed[i][j] = true;
+        rl[i] -= vl, cl[j] -= vl, ru[i]--, cu[j]--;
+        if (i == j) {
+            dl -= vl;
+            du--;
+        }
+        if (i + j == 3) {
+            dile -= vl;
+            d1u--;
+        }
+        rem--;
 
-        int L = p - 1, R = n - p;
-
-        string la = " " + a.substr(1, L), lc = " " + c.substr(1, L);
-        vector<int> left_ans;
-        if (L > 0) {
-            if (!solve_left(L, la, lc, left_ans)) {
-                continue;
-            }
+        if (dfs()) {
+            return true;
         }
 
-        string ra, rc;
-        ra.push_back(' ');
-        rc.push_back(' ');
-        for (int i = n; i > p; --i) {
-            ra.push_back(b[i]);
-            rc.push_back(c[i]);
+        rem++;
+        if (i + j == 3) {
+            dile += vl;
+            d1u++;
         }
-
-        vector<int> right_ans;
-        if (R > 0) {
-            if (!solve_right(R, ra, rc, right_ans)) {
-                continue;
-            }
+        if (i == j) {
+            dl += vl;
+            du++;
         }
-
-        for (int i = 1; i <= L; ++i) {
-            ans[i] = left_ans[i];
-        }
-        ans[p] = n;
-        for (int i = 1; i <= R; ++i) {
-
-            int idx = p + i;
-            ans[idx] = L + right_ans[R - i + 1];
-        }
-
-        found = true;
-        for (int i = 1; i <= n; ++i) {
-            cout << ans[i] << " \n"[i == n];
-        }
-        break;
+        ru[i]++;
+        cu[j]++;
+        rl[i] += vl;
+        cl[j] += vl;
+        fixed[i][j] = false;
     }
-    if (!found) {
-        cout << "-1\n";
+    return false;
+}
+inline void solve(int Task_Id) {
+
+    for (int i = 0; i < 4; ++i)
+        cin >> rl[i];
+    for (int i = 0; i < 4; ++i)
+        cin >> cl[i];
+    cin >> dl >> dile;
+
+    for (int i = 0; i < 4; ++i)
+        for (int j = 0; j < 4; ++j)
+            fixed[i][j] = false;
+
+    for (int t = 0; t < 4; ++t) {
+        int i, j, k;
+        cin >> i >> j >> k;
+        grid[i][j] = k;
+        fixed[i][j] = true;
+        rl[i] -= k;
+        cl[j] -= k;
+        if (i == j)
+            dl -= k;
+        if (i + j == 3)
+            dile -= k;
+    }
+
+    rem = 0;
+    du = d1u = 0;
+    for (int i = 0; i < 4; ++i) {
+        ru[i] = cu[i] = 0;
+    }
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            if (!fixed[i][j]) {
+                ++rem;
+                ++ru[i];
+                ++cu[j];
+                if (i == j)
+                    ++du;
+                if (i + j == 3)
+                    ++d1u;
+            }
+        }
+    }
+
+    dfs();
+
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            cout << grid[i][j];
+            if (j < 3)
+                cout << ' ';
+        }
+        cout << '\n';
     }
     return;
 }
