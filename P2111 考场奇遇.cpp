@@ -629,7 +629,7 @@ inline void solve(int Task_Id) {
 
     if (Q == 0) {
         cout << "1.000" << endl;
-        return 0;
+        return;
     }
 
     double p = A / 100.0; 
@@ -639,7 +639,7 @@ inline void solve(int Task_Id) {
     dp[0] = 1.0;
 
     for (int i = 0; i < N; ++i) {
-        double prob = (S[i] == '1') ? p : q; /
+        double prob = (S[i] == '1') ? p : q; 
         for (int j = i + 1; j >= 1; --j) {
             dp[j] = dp[j] * (1.0 - prob) + dp[j - 1] * prob;
         }
