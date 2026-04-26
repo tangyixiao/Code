@@ -4,7 +4,7 @@
 using namespace std;
 
 const int MAXN = 200005;
-const int MAXM = MAXN * 20;
+const int MAXM = MAXN * 40;
 
 int n, m, a[MAXN], b[MAXN], sz;
 int root[MAXN], tot;
@@ -69,6 +69,5 @@ int main() {
         int idx = query(root[l - 1], root[r], 1, sz, k);
         printf("%d\n", b[idx]);
     }
-
     return 0;
 }
