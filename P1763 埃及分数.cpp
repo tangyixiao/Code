@@ -609,7 +609,74 @@ inline T Pop_Count(T x) { return __builtin_popcount(x); }
 } // namespace BITS
 using namespace BITS;
 #pragma endregion BITS
-inline void solve(int Task_Id);
+using ll = long long;
+const double eps = 1e-9;
+ll vans[105], vnow[105], nowp, ansp, maxdep = 1, maxb;
+void dfs(ll step, ll a, ll b, ll lastb) {
+    if (!a)
+        return;
+    ll g = gcd(a, b);
+    a /= g, b /= g;
+    if (step == maxdep - 1) {
+
+        for (ll k = 4 * b / (a * a); k * a <= 2 * maxb; ++k) {
+            ll delta = (k * k * a * a) - (4 * k * b), x, y;
+            if (delta <= 0)
+                continue;
+            ll s = sqrt(delta);
+            if (s * s != delta || delta <= 0)
+                continue;
+            y = ((k * a) + s) >> 1;
+            x = ((k * a) - s) >> 1;
+            if (x > maxb || y > maxb || x < 0 || y < 0)
+                continue;
+            if ((ansp == 0 || y < vans[maxdep])) {
+                if (x == vnow[step - 1])
+                    continue;
+                for (ll i = 1; i < step; ++i)
+                    vans[i] = vnow[i];
+                vans[step] = x;
+                vans[step + 1] = y;
+                ansp = maxdep;
+                break;
+            }
+        }
+        return;
+    }
+    for (ll i = lastb + 1; i < maxb; i++) {
+        if (a * i < b)
+            continue;
+
+        if ((maxdep - step + 1) * (1 / double(i)) < double(a) / double(b))
+            break;
+        ll newa = a * i - b;
+        ll newb = i * b;
+        vnow[step] = i;
+        dfs(step + 1, newa, newb, i);
+        vnow[step] = 0;
+    }
+}
+inline void solve(int Task_Id) {
+    ll a, b;
+    cin >> a >> b;
+
+    for (maxdep = 1; maxdep <= 15; ++maxdep) {
+        maxb = 1000;
+        while (maxb <= 10000000) {
+            memset(vans, 0, sizeof(vans));
+            memset(vnow, 0, sizeof(vnow));
+            nowp = ansp = 0;
+            dfs(1, a, b, 0);
+            if (ansp) {
+                for (ll i = 1; i <= ansp; ++i) {
+                    printf("%lld ", vans[i]);
+                }
+                return;
+            }
+            maxb *= 10;
+        }
+    }
+}
 } // namespace TANGYIXIAO
 using namespace TANGYIXIAO;
 #pragma endregion TANGYIXIAO
@@ -640,67 +707,3 @@ signed main(int argc, char *argv[]) {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
-namespace TANGYIXIAO {
-using ll = long long;
-
-ll a, b;
-vector<ll> ans, cur;
-bool found;
-
-ll ceil_div(ll x, ll y) {
-    return (x + y - 1) / y;
-}
-
-void dfs(ll ra, ll rb, ll start, int step) {
-    if (step == 0) {
-        if (ra == 0) {
-            if (ans.empty() || cur.back() < ans.back()) {
-                ans = cur;
-            }
-            found = true;
-        }
-        return;
-    }
-
-    ll min_den = max(start, ceil_div(rb, ra));
-
-    ll max_den = (step * rb) / ra;
-    if (min_den > max_den)
-        return;
-    for (ll i = min_den; i <= max_den; ++i) {
-
-        if (!cur.empty() && i == cur.back())
-            continue;
-        ll new_ra = ra * i - rb;
-        ll new_rb = rb * i;
-        if (new_ra < 0)
-            continue;
-
-        ll g = __gcd(new_ra, new_rb);
-        new_ra /= g;
-        new_rb /= g;
-        cur.push_back(i);
-        dfs(new_ra, new_rb, i + 1, step - 1);
-        cur.pop_back();
-        if (found && !ans.empty() && i >= ans.back())
-            break;
-    }
-}
-
-inline void solve(int Task_Id) {
-    cin >> a >> b;
-    ans.clear();
-    found = false;
-    int depth = 1;
-    while (true) {
-        cur.clear();
-        dfs(a, b, 2, depth);
-        if (found)
-            break;
-        depth++;
-    }
-    for (size_t i = 0; i < ans.size(); ++i) {
-        cout << ans[i] << " \n"[i == ans.size() - 1];
-    }
-}
-} // namespace TANGYIXIAO
