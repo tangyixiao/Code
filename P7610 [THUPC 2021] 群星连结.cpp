@@ -622,8 +622,8 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-
-// 天赋类型枚举（对应原题天赋编号）
+// ---------- 游戏模拟相关定义 ----------
+// 天赋类型
 enum class TalentType : int {
     None = 0,           // 我自闭了
     FleshPuppet = 1,    // 血肉皮囊
@@ -633,7 +633,7 @@ enum class TalentType : int {
     TechSupremacy = 5   // 科技至上
 };
 
-// 技能类型枚举（对应原题技能编号）
+// 技能类型
 enum class SkillType : int {
     None = 0,                    // 心态崩了
     GreenExplosion = 1,          // 格林炸裂
@@ -645,351 +645,361 @@ enum class SkillType : int {
     AuroraBloom = 7,             // 极光绽放
     Meteor = 8,                  // 流星
     FairyShelter = 9,            // 精灵庇护
-    FullPowerReincarnation = 10  // 全力超全开・轮回之终末
+    FullPowerReincarnation = 10  // 全力超全开·轮回之终末
 };
 
 // 延迟事件类型
 enum class EventType : int {
-    ReincarnationEnd = -1, // 轮回之终末结束（强制死亡）
+    ReincarnationEnd = -1, // 轮回终末强制死亡
     AttackBonus = 1,       // 攻击力增益/减益
     DefenseBonus = 2,      // 防御力增益/减益
     EnergyBonus = 3        // 能量回复增益
 };
 
-// 快速读入整数
-inline int read_int() {
-    int x = 0, ch;
-    while ((ch = getchar()) < '0' || ch > '9')
-        ;
-    x = ch ^ '0';
-    while ((ch = getchar()) >= '0' && ch <= '9')
-        x = (x << 1) + (x << 3) + (ch ^ '0');
-    return x;
-}
-
-// 前向声明
-struct Character;
-struct Player;
-
-// 天赋附加参数
-struct Innate {
-    TalentType type;
-    int param_x, param_y;
-};
-
-// 技能附加参数
-struct Skill {
-    SkillType type;
-    int param_x, param_y, param_z;
-};
-
-// 延迟事件
+// 延迟事件结构体
 struct DelayedEvent {
     EventType type;
-    int target_player; // 0 for self, 1 for opponent
+    int target_player; // 0 为己方，1 为敌方（相对于技能释放者）
     int value;
 };
 
-inline void solve(int Task_Id) {
-    int num_characters = read_int();
-    const int MAX_TURN = 300010;
-    vector<vector<DelayedEvent>> delayed_events(MAX_TURN);
+int num_characters; // 全局角色数量（游戏模拟用）
 
-    // 单个角色定义
-    struct Character {
-        int max_hp, current_hp;
-        int max_mp, current_mp;
-        int base_attack, attack_bonus;
-        int base_defense, defense_bonus;
-        int target_priority[12]; // 攻击顺序，1‑based
-        int energy_bonus;        // 回合结束时的额外回蓝
-        Innate innate;
-        Skill skill;
-        int id;
+// 前向声明
+struct Player;
 
-        bool is_alive() const { return current_hp > 0; }
-        bool has_full_mp() const { return current_mp == max_mp; }
-        int get_attack() const { return max(base_attack + attack_bonus, 1); }
-        int get_defense() const { return max(base_defense + defense_bonus, 0); }
+struct Character {
+    int max_hp, current_hp;
+    int max_mp, current_mp;
+    int base_attack, attack_bonus;
+    int base_defense, defense_bonus;
+    int target_priority[12]; // 攻击顺序（1‑based）
+    int energy_bonus;        // 回合结束额外回蓝（del_mp）
+    TalentType talent;
+    int talent_param_x, talent_param_y;
+    SkillType skill;
+    int skill_param_x, skill_param_y, skill_param_z;
+    int id;
 
-        // 计算实际扣除生命值
-        int calculate_damage_hp(int damage, int true_damage) const {
-            int reduced = max(damage - get_defense(), 0);
-            if (innate.type == TalentType::FleshPuppet)
-                return reduced + true_damage - true_damage / 2;
-            return reduced + true_damage;
+    bool is_alive() const { return current_hp > 0; }
+    bool has_full_mp() const { return current_mp == max_mp; }
+
+    int get_attack() const { return max(base_attack + attack_bonus, 1); }
+    int get_defense() const { return max(base_defense + defense_bonus, 0); }
+
+    int calculate_damage(int damage, int true_damage) const {
+        int reduced = max(damage - get_defense(), 0);
+        if (talent == TalentType::FleshPuppet)
+            return reduced + true_damage - true_damage / 2;
+        return reduced + true_damage;
+    }
+
+    void receive_damage(int damage, int true_damage) {
+        current_mp = min(current_mp + 1, max_mp);
+        current_hp -= calculate_damage(damage, true_damage);
+    }
+
+    int get_priority_target(const Character opponent[]) const {
+        for (int i = 1; i <= num_characters; ++i) {
+            int idx = target_priority[i];
+            if (opponent[idx].is_alive())
+                return idx;
+        }
+        return 0;
+    }
+
+    void perform_attack(Character opponent[]) {
+        int target = get_priority_target(opponent);
+        Character &enemy = opponent[target];
+        int att = get_attack(), true_dmg = 0;
+        if (talent == TalentType::StarProjection) {
+            true_dmg = talent_param_x;
+        } else if (talent == TalentType::Transcendence) {
+            att = 0;
+            true_dmg = get_attack();
+        }
+        enemy.receive_damage(att, true_dmg);
+        current_mp = min(current_mp + 1, max_mp);
+        if (talent == TalentType::TechSupremacy) {
+            bool any_alive = false;
+            for (int i = 1; i <= num_characters; ++i)
+                if (opponent[i].is_alive())
+                    any_alive = true;
+            if (any_alive)
+                current_hp = min(current_hp + talent_param_x, max_hp);
+        }
+    }
+
+    int evaluate_attack(const Character opponent[]) const {
+        int target = get_priority_target(opponent);
+        const Character &enemy = opponent[target];
+        int dmg = get_attack(), tdmg = 0;
+        if (talent == TalentType::StarProjection)
+            tdmg = talent_param_x;
+        else if (talent == TalentType::Transcendence) {
+            dmg = 0;
+            tdmg = get_attack();
+        }
+        return enemy.calculate_damage(dmg, tdmg);
+    }
+
+    bool use_skill(Character opponent[], int current_turn,
+                   vector<DelayedEvent> delayed[], int player_id) {
+        current_mp = 0;
+        int target = get_priority_target(opponent);
+        Character &enemy = opponent[target];
+
+        switch (skill) {
+        case SkillType::None:
+            break;
+        case SkillType::GreenExplosion:
+            for (int i = 1; i <= num_characters; ++i)
+                if (opponent[i].is_alive()) {
+                    opponent[i].receive_damage(skill_param_x, 0);
+                    opponent[i].current_mp -= opponent[i].current_mp / 10;
+                }
+            break;
+        case SkillType::IntercontinentalMissile:
+            for (int i = 1; i <= num_characters; ++i)
+                if (opponent[i].is_alive())
+                    opponent[i].receive_damage(0, get_attack());
+            break;
+        case SkillType::SkyscraperBreak:
+            for (int i = 1; i <= num_characters; ++i)
+                if (opponent[i].is_alive())
+                    opponent[i].receive_damage(
+                        min(skill_param_x * get_attack(), opponent[i].max_hp / 10), 0);
+            break;
+        case SkillType::Showtime:
+            // 立即效果：己方 energy_bonus 增加，持续至回合结束（用事件撤销）
+            delayed[current_turn + skill_param_x - 1].push_back(
+                {EventType::EnergyBonus, player_id, -skill_param_y});
+            // 立即应用
+            break;
+        case SkillType::SiriusBite:
+            enemy.defense_bonus -= skill_param_x;
+            enemy.receive_damage(0, get_attack());
+            break;
+        case SkillType::EarthBlueFlash:
+            enemy.receive_damage(0, get_attack());
+            // 立即效果：敌方 attack_bonus 增加（减少 y），持续事件用
+            delayed[current_turn + skill_param_x - 1].push_back(
+                {EventType::AttackBonus, 1 - player_id, skill_param_y});
+            // 立即应用（将在 take_action 中处理）
+            break;
+        case SkillType::AuroraBloom:
+            delayed[current_turn + skill_param_x - 1].push_back(
+                {EventType::AttackBonus, player_id, -skill_param_y});
+            break;
+        case SkillType::Meteor:
+            for (int i = 1; i <= num_characters; ++i)
+                opponent[i].receive_damage(get_attack(), 0);
+            delayed[current_turn + skill_param_x - 1].push_back(
+                {EventType::DefenseBonus, 1 - player_id, skill_param_y});
+            break;
+        case SkillType::FairyShelter:
+            delayed[current_turn + skill_param_x - 1].push_back(
+                {EventType::DefenseBonus, player_id, -skill_param_y});
+            break;
+        case SkillType::FullPowerReincarnation:
+            delayed[current_turn + skill_param_x - 1].push_back(
+                {EventType::ReincarnationEnd, player_id, 0});
+            return true; // 需要特殊处理
         }
 
-        // 扣除生命值（同时回1点能量）
-        void apply_damage(int damage, int true_damage) {
-            current_mp = min(current_mp + 1, max_mp);
-            current_hp -= calculate_damage_hp(damage, true_damage);
-        }
-
-        // 获取优先攻击目标（敌方存活且顺序最前的）
-        int get_priority_target(const Character opponent[]) const {
-            for (int i = 1; i <= num_characters; ++i) {
-                int idx = target_priority[i];
-                if (opponent[idx].is_alive())
-                    return idx;
-            }
-            return 0; // 无存活目标
-        }
-
-        // 普通攻击
-        void perform_attack(Character opponent[]) {
-            int target = get_priority_target(opponent);
-            Character &tar = opponent[target];
-            int att = get_attack(), true_dmg = 0;
-            if (innate.type == TalentType::StarProjection) {
-                true_dmg = innate.param_x;
-            } else if (innate.type == TalentType::Transcendence) {
-                att = 0;
-                true_dmg = get_attack();
-            }
-            tar.apply_damage(att, true_dmg);
-            current_mp = min(current_mp + 1, max_mp);
-            if (innate.type == TalentType::TechSupremacy) {
-                bool any_alive = false;
-                for (int i = 1; i <= num_characters; ++i)
-                    if (opponent[i].is_alive())
-                        any_alive = true;
-                if (any_alive)
-                    current_hp = min(current_hp + innate.param_x, max_hp);
-            }
-        }
-
-        // 预估对优先目标造成的实际生命值扣除（用于选择攻击者）
-        int evaluate_attack_damage(const Character opponent[]) const {
-            int target = get_priority_target(opponent);
-            const Character &tar = opponent[target];
-            int dmg = get_attack(), tdmg = 0;
-            if (innate.type == TalentType::StarProjection)
-                tdmg = innate.param_x;
-            else if (innate.type == TalentType::Transcendence) {
-                dmg = 0;
-                tdmg = get_attack();
-            }
-            return tar.calculate_damage_hp(dmg, tdmg);
-        }
-
-        // 发动主动技能
-        void perform_skill(Character opponent[], int current_turn, vector<DelayedEvent> delayed[]) {
-            current_mp = 0;
-            int target = get_priority_target(opponent);
-            Character &tar = opponent[target];
-            switch (skill.type) {
-            case SkillType::None:
-                break;
-            case SkillType::GreenExplosion:
-                for (int i = 1; i <= num_characters; ++i)
-                    if (opponent[i].is_alive()) {
-                        opponent[i].apply_damage(skill.param_x, 0);
-                        opponent[i].current_mp -= opponent[i].current_mp / 10;
-                    }
-                break;
-            case SkillType::IntercontinentalMissile:
-                for (int i = 1; i <= num_characters; ++i)
-                    if (opponent[i].is_alive())
-                        opponent[i].apply_damage(0, get_attack());
-                break;
-            case SkillType::SkyscraperBreak:
-                for (int i = 1; i <= num_characters; ++i)
-                    if (opponent[i].is_alive())
-                        opponent[i].apply_damage(min(skill.param_x * get_attack(), opponent[i].max_hp / 10), 0);
-                break;
-            case SkillType::Showtime:
-                delayed[current_turn + skill.param_x - 1].push_back({EventType::EnergyBonus, 0, skill.param_y});
-                break;
-            case SkillType::SiriusBite:
-                tar.defense_bonus -= skill.param_x;
-                tar.apply_damage(0, get_attack());
-                break;
-            case SkillType::EarthBlueFlash:
-                tar.apply_damage(0, get_attack());
-                delayed[current_turn + skill.param_x - 1].push_back({EventType::AttackBonus, 1, -skill.param_y});
-                break;
-            case SkillType::AuroraBloom:
-                delayed[current_turn + skill.param_x - 1].push_back({EventType::AttackBonus, 0, skill.param_y});
-                break;
-            case SkillType::Meteor:
-                for (int i = 1; i <= num_characters; ++i)
-                    opponent[i].apply_damage(get_attack(), 0);
-                delayed[current_turn + skill.param_x - 1].push_back({EventType::DefenseBonus, 1, -skill.param_y});
-                break;
-            case SkillType::FairyShelter:
-                delayed[current_turn + skill.param_x - 1].push_back({EventType::DefenseBonus, 0, skill.param_y});
-                break;
-            case SkillType::FullPowerReincarnation:
-                delayed[current_turn + skill.param_x - 1].push_back({EventType::ReincarnationEnd, 0, 0});
-                return; // 特殊处理在 Player::take_action 中
-            }
-            current_mp = min(current_mp + 1, max_mp);
-            if (innate.type == TalentType::TechSupremacy)
-                current_mp = min(current_mp + innate.param_y, max_mp);
-        }
-
-        // 己方行动结束时的回复
-        void on_turn_end() {
-            if (!is_alive())
-                return;
-            current_mp = min(current_mp + energy_bonus + 1, max_mp);
-            if (innate.type == TalentType::MindOverMatter) {
-                current_hp = min(current_hp + innate.param_x, max_hp);
-                current_mp = min(current_mp + innate.param_y, max_mp);
-            }
-        }
-    };
-
-    bool any_opponent_alive(const Character opponent[]) {
-        for (int i = 1; i <= num_characters; ++i)
-            if (opponent[i].is_alive())
-                return true;
+        current_mp = min(current_mp + 1, max_mp);
+        if (talent == TalentType::TechSupremacy)
+            current_mp = min(current_mp + talent_param_y, max_mp);
         return false;
     }
 
-    struct Player {
-        int id; // 0 for Alice, 1 for Bob
-        Character characters[12];
+    void on_turn_end() {
+        if (!is_alive())
+            return;
+        current_mp = min(current_mp + energy_bonus + 1, max_mp);
+        if (talent == TalentType::MindOverMatter) {
+            current_hp = min(current_hp + talent_param_x, max_hp);
+            current_mp = min(current_mp + talent_param_y, max_mp);
+        }
+    }
+};
 
-        bool all_dead() const {
+struct Player {
+    int id; // 0: Alice, 1: Bob
+    Character characters[12];
+
+    bool all_dead() const {
+        for (int i = 1; i <= num_characters; ++i)
+            if (characters[i].is_alive())
+                return false;
+        return true;
+    }
+
+    void read_data() {
+        for (int i = 1; i <= num_characters; ++i) {
+            auto &c = characters[i];
+            cin >> c.max_hp;
+            c.current_hp = c.max_hp;
+            cin >> c.max_mp;
+            c.current_mp = 0;
+            cin >> c.base_attack >> c.base_defense;
+            c.attack_bonus = c.defense_bonus = 0;
+            c.energy_bonus = 0;
+            c.id = i;
+            for (int j = 1; j <= num_characters; ++j)
+                cin >> c.target_priority[j];
+            int tp;
+            cin >> tp;
+            c.talent = static_cast<TalentType>(tp);
+            cin >> c.talent_param_x >> c.talent_param_y;
+            int st;
+            cin >> st;
+            c.skill = static_cast<SkillType>(st);
+            cin >> c.skill_param_x >> c.skill_param_y >> c.skill_param_z;
+        }
+    }
+
+    void take_action(Character opponent[], int current_turn,
+                     vector<DelayedEvent> delayed[]) {
+        if (all_dead())
+            return;
+
+        // 选择技能
+        pair<int, int> best_skill = {0, 0};
+        for (int i = 1; i <= num_characters; ++i) {
+            if (characters[i].is_alive() && characters[i].has_full_mp()) {
+                int st = static_cast<int>(characters[i].skill);
+                best_skill = max(best_skill, {st, i});
+            }
+        }
+
+        if (best_skill != make_pair(0, 0)) {
+            int cid = best_skill.second;
+            Character &caster = characters[cid];
+            SkillType used_skill = caster.skill;
+            bool is_reinc = caster.use_skill(opponent, current_turn, delayed, id);
+
+            // 处理持久效果的立即应用（use_skill 只记录了撤销事件，现在立即应用增益/减益）
+            if (used_skill == SkillType::Showtime) {
+                for (int i = 1; i <= num_characters; ++i)
+                    if (characters[i].is_alive())
+                        characters[i].energy_bonus += caster.skill_param_y;
+            } else if (used_skill == SkillType::EarthBlueFlash) {
+                for (int i = 1; i <= num_characters; ++i)
+                    if (opponent[i].is_alive())
+                        opponent[i].attack_bonus -= caster.skill_param_y;
+            } else if (used_skill == SkillType::AuroraBloom) {
+                for (int i = 1; i <= num_characters; ++i)
+                    if (characters[i].is_alive())
+                        characters[i].attack_bonus += caster.skill_param_y;
+                // 治疗血量最低者
+                pair<int, int> lowest = {INT_MAX, 0};
+                for (int i = 1; i <= num_characters; ++i)
+                    if (characters[i].is_alive())
+                        lowest = min(lowest, {characters[i].current_hp, i});
+                characters[lowest.second].current_hp = min(
+                    characters[lowest.second].current_hp + caster.skill_param_z,
+                    characters[lowest.second].max_hp);
+            } else if (used_skill == SkillType::Meteor) {
+                for (int i = 1; i <= num_characters; ++i)
+                    if (opponent[i].is_alive())
+                        opponent[i].defense_bonus -= caster.skill_param_y;
+            } else if (used_skill == SkillType::FairyShelter) {
+                for (int i = 1; i <= num_characters; ++i)
+                    if (characters[i].is_alive()) {
+                        characters[i].defense_bonus += caster.skill_param_y;
+                        characters[i].current_hp = min(
+                            characters[i].current_hp + caster.skill_param_z,
+                            characters[i].max_hp);
+                    }
+            } else if (is_reinc) {
+                // 轮回终末立即效果
+                for (int i = 1; i <= num_characters; ++i) {
+                    if (characters[i].is_alive()) {
+                        characters[i].base_attack *= 2;
+                        characters[i].current_hp = max(characters[i].current_hp,
+                                                       characters[i].max_hp / 2);
+                        characters[i].base_defense *= 2;
+                        characters[i].current_mp = max(characters[i].current_mp,
+                                                       characters[i].max_mp / 2);
+                    }
+                }
+                caster.current_mp = min(caster.current_mp + 1, caster.max_mp);
+                if (caster.talent == TalentType::TechSupremacy)
+                    caster.current_mp = min(caster.current_mp + caster.talent_param_y,
+                                            caster.max_mp);
+                for (int i = 1; i <= num_characters; ++i) {
+                    characters[i].energy_bonus += 1;
+                    if (characters[i].skill == SkillType::FullPowerReincarnation)
+                        characters[i].skill = SkillType::None;
+                    if (opponent[i].skill == SkillType::FullPowerReincarnation)
+                        opponent[i].skill = SkillType::None;
+                }
+            }
+
+            // 行动后全体回能
+            bool any_opp = false;
             for (int i = 1; i <= num_characters; ++i)
-                if (characters[i].is_alive())
-                    return false;
-            return true;
-        }
-
-        // 输入角色数据
-        void read_input(int player_id) {
-            id = player_id;
-            for (int i = 1; i <= num_characters; ++i) {
-                characters[i].current_hp = characters[i].max_hp = read_int();
-                characters[i].current_mp = 0;
-                characters[i].max_mp = read_int();
-                characters[i].base_attack = read_int();
-                characters[i].base_defense = read_int();
-                characters[i].attack_bonus = characters[i].defense_bonus = 0;
-                characters[i].id = i;
-                for (int j = 1; j <= num_characters; ++j)
-                    characters[i].target_priority[j] = read_int();
-                int tp = read_int();
-                characters[i].innate.type = static_cast<TalentType>(tp);
-                characters[i].innate.param_x = read_int();
-                characters[i].innate.param_y = read_int();
-                int st = read_int();
-                characters[i].skill.type = static_cast<SkillType>(st);
-                characters[i].skill.param_x = read_int();
-                characters[i].skill.param_y = read_int();
-                characters[i].skill.param_z = read_int();
-                characters[i].energy_bonus = 0;
-            }
-        }
-
-        // 己方行动
-        void take_action(Character opponent[], int current_turn, vector<DelayedEvent> delayed[]) {
-            if (all_dead())
-                return;
-
-            // 优先选择能发动技能的角色（技能编号从大到小，编号从大到小）
-            pair<int, int> best_skill = {0, 0}; // (skill_type, char_id)
-            for (int i = 1; i <= num_characters; ++i) {
-                if (characters[i].is_alive() && characters[i].has_full_mp()) {
-                    int st = static_cast<int>(characters[i].skill.type);
-                    best_skill = max(best_skill, {st, i});
+                if (opponent[i].is_alive()) {
+                    any_opp = true;
+                    break;
                 }
-            }
-
-            if (best_skill != make_pair(0, 0)) {
-                int ch_id = best_skill.second;
-                Character &caster = characters[ch_id];
-                SkillType used_skill = caster.skill.type;
-                caster.perform_skill(opponent, current_turn, delayed);
-
-                // 处理特殊技能的额外效果
-                if (used_skill == SkillType::AuroraBloom) {
-                    // 己方生命值最低且编号最小的角色回复 life
-                    pair<int, int> lowest = {INT_MAX, 0};
-                    for (int i = 1; i <= num_characters; ++i)
-                        if (characters[i].is_alive())
-                            lowest = min(lowest, {characters[i].current_hp, i});
-                    int k = lowest.second;
-                    characters[k].current_hp = min(characters[k].current_hp + caster.skill.param_z, characters[k].max_hp);
-                } else if (used_skill == SkillType::FairyShelter) {
-                    // 己方全体回复 life
-                    for (int i = 1; i <= num_characters; ++i)
-                        if (characters[i].is_alive())
-                            characters[i].current_hp = min(characters[i].current_hp + caster.skill.param_z, characters[i].max_hp);
-                } else if (used_skill == SkillType::FullPowerReincarnation) {
-                    // 轮回之终末特殊处理
-                    for (int i = 1; i <= num_characters; ++i) {
-                        if (characters[i].is_alive()) {
-                            characters[i].base_attack *= 2;
-                            characters[i].current_hp = max(characters[i].current_hp, characters[i].max_hp / 2);
-                            characters[i].base_defense *= 2;
-                            characters[i].current_mp = max(characters[i].current_mp, characters[i].max_mp / 2);
-                        }
-                    }
-                    caster.current_mp = min(caster.current_mp + 1, caster.max_mp);
-                    if (caster.innate.type == TalentType::TechSupremacy)
-                        caster.current_mp = min(caster.current_mp + caster.innate.param_y, caster.max_mp);
-                    // 己方额外回蓝+1
-                    for (int i = 1; i <= num_characters; ++i)
-                        characters[i].energy_bonus += 1;
-                    // 双方所有拥有该技能的角色技能变为0
-                    for (int i = 1; i <= num_characters; ++i) {
-                        if (characters[i].skill.type == SkillType::FullPowerReincarnation)
-                            characters[i].skill.type = SkillType::None;
-                        if (opponent[i].skill.type == SkillType::FullPowerReincarnation)
-                            opponent[i].skill.type = SkillType::None;
-                    }
-                    delayed[current_turn + caster.skill.param_x - 1].push_back({EventType::ReincarnationEnd, id, 0});
-                }
-
-                // 非轮回之终末的技能产生的延迟事件已由 perform_skill 添加，无需额外处理
-                // 己方行动后全体回能（如果敌方还有人存活）
-                if (any_opponent_alive(opponent)) {
-                    for (int i = 1; i <= num_characters; ++i)
-                        characters[i].on_turn_end();
-                }
-                return;
-            }
-
-            // 没有技能可发动，选择普通攻击
-            pair<pair<int, int>, int> best_attack = {{0, 0}, 0}; // ((target_hp, damage_dealt), char_id)
-            for (int i = 1; i <= num_characters; ++i) {
-                if (characters[i].is_alive()) {
-                    int target = characters[i].get_priority_target(opponent);
-                    int target_hp = opponent[target].current_hp;
-                    int dealt = characters[i].evaluate_attack_damage(opponent);
-                    best_attack = max(best_attack, {{target_hp, dealt}, i});
-                }
-            }
-            int attacker = best_attack.second;
-            characters[attacker].perform_attack(opponent);
-            if (any_opponent_alive(opponent)) {
+            if (any_opp)
                 for (int i = 1; i <= num_characters; ++i)
                     characters[i].on_turn_end();
+            return;
+        }
+
+        // 没有技能可放，进行普通攻击
+        pair<pair<int, int>, int> best_atk = {{0, 0}, 0};
+        for (int i = 1; i <= num_characters; ++i) {
+            if (characters[i].is_alive()) {
+                int t = characters[i].get_priority_target(opponent);
+                int hp = opponent[t].current_hp;
+                int dealt = characters[i].evaluate_attack(opponent);
+                best_atk = max(best_atk, {{hp, dealt}, i});
             }
         }
-    };
+        int attacker = best_atk.second;
+        characters[attacker].perform_attack(opponent);
+        bool any_opp = false;
+        for (int i = 1; i <= num_characters; ++i)
+            if (opponent[i].is_alive()) {
+                any_opp = true;
+                break;
+            }
+        if (any_opp)
+            for (int i = 1; i <= num_characters; ++i)
+                characters[i].on_turn_end();
+    }
+};
+
+inline void solve(int Task_Id) {
+    cin >> num_characters;
+    const int MAX_TURN = 300010;
+    vector<vector<DelayedEvent>> delayed_events(MAX_TURN);
 
     Player player[2];
-    player[0].read_input(0);
-    player[1].read_input(1);
+    player[0].id = 0;
+    player[1].id = 1;
+    player[0].read_data();
+    player[1].read_data();
 
     int current_turn = 1;
     while (true) {
+        // Alice 行动
         player[0].take_action(player[1].characters, current_turn, delayed_events.data());
         if (player[1].all_dead())
             break;
+
+        // Bob 行动
         player[1].take_action(player[0].characters, current_turn, delayed_events.data());
         if (player[0].all_dead())
             break;
 
-        // 回合结束，处理延迟事件
+        // 处理本回合结束时的延迟事件
         for (auto &ev : delayed_events[current_turn]) {
             if (ev.type == EventType::ReincarnationEnd) {
-                // 强制全体死亡
                 for (int i = 1; i <= num_characters; ++i)
                     player[ev.target_player].characters[i].current_hp = 0;
                 break;
@@ -1004,7 +1014,17 @@ inline void solve(int Task_Id) {
                     target_chars[i].energy_bonus += ev.value;
             }
         }
+        if (player[0].all_dead() || player[1].all_dead())
+            break;
+        ++current_turn;
     }
-    return;
+
+    cout << current_turn << '\n';
+    int winner = player[0].all_dead() ? 1 : 0;
+    cout << (winner ? "Bob" : "Alice") << '\n';
+    for (int i = 1; i <= num_characters; ++i) {
+        int hp = player[winner].characters[i].is_alive() ? player[winner].characters[i].current_hp : 0;
+        cout << hp << (i == num_characters ? '\n' : ' ');
+    }
 }
 } // namespace TANGYIXIAO
