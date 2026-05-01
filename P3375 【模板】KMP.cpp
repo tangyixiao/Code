@@ -2,15 +2,14 @@
 using namespace std;
 const int N = 1e6 + 5;
 int kmp[N], la, lb;
-char a[N], b[N];
+string a, b;
 signed main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    cin >> a + 1;
-    cin >> b + 1;
-    la = strlen(a + 1);
-    lb = strlen(b + 1);
+    cin >> a >> b;
+    a = '#' + a, b = '#' + b;
+    la = a.size() - 1, lb = b.size() - 1;
     for (int i = 2, j = 0; i <= lb; i++) {
         while (j && b[i] != b[j + 1]) {
             j = kmp[j];

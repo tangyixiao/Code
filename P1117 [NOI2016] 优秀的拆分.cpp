@@ -2,7 +2,7 @@
 #define int long long
 using namespace std;
 const int N = 5e4 + 5, mod = 3e7 + 7;
-char s[N];
+string s;
 int T, n, Hash[N], mo[N], u[N], v[N], ans;
 inline int gethash(int l, int r) {
     return ((Hash[l] - Hash[r] * mo[r - l]) % mod + mod) % mod;
@@ -15,8 +15,9 @@ inline void init() {
     return;
 }
 inline void solve() {
-    cin >> (s + 1);
-    n = strlen(s + 1);
+    cin >> s;
+    s = " " + s;
+    n = s.size();
     memset(u, 0, sizeof(u));
     memset(v, 0, sizeof(v));
     Hash[n + 1] = 0;
@@ -34,7 +35,7 @@ inline void solve() {
                     else
                         r = mid - 1;
                 }
-                int head = i - pos + 1;
+                int hd = i - pos + 1;
                 l = 1, r = L, pos = 0;
                 while (l <= r) {
                     int mid = l + r >> 1;
@@ -43,12 +44,12 @@ inline void solve() {
                     else
                         r = mid - 1;
                 }
-                int tail = i + pos - 1;
-                head = max(head + L - 1, i);
-                tail = min(tail, i + L - 1);
-                if (head <= tail) {
-                    ++u[head - 2 * L + 1], --u[tail + 1 - 2 * L + 1];
-                    ++v[head], --v[tail + 1];
+                int tl = i + pos - 1;
+                hd = max(hd + L - 1, i);
+                tl = min(tl, i + L - 1);
+                if (hd <= tl) {
+                    ++u[hd - 2 * L + 1], --u[tl + 1 - 2 * L + 1];
+                    ++v[hd], --v[tl + 1];
                 }
             }
         }
