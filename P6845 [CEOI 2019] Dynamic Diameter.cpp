@@ -624,158 +624,153 @@ signed main(int argc, char *argv[]) {
 namespace TANGYIXIAO {
 using ll = long long;
 
-const int N = 2e5 + 10;
+const int MAXN = 200005;
+
 struct Node {
-    int ch[2], fa, rev;
-    ll val, sum, lmx, rmx, mx;
-} tr[N];
+    ll mx, mn, lv, rv, ans;
+    Node() : mx(0), mn(0), lv(0), rv(0), ans(0) {}
+    Node(ll d) {
+        mx = mn = d;
+        lv = rv = -d;
+        ans = 0;
+    }
+    Node(ll mx, ll mn, ll lv, ll rv, ll ans)
+        : mx(mx), mn(mn), lv(lv), rv(rv), ans(ans) {}
+};
 
-inline bool isroot(int x) {
-    int f = tr[x].fa;
-    return !f || (tr[f].ch[0] != x && tr[f].ch[1] != x);
+Node operator+(const Node &a, const Node &b) {
+    Node res;
+    res.mx = max(a.mx, b.mx);
+    res.mn = min(a.mn, b.mn);
+    res.lv = max({a.lv, b.lv, a.mx - 2 * b.mn});
+    res.rv = max({a.rv, b.rv, b.mx - 2 * a.mn});
+    res.ans = max({a.ans, b.ans, a.mx + b.rv, a.lv + b.mx});
+    return res;
 }
 
-inline void pushup(int x) {
-    int l = tr[x].ch[0], r = tr[x].ch[1];
-    tr[x].sum = tr[l].sum + tr[x].val + tr[r].sum;
+Node tree[4 * MAXN];
+ll lazy[4 * MAXN];
 
-    tr[x].lmx = max(tr[l].lmx, tr[l].sum + tr[x].val + tr[r].lmx);
-    tr[x].rmx = max(tr[r].rmx, tr[r].sum + tr[x].val + tr[l].rmx);
-
-    tr[x].mx = max({tr[l].mx, tr[r].mx,
-                    tr[l].rmx + tr[x].val + tr[r].lmx});
+void apply(int node, ll v) {
+    tree[node].mx += v;
+    tree[node].mn += v;
+    tree[node].lv -= v;
+    tree[node].rv -= v;
+    lazy[node] += v;
 }
 
-inline void pushrev(int x) {
-    swap(tr[x].ch[0], tr[x].ch[1]);
-    swap(tr[x].lmx, tr[x].rmx);
-    tr[x].rev ^= 1;
-}
-
-inline void pushdown(int x) {
-    if (tr[x].rev) {
-        if (tr[x].ch[0])
-            pushrev(tr[x].ch[0]);
-        if (tr[x].ch[1])
-            pushrev(tr[x].ch[1]);
-        tr[x].rev = 0;
+void push(int node) {
+    if (lazy[node] != 0) {
+        apply(node * 2, lazy[node]);
+        apply(node * 2 + 1, lazy[node]);
+        lazy[node] = 0;
     }
 }
 
-void rotate(int x) {
-    int y = tr[x].fa, z = tr[y].fa;
-    int k = (tr[y].ch[1] == x);
-    if (!isroot(y))
-        tr[z].ch[tr[z].ch[1] == y] = x;
-    tr[x].fa = z;
-    tr[y].ch[k] = tr[x].ch[k ^ 1];
-    if (tr[x].ch[k ^ 1])
-        tr[tr[x].ch[k ^ 1]].fa = y;
-    tr[x].ch[k ^ 1] = y;
-    tr[y].fa = x;
-    pushup(y);
-    pushup(x);
-}
-
-void splay(int x) {
-    static int stk[N], top;
-    int u = x;
-    stk[top = 1] = u;
-    while (!isroot(u))
-        stk[++top] = u = tr[u].fa;
-    while (top)
-        pushdown(stk[top--]);
-    while (!isroot(x)) {
-        int y = tr[x].fa, z = tr[y].fa;
-        if (!isroot(y))
-            ((tr[y].ch[1] == x) ^ (tr[z].ch[1] == y)) ? rotate(x) : rotate(y);
-        rotate(x);
+void build(int node, int l, int r, ll *arr) {
+    if (l == r) {
+        tree[node] = Node(arr[l]);
+        return;
     }
+    int mid = (l + r) / 2;
+    build(node * 2, l, mid, arr);
+    build(node * 2 + 1, mid + 1, r, arr);
+    tree[node] = tree[node * 2] + tree[node * 2 + 1];
 }
 
-void access(int x) {
-    for (int y = 0; x; y = x, x = tr[x].fa) {
-        splay(x);
-        tr[x].ch[1] = y;
-        pushup(x);
+void update(int node, int l, int r, int ql, int qr, ll v) {
+    if (ql <= l && r <= qr) {
+        apply(node, v);
+        return;
     }
+    push(node);
+    int mid = (l + r) / 2;
+    if (ql <= mid)
+        update(node * 2, l, mid, ql, qr, v);
+    if (qr > mid)
+        update(node * 2 + 1, mid + 1, r, ql, qr, v);
+    tree[node] = tree[node * 2] + tree[node * 2 + 1];
 }
-
-void makeroot(int x) {
-    access(x);
-    splay(x);
-    pushrev(x);
-}
-
-int findroot(int x) {
-    access(x);
-    splay(x);
-    while (tr[x].ch[0]) {
-        pushdown(x);
-        x = tr[x].ch[0];
-    }
-    splay(x);
-    return x;
-}
-
-void split(int x, int y) {
-    makeroot(x);
-    access(y);
-    splay(y);
-}
-
-void link(int x, int y) {
-    makeroot(x);
-    if (findroot(y) != x)
-        tr[x].fa = y;
-}
-
-void cut(int x, int y) {
-    makeroot(x);
-    access(y);
-    splay(y);
-    if (tr[y].ch[0] == x && !tr[x].ch[1]) {
-        tr[y].ch[0] = tr[x].fa = 0;
-        pushup(y);
-    }
-}
-
-int n, q, W;
-int u[N], v[N];
-ll w[N];
 
 inline void solve(int Task_Id) {
-    cin >> n >> q >> W;
-    int edge_cnt = n;
-    for (int i = 1; i < n; ++i) {
-        cin >> u[i] >> v[i] >> w[i];
-        int eid = ++edge_cnt;
-        tr[u[i]].val = tr[u[i]].sum = tr[u[i]].lmx = tr[u[i]].rmx = tr[u[i]].mx = 0;
-        tr[v[i]].val = tr[v[i]].sum = tr[v[i]].lmx = tr[v[i]].rmx = tr[v[i]].mx = 0;
-        tr[eid].val = tr[eid].sum = tr[eid].lmx = tr[eid].rmx = tr[eid].mx = w[i];
+    int n, q;
+    ll w;
+    cin >> n >> q >> w;
 
-        link(u[i], eid);
-        link(v[i], eid);
+    struct Edge {
+        int u, v;
+        ll w;
+    };
+    vector<Edge> edges(n);
+    vector<vector<tuple<int, ll, int>>> adj(n + 1);
+
+    for (int i = 1; i < n; ++i) {
+        int a, b;
+        ll c;
+        cin >> a >> b >> c;
+        edges[i] = {a, b, c};
+        adj[a].emplace_back(b, c, i);
+        adj[b].emplace_back(a, c, i);
     }
+
+    vector<ll> dep(n + 1, 0);
+    vector<int> in(n + 1), out(n + 1);
+    vector<int> edge_to_child(n, 0);
+    vector<ll> euler(2 * n);
+
+    vector<int> stk;
+    stk.push_back(1);
+    vector<int> it(n + 1, 0);
+    vector<int> parent(n + 1, 0);
+    int timer = 0;
+
+    while (!stk.empty()) {
+        int u = stk.back();
+        if (it[u] == 0) {
+            ++timer;
+            in[u] = timer;
+            euler[timer] = dep[u];
+        }
+        if (it[u] < (int)adj[u].size()) {
+            auto [v, wgt, id] = adj[u][it[u]];
+            ++it[u];
+            if (v == parent[u])
+                continue;
+            parent[v] = u;
+            dep[v] = dep[u] + wgt;
+            edge_to_child[id] = v;
+            stk.push_back(v);
+        } else {
+            out[u] = timer;
+            stk.pop_back();
+            if (!stk.empty()) {
+                int p = stk.back();
+                ++timer;
+                euler[timer] = dep[p];
+            }
+        }
+    }
+
+    int M = 2 * n - 1;
+    build(1, 1, M, euler.data() + 1);
 
     ll last = 0;
     while (q--) {
         ll d, e;
         cin >> d >> e;
-        int idx = (d + last) % (n - 1) + 1;
-        ll new_w = (e + last) % W;
+        d = (d + last) % (n - 1);
+        e = (e + last) % w;
+        int idx = (int)d + 1;
+        ll new_w = e;
+        ll delta = new_w - edges[idx].w;
+        edges[idx].w = new_w;
 
-        int eid = n + idx;
-        makeroot(u[idx]);
-        access(v[idx]);
-        splay(eid);
-        tr[eid].val = new_w;
-        pushup(eid);
+        int child = edge_to_child[idx];
+        if (child != 0) {
+            update(1, 1, M, in[child], out[child], delta);
+        }
 
-        makeroot(1);
-        access(1);
-        splay(1);
-        last = tr[1].mx;
+        last = tree[1].ans;
         cout << last << '\n';
     }
     return;
