@@ -622,155 +622,138 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-using ll = long long;
+typedef long long ll;
 
-const int MAXN = 200005;
+const int MAXN = 100005;
+
+int n, q;
+ll W;
+vector<tuple<int, ll, int>> adj[MAXN];
+ll weight[MAXN];
+int child_of_edge[MAXN];
+int in[MAXN], out[MAXN];
+vector<ll> seq;
+
+ll cur = 0;
+
+void dfs(int u, int p) {
+    for (auto [v, w, id] : adj[u]) {
+        if (v == p)
+            continue;
+        child_of_edge[id] = v;
+
+        cur += weight[id];
+        in[v] = seq.size();
+        seq.push_back(cur);
+        dfs(v, u);
+        cur -= weight[id];
+        out[v] = seq.size();
+        seq.push_back(cur);
+    }
+}
 
 struct Node {
-    ll mx, mn, lv, rv, ans;
-    Node() : mx(0), mn(0), lv(0), rv(0), ans(0) {}
-    Node(ll d) {
-        mx = mn = d;
-        lv = rv = -d;
-        ans = 0;
-    }
-    Node(ll mx, ll mn, ll lv, ll rv, ll ans)
-        : mx(mx), mn(mn), lv(lv), rv(rv), ans(ans) {}
-};
+    ll mx, mn, lm, rm, diam;
+} tree[4 * 200005];
 
-Node operator+(const Node &a, const Node &b) {
+ll lazy[4 * 200005];
+
+void apply(int u, ll v) {
+    tree[u].mx += v;
+    tree[u].mn += v;
+    tree[u].lm -= v;
+    tree[u].rm -= v;
+
+    lazy[u] += v;
+}
+
+void push_down(int u) {
+    if (lazy[u] != 0) {
+        apply(u * 2, lazy[u]);
+        apply(u * 2 + 1, lazy[u]);
+        lazy[u] = 0;
+    }
+}
+
+Node merge(const Node &l, const Node &r) {
     Node res;
-    res.mx = max(a.mx, b.mx);
-    res.mn = min(a.mn, b.mn);
-    res.lv = max({a.lv, b.lv, a.mx - 2 * b.mn});
-    res.rv = max({a.rv, b.rv, b.mx - 2 * a.mn});
-    res.ans = max({a.ans, b.ans, a.mx + b.rv, a.lv + b.mx});
+    res.mx = max(l.mx, r.mx);
+    res.mn = min(l.mn, r.mn);
+    res.lm = max({l.lm, r.lm, l.mx - 2 * r.mn});
+    res.rm = max({l.rm, r.rm, r.mx - 2 * l.mn});
+    res.diam = max({l.diam, r.diam, l.lm + r.mx, l.mx + r.rm});
     return res;
 }
 
-Node tree[4 * MAXN];
-ll lazy[4 * MAXN];
-
-void apply(int node, ll v) {
-    tree[node].mx += v;
-    tree[node].mn += v;
-    tree[node].lv -= v;
-    tree[node].rv -= v;
-    lazy[node] += v;
-}
-
-void push(int node) {
-    if (lazy[node] != 0) {
-        apply(node * 2, lazy[node]);
-        apply(node * 2 + 1, lazy[node]);
-        lazy[node] = 0;
-    }
-}
-
-void build(int node, int l, int r, ll *arr) {
+void build(int u, int l, int r) {
     if (l == r) {
-        tree[node] = Node(arr[l]);
+        ll val = seq[l];
+        tree[u].mx = tree[u].mn = val;
+        tree[u].lm = tree[u].rm = -val;
+        tree[u].diam = 0;
+        lazy[u] = 0;
         return;
     }
-    int mid = (l + r) / 2;
-    build(node * 2, l, mid, arr);
-    build(node * 2 + 1, mid + 1, r, arr);
-    tree[node] = tree[node * 2] + tree[node * 2 + 1];
+    int mid = (l + r) >> 1;
+    build(u * 2, l, mid);
+    build(u * 2 + 1, mid + 1, r);
+    tree[u] = merge(tree[u * 2], tree[u * 2 + 1]);
+    lazy[u] = 0;
 }
 
-void update(int node, int l, int r, int ql, int qr, ll v) {
+void update(int u, int l, int r, int ql, int qr, ll val) {
     if (ql <= l && r <= qr) {
-        apply(node, v);
+        apply(u, val);
         return;
     }
-    push(node);
-    int mid = (l + r) / 2;
+    push_down(u);
+    int mid = (l + r) >> 1;
     if (ql <= mid)
-        update(node * 2, l, mid, ql, qr, v);
+        update(u * 2, l, mid, ql, qr, val);
     if (qr > mid)
-        update(node * 2 + 1, mid + 1, r, ql, qr, v);
-    tree[node] = tree[node * 2] + tree[node * 2 + 1];
+        update(u * 2 + 1, mid + 1, r, ql, qr, val);
+    tree[u] = merge(tree[u * 2], tree[u * 2 + 1]);
 }
-
 inline void solve(int Task_Id) {
-    int n, q;
-    ll w;
-    cin >> n >> q >> w;
 
-    struct Edge {
-        int u, v;
-        ll w;
-    };
-    vector<Edge> edges(n);
-    vector<vector<tuple<int, ll, int>>> adj(n + 1);
-
-    for (int i = 1; i < n; ++i) {
+    cin >> n >> q >> W;
+    for (int i = 1; i <= n - 1; ++i) {
         int a, b;
         ll c;
         cin >> a >> b >> c;
-        edges[i] = {a, b, c};
-        adj[a].emplace_back(b, c, i);
-        adj[b].emplace_back(a, c, i);
+        adj[a].push_back({b, c, i});
+        adj[b].push_back({a, c, i});
+        weight[i] = c;
     }
 
-    vector<ll> dep(n + 1, 0);
-    vector<int> in(n + 1), out(n + 1);
-    vector<int> edge_to_child(n, 0);
-    vector<ll> euler(2 * n);
+    seq.reserve(2 * n);
+    cur = 0;
+    in[1] = 0;
+    seq.push_back(0);
+    dfs(1, 0);
+    out[1] = seq.size() - 1;
 
-    vector<int> stk;
-    stk.push_back(1);
-    vector<int> it(n + 1, 0);
-    vector<int> parent(n + 1, 0);
-    int timer = 0;
-
-    while (!stk.empty()) {
-        int u = stk.back();
-        if (it[u] == 0) {
-            ++timer;
-            in[u] = timer;
-            euler[timer] = dep[u];
-        }
-        if (it[u] < (int)adj[u].size()) {
-            auto [v, wgt, id] = adj[u][it[u]];
-            ++it[u];
-            if (v == parent[u])
-                continue;
-            parent[v] = u;
-            dep[v] = dep[u] + wgt;
-            edge_to_child[id] = v;
-            stk.push_back(v);
-        } else {
-            out[u] = timer;
-            stk.pop_back();
-            if (!stk.empty()) {
-                int p = stk.back();
-                ++timer;
-                euler[timer] = dep[p];
-            }
-        }
-    }
-
-    int M = 2 * n - 1;
-    build(1, 1, M, euler.data() + 1);
+    int M = seq.size();
+    build(1, 0, M - 1);
 
     ll last = 0;
-    while (q--) {
+    for (int i = 0; i < q; ++i) {
         ll d, e;
         cin >> d >> e;
         d = (d + last) % (n - 1);
-        e = (e + last) % w;
-        int idx = (int)d + 1;
-        ll new_w = e;
-        ll delta = new_w - edges[idx].w;
-        edges[idx].w = new_w;
+        e = (e + last) % W;
+        int id = d + 1;
 
-        int child = edge_to_child[idx];
-        if (child != 0) {
-            update(1, 1, M, in[child], out[child], delta);
+        ll old_w = weight[id];
+        ll delta = e - old_w;
+        if (delta != 0) {
+            weight[id] = e;
+            int v = child_of_edge[id];
+            int L = in[v];
+            int R = out[v] - 1;
+            update(1, 0, M - 1, L, R, delta);
         }
-
-        last = tree[1].ans;
+        last = tree[1].diam;
         cout << last << '\n';
     }
     return;
