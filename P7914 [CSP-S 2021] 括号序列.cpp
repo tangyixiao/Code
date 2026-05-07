@@ -623,54 +623,7 @@ signed main(int argc, char *argv[]) {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 inline void solve(int Task_Id) {
-    int n, m1, m2;
-    cin >> n >> m1 >> m2;
-    vector<pair<int, int>> d1(m1), d2(m2);
-    for (int i = 0; i < m1; ++i)
-        cin >> d1[i].first >> d1[i].second;
-    for (int i = 0; i < m2; ++i)
-        cin >> d2[i].first >> d2[i].second;
-    sort(d1.begin(), d1.end());
-    sort(d2.begin(), d2.end());
-
-    auto calc = [&](vector<pair<int, int>> &a) {
-        int sz = a.size();
-        vector<int> id(sz);
-        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> occ;
-        priority_queue<int, vector<int>, greater<int>> free;
-        int next_id = 1;
-        for (int i = 0; i < sz; ++i) {
-            int arr = a[i].first, lea = a[i].second;
-            while (!occ.empty() && occ.top().first < arr) {
-                free.push(occ.top().second);
-                occ.pop();
-            }
-            int cur;
-            if (!free.empty()) {
-                cur = free.top();
-                free.pop();
-            } else {
-                cur = next_id++;
-            }
-            occ.push({lea, cur});
-            id[i] = cur;
-        }
-        vector<int> f(n + 2, 0);
-        for (int x : id)
-            if (x <= n)
-                f[x]++;
-        for (int i = 1; i <= n; ++i)
-            f[i] += f[i - 1];
-        return f;
-    };
-
-    vector<int> f1 = calc(d1);
-    vector<int> f2 = calc(d2);
-
-    int ans = 0;
-    for (int i = 0; i <= n; ++i)
-        ans = max(ans, f1[i] + f2[n - i]);
-    cout << ans << '\n';
+    // do something here
     return;
 }
 } // namespace TANGYIXIAO
