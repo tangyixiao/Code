@@ -623,7 +623,185 @@ signed main(int argc, char *argv[]) {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 inline void solve(int Task_Id) {
-    // do something here
+    int n, m;
+    cin >> n >> m;
+    vector<int> val(n + 1);
+    for (int i = 1; i <= n; ++i)
+        cin >> val[i];
+    vector<vector<int>> e(n + 1);
+    for (int i = 1; i < n; ++i) {
+        int u, v;
+        cin >> u >> v;
+        e[u].push_back(v);
+        e[v].push_back(u);
+    }
+    vector<int> dep(n + 1), len(n + 1);
+    vector<vector<int>> up(n + 1, vector<int>(18, 0));
+    function<void(int, int)> dfs_lca = [&](int u, int p) {
+        up[u][0] = p;
+        for (int i = 1; i < 18; ++i)
+            up[u][i] = up[up[u][i - 1]][i - 1];
+        for (int v : e[u])
+            if (v != p) {
+                dep[v] = dep[u] + 1;
+                len[v] = len[u] + 1;
+                dfs_lca(v, u);
+            }
+    };
+    dfs_lca(1, 0);
+    auto lca = [&](int u, int v) {
+        if (dep[u] < dep[v])
+            swap(u, v);
+        int d = dep[u] - dep[v];
+        for (int i = 0; i < 18; ++i)
+            if (d >> i & 1)
+                u = up[u][i];
+        if (u == v)
+            return u;
+        for (int i = 17; i >= 0; --i)
+            if (up[u][i] != up[v][i])
+                u = up[u][i], v = up[v][i];
+        return up[u][0];
+    };
+    auto dist = [&](int u, int v) { return len[u] + len[v] - 2 * len[lca(u, v)]; };
+
+    vector<int> sz(n + 1), mx(n + 1), vis(n + 1), fa_p(n + 1);
+    vector<vector<int>> nodes(n + 1);
+    vector<int> anc_dist; // temp
+    function<void(int, int, int, vector<int> &)> dfs_collect = [&](int u, int p, int d, vector<int> &vec) {
+        vec.push_back(u);
+        anc_dist[u] = d;
+        for (int v : e[u])
+            if (v != p && !vis[v])
+                dfs_collect(v, u, d + 1, vec);
+    };
+    function<void(int, int)> build = [&](int u, int f) {
+        function<int(int, int, int)> get_size = [&](int u, int p, int) {
+            sz[u] = 1;
+            mx[u] = 0;
+            for (int v : e[u])
+                if (v != p && !vis[v]) {
+                    get_size(v, u, 0);
+                    sz[u] += sz[v];
+                    mx[u] = max(mx[u], sz[v]);
+                }
+            return 0;
+        };
+        get_size(u, 0, 0);
+        int tot = sz[u];
+        function<int(int, int)> get_rt = [&](int u, int p) {
+            mx[u] = max(mx[u], tot - sz[u]);
+            int rt = u;
+            for (int v : e[u])
+                if (v != p && !vis[v]) {
+                    int t = get_rt(v, u);
+                    if (mx[t] < mx[rt])
+                        rt = t;
+                }
+            return rt;
+        };
+        int r = get_rt(u, 0);
+        fa_p[r] = f;
+        vis[r] = 1;
+        nodes[r].clear();
+        nodes[r].push_back(r);
+        anc_dist.resize(n + 1);
+        anc_dist[r] = 0;
+        for (int v : e[r])
+            if (!vis[v]) {
+                vector<int> sub;
+                dfs_collect(v, r, 1, sub);
+                for (int x : sub)
+                    nodes[r].push_back(x);
+            }
+        for (int v : e[r])
+            if (!vis[v])
+                build(v, r);
+    };
+    anc_dist.resize(n + 1);
+    build(1, 0);
+
+    vector<vector<pair<int, int>>> anc(n + 1);
+    for (int u = 1; u <= n; ++u) {
+        for (int x = u; x; x = fa_p[x]) {
+            anc[u].emplace_back(x, dist(u, x));
+        }
+    }
+
+    vector<int> bit1_sz(n + 1), bit2_sz(n + 1);
+    for (int u = 1; u <= n; ++u) {
+        int mx1 = 0, mx2 = 0;
+        for (auto [c, d] : anc[u]) {
+            mx1 = max(mx1, d);
+            if (fa_p[c])
+                mx2 = max(mx2, dist(u, fa_p[c]));
+        }
+        bit1_sz[u] = mx1 + 2;
+        if (fa_p[u])
+            bit2_sz[u] = mx2 + 2;
+    }
+    vector<vector<int>> bit1(n + 1), bit2(n + 1);
+    for (int i = 1; i <= n; ++i) {
+        bit1[i].assign(bit1_sz[i], 0);
+        if (fa_p[i])
+            bit2[i].assign(bit2_sz[i], 0);
+    }
+    auto bit_add = [&](vector<int> &a, int idx, int dx) {
+        int sz = a.size();
+        for (int i = idx; i < sz; i += i & -i)
+            a[i] += dx;
+    };
+    auto bit_sum = [&](vector<int> &a, int idx) {
+        int s = 0;
+        for (int i = min(idx, (int)a.size() - 1); i > 0; i -= i & -i)
+            s += a[i];
+        return s;
+    };
+
+    for (int u = 1; u <= n; ++u) {
+        for (auto [c, d] : anc[u]) {
+            bit_add(bit1[c], d + 1, val[u]);
+            if (fa_p[c])
+                bit_add(bit2[c], dist(u, fa_p[c]) + 1, val[u]);
+        }
+    }
+
+    int last = 0;
+    while (m--) {
+        int op;
+        cin >> op;
+        if (op == 0) {
+            int x, k;
+            cin >> x >> k;
+            x ^= last;
+            k ^= last;
+            int ans = 0;
+            for (int u = x; u; u = fa_p[u]) {
+                int d = dist(x, u);
+                if (d <= k)
+                    ans += bit_sum(bit1[u], k - d + 1);
+                if (fa_p[u]) {
+                    int d2 = dist(x, fa_p[u]);
+                    if (d2 <= k)
+                        ans -= bit_sum(bit2[u], k - d2 + 1);
+                }
+            }
+            cout << ans << '\n';
+            last = ans;
+        } else {
+            int x, y;
+            cin >> x >> y;
+            x ^= last;
+            y ^= last;
+            int delta = y - val[x];
+            val[x] = y;
+            for (auto [c, d] : anc[x]) {
+                bit_add(bit1[c], d + 1, delta);
+                if (fa_p[c])
+                    bit_add(bit2[c], dist(x, fa_p[c]) + 1, delta);
+            }
+        }
+    }
     return;
 }
 } // namespace TANGYIXIAO
