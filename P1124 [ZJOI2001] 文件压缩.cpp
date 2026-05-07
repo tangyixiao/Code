@@ -644,38 +644,35 @@ namespace TANGYIXIAO {
 inline void solve(int Task_Id) {
     int n;
     cin >> n;
-    string L;
-    cin >> L;
+    string s;
+    cin >> s;
     int p;
     cin >> p;
-    p--;
 
-    string F = L;
-    sort(F.begin(), F.end());
-
-    vector<int> posF[26];
-    for (int i = 0; i < n; ++i) {
-        posF[F[i] - 'a'].push_back(i);
-    }
-
-    vector<int> Next(n);
     int cnt[26] = {0};
+    for (char c : s)
+        cnt[c - 'a']++;
+    int start[26];
+    int sum = 0;
+    for (int i = 0; i < 26; ++i) {
+        start[i] = sum;
+        sum += cnt[i];
+    }
+    vector<int> next(n);
+    int used[26] = {0};
     for (int i = 0; i < n; ++i) {
-        int c = L[i] - 'a';
-        int k = cnt[c]++;
-        Next[i] = posF[c][k];
+        int c = s[i] - 'a';
+        next[i] = start[c] + used[c];
+        used[c]++;
     }
 
-    string ans;
-    int cur = p;
+    string ans(n, ' ');
+    int row = p - 1;
     for (int i = 0; i < n; ++i) {
-        ans.push_back(L[cur]);
-        cur = Next[cur];
+        ans[n - 1 - i] = s[row];
+        row = next[row];
     }
-
-    reverse(ans.begin(), ans.end());
-    cout << ans << endl;
-
+    cout << ans << '\n';
     return;
 }
 } // namespace TANGYIXIAO
