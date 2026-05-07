@@ -623,7 +623,70 @@ signed main(int argc, char *argv[]) {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 inline void solve(int Task_Id) {
-    // do something here
+    int N;
+    cin >> N;
+    int m1, m2;
+    cin >> m1 >> m2;
+
+    if (m1 == 1) {
+
+        cout << 0 << endl;
+        return;
+    }
+
+    vector<pair<int, int>> factors;
+    int tmp = m1;
+    for (int i = 2; i * i <= tmp; ++i) {
+        if (tmp % i == 0) {
+            int cnt = 0;
+            while (tmp % i == 0) {
+                tmp /= i;
+                ++cnt;
+            }
+            factors.emplace_back(i, cnt * m2);
+        }
+    }
+    if (tmp > 1) {
+        factors.emplace_back(tmp, m2);
+    }
+
+    const long long INF = 1e18;
+    long long ans = INF;
+
+    for (int i = 0; i < N; ++i) {
+        int S;
+        cin >> S;
+
+        long long t_needed = 0;
+        bool possible = true;
+
+        for (auto &[p, a] : factors) {
+            if (S % p != 0) {
+                possible = false;
+                break;
+            }
+            int b = 0;
+            int s_copy = S;
+            while (s_copy % p == 0) {
+                s_copy /= p;
+                ++b;
+            }
+
+            long long t = (a + b - 1) / b;
+            if (t > t_needed)
+                t_needed = t;
+        }
+
+        if (possible && t_needed < ans) {
+            ans = t_needed;
+        }
+    }
+
+    if (ans == INF)
+        cout << -1 << endl;
+    else
+        cout << ans << endl;
+
     return;
 }
 } // namespace TANGYIXIAO
