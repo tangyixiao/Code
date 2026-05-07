@@ -623,7 +623,71 @@ signed main(int argc, char *argv[]) {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 inline void solve(int Task_Id) {
-    // do something here
+    int n, k;
+    cin >> n >> k;
+    string s;
+    cin >> s;
+    s = "0" + s;
+    const int mod = 1e9 + 7;
+    vector<vector<int>> star(n + 2, vector<int>(n + 2, 0));
+    for (int i = 1; i <= n; ++i) {
+        bool ok = true;
+        for (int j = i; j <= i + k - 1 && j <= n; ++j) {
+            if (s[j] != '*' && s[j] != '?')
+                ok = false;
+            if (ok)
+                star[i][j] = 1;
+        }
+    }
+    vector<vector<int>> dp0 = star;
+    vector<vector<int>> dp1(n + 2, vector<int>(n + 2, 0));
+    vector<vector<int>> dp2(n + 2, vector<int>(n + 2, 0));
+    vector<vector<int>> G(n + 2, vector<int>(n + 2, 0));
+    vector<vector<int>> dp3(n + 2, vector<int>(n + 2, 0));
+    auto ok_char = [&](char c, int type) {
+        if (type == 0)
+            return c == '(' || c == '?';
+        else
+            return c == ')' || c == '?';
+    };
+    for (int len = 1; len <= n; ++len) {
+        for (int i = 1; i + len - 1 <= n; ++i) {
+            int j = i + len - 1;
+            if (ok_char(s[i], 0) && ok_char(s[j], 1)) {
+                int l = i + 1, r = j - 1;
+                if (l > r)
+                    dp1[i][j] = 1;
+                else {
+                    if (dp0[l][r])
+                        dp1[i][j] = (dp1[i][j] + 1) % mod;
+                    dp1[i][j] = (dp1[i][j] + dp2[l][r]) % mod;
+                    for (int t = l; t < r; ++t) {
+                        dp1[i][j] = (dp1[i][j] + (long long)dp2[l][t] * dp0[t + 1][r]) % mod;
+                        dp1[i][j] = (dp1[i][j] + (long long)dp0[l][t] * dp2[t + 1][r]) % mod;
+                    }
+                }
+            }
+            G[i][j] = 0;
+            int max_t = min(j - 1, i + k - 1);
+            for (int t = i; t <= max_t; ++t) {
+                if (dp0[i][t]) {
+                    G[i][j] = (G[i][j] + dp1[t + 1][j]) % mod;
+                }
+            }
+            dp3[i][j] = 0;
+            for (int m = i; m <= j; ++m) {
+                if (G[i][m]) {
+                    int rest = (m + 1 <= j) ? dp3[m + 1][j] : 1;
+                    dp3[i][j] = (dp3[i][j] + (long long)G[i][m] * rest) % mod;
+                }
+            }
+            dp2[i][j] = dp1[i][j];
+            for (int p = i; p < j; ++p) {
+                dp2[i][j] = (dp2[i][j] + (long long)dp1[i][p] * dp3[p + 1][j]) % mod;
+            }
+        }
+    }
+    cout << dp2[1][n] << '\n';
     return;
 }
 } // namespace TANGYIXIAO
