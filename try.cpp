@@ -1,13 +1,11 @@
-#include <climits>
-#include <cmath>
+#include <algorithm>
 #include <iostream>
-#include <vector>
+#include <string>
 
 using namespace std;
 
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
 
+int main() {
+    
     return 0;
 }
