@@ -621,30 +621,36 @@ signed main(int argc, char *argv[]) {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
-namespace TANGYIXIAO {
 typedef long long ll;
 const int INF = 0x3f3f3f3f;
 
+namespace TANGYIXIAO {
 inline void solve(int Task_Id) {
-    int n, m;
-    cin >> n >> m;
-    vector<int> p(n + 1);
-    int total = 0;
-    for (int i = 1; i <= n; ++i) {
-        cin >> p[i];
-        total += p[i];
-    }
+    int M, N;
+    cin >> M >> N;
 
-    vector<vector<int>> t(n + 1, vector<int>(m + 1));
-    for (int i = 1; i <= n; ++i)
-        for (int j = 1; j <= m; ++j)
-            cin >> t[i][j];
+    vector<vector<int>> T(N + 1, vector<int>(M + 1));
+    for (int i = 1; i <= N; ++i)
+        for (int j = 1; j <= M; ++j)
+            cin >> T[i][j];
+
+    int node_cnt = 0;
+    int S = ++node_cnt;
+    int T_node = ++node_cnt;
+    vector<int> car(N + 1);
+    vector<vector<int>> tech(M + 1, vector<int>(N + 1));
+
+    for (int i = 1; i <= N; ++i)
+        car[i] = ++node_cnt;
+    for (int j = 1; j <= M; ++j)
+        for (int k = 1; k <= N; ++k)
+            tech[j][k] = ++node_cnt;
 
     struct Edge {
         int to, next, cap, cost;
     };
     vector<Edge> edges;
-    vector<int> head;
+    vector<int> head(node_cnt + 1, -1);
 
     auto add = [&](int u, int v, int cap, int cost) {
         edges.push_back({v, head[u], cap, cost});
@@ -653,34 +659,20 @@ inline void solve(int Task_Id) {
         head[v] = (int)edges.size() - 1;
     };
 
-    int S = 0, T = 1;
-    int node_cnt = 1;
-    vector<int> dish(n + 1);
-    for (int i = 1; i <= n; ++i) {
-        dish[i] = ++node_cnt;
-    }
+    for (int i = 1; i <= N; ++i)
+        add(S, car[i], 1, 0);
 
-    head.assign(n + total + 10, -1);
-    vector<int> chef_of(n + total + 10, 0), k_of(n + total + 10, 0);
-    vector<int> max_k(m + 1, 0);
+    for (int j = 1; j <= M; ++j)
+        for (int k = 1; k <= N; ++k) {
+            add(tech[j][k], T_node, 1, 0);
+            for (int i = 1; i <= N; ++i)
+                add(car[i], tech[j][k], 1, k * T[i][j]);
+        }
 
-    for (int i = 1; i <= n; ++i)
-        add(S, dish[i], p[i], 0);
-
-    for (int j = 1; j <= m; ++j) {
-        int id = ++node_cnt;
-        chef_of[id] = j;
-        k_of[id] = 1;
-        max_k[j] = 1;
-        add(id, T, 1, 0);
-        for (int i = 1; i <= n; ++i)
-            add(dish[i], id, 1, t[i][j]);
-    }
-
-    ll mincost = 0;
     int flow = 0;
+    ll mincost = 0;
 
-    while (flow < total) {
+    while (true) {
         vector<int> dist(node_cnt + 1, INF), pre(node_cnt + 1, -1), pedge(node_cnt + 1, -1);
         vector<bool> inq(node_cnt + 1, false);
         queue<int> q;
@@ -706,50 +698,21 @@ inline void solve(int Task_Id) {
             }
         }
 
-        if (dist[T] == INF)
+        if (dist[T_node] == INF)
             break;
 
-        int aug = total - flow;
-        for (int v = T; v != S; v = pre[v])
-            aug = min(aug, edges[pedge[v]].cap);
-
+        int aug = 1;
         flow += aug;
-        mincost += 1LL * aug * dist[T];
+        mincost += 1LL * aug * dist[T_node];
 
-        for (int v = T; v != S; v = pre[v]) {
+        for (int v = T_node; v != S; v = pre[v]) {
             int idx = pedge[v];
             edges[idx].cap -= aug;
             edges[idx ^ 1].cap += aug;
         }
-
-        for (int v = T; v != S; v = pre[v]) {
-            int u = pre[v];
-            if (v == T && chef_of[u] != 0) {
-                int idx = pedge[v];
-                if (edges[idx].cap == 0) {
-                    int j = chef_of[u];
-                    int k = k_of[u];
-                    if (k == max_k[j]) {
-                        int new_k = k + 1;
-                        int new_node = ++node_cnt;
-                        if ((int)head.size() <= new_node)
-                            head.push_back(-1);
-                        chef_of.resize(new_node + 1, 0);
-                        k_of.resize(new_node + 1, 0);
-                        chef_of[new_node] = j;
-                        k_of[new_node] = new_k;
-                        max_k[j] = new_k;
-                        add(new_node, T, 1, 0);
-                        for (int i = 1; i <= n; ++i)
-                            add(dish[i], new_node, 1, new_k * t[i][j]);
-                    }
-                }
-                break;
-            }
-        }
     }
 
-    cout << mincost << endl;
+    cout << fixed << setprecision(2) << (double)mincost / N << endl;
     return;
 }
 } // namespace TANGYIXIAO
