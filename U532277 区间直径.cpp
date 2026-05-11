@@ -622,69 +622,8 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 300005;
-
-int n, q;
-vector<int> g[N];
-int fa[N], sz[N], son[N], mx[N], cent[N];
 inline void solve(int Task_Id) {
-    cin >> n >> q;
-    for (int i = 2; i <= n; ++i) {
-        int p;
-        cin >> p;
-        g[p].push_back(i);
-    }
-
-    vector<int> order;
-    stack<pair<int, int>> st;
-    st.push({1, 0});
-    fa[1] = 0;
-
-    while (!st.empty()) {
-        int u = st.top().first;
-        int &idx = st.top().second;
-        if (idx < (int)g[u].size()) {
-            int v = g[u][idx++];
-            fa[v] = u;
-            st.push({v, 0});
-        } else {
-            order.push_back(u);
-            st.pop();
-
-            sz[u] = 1;
-            int max_sz = 0;
-            for (int v : g[u]) {
-                sz[u] += sz[v];
-                if (sz[v] > max_sz) {
-                    max_sz = sz[v];
-                    son[u] = v;
-                }
-            }
-            mx[u] = max_sz;
-        }
-    }
-
-    for (int u : order) {
-        if (son[u] == 0) {
-            cent[u] = u;
-        } else {
-            int c = cent[son[u]];
-            while (c != u) {
-
-                if (max(mx[c], sz[u] - sz[c]) <= sz[u] / 2)
-                    break;
-                c = fa[c];
-            }
-            cent[u] = c;
-        }
-    }
-
-    while (q--) {
-        int v;
-        cin >> v;
-        cout << cent[v] << '\n';
-    }
-
+    // do something here
     return;
 }
 } // namespace TANGYIXIAO
