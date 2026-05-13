@@ -623,146 +623,152 @@ signed main(int argc, char *argv[]) {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 typedef long long ll;
-const int MAXN = 500005;
-const ll INF = 1e18;
+const int MAXN = 50005;
+const int MOD = 201314;
 
-int n, q;
-vector<pair<int, ll>> children[MAXN];
-struct Query {
-    int l, r, id;
-};
-vector<Query> queries[MAXN];
-ll ans[MAXN];
+int n, m;
+vector<int> g[MAXN];
 
-int parent[MAXN];
-ll parent_w[MAXN];
-int degree[MAXN];
-ll depth[MAXN];
-int sz[MAXN];
-bool is_leaf[MAXN];
+int parent[MAXN], depth[MAXN], heavy[MAXN], head[MAXN], pos[MAXN], sz[MAXN];
+int cur_pos;
 
-ll mn[MAXN * 4], lazy[MAXN * 4];
-
-void build(int p, int l, int r) {
-    if (l == r) {
-        mn[p] = is_leaf[l] ? depth[l] : INF;
-        return;
+int dfs1(int u) {
+    sz[u] = 1;
+    int max_sz = 0;
+    for (int v : g[u]) {
+        if (v == parent[u])
+            continue;
+        parent[v] = u;
+        depth[v] = depth[u] + 1;
+        int v_sz = dfs1(v);
+        sz[u] += v_sz;
+        if (v_sz > max_sz) {
+            max_sz = v_sz;
+            heavy[u] = v;
+        }
     }
-    int mid = (l + r) >> 1;
-    build(p << 1, l, mid);
-    build(p << 1 | 1, mid + 1, r);
-    mn[p] = min(mn[p << 1], mn[p << 1 | 1]);
+    return sz[u];
 }
 
-inline void push(int p) {
-    if (lazy[p] != 0) {
-        mn[p << 1] += lazy[p];
-        lazy[p << 1] += lazy[p];
-        mn[p << 1 | 1] += lazy[p];
-        lazy[p << 1 | 1] += lazy[p];
-        lazy[p] = 0;
+void dfs2(int u, int h) {
+    head[u] = h;
+    pos[u] = ++cur_pos;
+    if (heavy[u] != 0)
+        dfs2(heavy[u], h);
+    for (int v : g[u]) {
+        if (v != parent[u] && v != heavy[u])
+            dfs2(v, v);
     }
 }
 
-void add(int p, int l, int r, int ql, int qr, ll v) {
-    if (ql <= l && r <= qr) {
-        mn[p] += v;
-        lazy[p] += v;
-        return;
+struct SegTree {
+    int sum[MAXN * 4], lazy[MAXN * 4];
+    void push(int p, int l, int r) {
+        if (lazy[p]) {
+            int mid = (l + r) >> 1;
+            sum[p << 1] = (sum[p << 1] + lazy[p] * (mid - l + 1)) % MOD;
+            lazy[p << 1] = (lazy[p << 1] + lazy[p]) % MOD;
+            sum[p << 1 | 1] = (sum[p << 1 | 1] + lazy[p] * (r - mid)) % MOD;
+            lazy[p << 1 | 1] = (lazy[p << 1 | 1] + lazy[p]) % MOD;
+            lazy[p] = 0;
+        }
     }
-    push(p);
-    int mid = (l + r) >> 1;
-    if (ql <= mid)
-        add(p << 1, l, mid, ql, qr, v);
-    if (qr > mid)
-        add(p << 1 | 1, mid + 1, r, ql, qr, v);
-    mn[p] = min(mn[p << 1], mn[p << 1 | 1]);
+    void add(int p, int l, int r, int ql, int qr, int v) {
+        if (ql <= l && r <= qr) {
+            sum[p] = (sum[p] + v * (r - l + 1)) % MOD;
+            lazy[p] = (lazy[p] + v) % MOD;
+            return;
+        }
+        push(p, l, r);
+        int mid = (l + r) >> 1;
+        if (ql <= mid)
+            add(p << 1, l, mid, ql, qr, v);
+        if (qr > mid)
+            add(p << 1 | 1, mid + 1, r, ql, qr, v);
+        sum[p] = (sum[p << 1] + sum[p << 1 | 1]) % MOD;
+    }
+    int query(int p, int l, int r, int ql, int qr) {
+        if (ql <= l && r <= qr)
+            return sum[p];
+        push(p, l, r);
+        int mid = (l + r) >> 1, res = 0;
+        if (ql <= mid)
+            res = (res + query(p << 1, l, mid, ql, qr)) % MOD;
+        if (qr > mid)
+            res = (res + query(p << 1 | 1, mid + 1, r, ql, qr)) % MOD;
+        return res;
+    }
+} seg;
+
+void path_add(int u, int v = 1) {
+    while (head[u] != head[1]) {
+        seg.add(1, 1, n, pos[head[u]], pos[u], v);
+        u = parent[head[u]];
+    }
+    seg.add(1, 1, n, pos[1], pos[u], v);
 }
 
-ll query(int p, int l, int r, int ql, int qr) {
-    if (ql <= l && r <= qr)
-        return mn[p];
-    push(p);
-    int mid = (l + r) >> 1;
-    ll res = INF;
-    if (ql <= mid)
-        res = min(res, query(p << 1, l, mid, ql, qr));
-    if (qr > mid)
-        res = min(res, query(p << 1 | 1, mid + 1, r, ql, qr));
+int path_sum(int u) {
+    int res = 0;
+    while (head[u] != head[1]) {
+        res = (res + seg.query(1, 1, n, pos[head[u]], pos[u])) % MOD;
+        u = parent[head[u]];
+    }
+    res = (res + seg.query(1, 1, n, pos[1], pos[u])) % MOD;
     return res;
 }
 
-struct Frame {
-    int u, idx;
+struct Query {
+    int r, z, id, sign;
+    bool operator<(const Query &other) const {
+        return r < other.r;
+    }
 };
-
+vector<Query> queries;
+int ans[MAXN];
 inline void solve(int Task_Id) {
-    scanf("%d %d", &n, &q);
+    scanf("%d %d", &n, &m);
+
     for (int i = 2; i <= n; ++i) {
-        int p, w;
-        scanf("%d %d", &p, &w);
-        parent[i] = p;
-        parent_w[i] = w;
-        degree[p]++;
-        degree[i]++;
-        children[p].push_back({i, w});
+        int p;
+        scanf("%d", &p);
+        p++;
+        g[p].push_back(i);
+        g[i].push_back(p);
     }
 
-    depth[1] = 0;
-    for (int i = 2; i <= n; ++i)
-        depth[i] = depth[parent[i]] + parent_w[i];
+    depth[1] = 1;
+    dfs1(1);
+    cur_pos = 0;
+    dfs2(1, 1);
 
-    for (int i = 1; i <= n; ++i)
-        sz[i] = 1;
-    for (int i = n; i >= 2; --i)
-        sz[parent[i]] += sz[i];
-
-    for (int i = 1; i <= n; ++i)
-        is_leaf[i] = (degree[i] == 1);
-    is_leaf[1] = false;
-
-    for (int i = 0; i < q; ++i) {
-        int v, l, r;
-        scanf("%d %d %d", &v, &l, &r);
-        queries[v].push_back({l, r, i});
+    for (int i = 0; i < m; ++i) {
+        int l, r, z;
+        scanf("%d %d %d", &l, &r, &z);
+        l++;
+        r++;
+        z++;
+        if (l > 1)
+            queries.push_back({l - 1, z, i, -1});
+        queries.push_back({r, z, i, 1});
     }
+    sort(queries.begin(), queries.end());
 
-    build(1, 1, n);
-    ll offset = 0;
+    int idx = 0;
+    for (int i = 1; i <= n; ++i) {
 
-    for (auto &qr : queries[1])
-        ans[qr.id] = query(1, 1, n, qr.l, qr.r) + offset;
+        path_add(i, 1);
 
-    vector<Frame> stk;
-    stk.reserve(n);
-    stk.push_back({1, 0});
-    while (!stk.empty()) {
-        Frame &f = stk.back();
-        int u = f.u;
-        if (f.idx < (int)children[u].size()) {
-            int c = children[u][f.idx].first;
-            ll w = children[u][f.idx].second;
-            f.idx++;
-
-            offset += w;
-            add(1, 1, n, c, c + sz[c] - 1, -2 * w);
-            stk.push_back({c, 0});
-
-            for (auto &qr : queries[c])
-                ans[qr.id] = query(1, 1, n, qr.l, qr.r) + offset;
-        } else {
-            stk.pop_back();
-            if (!stk.empty()) {
-
-                ll w = parent_w[u];
-                offset -= w;
-                add(1, 1, n, u, u + sz[u] - 1, 2 * w);
-            }
+        while (idx < (int)queries.size() && queries[idx].r == i) {
+            int sum = path_sum(queries[idx].z);
+            ans[queries[idx].id] = (ans[queries[idx].id] + queries[idx].sign * sum) % MOD;
+            idx++;
         }
     }
 
-    for (int i = 0; i < q; ++i)
-        printf("%lld\n", ans[i]);
+    for (int i = 0; i < m; ++i)
+        printf("%d\n", (ans[i] + MOD) % MOD);
+
     return;
 }
 } // namespace TANGYIXIAO
