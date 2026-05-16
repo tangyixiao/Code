@@ -1,13 +1,13 @@
 
 /*
-Copyright (C) 2026 Tangyixiao
+Copyright (C) 2026 TangYixiao
 */
 
-#define PRAGMA_TyPE 0 // 0 for no pragma, 1 for Real optimize, 2 for All optimize, 3 for Compiler optimize
+#define PRAGMA_TYPE 0 // 0 for no pragma, 1 for Real optimize, 2 for All optimize, 3 for Compiler optimize
 // #define PRAGMA_GPlusPlus_ALLOWED
-#define JUDGE_TyPE 0 // 0 for online judge, 1 for judge file , 2 for local file
+#define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-#define MULTIPLE_TEST
+// #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -16,7 +16,7 @@ Copyright (C) 2026 Tangyixiao
 // #define TESTLIB
 #pragma region PREPROCESSOR
 #pragma region PRAGMAS
-#if PRAGMA_TyPE == 2
+#if PRAGMA_TYPE == 2
 #if PRAGMA_GCC_or_GPlusPlus_ALLOWED == 1
 #pragma region PRAGMA_GCC
 #pragma GCC optimize(1)
@@ -27,7 +27,7 @@ Copyright (C) 2026 Tangyixiao
 #pragma GCC optimize("-fgcse")
 #pragma GCC optimize("-fgcse-lm")
 #pragma GCC optimize("-fipa-sra")
-#pragma GCC optimize("-ftree-p")
+#pragma GCC optimize("-ftree-pre")
 #pragma GCC optimize("-ftree-vrp")
 #pragma GCC optimize("-fpeephole2")
 #pragma GCC optimize("-ffast-math")
@@ -42,7 +42,7 @@ Copyright (C) 2026 Tangyixiao
 #pragma GCC optimize("-fthread-jumps")
 #pragma GCC optimize("-funroll-loops")
 #pragma GCC optimize("-fwhole-program")
-#pragma GCC optimize("-freorder-bls")
+#pragma GCC optimize("-freorder-blocks")
 #pragma GCC optimize("-fschedule-insns")
 #pragma GCC optimize("inline-functions")
 #pragma GCC optimize("-ftree-tail-merge")
@@ -50,9 +50,9 @@ Copyright (C) 2026 Tangyixiao
 #pragma GCC optimize("-fstrict-aliasing")
 #pragma GCC optimize("-fstrict-overflow")
 #pragma GCC optimize("-falign-functions")
-#pragma GCC optimize("-fcse-skip-bls")
+#pragma GCC optimize("-fcse-skip-blocks")
 #pragma GCC optimize("-fcse-follow-jumps")
-#pragma GCC optimize("-fsched-interbl")
+#pragma GCC optimize("-fsched-interblock")
 #pragma GCC optimize("-fpartial-inlining")
 #pragma GCC optimize("no-stack-protector")
 #pragma GCC optimize("-freorder-functions")
@@ -79,7 +79,7 @@ Copyright (C) 2026 Tangyixiao
 #pragma G++ optimize("-fgcse")
 #pragma G++ optimize("-fgcse-lm")
 #pragma G++ optimize("-fipa-sra")
-#pragma G++ optimize("-ftree-p")
+#pragma G++ optimize("-ftree-pre")
 #pragma G++ optimize("-ftree-vrp")
 #pragma G++ optimize("-fpeephole2")
 #pragma G++ optimize("-ffast-math")
@@ -94,7 +94,7 @@ Copyright (C) 2026 Tangyixiao
 #pragma G++ optimize("-fthread-jumps")
 #pragma G++ optimize("-funroll-loops")
 #pragma G++ optimize("-fwhole-program")
-#pragma G++ optimize("-freorder-bls")
+#pragma G++ optimize("-freorder-blocks")
 #pragma G++ optimize("-fschedule-insns")
 #pragma G++ optimize("inline-functions")
 #pragma G++ optimize("-ftree-tail-merge")
@@ -102,9 +102,9 @@ Copyright (C) 2026 Tangyixiao
 #pragma G++ optimize("-fstrict-aliasing")
 #pragma G++ optimize("-fstrict-overflow")
 #pragma G++ optimize("-falign-functions")
-#pragma G++ optimize("-fcse-skip-bls")
+#pragma G++ optimize("-fcse-skip-blocks")
 #pragma G++ optimize("-fcse-follow-jumps")
-#pragma G++ optimize("-fsched-interbl")
+#pragma G++ optimize("-fsched-interblock")
 #pragma G++ optimize("-fpartial-inlining")
 #pragma G++ optimize("no-stack-protector")
 #pragma G++ optimize("-freorder-functions")
@@ -121,7 +121,7 @@ Copyright (C) 2026 Tangyixiao
 #pragma endregion PRAGMA_GPlusPlus
 #else
 #endif
-#elif PRAGMA_TyPE == 1
+#elif PRAGMA_TYPE == 1
 
 #pragma GCC optimize("O3")
 
@@ -134,11 +134,11 @@ Copyright (C) 2026 Tangyixiao
 #pragma GCC target("f16c")
 #pragma GCC optimize("inline","fast-math","unroll-loops","no-stack-protector")
 #pragma GCC diagnostic error "-fwhole-program"
-#pragma GCC diagnostic error "-fcse-skip-bls"
+#pragma GCC diagnostic error "-fcse-skip-blocks"
 #pragma GCC diagnostic error "-funsafe-loop-optimizations"
 #pragma GCC diagnostic error "-std=c++14" // 注意版本
 */
-#elif PRAGMA_TyPE == 3
+#elif PRAGMA_TYPE == 3
 
 #pragma region PRAGMA_COMPILER
 #pragma region Optimization
@@ -188,7 +188,7 @@ Copyright (C) 2026 Tangyixiao
 // 基本警告控制：忽略、警告、错误
 #pragma GCC diagnostic ignored "-Wunused-variable"  // 忽略未使用变量警告
 #pragma GCC diagnostic warning "-Wunused-parameter" // 将“未使用参数”作为警告（默认级别）
-#pragma GCC diagnostic error "-Wformat-senwity"    // 将格式字符串安全问题提升为错误
+#pragma GCC diagnostic error "-Wformat-security"    // 将格式字符串安全问题提升为错误
 
 // 常用警告组（部分组名可作为整体控制，但更推荐单独控制具体警告）
 #pragma GCC diagnostic ignored "-Wall" // 忽略绝大部分常见警告（不推荐）
@@ -225,7 +225,7 @@ Copyright (C) 2026 Tangyixiao
 // 注意：无法通过 #pragma 直接控制 -static, -shared, -l 等链接器选项
 */
 #pragma endregion Visibility_Linking
-#pragma region Stack Protection_Senwity
+#pragma region Stack Protection_Security
 /*
 // 使用 optimize pragma 控制栈保护（GCC 4.9+ 支持）
 #pragma GCC optimize("stack-protector-strong") // 对应 -fstack-protector-strong：强栈保护
@@ -234,7 +234,7 @@ Copyright (C) 2026 Tangyixiao
 // 地址消毒剂（AddressSanitizer）无法通过 #pragma 在函数级开关，需要全局 -fsanitize=address
 // 但可以在函数上使用 __attribute__((no_sanitize_address))，此处不展开
 */
-#pragma endregion Stack Protection_Senwity
+#pragma endregion Stack Protection_Security
 #pragma region Miscellaneous_Code_Generation
 /*
 
@@ -468,7 +468,7 @@ Copyright (C) 2026 Tangyixiao
 #include <semaphore>       // 信号量 (counting_semaphore, binary_semaphore)
 #include <source_location> // 源代码位置信息
 #include <span>            // 连续序列视图
-#include <stp_token>       // 停止令牌 (stp_token, stp_source)
+#include <stop_token>      // 停止令牌 (stop_token, stop_source)
 #include <syncstream>      // 同步输出流 (osyncstream)
 #include <version>         // 特性测试宏
 
@@ -531,9 +531,9 @@ using namespace __gnu_pbds;
 
 #endif
 #pragma endregion INCLUDES
-#define int long long
-#pragma region TANGyIXIAO
-namespace TANGyIXIAO {
+
+#pragma region TANGYIXIAO
+namespace TANGYIXIAO {
 #pragma region IO
 namespace IO {
 inline void Init_IO() { cin.tie(0)->sync_with_stdio(false); }
@@ -569,7 +569,7 @@ using namespace TIME;
 #pragma endregion TIME
 #pragma region DEBUGS
 namespace DEBUGS {
-#define all(x) (x).begin(), (x).end()
+#define All(x) (x).begin(), (x).end()
 #define fprint(...) cout << format(__VA_ARGS__)
 #define fprintln(...) cout << format(__VA_ARGS__) << '\n'
 #define ferr(...) cerr << format(__VA_ARGS__)
@@ -591,11 +591,11 @@ inline T Pop_Count(T x) { return __builtin_popcount(x); }
 using namespace BITS;
 #pragma endregion BITS
 inline void solve(int Task_Id);
-} // namespace TANGyIXIAO
-using namespace TANGyIXIAO;
-#pragma endregion TANGyIXIAO
+} // namespace TANGYIXIAO
+using namespace TANGYIXIAO;
+#pragma endregion TANGYIXIAO
 #pragma region MAIN
-signed main() {
+signed main(int argc, char *argv[]) {
 #ifdef TIME_COUNT
     Start_Time_Count();
 #endif
@@ -621,119 +621,129 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
-namespace TANGyIXIAO {
+namespace TANGYIXIAO {
+const int MOD = 1e9 + 7;
+using Matrix = vector<vector<long long>>;
 
-inline __int128 gcdgcd(__int128 a, __int128 b) {
-    while (b != 0) {
-        __int128 t = a % b;
-        a = b;
-        b = t;
+Matrix multiply(const Matrix &A, const Matrix &B) {
+    int n = A.size(), m = B[0].size(), p = B.size();
+    Matrix C(n, vector<long long>(m, 0));
+    for (int i = 0; i < n; ++i) {
+        for (int k = 0; k < p; ++k) {
+            if (A[i][k] == 0)
+                continue;
+            long long aik = A[i][k];
+            for (int j = 0; j < m; ++j) {
+                C[i][j] = (C[i][j] + aik * B[k][j]) % MOD;
+            }
+        }
     }
-    return a < 0 ? -a : a;
+    return C;
 }
 
-struct fr {
-    __int128 num, den;
-    fr(__int128 n = 0, __int128 d = 1) : num(n), den(d) { delt(); }
+Matrix power(Matrix A, long long exp) {
+    int n = A.size();
+    Matrix res(n, vector<long long>(n, 0));
+    for (int i = 0; i < n; ++i)
+        res[i][i] = 1;
+    while (exp > 0) {
+        if (exp & 1)
+            res = multiply(res, A);
+        A = multiply(A, A);
+        exp >>= 1;
+    }
+    return res;
+}
 
-    inline void delt() {
-        if (den < 0) {
-            num = -num;
-            den = -den;
-        }
-        __int128 g = gcdgcd(num < 0 ? -num : num, den);
-        num /= g;
-        den /= g;
-    }
-    fr operator+(const fr &o) const {
-        __int128 g = gcdgcd(den, o.den);
-        __int128 l = den / g * o.den;
-        __int128 n = num * (o.den / g) + o.num * (den / g);
-        return fr(n, l);
-    }
-    fr operator-(const fr &o) const {
-        __int128 g = gcdgcd(den, o.den);
-        __int128 l = den / g * o.den;
-        __int128 n = num * (o.den / g) - o.num * (den / g);
-        return fr(n, l);
-    }
-    fr operator*(__int128 k) const {
-        return fr(num * k, den);
-    }
-    fr operator/(__int128 k) const {
-        return fr(num, den * k);
-    }
-    bool operator<(const fr &o) const {
-        return num * o.den < o.num * den;
-    }
-    bool operator<=(const fr &o) const {
-        return num * o.den <= o.num * den;
-    }
-    bool operator==(const fr &o) const {
-        return num * o.den == o.num * den;
+struct Node {
+    int fail;
+    bool banned;
+    array<int, 26> next;
+    Node() : fail(0), banned(false) {
+        next.fill(-1);
     }
 };
-
-struct bl {
-    __int128 sa, sb;
-    fr y;
-};
-int N;
 inline void solve(int Task_Id) {
-    cin >> N;
-    vector<__int128> A(N), B(N), C(N);
-    for (int i = 0; i < N; ++i) {
-        long long a, b, c;
-        cin >> a >> b >> c;
-        A[i] = a, B[i] = b, C[i] = c;
+
+    long long N;
+    int Q;
+    cin >> N >> Q;
+
+    vector<Node> nodes(1);
+
+    for (int i = 0; i < Q; ++i) {
+        int L;
+        string s;
+        cin >> L >> s;
+        int u = 0;
+        for (char c : s) {
+            int idx = c - 'a';
+            if (nodes[u].next[idx] == -1) {
+                nodes[u].next[idx] = nodes.size();
+                nodes.emplace_back();
+            }
+            u = nodes[u].next[idx];
+        }
+        nodes[u].banned = true;
     }
 
-    vector<bl> st;
-    fr subt(0, 1), tc(0, 1);
+    queue<int> q;
+    for (int c = 0; c < 26; ++c) {
+        if (nodes[0].next[c] != -1) {
+            nodes[nodes[0].next[c]].fail = 0;
+            q.push(nodes[0].next[c]);
+        } else {
+            nodes[0].next[c] = 0;
+        }
+    }
 
-    for (int i = 0; i < N; ++i) {
-        __int128 cc = C[i];
-        bl nw;
-        nw.sa = A[i], nw.sb = B[i], nw.y = fr(0, 1);
-        st.push_back(nw);
-        for (;;) {
-            bl &tp = st.back();
-            fr lst = subt + tp.y * cc;
-            if (!(lst < fr(1, 1)))
-                break;
+    while (!q.empty()) {
+        int u = q.front();
+        q.pop();
 
-            fr dfic = fr(1, 1) - lst;
-            __int128 cf = tp.sb + cc;
-
-            if (st.size() == 1) {
-                fr del = dfic / cf;
-                tp.y = tp.y + del;
-                subt = subt + del * tp.sb;
-                tc = tc + del * tp.sa;
-                break;
+        if (nodes[nodes[u].fail].banned) {
+            nodes[u].banned = true;
+        }
+        for (int c = 0; c < 26; ++c) {
+            int v = nodes[u].next[c];
+            if (v != -1) {
+                nodes[v].fail = nodes[nodes[u].fail].next[c];
+                q.push(v);
             } else {
-                bl &l = st[st.size() - 2];
-                fr mdel = l.y - tp.y;
-                fr deln = dfic / cf;
-                bool um = !(deln < mdel);
-                fr del = um ? mdel : deln;
-                tp.y = tp.y + del;
-                subt = subt + del * tp.sb;
-                tc = tc + del * tp.sa;
-                if (um) {
-                    l.sa += tp.sa;
-                    l.sb += tp.sb;
-                    st.pop_back();
-                } else {
-                    break;
-                }
+                nodes[u].next[c] = nodes[nodes[u].fail].next[c];
             }
         }
     }
 
-    __int128 num = tc.num, den = tc.den;
-    long long ans = (num < 0) ? 0 : (long long)(num / den);
+    vector<int> id(nodes.size(), -1);
+    int M = 0;
+    for (int i = 0; i < (int)nodes.size(); ++i) {
+        if (!nodes[i].banned) {
+            id[i] = M++;
+        }
+    }
+
+    Matrix mat(M, vector<long long>(M, 0));
+    for (int i = 0; i < (int)nodes.size(); ++i) {
+        if (nodes[i].banned)
+            continue;
+        int u = id[i];
+        for (int c = 0; c < 26; ++c) {
+            int v = nodes[i].next[c];
+            if (!nodes[v].banned) {
+                int w = id[v];
+                mat[u][w] = (mat[u][w] + 1) % MOD;
+            }
+        }
+    }
+
+    Matrix res = power(mat, N);
+    long long ans = 0;
+    for (int j = 0; j < M; ++j) {
+        ans = (ans + res[0][j]) % MOD;
+    }
+
     cout << ans << '\n';
     return;
 }
-} // namespace TANGyIXIAO
+} // namespace TANGYIXIAO
