@@ -7,7 +7,7 @@ Copyright (C) 2026 TangYixiao
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-#define MULTIPLE_TEST
+// #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -623,79 +623,7 @@ signed main(int argc, char *argv[]) {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 inline void solve(int Task_Id) {
-    int n;
-    cin >> n;
-
-    vector<vector<int>> adj(n);
-    for (int i = 1; i < n; ++i) {
-        int u, v;
-        cin >> u >> v;
-        --u;
-        --v;
-        adj[u].push_back(v);
-        adj[v].push_back(u);
-    }
-
-    auto bfs = [&](int start) {
-        vector<int> dist(n, -1);
-        dist[start] = 0;
-        queue<int> q;
-        q.push(start);
-        while (!q.empty()) {
-            int v = q.front();
-            q.pop();
-            for (int w : adj[v]) {
-                if (dist[w] == -1) {
-                    dist[w] = dist[v] + 1;
-                    q.push(w);
-                }
-            }
-        }
-        return dist;
-    };
-
-    vector<int> dist_from_0 = bfs(0);
-    int end1 = std::max_element(dist_from_0.begin(), dist_from_0.end()) - dist_from_0.begin();
-    vector<int> dist_from_end1 = bfs(end1);
-    int end2 = std::max_element(dist_from_end1.begin(), dist_from_end1.end()) - dist_from_end1.begin();
-    vector<int> dist_from_end2 = bfs(end2);
-
-    int diameter = dist_from_end2[std::max_element(dist_from_end2.begin(), dist_from_end2.end()) - dist_from_end2.begin()] + 1;
-
-    vector<int> centers;
-    for (int i = 0; i < n; ++i) {
-        if (dist_from_end1[i] + dist_from_end2[i] == diameter - 1 &&
-            (dist_from_end1[i] == diameter / 2 || dist_from_end2[i] == diameter / 2)) {
-            centers.push_back(i);
-        }
-    }
-
-    if (diameter % 2 == 1) {
-        assert(centers.size() == 1);
-    } else {
-        assert(centers.size() == 2);
-    }
-
-    vector<pair<int, int>> operations;
-
-    if (diameter % 2 == 1) {
-        for (int r = 0; r <= diameter / 2; ++r) {
-            operations.push_back({centers[0], r});
-        }
-    } else {
-        int current_radius = diameter / 2 - 1;
-        while (current_radius >= 0) {
-            operations.push_back({centers[0], current_radius});
-            operations.push_back({centers[1], current_radius});
-            current_radius -= 2;
-        }
-    }
-
-    cout << operations.size() << "\n";
-    for (auto [center, radius] : operations) {
-        cout << center + 1 << " " << radius << "\n";
-    }
-
+    // do something here
     return;
 }
 } // namespace TANGYIXIAO
