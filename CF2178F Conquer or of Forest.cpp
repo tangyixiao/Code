@@ -534,6 +534,14 @@ using namespace __gnu_pbds;
 
 #pragma region TANGYIXIAO
 namespace TANGYIXIAO {
+const int N = 200005, mod = 998244353;
+typedef long long ll;
+
+int head[N], to[N * 2], nxt[N * 2], ecnt;
+int sz[N], s[N];
+bool c[N];
+int ls[N];
+int inv[N], jc[N];
 #pragma region IO
 namespace IO {
 inline void Init_IO() { cin.tie(0)->sync_with_stdio(false); }
@@ -606,6 +614,12 @@ signed main(int argc, char *argv[]) {
     Local_File(FILE_NAME, FILE_IDX);
 #else
 #endif
+    inv[0] = inv[1] = 1;
+    jc[0] = jc[1] = 1;
+    for (int i = 2; i < N; ++i) {
+        inv[i] = (mod - mod / i) * (ll)inv[mod % i] % mod;
+        jc[i] = (ll)jc[i - 1] * i % mod;
+    }
     int T = 1;
 #ifdef MULTIPLE_TEST
     cin >> T;
@@ -622,62 +636,58 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-#include <bits/stdc++.h>
-using namespace std;
 
-const int N = 200005, M = 998244353;
-int h[N], to[N * 2], nx[N * 2], e;
-int s[N], p[N], c[N];
-int n, cnt;
-
-void ad(int u, int v) {
-    to[e] = v;
-    nx[e] = h[u];
-    h[u] = e++;
-    to[e] = u;
-    nx[e] = h[v];
-    h[v] = e++;
+void add(int u, int v) {
+    to[++ecnt] = v;
+    nxt[ecnt] = head[u];
+    head[u] = ecnt;
 }
 
-void df(int u, int f) {
-    p[u] = f;
+inline void dfs(int u, int fa) {
+    sz[u] = 1;
     s[u] = 1;
-    for (int i = h[u]; ~i; i = nx[i]) {
+    int sc = 0;
+    for (int i = head[u]; i; i = nxt[i]) {
         int v = to[i];
-        if (v == f)
+        if (v == fa)
             continue;
-        df(v, u);
+        dfs(v, u);
+        sz[u] += sz[v];
         s[u] += s[v];
+        if (c[v])
+            sc += s[v];
     }
-    c[u] = (s[u] & 1) ^ 1;
-}
-
-int pw(int a, int b) {
-    int r = 1;
-    while (b) {
-        if (b & 1)
-            r = 1LL * r * a % M;
-        a = 1LL * a * a % M;
-        b >>= 1;
-    }
-    return r;
+    s[u] -= sc;
+    c[u] = (sz[u] % 2 == 0);
 }
 
 inline void solve(int Task_Id) {
+    int n;
     cin >> n;
-    fill(h, h + n + 1, -1);
-    e = 0;
+    ecnt = 0;
+    fill(head + 1, head + n + 1, 0);
     for (int i = 1; i < n; ++i) {
         int u, v;
         cin >> u >> v;
-        ad(u, v);
+        add(u, v);
+        add(v, u);
     }
-    df(1, 0);
-    cnt = 0;
+    dfs(1, 0);
+    int m = 0;
+    ll sum = s[1];
     for (int i = 2; i <= n; ++i)
-        if (c[i] != c[p[i]])
-            ++cnt;
-    cout << pw(2, cnt) << '\n';
-    return;
+        if (c[i]) {
+            ls[++m] = i;
+            sum = sum * s[i] % mod * s[i] % mod;
+        }
+    ll ans = 0;
+    for (int i = 1; i <= m; ++i) {
+        int x = ls[i];
+        ans = (ans + sum * inv[s[x]] % mod * jc[m - 1]) % mod;
+    }
+    if (ans == 0)
+        ans = 1;
+    cout << ans << '\n';
 }
+
 } // namespace TANGYIXIAO

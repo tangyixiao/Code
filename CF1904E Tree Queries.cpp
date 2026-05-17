@@ -7,7 +7,7 @@ Copyright (C) 2026 TangYixiao
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-#define MULTIPLE_TEST
+// #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -622,162 +622,193 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 200005, M1 = 400005, M2 = 800005;
-int oh[N], ot[M1], onx[M1], oe;
-int dep[N], in[N], out[N], up[N][18], timer;
-int vh[N], vt[M2], vnx[M2], vw[M2], ve;
-int dfs_u[N * 2], dfs_p[N * 2], dfs_s[N * 2], dfs_sp;
-int st[N];
-int vn[N * 2], vc;
-int que[N * 2];
-bool ban[N], vis[N];
-int dis[N], tmp[N * 2], tl;
-int bad[N], bl;
+const int N = 200005, M = 400005, MQ = 200005, K = 200005;
+int h1[N], t1[M], n1[M], e1;
+int h2[N], t2[MQ], n2[MQ], e2;
+int h3[MQ], t3[K], n3[K], e3;
+int dep[N], fa[N], sz[N], sn[N], tp[N];
+int df[N], lo[N], rk[N], tim;
+long long sm[N << 2], tg[N << 2];
+int st1[400005], st2[400005], stp;
+int ans[MQ];
+int n, m;
 
-void addo(int u, int v) {
-    ot[oe] = v;
-    onx[oe] = oh[u];
-    oh[u] = oe++;
+void ad1(int u, int v) {
+    t1[e1] = v;
+    n1[e1] = h1[u];
+    h1[u] = e1++;
+}
+void ad2(int u, int v) {
+    t2[e2] = v;
+    n2[e2] = h2[u];
+    h2[u] = e2++;
+}
+void ad3(int u, int v) {
+    t3[e3] = v;
+    n3[e3] = h3[u];
+    h3[u] = e3++;
 }
 
-void addv(int u, int v, int w) {
-    vt[ve] = v;
-    vw[ve] = w;
-    vnx[ve] = vh[u];
-    vh[u] = ve++;
-    vt[ve] = u;
-    vw[ve] = w;
-    vnx[ve] = vh[v];
-    vh[v] = ve++;
+void dfs1(int u) {
+    sz[u] = 1;
+    for (int e = h1[u]; ~e; e = n1[e]) {
+        int v = t1[e];
+        if (v == fa[u])
+            continue;
+        fa[v] = u;
+        dep[v] = dep[u] + 1;
+        dfs1(v);
+        sz[u] += sz[v];
+        if (sz[v] > sz[sn[u]])
+            sn[u] = v;
+    }
 }
 
-bool isa(int u, int v) {
-    return in[u] <= in[v] && out[v] <= out[u];
+void dfs2(int u, int t) {
+    tp[u] = t;
+    df[u] = ++tim;
+    rk[tim] = u;
+    if (sn[u])
+        dfs2(sn[u], t);
+    for (int e = h1[u]; ~e; e = n1[e]) {
+        int v = t1[e];
+        if (v == fa[u] || v == sn[u])
+            continue;
+        dfs2(v, v);
+    }
+    lo[u] = tim;
 }
 
-int lca(int u, int v) {
-    if (isa(u, v))
-        return u;
-    if (isa(v, u))
-        return v;
-    for (int i = 17; i >= 0; --i)
-        if (!isa(up[u][i], v))
-            u = up[u][i];
-    return up[u][0];
+int lc(int x) { return x << 1; }
+int rc(int x) { return x << 1 | 1; }
+
+void up(int x) { sm[x] = max(sm[lc(x)], sm[rc(x)]); }
+
+void down(int x) {
+    long long &a = tg[x];
+    if (!a)
+        return;
+    sm[lc(x)] += a;
+    tg[lc(x)] += a;
+    sm[rc(x)] += a;
+    tg[rc(x)] += a;
+    a = 0;
 }
 
-void dfs_pre() {
-    dfs_sp = 0;
-    dfs_u[++dfs_sp] = 1;
-    dfs_p[dfs_sp] = 0;
-    dfs_s[dfs_sp] = 0;
-    while (dfs_sp) {
-        int u = dfs_u[dfs_sp], p = dfs_p[dfs_sp], s = dfs_s[dfs_sp--];
-        if (!s) {
-            in[u] = ++timer;
-            dfs_u[++dfs_sp] = u;
-            dfs_p[dfs_sp] = p;
-            dfs_s[dfs_sp] = 1;
-            for (int e = oh[u]; ~e; e = onx[e]) {
-                int v = ot[e];
-                if (v == p)
-                    continue;
-                dep[v] = dep[u] + 1;
-                up[v][0] = u;
-                dfs_u[++dfs_sp] = v;
-                dfs_p[dfs_sp] = u;
-                dfs_s[dfs_sp] = 0;
+void build(int x, int l, int r) {
+    if (l == r) {
+        sm[x] = dep[rk[l]];
+        return;
+    }
+    int mid = (l + r) >> 1;
+    build(lc(x), l, mid);
+    build(rc(x), mid + 1, r);
+    up(x);
+}
+
+void upd(int x, int l, int r, int ql, int qr, int v) {
+    if (ql > r || qr < l || ql > qr)
+        return;
+    if (ql <= l && r <= qr) {
+        sm[x] += v;
+        tg[x] += v;
+        return;
+    }
+    down(x);
+    int mid = (l + r) >> 1;
+    upd(lc(x), l, mid, ql, qr, v);
+    upd(rc(x), mid + 1, r, ql, qr, v);
+    up(x);
+}
+
+long long qry(int x, int l, int r, int ql, int qr) {
+    if (ql > r || qr < l)
+        return -1e18;
+    if (ql <= l && r <= qr)
+        return sm[x];
+    down(x);
+    int mid = (l + r) >> 1;
+    return max(qry(lc(x), l, mid, ql, qr),
+               qry(rc(x), mid + 1, r, ql, qr));
+}
+
+int slv(int u, int v) {
+    while (tp[u] != tp[v]) {
+        u = tp[u];
+        if (fa[u] == v)
+            return u;
+        u = fa[u];
+    }
+    return sn[v];
+}
+
+void dfs3(int u) {
+    for (int e = h2[u]; ~e; e = n2[e]) {
+        int id = t2[e];
+        stp = 0;
+        for (int p = h3[id]; ~p; p = n3[p]) {
+            int v = t3[p];
+            if (df[v] <= df[u] && df[u] <= lo[v]) {
+                int w = slv(u, v);
+                upd(1, 1, n, 1, df[w] - 1, -n);
+                upd(1, 1, n, lo[w] + 1, n, -n);
+                st1[++stp] = 1;
+                st2[stp] = df[w] - 1;
+                st1[++stp] = lo[w] + 1;
+                st2[stp] = n;
+            } else {
+                upd(1, 1, n, df[v], lo[v], -n);
+                st1[++stp] = df[v];
+                st2[stp] = lo[v];
             }
-        } else {
-            out[u] = timer;
+        }
+        ans[id] = qry(1, 1, n, 1, n);
+        while (stp) {
+            int l = st1[stp], r = st2[stp--];
+            upd(1, 1, n, l, r, n);
         }
     }
-}
-
-int bfs(int s, int &far) {
-    int hd = 0, tl = 0;
-    que[tl++] = s;
-    vis[s] = 1;
-    dis[s] = 0;
-    tmp[++::tl] = s;
-    int mx = 0, f = s;
-    while (hd < tl) {
-        int u = que[hd++];
-        for (int e = vh[u]; ~e; e = vnx[e]) {
-            int v = vt[e];
-            if (!vis[v] && !ban[v]) {
-                vis[v] = 1;
-                dis[v] = dis[u] + vw[e];
-                tmp[++::tl] = v;
-                que[tl++] = v;
-            }
-        }
+    for (int e = h1[u]; ~e; e = n1[e]) {
+        int v = t1[e];
+        if (v == fa[u])
+            continue;
+        upd(1, 1, n, 1, n, 1);
+        upd(1, 1, n, df[v], lo[v], -2);
+        dfs3(v);
+        upd(1, 1, n, 1, n, -1);
+        upd(1, 1, n, df[v], lo[v], 2);
     }
-    for (int i = 1; i <= ::tl; ++i) {
-        int u = tmp[i];
-        if (dis[u] > mx)
-            mx = dis[u], f = u;
-        vis[u] = 0;
-    }
-    ::tl = 0;
-    far = f;
-    return mx;
 }
 
 inline void solve(int Task_Id) {
-
-    int n, q;
-    cin >> n >> q;
-    fill(oh, oh + n + 1, -1);
+    cin >> n >> m;
+    fill(h1, h1 + n + 1, -1);
+    fill(h2, h2 + n + 1, -1);
+    fill(h3, h3 + m + 1, -1);
     for (int i = 1; i < n; ++i) {
         int u, v;
         cin >> u >> v;
-        addo(u, v);
-        addo(v, u);
+        ad1(u, v);
+        ad1(v, u);
     }
-    dfs_pre();
-    for (int j = 1; j < 18; ++j)
-        for (int i = 1; i <= n; ++i)
-            up[i][j] = up[up[i][j - 1]][j - 1];
-    fill(vh, vh + n + 1, -1);
-    while (q--) {
+    for (int i = 1; i <= m; ++i) {
         int x, k;
         cin >> x >> k;
-        vc = 0;
-        vn[++vc] = x;
-        bl = 0;
-        for (int i = 0; i < k; ++i) {
+        ad2(x, i);
+        for (int j = 0; j < k; ++j) {
             int a;
             cin >> a;
-            vn[++vc] = a;
-            ban[a] = 1;
-            bad[++bl] = a;
+            ad3(i, a);
         }
-        sort(vn + 1, vn + vc + 1, [](int a, int b) { return in[a] < in[b]; });
-        int old = vc;
-        for (int i = 1; i < old; ++i)
-            vn[++vc] = lca(vn[i], vn[i + 1]);
-        sort(vn + 1, vn + vc + 1, [](int a, int b) { return in[a] < in[b]; });
-        vc = unique(vn + 1, vn + vc + 1) - vn - 1;
-        int top = 0;
-        st[++top] = vn[1];
-        for (int i = 2; i <= vc; ++i) {
-            int v = vn[i];
-            while (top && !isa(st[top], v))
-                --top;
-            int u = st[top];
-            addv(u, v, dep[v] - dep[u]);
-            st[++top] = v;
-        }
-        int p, q;
-        bfs(x, p);
-        cout << bfs(p, q) << '\n';
-        for (int i = 1; i <= vc; ++i)
-            vh[vn[i]] = -1;
-        ve = 0;
-        for (int i = 1; i <= bl; ++i)
-            ban[bad[i]] = 0;
     }
+    dep[0] = -1;
+    dfs1(1);
+    dfs2(1, 1);
+    build(1, 1, n);
+    dfs3(1);
+    for (int i = 1; i <= m; ++i)
+        cout << ans[i] << '\n';
     return;
 }
+
 } // namespace TANGYIXIAO
