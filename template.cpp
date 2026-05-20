@@ -532,25 +532,31 @@ using namespace __gnu_pbds;
 #endif
 #pragma endregion INCLUDES
 
-#pragma region TANGYIXIAO
+#pragma region TANGYIXIAO// clang-format off
 namespace TANGYIXIAO {
 #pragma region IO
 namespace IO {
-inline void Init_IO() { cin.tie(0)->sync_with_stdio(false); }
+namespace FAST_IO {
+#ifdef __unix__
+#define ugetchar getchar_unlocked
+#else
+#define ugetchar _getchar_nolock
+#endif
+inline void IOSS_Init() { std::ios::sync_with_stdio(false); std::cin.tie(0); std::cout.tie(0); return; }
+}
+using namespace FAST_IO;
 #pragma region FILE_IO
 namespace FILE_IO {
-const string Insuffix = ".in", Outsuffix = ".out", Anssuffix = ".ans";
-inline void Judge_File(string File_Name) { freopen((File_Name + Insuffix).c_str(), "r", stdin), freopen((File_Name + Outsuffix).c_str(), "w", stdout); }
-inline void Local_File(string File_Name, int File_Idx) { freopen((File_Name + to_string(File_Idx) + Insuffix).c_str(), "r", stdin), freopen((File_Name + to_string(File_Idx) + Outsuffix).c_str(), "w", stdout); }
+const std::string Insuffix = ".in", Outsuffix = ".out", Anssuffix = ".ans";
+inline void Judge_File(std::string File_Name) { freopen((File_Name + Insuffix).c_str(), "r", stdin), freopen((File_Name + Outsuffix).c_str(), "w", stdout); return; }
+inline void Local_File(std::string File_Name, int File_Idx) { freopen((File_Name + std::to_string(File_Idx) + Insuffix).c_str(), "r", stdin), freopen((File_Name + std::to_string(File_Idx) + Outsuffix).c_str(), "w", stdout); return; }
 } // namespace FILE_IO
 using namespace FILE_IO;
 #pragma endregion FILE_IO
 #pragma region INT128_IO
 namespace INT128_IO {
-// clang-format off
-istream&operator>>(istream&is,__int128&x){string s;is>>s;bool neg=false;x=0;for(char c:s){if(c=='-')neg=true;else x=x*10+(c-'0');}if(neg)x=-x;return is;}
-ostream&operator<<(ostream&os,__int128 x){if(x==0)os<<0;else{string s,t;if(x<0)x=-x,t="-";while(x)s.push_back('0'+x%10),x/=10;reverse(s.begin(),s.end());os<<t<<s;}return os;}
-// clang-format on
+std::istream &operator>>(std::istream &is, __int128 &x) { std::string s; is >> s; bool neg = false; x = 0; for (char c : s) { if (c == '-') { neg = true; } else { x = x * 10 + (c - '0'); } } if (neg) { x = -x; } return is; }
+std::ostream &operator<<(std::ostream &os, __int128 x) { if (x == 0) { os << 0; } else { std::string s, t;if (x < 0) { x = -x, t = "-"; } for (; x;) { s.push_back('0' + x % 10), x /= 10; } std::reverse(s.begin(), s.end()); os << t << s; } return os; }
 } // namespace INT128_IO
 using namespace INT128_IO;
 #pragma endregion INT128_IO
@@ -560,46 +566,47 @@ using namespace IO;
 #pragma region TIME
 namespace TIME {
 clock_t Start_Time, End_Time;
-inline void Start_Time_Count() { Start_Time = clock(); }
-inline void End_Time_Count() { End_Time = clock(); }
+inline void Start_Time_Count() { Start_Time = clock(); return; }
+inline void End_Time_Count() { End_Time = clock(); return; }
 inline double Time_Count() { return (double)(End_Time - Start_Time) / CLOCKS_PER_SEC; }
-inline void Print_Time_Count(string Programe_Name) { cerr << fixed << setprecision(4) << "\n" + Programe_Name + " Time: " << Time_Count() << "s\n"; }
+inline void Print_Time_Count(std::string Programe_Name) { std::cerr << std::fixed << std::setprecision(4) << "\n" + Programe_Name + " Time: " << Time_Count() << "s\n"; return; }
 } // namespace TIME
 using namespace TIME;
 #pragma endregion TIME
 #pragma region DEBUGS
 namespace DEBUGS {
 #define All(x) (x).begin(), (x).end()
-#define fprint(...) cout << format(__VA_ARGS__)
-#define fprintln(...) cout << format(__VA_ARGS__) << '\n'
-#define ferr(...) cerr << format(__VA_ARGS__)
-#define ferrln(...) cerr << format(__VA_ARGS__) << '\n'
-#define funct(name, ret, ...) function<ret(__VA_ARGS__)> name = [&](__VA_ARGS__)
-inline void Debug_Print(string Debug_Message) { cerr << "\n" + Debug_Message + "\n"; }
+#define fprint(...) std::cout << std::format(__VA_ARGS__)
+#define fprintln(...) std::cout << std::format(__VA_ARGS__) << "\n"
+#define ferr(...) std::cerr << std::format(__VA_ARGS__)
+#define ferrln(...) std::cerr << std::format(__VA_ARGS__) << "\n"
+#define funct(name, ret, ...) std::function<ret(__VA_ARGS__)> name = [&](__VA_ARGS__)
+inline void Debug_Print(std::string Debug_Message) { std::cerr << "\n" << Debug_Message << "\n"; return;}
 } // namespace DEBUGS
 using namespace DEBUGS;
 #pragma endregion DEBUGS
 #pragma region BITS
 namespace BITS {
 template <class T>
-inline T lowbit(T x) { return x & (-x); }
+inline T lowbit(T x) { return ((x) & (-x)); }
 template <class T>
-inline T highbit(T x) { return (T)(log2(x) + 1); }
+inline T highbit(T x) { return (T)(std::log2(x) + 1); }
 template <class T>
-inline T Pop_Count(T x) { return __builtin_popcount(x); }
+inline T Pop_Count(T x) { return std::__builtin_popcount(x); }
 } // namespace BITS
 using namespace BITS;
 #pragma endregion BITS
 inline void solve(int Task_Id);
 } // namespace TANGYIXIAO
 using namespace TANGYIXIAO;
+// clang-format on
 #pragma endregion TANGYIXIAO
 #pragma region MAIN
 signed main(int argc, char *argv[]) {
 #ifdef TIME_COUNT
     Start_Time_Count();
 #endif
-    Init_IO();
+    IOSS_Init();
 #if JUDGE == 1
     Judge_File(FILE_NAME);
 #elif JUDGE == 2

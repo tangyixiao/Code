@@ -622,29 +622,26 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 5005;
-int s[N][N];
+const int N = 1005;
+int d[N][N];
 inline void solve(int Task_Id) {
     int n, m;
     cin >> n >> m;
-    for (int i = 0; i < n; ++i) {
-        int x, y, v;
-        cin >> x >> y >> v;
-        ++x;
-        ++y;
-        s[x][y] += v;
+    for (int i = 0; i < m; ++i) {
+        int x1, y1, x2, y2;
+        cin >> x1 >> y1 >> x2 >> y2;
+        ++d[x1][y1];
+        --d[x2 + 1][y1];
+        --d[x1][y2 + 1];
+        ++d[x2 + 1][y2 + 1];
     }
-    for (int i = 1; i <= 5001; ++i)
-        for (int j = 1; j <= 5001; ++j)
-            s[i][j] += s[i - 1][j] + s[i][j - 1] - s[i - 1][j - 1];
-    int ans = 0;
-    for (int i = m; i <= 5001; ++i)
-        for (int j = m; j <= 5001; ++j) {
-            int sum = s[i][j] - s[i - m][j] - s[i][j - m] + s[i - m][j - m];
-            if (sum > ans)
-                ans = sum;
-        }
-    cout << ans << endl;
+    for (int i = 1; i <= n; ++i)
+        for (int j = 1; j <= n; ++j)
+            d[i][j] += d[i - 1][j] + d[i][j - 1] - d[i - 1][j - 1];
+    for (int i = 1; i <= n; ++i) {
+        for (int j = 1; j <= n; ++j)
+            cout << d[i][j] << " \n"[j == n];
+    }
     return;
 }
 } // namespace TANGYIXIAO
