@@ -629,8 +629,74 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int MAXN = 100005;
+const long long MOD = 1000000007;
+long long bit1[MAXN], bit2[MAXN], a[MAXN];
+int n;
+
+long long qpow(long long x, int k) {
+    long long r = 1;
+    while (k) {
+        if (k & 1)
+            r = r * x % MOD;
+        x = x * x % MOD;
+        k >>= 1;
+    }
+    return r;
+}
+
+void add(long long *bit, int p, long long v) {
+    while (p <= n) {
+        bit[p] = (bit[p] + v) % MOD;
+        p += p & -p;
+    }
+}
+
+long long query(long long *bit, int p) {
+    long long s = 0;
+    while (p) {
+        s = (s + bit[p]) % MOD;
+        p -= p & -p;
+    }
+    return s;
+}
+
 inline void solve(int Task_Id) {
-    // do something here
+    int m;
+    cin >> n >> m;
+    for (int i = 1; i <= n; ++i) {
+        cin >> a[i];
+        long long sq = a[i] * a[i] % MOD;
+        add(bit1, i, a[i]);
+        add(bit2, i, sq);
+    }
+    while (m--) {
+        int c, x, y;
+        cin >> c >> x >> y;
+        if (c == 1) {
+            long long old = a[x];
+            if (old == y)
+                continue;
+            a[x] = y;
+            add(bit1, x, (y - old) % MOD);
+            long long d = (y * y % MOD - old * old % MOD) % MOD;
+            if (d < 0)
+                d += MOD;
+            add(bit2, x, d);
+        } else {
+            int len = y - x + 1;
+            long long sum = (query(bit1, y) - query(bit1, x - 1)) % MOD;
+            if (sum < 0)
+                sum += MOD;
+            long long sq = (query(bit2, y) - query(bit2, x - 1)) % MOD;
+            if (sq < 0)
+                sq += MOD;
+            long long inv = qpow(len, MOD - 2);
+            long long avg = sum * inv % MOD;
+            long long ans = (sq * inv % MOD - avg * avg % MOD + MOD) % MOD;
+            cout << ans << '\n';
+        }
+    }
     return;
 }
 } // namespace TANGYIXIAO

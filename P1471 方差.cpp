@@ -4,48 +4,42 @@
 using namespace std;
 
 struct Node {
-    double sum;  // 区间和
-    double sum2; // 区间平方和
-    double lazy; // 懒标记
+    double sum;
+    double sum2;
+    double lazy;
 
     Node() : sum(0), sum2(0), lazy(0) {}
 };
 
 class SegmentTree {
-private:
+  private:
     int n;
     vector<Node> tree;
     vector<double> arr;
 
-    // 合并子节点信息到父节点
     void pushUp(int rt) {
         tree[rt].sum = tree[rt << 1].sum + tree[rt << 1 | 1].sum;
         tree[rt].sum2 = tree[rt << 1].sum2 + tree[rt << 1 | 1].sum2;
     }
 
-    // 下推懒标记
     void pushDown(int rt, int l, int r) {
         if (tree[rt].lazy != 0) {
             int mid = (l + r) >> 1;
             int leftLen = mid - l + 1;
             int rightLen = r - mid;
 
-            // 更新左子节点
             tree[rt << 1].sum2 += 2 * tree[rt].lazy * tree[rt << 1].sum + leftLen * tree[rt].lazy * tree[rt].lazy;
             tree[rt << 1].sum += leftLen * tree[rt].lazy;
             tree[rt << 1].lazy += tree[rt].lazy;
 
-            // 更新右子节点
             tree[rt << 1 | 1].sum2 += 2 * tree[rt].lazy * tree[rt << 1 | 1].sum + rightLen * tree[rt].lazy * tree[rt].lazy;
             tree[rt << 1 | 1].sum += rightLen * tree[rt].lazy;
             tree[rt << 1 | 1].lazy += tree[rt].lazy;
 
-            // 清空当前节点的懒标记
             tree[rt].lazy = 0;
         }
     }
 
-    // 构建线段树
     void build(int rt, int l, int r) {
         tree[rt].lazy = 0;
         if (l == r) {
@@ -59,7 +53,6 @@ private:
         pushUp(rt);
     }
 
-    // 区间更新
     void update(int rt, int l, int r, int L, int R, double val) {
         if (L <= l && r <= R) {
             int len = r - l + 1;
@@ -77,7 +70,6 @@ private:
         pushUp(rt);
     }
 
-    // 区间查询
     pair<double, double> query(int rt, int l, int r, int L, int R) {
         if (L <= l && r <= R) {
             return {tree[rt].sum, tree[rt].sum2};
@@ -92,27 +84,24 @@ private:
         return {left.first + right.first, left.second + right.second};
     }
 
-public:
-    SegmentTree(vector<double>& nums) {
+  public:
+    SegmentTree(vector<double> &nums) {
         n = nums.size() - 1;
         arr = nums;
         tree.resize(4 * (n + 1));
         build(1, 1, n);
     }
 
-    // 区间加
     void add(int l, int r, double k) {
         update(1, 1, n, l, r, k);
     }
 
-    // 查询区间平均数
     double queryAverage(int l, int r) {
         auto res = query(1, 1, n, l, r);
         double len = r - l + 1;
         return res.first / len;
     }
 
-    // 查询区间方差
     double queryVariance(int l, int r) {
         auto res = query(1, 1, n, l, r);
         double sum = res.first;
