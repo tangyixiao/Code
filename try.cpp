@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -15,3 +16,5 @@ int main() {
 
     return 0;
 }
+=======
+>>>>>>> 6b47d3d364b5b87f0a39f6cf4e461e4bdc56844f
