@@ -14,8 +14,6 @@ Copyright (C) 2026 TangYixiao
 // #define BITS_NOT_ALLOWED
 // #define PD_DS_USED
 // #define TESTLIB
-
-// clang-format off
 #pragma region PREPROCESSOR
 #pragma region PRAGMAS
 #if PRAGMA_TYPE == 2
@@ -535,6 +533,7 @@ using namespace __gnu_pbds;
 #pragma endregion INCLUDES
 
 #pragma region TANGYIXIAO
+// clang-format off
 namespace TANGYIXIAO {
 #pragma region IO
 namespace IO {
@@ -598,12 +597,75 @@ inline T Pop_Count(T x) { return __builtin_popcount(x); }
 } // namespace BITS
 using namespace BITS;
 #pragma endregion BITS
-inline void solve(int Task_Id);
+const int N = 1e4 + 7, C = 77;
+string s[N], a;
+int r, c, i, j, x, y,p[N], f[C];
+inline void init();
+inline void kmp();
+inline void solve(int Task_Id) {
+    init();
+    kmp();
+    cout << (r - 1 - p[r - 1]) * x << "\n";
+    return;
+}
 } // namespace TANGYIXIAO
 using namespace TANGYIXIAO;
+
+namespace TANGYIXIAO {
+inline void init() {
+    cin >> r >> c;
+    for (i = 0; i < r; ++i) {
+        cin >> s[i];
+        a = s[i];
+        for (j = c - 1; j > 0; --j) {
+            a[j] = 0;
+            for (x = 0, y = 0; s[i][y]; ++x, ++y) {
+                if (!a[x]) {
+                    x = 0;
+                }
+                if (a[x] != s[i][y]) {
+                    break;
+                }
+            }
+            if (!s[i][y]) {
+                ++f[j];
+            }
+        }
+    }
+    p[0] = -1, j = -1;
+    return;
+}
+} // namespace TANGYIXIAO
 // clang-format on
 #pragma endregion TANGYIXIAO
 #pragma region MAIN
+
+namespace TANGYIXIAO {
+inline void kmp() {
+    x = c;
+    for (i = 0; i < c; ++i) {
+        if (f[i] == r) {
+            x = i;
+            break;
+        }
+    }
+    for (i = 0; i < r; ++i) {
+        s[i][x] = 0;
+    }
+    p[0] = -1;
+    j = -1;
+    for (i = 1; i < r; ++i) {
+        for (; j >= 0 && s[i] != s[j + 1];) {
+            j = p[j];
+        }
+        if (s[i] == s[j + 1]) {
+            ++j;
+        }
+        p[i] = j;
+    }
+    return;
+}
+} // namespace TANGYIXIAO
 signed main(int argc, char *argv[]) {
 #ifdef TIME_COUNT
     Start_Time_Count();
@@ -630,9 +692,3 @@ signed main(int argc, char *argv[]) {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
-namespace TANGYIXIAO {
-inline void solve(int Task_Id) {
-    // do something here
-    return;
-}
-} // namespace TANGYIXIAO
