@@ -10,19 +10,22 @@ ll a[N];
 
 void dfs(int u, int f) {
     fa[u] = f;
-    for (int v : G[u])
-        if (v != f)
-            dfs(v, u);
+    for (int i = 0; i < G[u].size(); i++)
+        if (G[u][i] != f)
+            dfs(G[u][i], u);
+
 }
 
 void add_subtree(int u, int f, ll v) {
     a[u] += v;
-    for (int w : G[u])
-        if (w != f)
-            add_subtree(w, u, v);
+    for (int i = 0; i < G[u].size(); i++)
+        if (G[u][i] != f)
+            add_subtree(G[u][i], u, v);
 }
 
 int main() {
+    freopen("P3178.in", "r", stdin);
+    freopen("P3178.ans", "w", stdout);
     int n, m;
     scanf("%d%d", &n, &m);
     for (int i = 1; i <= n; i++)

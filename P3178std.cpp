@@ -12,7 +12,8 @@ inline void dfs1(int u, int f) {
     sz[u] = 1;
     dep[u] = dep[f] + 1;
     fa[u] = f;
-    for (int v : G[u]) {
+    for (int i = 0; i < G[u].size(); i++) {
+        int v = G[u][i];
         if (v != f) {
             dfs1(v, u);
             sz[u] += sz[v];
@@ -31,7 +32,8 @@ inline void dfs2(int u, int tp) {
     if (son[u]) {
         dfs2(son[u], tp);
     }
-    for (int v : G[u]) {
+    for (int i = 0; i < G[u].size(); i++) {
+        int v = G[u][i];
         if (v != fa[u] && v != son[u]) {
             dfs2(v, v);
         }
@@ -152,6 +154,8 @@ inline void solve(int Task_Id) {
 } // namespace TANGYIXIAO
 
 signed main() {
+    freopen("P3178.in", "r", stdin);
+    freopen("P3178.out", "w", stdout);
     TANGYIXIAO::solve(1);
     return 0;
 }
