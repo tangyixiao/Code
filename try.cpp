@@ -1,15 +1,16 @@
 #include <bits/stdc++.h>
-#include <windows.h>
 using namespace std;
-inline void solve() {
-    for (;;) {
-        system("fc P10475.out P10475.ans");
-        Sleep(2000);
-    }
-    return;
+
+void solve() {
+    
 }
 
-signed main() {
-    solve();
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int c, T;
+    cin >> c >> T;
+    while (T--)
+        solve();
     return 0;
 }
