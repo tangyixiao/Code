@@ -1,16 +1,8 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
 using namespace std;
 
-void solve() {
-    
-}
 
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    int c, T;
-    cin >> c >> T;
-    while (T--)
-        solve();
     return 0;
 }
