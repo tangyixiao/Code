@@ -631,37 +631,50 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int MAXN = (int)1e6 + 5;
+const int MAXN = (int)1e7 + 5;
+const int MOD = 20101009;
 
-int mu[MAXN], pr[MAXN], cnt;
+int f[MAXN], s[MAXN], p[664579], cnt;
 bool vs[MAXN];
 inline void solve(int Task_Id) {
-    int a, b, d;
-    scanf("%d%d%d", &a, &b, &d);
-    a /= d;
-    b /= d;
-    if (a > b)
-        swap(a, b);
-    int n = a;
-    mu[1] = 1;
-    for (int i = 2; i <= n; ++i) {
+    int n, m;
+    scanf("%d%d", &n, &m);
+    int t = min(n, m);
+    f[1] = 1;
+    for (int i = 2; i <= t; ++i) {
         if (!vs[i]) {
-            pr[++cnt] = i;
-            mu[i] = -1;
+            p[cnt++] = i;
+            f[i] = (i - 1LL * i * i % MOD + MOD) % MOD;
         }
-        for (int j = 1; j <= cnt && i * pr[j] <= n; ++j) {
-            vs[i * pr[j]] = true;
-            if (i % pr[j] == 0) {
-                mu[i * pr[j]] = 0;
+        for (int j = 0; j < cnt && i * p[j] <= t; ++j) {
+            vs[i * p[j]] = true;
+            if (i % p[j] == 0) {
+                f[i * p[j]] = 1LL * f[i] * p[j] % MOD;
                 break;
             }
-            mu[i * pr[j]] = -mu[i];
+            f[i * p[j]] = 1LL * f[i] * f[p[j]] % MOD;
         }
     }
-    long long ans = 0;
-    for (int i = 1; i <= n; ++i)
-        ans += 1LL * mu[i] * (a / i) * (b / i);
-    printf("%lld\n", ans);
+    for (int i = 1; i <= t; ++i) {
+        s[i] = s[i - 1] + f[i];
+        if (s[i] >= MOD)
+            s[i] -= MOD;
+    }
+    int ans = 0;
+    for (int l = 1, r; l <= t; l = r + 1) {
+        int fn = n / l, fm = m / l;
+        r = min(n / fn, m / fm);
+        if (r > t)
+            r = t;
+        int sumx = (1LL * fn * (fn + 1) / 2) % MOD;
+        int sumy = (1LL * fm * (fm + 1) / 2) % MOD;
+        int g = 1LL * sumx * sumy % MOD;
+        int d = s[r] - s[l - 1];
+        if (d < 0)
+            d += MOD;
+        ans = (ans + 1LL * d * g) % MOD;
+    }
+    printf("%d\n", ans);
     return;
 }
 } // namespace TANGYIXIAO

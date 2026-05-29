@@ -631,37 +631,54 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int MAXN = (int)1e6 + 5;
+const int MAXN = 50005;
 
 int mu[MAXN], pr[MAXN], cnt;
+int d[MAXN], e[MAXN]; 
+long long f[MAXN];
 bool vs[MAXN];
 inline void solve(int Task_Id) {
-    int a, b, d;
-    scanf("%d%d%d", &a, &b, &d);
-    a /= d;
-    b /= d;
-    if (a > b)
-        swap(a, b);
-    int n = a;
     mu[1] = 1;
-    for (int i = 2; i <= n; ++i) {
+    d[1] = 1;
+    for (int i = 2; i < MAXN; ++i) {
         if (!vs[i]) {
             pr[++cnt] = i;
             mu[i] = -1;
+            d[i] = 2;
+            e[i] = 1;
         }
-        for (int j = 1; j <= cnt && i * pr[j] <= n; ++j) {
-            vs[i * pr[j]] = true;
+        for (int j = 1; j <= cnt && i * pr[j] < MAXN; ++j) {
+            int t = i * pr[j];
+            vs[t] = true;
             if (i % pr[j] == 0) {
-                mu[i * pr[j]] = 0;
+                mu[t] = 0;
+                e[t] = e[i] + 1;
+                d[t] = d[i] / (e[i] + 1) * (e[i] + 2);
                 break;
             }
-            mu[i * pr[j]] = -mu[i];
+            mu[t] = -mu[i];
+            e[t] = 1;
+            d[t] = d[i] * 2;
         }
     }
-    long long ans = 0;
-    for (int i = 1; i <= n; ++i)
-        ans += 1LL * mu[i] * (a / i) * (b / i);
-    printf("%lld\n", ans);
+    for (int i = 1; i < MAXN; ++i) {
+        f[i] = f[i - 1] + d[i];
+        mu[i] += mu[i - 1];
+    }
+    int T;
+    scanf("%d", &T);
+    while (T--) {
+        int n, m;
+        scanf("%d%d", &n, &m);
+        if (n > m)
+            swap(n, m);
+        long long ans = 0;
+        for (int l = 1, r; l <= n; l = r + 1) {
+            r = min(n / (n / l), m / (m / l));
+            ans += 1LL * (mu[r] - mu[l - 1]) * f[n / l] * f[m / l];
+        }
+        printf("%lld\n", ans);
+    }
     return;
 }
 } // namespace TANGYIXIAO

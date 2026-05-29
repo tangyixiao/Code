@@ -631,37 +631,92 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int MAXN = (int)1e6 + 5;
+const int MAXN = 1e5 + 5;
+const int MAXQ = 2e4 + 5;
 
+unsigned int sigma[MAXN];
 int mu[MAXN], pr[MAXN], cnt;
 bool vs[MAXN];
+int id[MAXN];
+
+struct qry {
+    int n, m, a, id;
+} qs[MAXQ];
+
+unsigned int c[MAXN];
+unsigned int ans[MAXQ];
+
+void add(int x, unsigned int v) {
+    for (; x < MAXN; x += x & -x)
+        c[x] += v;
+}
+
+unsigned int query(int x) {
+    unsigned int r = 0;
+    for (; x; x -= x & -x)
+        r += c[x];
+    return r;
+}
 inline void solve(int Task_Id) {
-    int a, b, d;
-    scanf("%d%d%d", &a, &b, &d);
-    a /= d;
-    b /= d;
-    if (a > b)
-        swap(a, b);
-    int n = a;
     mu[1] = 1;
-    for (int i = 2; i <= n; ++i) {
+    for (int i = 2; i < MAXN; ++i) {
         if (!vs[i]) {
             pr[++cnt] = i;
             mu[i] = -1;
         }
-        for (int j = 1; j <= cnt && i * pr[j] <= n; ++j) {
-            vs[i * pr[j]] = true;
+        for (int j = 1; j <= cnt && i * pr[j] < MAXN; ++j) {
+            int t = i * pr[j];
+            vs[t] = true;
             if (i % pr[j] == 0) {
-                mu[i * pr[j]] = 0;
+                mu[t] = 0;
                 break;
             }
-            mu[i * pr[j]] = -mu[i];
+            mu[t] = -mu[i];
         }
     }
-    long long ans = 0;
-    for (int i = 1; i <= n; ++i)
-        ans += 1LL * mu[i] * (a / i) * (b / i);
-    printf("%lld\n", ans);
+    for (int d = 1; d < MAXN; ++d)
+        for (int j = d; j < MAXN; j += d)
+            sigma[j] += d;
+    for (int i = 0; i < MAXN; ++i)
+        id[i] = i;
+    sort(id + 1, id + MAXN, [](int x, int y) { return sigma[x] < sigma[y]; });
+
+    int Q;
+    scanf("%d", &Q);
+    for (int i = 0; i < Q; ++i) {
+        scanf("%d%d%d", &qs[i].n, &qs[i].m, &qs[i].a);
+        qs[i].id = i;
+    }
+    sort(qs, qs + Q, [](const qry &x, const qry &y) { return x.a < y.a; });
+
+    int cur = 1;
+    for (int i = 0; i < Q; ++i) {
+        while (cur < MAXN && sigma[id[cur]] <= (unsigned int)qs[i].a) {
+            int d = id[cur];
+            unsigned int sd = sigma[d];
+            for (int T = d, k = 1; T < MAXN; T += d, ++k) {
+                int mk = mu[k];
+                if (mk == 0)
+                    continue;
+                if (mk == 1)
+                    add(T, sd);
+                else
+                    add(T, -sd);
+            }
+            ++cur;
+        }
+        int n = qs[i].n, m = qs[i].m;
+        if (n > m)
+            swap(n, m);
+        unsigned int res = 0;
+        for (int l = 1, r; l <= n; l = r + 1) {
+            r = min(n / (n / l), m / (m / l));
+            res += (unsigned int)(n / l) * (unsigned int)(m / l) * (query(r) - query(l - 1));
+        }
+        ans[qs[i].id] = res & 0x7fffffff;
+    }
+    for (int i = 0; i < Q; ++i)
+        printf("%u\n", ans[i]);
     return;
 }
 } // namespace TANGYIXIAO

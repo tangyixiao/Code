@@ -631,37 +631,57 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int MAXN = (int)1e6 + 5;
+const int MAXN = 1000005;
+const int MOD = 1000000007;
 
-int mu[MAXN], pr[MAXN], cnt;
-bool vs[MAXN];
-inline void solve(int Task_Id) {
-    int a, b, d;
-    scanf("%d%d%d", &a, &b, &d);
-    a /= d;
-    b /= d;
-    if (a > b)
-        swap(a, b);
-    int n = a;
-    mu[1] = 1;
-    for (int i = 2; i <= n; ++i) {
-        if (!vs[i]) {
-            pr[++cnt] = i;
-            mu[i] = -1;
-        }
-        for (int j = 1; j <= cnt && i * pr[j] <= n; ++j) {
-            vs[i * pr[j]] = true;
-            if (i % pr[j] == 0) {
-                mu[i * pr[j]] = 0;
-                break;
-            }
-            mu[i * pr[j]] = -mu[i];
-        }
+int f[MAXN], g[MAXN], pre[MAXN], inv_pre[MAXN];
+
+int fp(int a, long long b) {
+    int r = 1;
+    while (b) {
+        if (b & 1)
+            r = 1LL * r * a % MOD;
+        a = 1LL * a * a % MOD;
+        b >>= 1;
     }
-    long long ans = 0;
-    for (int i = 1; i <= n; ++i)
-        ans += 1LL * mu[i] * (a / i) * (b / i);
-    printf("%lld\n", ans);
+    return r;
+}
+inline void solve(int Task_Id) {
+    f[0] = 0;
+    f[1] = 1;
+    for (int i = 2; i < MAXN; ++i)
+        f[i] = (f[i - 1] + f[i - 2]) % MOD;
+    for (int i = 1; i < MAXN; ++i)
+        g[i] = f[i];
+    for (int i = 1; i < MAXN; ++i) {
+        int iv = fp(g[i], MOD - 2);
+        for (int j = i * 2; j < MAXN; j += i)
+            g[j] = 1LL * g[j] * iv % MOD;
+    }
+    pre[0] = 1;
+    for (int i = 1; i < MAXN; ++i)
+        pre[i] = 1LL * pre[i - 1] * g[i] % MOD;
+    inv_pre[MAXN - 1] = fp(pre[MAXN - 1], MOD - 2);
+    for (int i = MAXN - 2; i >= 0; --i)
+        inv_pre[i] = 1LL * inv_pre[i + 1] * g[i + 1] % MOD;
+
+    int T;
+    scanf("%d", &T);
+    while (T--) {
+        int n, m;
+        scanf("%d%d", &n, &m);
+        int top = min(n, m);
+        int ans = 1;
+        for (int l = 1, r; l <= top; l = r + 1) {
+            r = min(n / (n / l), m / (m / l));
+            if (r > top)
+                r = top;
+            int v = 1LL * pre[r] * inv_pre[l - 1] % MOD;
+            long long e = 1LL * (n / l) * (m / l);
+            ans = 1LL * ans * fp(v, e) % MOD;
+        }
+        printf("%d\n", ans);
+    }
     return;
 }
 } // namespace TANGYIXIAO
