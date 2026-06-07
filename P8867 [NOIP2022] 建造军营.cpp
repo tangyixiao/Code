@@ -7,7 +7,7 @@ Copyright (C) 2026 TangYixiao
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-#define MULTIPLE_TEST
+// #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -631,148 +631,131 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-#define N 100005
-#define MOD 1000000007
+const int MOD = 1e9 + 7;
+const int MAXN = 500005;
+const int MAXM = 1000005;
 
-int n, k, c, T;
-int h[N], to[N * 2], nx[N * 2], eid[N * 2], tot;
-int deg[N], big[N], fa[N], fae[N], iskey[N];
-int q[N], qt;
-long long fac[N], inv[N];
+int n, m;
 
-long long pw(long long a, long long b) {
-    long long r = 1;
-    while (b) {
-        if (b & 1)
-            r = r * a % MOD;
-        a = a * a % MOD;
-        b >>= 1;
+int head[MAXN], to[MAXM * 2], nxt[MAXM * 2];
+int edge_cnt = 1;
+
+void add_edge(int u, int v) {
+    to[++edge_cnt] = v;
+    nxt[edge_cnt] = head[u];
+    head[u] = edge_cnt;
+}
+
+int dfn[MAXN], low[MAXN], timer;
+int st[MAXN], top;
+int bcc_cnt;
+int bcc_id[MAXN];
+int V_cnt[MAXN], E_cnt[MAXN];
+
+void tarjan(int u, int in_edge) {
+    dfn[u] = low[u] = ++timer;
+    st[++top] = u;
+
+    for (int i = head[u]; i; i = nxt[i]) {
+        int v = to[i];
+        if (i == (in_edge ^ 1))
+            continue;
+
+        if (!dfn[v]) {
+            tarjan(v, i);
+            low[u] = min(low[u], low[v]);
+        } else {
+            low[u] = min(low[u], dfn[v]);
+        }
     }
-    return r;
+
+    if (low[u] == dfn[u]) {
+        bcc_cnt++;
+        while (true) {
+            int x = st[top--];
+            bcc_id[x] = bcc_cnt;
+            V_cnt[bcc_cnt]++;
+            if (x == u)
+                break;
+        }
+    }
 }
 
-void add(int u, int v, int id) {
-    to[++tot] = v;
-    nx[tot] = h[u];
-    eid[tot] = id;
-    h[u] = tot;
+int tree_head[MAXN], tree_to[MAXN * 2], tree_nxt[MAXN * 2];
+int tree_edge_cnt = 0;
+
+void add_tree_edge(int u, int v) {
+    tree_to[++tree_edge_cnt] = v;
+    tree_nxt[tree_edge_cnt] = tree_head[u];
+    tree_head[u] = tree_edge_cnt;
 }
 
-void dfs(int u, int p) {
-    fa[u] = p;
-    for (int e = h[u]; e; e = nx[e]) {
-        int v = to[e];
+long long pow2[MAXM + 5];
+long long f[MAXN];
+int s_edges[MAXN];
+long long ans = 0;
+
+void dfs_dp(int u, int p) {
+    s_edges[u] = E_cnt[u];
+
+    f[u] = (pow2[V_cnt[u]] - 1 + MOD) % MOD * pow2[E_cnt[u]] % MOD;
+
+    ans = (ans + f[u] * pow2[m - s_edges[u]]) % MOD;
+
+    for (int i = tree_head[u]; i; i = tree_nxt[i]) {
+        int v = tree_to[i];
         if (v == p)
             continue;
-        fae[v] = eid[e];
-        dfs(v, u);
+
+        dfs_dp(v, u);
+
+        long long add = f[u] * f[v] % MOD * pow2[m - s_edges[u] - s_edges[v] - 1] % MOD;
+        ans = (ans + add) % MOD;
+
+        long long f_new = f[u] * pow2[s_edges[v] + 1] % MOD;
+        f_new = (f_new + f[v] * pow2[s_edges[u]]) % MOD;
+        f_new = (f_new + f[u] * f[v]) % MOD;
+
+        f[u] = f_new;
+        s_edges[u] += s_edges[v] + 1;
     }
 }
-
-long long dp0[N], dp1[N];
-long long preA[N], sufA[N], sumBA[N], BdivA[N];
-int son[N], sonc;
-
 inline void solve(int Task_Id) {
-    fac[0] = 1;
-    inv[0] = 1;
-    for (int i = 1; i < N; ++i) {
-        fac[i] = fac[i - 1] * i % MOD;
-        inv[i] = pw(fac[i], MOD - 2);
+    if (!(cin >> n >> m))
+        return;
+
+    pow2[0] = 1;
+    for (int i = 1; i <= m + 1; i++) {
+        pow2[i] = pow2[i - 1] * 2 % MOD;
     }
-    scanf("%d %d", &c, &T);
-    while (T--) {
-        scanf("%d %d", &n, &k);
-        tot = 0;
-        for (int i = 1; i <= n; ++i) {
-            h[i] = 0;
-            deg[i] = 0;
-            big[i] = 0;
-            iskey[i] = 0;
-        }
-        for (int i = 1; i < n; ++i) {
-            int u, v;
-            scanf("%d %d", &u, &v);
-            add(u, v, i);
-            add(v, u, i);
-            ++deg[u];
-            ++deg[v];
-        }
-        for (int i = 1; i <= k; ++i) {
-            int x;
-            scanf("%d", &x);
-            iskey[x] = 1;
-        }
 
-        for (int i = 1; i <= n; ++i)
-            if (deg[i] > 2)
-                big[i] = 1;
+    for (int i = 0; i < m; i++) {
+        int u, v;
+        cin >> u >> v;
+        add_edge(u, v);
+        add_edge(v, u);
+    }
 
-        dfs(1, 0);
+    tarjan(1, 0);
 
-        for (int i = n; i; --i) {
-            int u = q[i];
-            if (!big[u]) {
-                dp0[u] = 0;
-                dp1[u] = 1;
-                continue;
-            }
-            sonc = 0;
-            int leafcnt = 0;
-            long long prodA = 1;
-            for (int e = h[u]; e; e = nx[e]) {
-                int v = to[e];
-                if (v == fa[u])
-                    continue;
-                if (big[v]) {
-                    son[++sonc] = v;
+    for (int u = 1; u <= n; u++) {
+        for (int i = head[u]; i; i = nxt[i]) {
+            int v = to[i];
+            if (u < v) {
+                if (bcc_id[u] == bcc_id[v]) {
+                    E_cnt[bcc_id[u]]++;
                 } else {
-                    ++leafcnt;
+                    add_tree_edge(bcc_id[u], bcc_id[v]);
+                    add_tree_edge(bcc_id[v], bcc_id[u]);
                 }
             }
-
-            long long S0 = 1, S1 = 0, S2 = 0;
-            for (int j = 1; j <= sonc; ++j) {
-                int v = son[j];
-                long long A = dp1[v];
-                long long B = (dp0[v] + dp1[v]) % MOD;
-                S0 = S0 * A % MOD;
-                long long val = B * pw(A, MOD - 2) % MOD;
-                BdivA[j] = val;
-                sumBA[j] = (sumBA[j - 1] + val) % MOD;
-            }
-            S1 = S0 * sumBA[sonc] % MOD;
-            for (int j = 1; j <= sonc; ++j) {
-                long long tmp = (sumBA[sonc] - BdivA[j] + MOD) % MOD;
-                S2 = (S2 + S0 * BdivA[j] % MOD * tmp) % MOD;
-            }
-            S2 = S2 * inv[2] % MOD;
-
-            int m = leafcnt;
-            long long Cm1 = m, Cm2 = 1LL * m * (m - 1) / 2 % MOD;
-            long long f_internal = (S2 + S1 * Cm1 + S0 * Cm2) % MOD;
-            long long f_endpoint = (S1 + S0 * Cm1) % MOD;
-            if (fa[u] != 0) {
-                dp0[u] = f_internal;
-                dp1[u] = f_endpoint;
-            } else {
-                // root: no parent edge
-                dp0[u] = 0;
-                dp1[u] = (S2 + S1 * Cm1 + S0 * Cm2) % MOD;
-            }
         }
-
-        long long total_ways = 1;
-        for (int i = 1; i <= n; ++i)
-            if (big[i])
-                total_ways = total_ways * fac[deg[i] - 1] % MOD;
-
-        long long sum_choose = 1;
-        if (big[1])
-            sum_choose = dp1[1];
-        long long ans = total_ways * sum_choose % MOD;
-        printf("%lld\n", ans);
     }
+
+    dfs_dp(1, 0);
+
+    cout << ans << "\n";
+
     return;
 }
 } // namespace TANGYIXIAO

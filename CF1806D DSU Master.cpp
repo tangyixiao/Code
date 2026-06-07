@@ -536,6 +536,11 @@ using namespace __gnu_pbds;
 
 #pragma region TANGYIXIAO
 namespace TANGYIXIAO {
+const int MOD = 998244353;
+const int MAXN = 500005;
+
+int inv[MAXN];
+int fact[MAXN];
 #pragma region IO
 namespace IO {
 namespace FAST_IO {
@@ -616,6 +621,14 @@ signed main(int argc, char *argv[]) {
 #else
 #endif
     int T = 1;
+    inv[1] = 1;
+    for (int i = 2; i < MAXN; i++) {
+        inv[i] = 1LL * (MOD - MOD / i) * inv[MOD % i] % MOD;
+    }
+    fact[0] = 1;
+    for (int i = 1; i < MAXN; i++) {
+        fact[i] = 1LL * fact[i - 1] * i % MOD;
+    }
 #ifdef MULTIPLE_TEST
     cin >> T;
 #endif
@@ -631,148 +644,48 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-#define N 100005
-#define MOD 1000000007
-
-int n, k, c, T;
-int h[N], to[N * 2], nx[N * 2], eid[N * 2], tot;
-int deg[N], big[N], fa[N], fae[N], iskey[N];
-int q[N], qt;
-long long fac[N], inv[N];
-
-long long pw(long long a, long long b) {
-    long long r = 1;
-    while (b) {
-        if (b & 1)
-            r = r * a % MOD;
-        a = a * a % MOD;
-        b >>= 1;
-    }
-    return r;
-}
-
-void add(int u, int v, int id) {
-    to[++tot] = v;
-    nx[tot] = h[u];
-    eid[tot] = id;
-    h[u] = tot;
-}
-
-void dfs(int u, int p) {
-    fa[u] = p;
-    for (int e = h[u]; e; e = nx[e]) {
-        int v = to[e];
-        if (v == p)
-            continue;
-        fae[v] = eid[e];
-        dfs(v, u);
-    }
-}
-
-long long dp0[N], dp1[N];
-long long preA[N], sufA[N], sumBA[N], BdivA[N];
-int son[N], sonc;
 
 inline void solve(int Task_Id) {
-    fac[0] = 1;
-    inv[0] = 1;
-    for (int i = 1; i < N; ++i) {
-        fac[i] = fac[i - 1] * i % MOD;
-        inv[i] = pw(fac[i], MOD - 2);
+    int n;
+    if (!(cin >> n))
+        return;
+    vector<int> a(n);
+    for (int i = 1; i <= n - 1; i++) {
+        cin >> a[i];
     }
-    scanf("%d %d", &c, &T);
-    while (T--) {
-        scanf("%d %d", &n, &k);
-        tot = 0;
-        for (int i = 1; i <= n; ++i) {
-            h[i] = 0;
-            deg[i] = 0;
-            big[i] = 0;
-            iskey[i] = 0;
+
+    vector<int> dp(n, 0);
+    vector<int> S(n, 0);
+    vector<int> P(n, 0);
+    vector<int> Ans(n, 0);
+
+    dp[0] = 1;
+    S[0] = 0;
+    P[0] = 1;
+    Ans[0] = 0;
+
+    for (int i = 1; i <= n - 1; i++) {
+
+        long long next_S = S[i - 1];
+        if (a[i] == 0) {
+            next_S = (next_S + P[i - 1]) % MOD;
         }
-        for (int i = 1; i < n; ++i) {
-            int u, v;
-            scanf("%d %d", &u, &v);
-            add(u, v, i);
-            add(v, u, i);
-            ++deg[u];
-            ++deg[v];
+        S[i] = next_S;
+
+        dp[i] = 1LL * fact[i - 1] * S[i] % MOD;
+        P[i] = 1LL * S[i] * inv[i] % MOD;
+
+        long long next_Ans = 1LL * i * Ans[i - 1] % MOD;
+        if (a[i] == 0) {
+            next_Ans = (next_Ans + dp[i - 1]) % MOD;
         }
-        for (int i = 1; i <= k; ++i) {
-            int x;
-            scanf("%d", &x);
-            iskey[x] = 1;
-        }
-
-        for (int i = 1; i <= n; ++i)
-            if (deg[i] > 2)
-                big[i] = 1;
-
-        dfs(1, 0);
-
-        for (int i = n; i; --i) {
-            int u = q[i];
-            if (!big[u]) {
-                dp0[u] = 0;
-                dp1[u] = 1;
-                continue;
-            }
-            sonc = 0;
-            int leafcnt = 0;
-            long long prodA = 1;
-            for (int e = h[u]; e; e = nx[e]) {
-                int v = to[e];
-                if (v == fa[u])
-                    continue;
-                if (big[v]) {
-                    son[++sonc] = v;
-                } else {
-                    ++leafcnt;
-                }
-            }
-
-            long long S0 = 1, S1 = 0, S2 = 0;
-            for (int j = 1; j <= sonc; ++j) {
-                int v = son[j];
-                long long A = dp1[v];
-                long long B = (dp0[v] + dp1[v]) % MOD;
-                S0 = S0 * A % MOD;
-                long long val = B * pw(A, MOD - 2) % MOD;
-                BdivA[j] = val;
-                sumBA[j] = (sumBA[j - 1] + val) % MOD;
-            }
-            S1 = S0 * sumBA[sonc] % MOD;
-            for (int j = 1; j <= sonc; ++j) {
-                long long tmp = (sumBA[sonc] - BdivA[j] + MOD) % MOD;
-                S2 = (S2 + S0 * BdivA[j] % MOD * tmp) % MOD;
-            }
-            S2 = S2 * inv[2] % MOD;
-
-            int m = leafcnt;
-            long long Cm1 = m, Cm2 = 1LL * m * (m - 1) / 2 % MOD;
-            long long f_internal = (S2 + S1 * Cm1 + S0 * Cm2) % MOD;
-            long long f_endpoint = (S1 + S0 * Cm1) % MOD;
-            if (fa[u] != 0) {
-                dp0[u] = f_internal;
-                dp1[u] = f_endpoint;
-            } else {
-                // root: no parent edge
-                dp0[u] = 0;
-                dp1[u] = (S2 + S1 * Cm1 + S0 * Cm2) % MOD;
-            }
-        }
-
-        long long total_ways = 1;
-        for (int i = 1; i <= n; ++i)
-            if (big[i])
-                total_ways = total_ways * fac[deg[i] - 1] % MOD;
-
-        long long sum_choose = 1;
-        if (big[1])
-            sum_choose = dp1[1];
-        long long ans = total_ways * sum_choose % MOD;
-        printf("%lld\n", ans);
+        Ans[i] = next_Ans;
     }
+
+    for (int i = 1; i <= n - 1; i++) {
+        cout << Ans[i] << (i == n - 1 ? "" : " ");
+    }
+    cout << "\n";
     return;
 }
 } // namespace TANGYIXIAO
