@@ -631,32 +631,23 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-typedef long long ll;
-const int M = 1e5 + 5;
-int n, k;
-ll a[M], s[M], d[M];
-
-ll f(int j) {
-    return (j ? d[j - 1] : 0) - s[j];
-}
 inline void solve(int Task_Id) {
-    cin >> n >> k;
-    for (int i = 1; i <= n; ++i) {
-        cin >> a[i];
-        s[i] = s[i - 1] + a[i];
+    int h, w;
+    cin >> h >> w;
+    vector<string> g(h);
+    string p = "LANQIAO";
+    for (int i = 0; i < h; ++i) {
+        string t;
+        for (int j = 0; j < w; ++j)
+            t += p[(i + j) % 7];
+        g[i] = t;
     }
-    deque<int> q;
-    q.push_back(0);
-    for (int i = 1; i <= n; ++i) {
-        while (!q.empty() && q.front() < i - k)
-            q.pop_front();
-        d[i] = max(d[i - 1], s[i] + f(q.front()));
-        while (!q.empty() && f(i) >= f(q.back()))
-            q.pop_back();
-        q.push_back(i);
-    }
-    cout << d[n] << '\n';
-
+    int ans = 0;
+    for (int i = 0; i < h; ++i)
+        for (int j = 0; j < w; ++j)
+            if (g[i][j] == 'A')
+                ++ans;
+    cout << ans;
     return;
 }
 } // namespace TANGYIXIAO
