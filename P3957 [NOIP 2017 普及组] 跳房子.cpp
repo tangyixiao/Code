@@ -631,68 +631,57 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-inline void solve(int Task_Id) {
-    int m, n;
-    cin >> m >> n;
-    int col[101][101];
-    memset(col, -1, sizeof(col));
-    for (int i = 0; i < n; ++i) {
-        int x, y, c;
-        cin >> x >> y >> c;
-        col[x][y] = c;
-    }
-
-    int dist[101][101][2];
-    memset(dist, 0x3f, sizeof(dist));
-    dist[1][1][col[1][1]] = 0;
-
-    using State = tuple<int, int, int, int>;
-    priority_queue<State, vector<State>, greater<State>> pq;
-    pq.push({0, 1, 1, col[1][1]});
-
-    int dx[4] = {0, 0, 1, -1};
-    int dy[4] = {1, -1, 0, 0};
-
-    while (!pq.empty()) {
-        auto [d, x, y, c] = pq.top();
-        pq.pop();
-        if (d != dist[x][y][c])
-            continue;
-
-        for (int i = 0; i < 4; ++i) {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-            if (nx < 1 || nx > m || ny < 1 || ny > m)
-                continue;
-
-            if (col[nx][ny] != -1) {
-                int newc = col[nx][ny];
-                int cost = (c == newc) ? 0 : 1;
-                if (d + cost < dist[nx][ny][newc]) {
-                    dist[nx][ny][newc] = d + cost;
-                    pq.push({dist[nx][ny][newc], nx, ny, newc});
-                }
-            } else {
-                if (col[x][y] == -1)
-                    continue;
-
-                int newc = c;
-                int cost = 2;
-                if (d + cost < dist[nx][ny][newc]) {
-                    dist[nx][ny][newc] = d + cost;
-                    pq.push({dist[nx][ny][newc], nx, ny, newc});
-                }
-            }
+typedef long long ll;
+const int N = 500005;
+const ll INF = 1e18;
+int n, d, k, x[N], s[N];
+ll dp[N];
+bool check(int g) {
+    int mn = max(1, d - g), mx = d + g;
+    deque<int> q;
+    int cur = 0;
+    dp[0] = 0;
+    ll best = 0;
+    for (int i = 1; i <= n; ++i) {
+        while (cur < i && x[cur] <= x[i] - mn) {
+            while (!q.empty() && dp[q.back()] <= dp[cur])
+                q.pop_back();
+            q.push_back(cur);
+            ++cur;
         }
+        while (!q.empty() && x[q.front()] < x[i] - mx)
+            q.pop_front();
+        if (q.empty())
+            dp[i] = -INF;
+        else
+            dp[i] = s[i] + dp[q.front()];
+        if (dp[i] > best)
+            best = dp[i];
     }
-
-    int ans = min(dist[m][m][0], dist[m][m][1]);
-    if (ans == 0x3f3f3f3f) {
-        cout << -1 << endl;
-    } else {
-        cout << ans << endl;
+    return best >= k;
+}
+inline void solve(int Task_Id) {
+    scanf("%d%d%d", &n, &d, &k);
+    ll sum = 0;
+    for (int i = 1; i <= n; ++i) {
+        scanf("%d%d", &x[i], &s[i]);
+        if (s[i] > 0)
+            sum += s[i];
     }
-
+    if (sum < k) {
+        printf("-1\n");
+        return;
+    }
+    int l = 0, r = 1e9, ans = -1;
+    while (l <= r) {
+        int mid = (l + r) >> 1;
+        if (check(mid)) {
+            ans = mid;
+            r = mid - 1;
+        } else
+            l = mid + 1;
+    }
+    printf("%d\n", ans);
     return;
 }
 } // namespace TANGYIXIAO

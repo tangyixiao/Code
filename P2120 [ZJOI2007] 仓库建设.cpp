@@ -631,68 +631,56 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+typedef long long ll;
+const int N = 1000005;
+
+ll x[N], p[N], c[N];
+ll S[N], W[N], dp[N];
+int q[N], head, tail;
+
+inline ll X(int i) { return S[i]; }
+inline ll Y(int i) { return dp[i] + W[i]; }
+
+inline bool chk_hd(int a, int b, ll k) {
+    return (Y(b) - Y(a)) <= (__int128_t)k * (X(b) - X(a));
+}
+
+inline bool chk_tl(int a, int b, int c_idx) {
+    return (__int128_t)(Y(b) - Y(a)) * (X(c_idx) - X(b)) >= (__int128_t)(Y(c_idx) - Y(b)) * (X(b) - X(a));
+}
 inline void solve(int Task_Id) {
-    int m, n;
-    cin >> m >> n;
-    int col[101][101];
-    memset(col, -1, sizeof(col));
-    for (int i = 0; i < n; ++i) {
-        int x, y, c;
-        cin >> x >> y >> c;
-        col[x][y] = c;
+    int n;
+    if (!(cin >> n))
+        return;
+
+    for (int i = 1; i <= n; ++i) {
+        cin >> x[i] >> p[i] >> c[i];
+        S[i] = S[i - 1] + p[i];
+        W[i] = W[i - 1] + p[i] * x[i];
     }
 
-    int dist[101][101][2];
-    memset(dist, 0x3f, sizeof(dist));
-    dist[1][1][col[1][1]] = 0;
+    head = 1;
+    tail = 1;
+    q[1] = 0;
 
-    using State = tuple<int, int, int, int>;
-    priority_queue<State, vector<State>, greater<State>> pq;
-    pq.push({0, 1, 1, col[1][1]});
-
-    int dx[4] = {0, 0, 1, -1};
-    int dy[4] = {1, -1, 0, 0};
-
-    while (!pq.empty()) {
-        auto [d, x, y, c] = pq.top();
-        pq.pop();
-        if (d != dist[x][y][c])
-            continue;
-
-        for (int i = 0; i < 4; ++i) {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-            if (nx < 1 || nx > m || ny < 1 || ny > m)
-                continue;
-
-            if (col[nx][ny] != -1) {
-                int newc = col[nx][ny];
-                int cost = (c == newc) ? 0 : 1;
-                if (d + cost < dist[nx][ny][newc]) {
-                    dist[nx][ny][newc] = d + cost;
-                    pq.push({dist[nx][ny][newc], nx, ny, newc});
-                }
-            } else {
-                if (col[x][y] == -1)
-                    continue;
-
-                int newc = c;
-                int cost = 2;
-                if (d + cost < dist[nx][ny][newc]) {
-                    dist[nx][ny][newc] = d + cost;
-                    pq.push({dist[nx][ny][newc], nx, ny, newc});
-                }
-            }
-        }
+    for (int i = 1; i <= n; ++i) {
+        while (head < tail && chk_hd(q[head], q[head + 1], x[i]))
+            head++;
+        int j = q[head];
+        dp[i] = (ll)((__int128_t)dp[j] + (__int128_t)x[i] * (S[i] - S[j]) - (W[i] - W[j]) + c[i]);
+        while (head < tail && chk_tl(q[tail - 1], q[tail], i))
+            tail--;
+        q[++tail] = i;
     }
 
-    int ans = min(dist[m][m][0], dist[m][m][1]);
-    if (ans == 0x3f3f3f3f) {
-        cout << -1 << endl;
-    } else {
-        cout << ans << endl;
+    ll ans = 0x7fffffffffffffffLL;
+    for (int i = n; i >= 1; --i) {
+        ans = min(ans, dp[i]);
+        if (p[i])
+            break; 
     }
 
+    cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO

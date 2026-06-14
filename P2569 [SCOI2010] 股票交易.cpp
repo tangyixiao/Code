@@ -631,68 +631,65 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+typedef long long ll;
+const int T_MAX = 2005;
+const int P_MAX = 2005;
+const ll INF = 1e18;
+
+int T, MaxP, W;
+ll dp[T_MAX][P_MAX];
+int AP[T_MAX], BP[T_MAX], AS[T_MAX], BS[T_MAX];
+int q[P_MAX], head, tail;
 inline void solve(int Task_Id) {
-    int m, n;
-    cin >> m >> n;
-    int col[101][101];
-    memset(col, -1, sizeof(col));
-    for (int i = 0; i < n; ++i) {
-        int x, y, c;
-        cin >> x >> y >> c;
-        col[x][y] = c;
+    scanf("%d%d%d", &T, &MaxP, &W);
+    for (int i = 1; i <= T; ++i) {
+        scanf("%d%d%d%d", &AP[i], &BP[i], &AS[i], &BS[i]);
     }
-
-    int dist[101][101][2];
-    memset(dist, 0x3f, sizeof(dist));
-    dist[1][1][col[1][1]] = 0;
-
-    using State = tuple<int, int, int, int>;
-    priority_queue<State, vector<State>, greater<State>> pq;
-    pq.push({0, 1, 1, col[1][1]});
-
-    int dx[4] = {0, 0, 1, -1};
-    int dy[4] = {1, -1, 0, 0};
-
-    while (!pq.empty()) {
-        auto [d, x, y, c] = pq.top();
-        pq.pop();
-        if (d != dist[x][y][c])
-            continue;
-
-        for (int i = 0; i < 4; ++i) {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-            if (nx < 1 || nx > m || ny < 1 || ny > m)
-                continue;
-
-            if (col[nx][ny] != -1) {
-                int newc = col[nx][ny];
-                int cost = (c == newc) ? 0 : 1;
-                if (d + cost < dist[nx][ny][newc]) {
-                    dist[nx][ny][newc] = d + cost;
-                    pq.push({dist[nx][ny][newc], nx, ny, newc});
-                }
-            } else {
-                if (col[x][y] == -1)
-                    continue;
-
-                int newc = c;
-                int cost = 2;
-                if (d + cost < dist[nx][ny][newc]) {
-                    dist[nx][ny][newc] = d + cost;
-                    pq.push({dist[nx][ny][newc], nx, ny, newc});
-                }
+    for (int i = 0; i <= T; ++i)
+        for (int j = 0; j <= MaxP; ++j)
+            dp[i][j] = -INF;
+    dp[0][0] = 0;
+    for (int i = 1; i <= T; ++i) {
+        for (int j = 0; j <= MaxP; ++j)
+            dp[i][j] = dp[i - 1][j];
+        int prev = i - W - 1;
+        if (prev < 0)
+            prev = 0;
+        head = 0, tail = -1;
+        for (int j = 0; j <= MaxP; ++j) {
+            if (dp[prev][j] != -INF) {
+                ll val = dp[prev][j] + (ll)j * AP[i];
+                while (head <= tail && dp[prev][q[tail]] + (ll)q[tail] * AP[i] <= val)
+                    --tail;
+                q[++tail] = j;
+            }
+            while (head <= tail && q[head] < j - AS[i])
+                ++head;
+            if (head <= tail) {
+                int best = q[head];
+                dp[i][j] = max(dp[i][j], dp[prev][best] + (ll)(best - j) * AP[i]);
+            }
+        }
+        head = 0, tail = -1;
+        for (int j = MaxP; j >= 0; --j) {
+            if (dp[prev][j] != -INF) {
+                ll val = dp[prev][j] + (ll)j * BP[i];
+                while (head <= tail && dp[prev][q[tail]] + (ll)q[tail] * BP[i] <= val)
+                    --tail;
+                q[++tail] = j;
+            }
+            while (head <= tail && q[head] > j + BS[i])
+                ++head;
+            if (head <= tail) {
+                int best = q[head];
+                dp[i][j] = max(dp[i][j], dp[prev][best] + (ll)(best - j) * BP[i]);
             }
         }
     }
-
-    int ans = min(dist[m][m][0], dist[m][m][1]);
-    if (ans == 0x3f3f3f3f) {
-        cout << -1 << endl;
-    } else {
-        cout << ans << endl;
-    }
-
+    ll ans = 0;
+    for (int j = 0; j <= MaxP; ++j)
+        ans = max(ans, dp[T][j]);
+    printf("%lld\n", ans);
     return;
 }
 } // namespace TANGYIXIAO

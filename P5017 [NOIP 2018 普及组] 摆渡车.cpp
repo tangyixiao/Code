@@ -631,68 +631,53 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+typedef long long ll;
+const int N = 505, M = 105;
+const ll INF = 1e18;
+int n, m, t[N];
+ll sum[N], dp[N][M], pre[N][M];
 inline void solve(int Task_Id) {
-    int m, n;
-    cin >> m >> n;
-    int col[101][101];
-    memset(col, -1, sizeof(col));
-    for (int i = 0; i < n; ++i) {
-        int x, y, c;
-        cin >> x >> y >> c;
-        col[x][y] = c;
-    }
-
-    int dist[101][101][2];
-    memset(dist, 0x3f, sizeof(dist));
-    dist[1][1][col[1][1]] = 0;
-
-    using State = tuple<int, int, int, int>;
-    priority_queue<State, vector<State>, greater<State>> pq;
-    pq.push({0, 1, 1, col[1][1]});
-
-    int dx[4] = {0, 0, 1, -1};
-    int dy[4] = {1, -1, 0, 0};
-
-    while (!pq.empty()) {
-        auto [d, x, y, c] = pq.top();
-        pq.pop();
-        if (d != dist[x][y][c])
-            continue;
-
-        for (int i = 0; i < 4; ++i) {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-            if (nx < 1 || nx > m || ny < 1 || ny > m)
-                continue;
-
-            if (col[nx][ny] != -1) {
-                int newc = col[nx][ny];
-                int cost = (c == newc) ? 0 : 1;
-                if (d + cost < dist[nx][ny][newc]) {
-                    dist[nx][ny][newc] = d + cost;
-                    pq.push({dist[nx][ny][newc], nx, ny, newc});
-                }
-            } else {
-                if (col[x][y] == -1)
+    scanf("%d%d", &n, &m);
+    for (int i = 1; i <= n; ++i)
+        scanf("%d", &t[i]);
+    sort(t + 1, t + n + 1);
+    for (int i = 1; i <= n; ++i)
+        sum[i] = sum[i - 1] + t[i];
+    t[0] = -m;
+    for (int i = 0; i <= n; ++i)
+        for (int j = 0; j < m; ++j)
+            dp[i][j] = INF;
+    dp[0][0] = 0;
+    for (int j = 0; j < m; ++j)
+        pre[0][j] = 0;
+    for (int i = 1; i <= n; ++i) {
+        for (int j = 0; j < m; ++j) {
+            ll T = t[i] + j;
+            ll best = INF;
+            for (int k = 0; k < i; ++k) {
+                ll lim = T - m - t[k];
+                if (lim < 0)
                     continue;
-
-                int newc = c;
-                int cost = 2;
-                if (d + cost < dist[nx][ny][newc]) {
-                    dist[nx][ny][newc] = d + cost;
-                    pq.push({dist[nx][ny][newc], nx, ny, newc});
-                }
+                int l = lim >= m - 1 ? m - 1 : (int)lim;
+                if (pre[k][l] >= INF)
+                    continue;
+                int cnt = i - k;
+                ll cost = 1ll * cnt * T - (sum[i] - sum[k]);
+                ll val = pre[k][l] + cost;
+                if (val < best)
+                    best = val;
             }
+            dp[i][j] = best;
         }
+        pre[i][0] = dp[i][0];
+        for (int j = 1; j < m; ++j)
+            pre[i][j] = min(pre[i][j - 1], dp[i][j]);
     }
-
-    int ans = min(dist[m][m][0], dist[m][m][1]);
-    if (ans == 0x3f3f3f3f) {
-        cout << -1 << endl;
-    } else {
-        cout << ans << endl;
-    }
-
+    ll ans = INF;
+    for (int j = 0; j < m; ++j)
+        if (dp[n][j] < ans)
+            ans = dp[n][j];
+    printf("%lld\n", ans);
     return;
 }
 } // namespace TANGYIXIAO

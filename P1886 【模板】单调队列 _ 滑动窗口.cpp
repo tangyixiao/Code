@@ -608,7 +608,6 @@ signed main(int argc, char *argv[]) {
 #ifdef TIME_COUNT
     Start_Time_Count();
 #endif
-    IOSS_Init();
 #if JUDGE == 1
     Judge_File(FILE_NAME);
 #elif JUDGE == 2
@@ -631,68 +630,45 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+struct node {
+    int id, v;
+};
+const int N = 1e6 + 5;
+deque<node> que, pue;
+int n, m, k, M = 1, x, ans[N][3];
 inline void solve(int Task_Id) {
-    int m, n;
-    cin >> m >> n;
-    int col[101][101];
-    memset(col, -1, sizeof(col));
-    for (int i = 0; i < n; ++i) {
-        int x, y, c;
-        cin >> x >> y >> c;
-        col[x][y] = c;
-    }
+    cin >> n >> k;
+    for (int i = 1; i <= n; i++) {
+        scanf("%d", &x);
+        while (!que.empty() && x >= que.back().v) {
+            que.pop_back();
+        }
 
-    int dist[101][101][2];
-    memset(dist, 0x3f, sizeof(dist));
-    dist[1][1][col[1][1]] = 0;
+        while (!pue.empty() && x <= pue.back().v) {
+            pue.pop_back();
+        }
+        que.push_back(node{i, x});
+        pue.push_back(node{i, x});
+        while (i - k >= que.front().id) {
+            que.pop_front();
+        }
+        while (i - k >= pue.front().id) {
+            pue.pop_front();
+        }
 
-    using State = tuple<int, int, int, int>;
-    priority_queue<State, vector<State>, greater<State>> pq;
-    pq.push({0, 1, 1, col[1][1]});
-
-    int dx[4] = {0, 0, 1, -1};
-    int dy[4] = {1, -1, 0, 0};
-
-    while (!pq.empty()) {
-        auto [d, x, y, c] = pq.top();
-        pq.pop();
-        if (d != dist[x][y][c])
-            continue;
-
-        for (int i = 0; i < 4; ++i) {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-            if (nx < 1 || nx > m || ny < 1 || ny > m)
-                continue;
-
-            if (col[nx][ny] != -1) {
-                int newc = col[nx][ny];
-                int cost = (c == newc) ? 0 : 1;
-                if (d + cost < dist[nx][ny][newc]) {
-                    dist[nx][ny][newc] = d + cost;
-                    pq.push({dist[nx][ny][newc], nx, ny, newc});
-                }
-            } else {
-                if (col[x][y] == -1)
-                    continue;
-
-                int newc = c;
-                int cost = 2;
-                if (d + cost < dist[nx][ny][newc]) {
-                    dist[nx][ny][newc] = d + cost;
-                    pq.push({dist[nx][ny][newc], nx, ny, newc});
-                }
-            }
+        if (i >= k) {
+            ans[M][2] = que.front().v;
+            ans[M][1] = pue.front().v;
+            M++;
         }
     }
-
-    int ans = min(dist[m][m][0], dist[m][m][1]);
-    if (ans == 0x3f3f3f3f) {
-        cout << -1 << endl;
-    } else {
-        cout << ans << endl;
+    for (int i = 1; i < M; i++) {
+        printf("%d ", ans[i][1]);
     }
-
+    printf("\n");
+    for (int i = 1; i < M; i++) {
+        printf("%d ", ans[i][2]);
+    }
     return;
 }
 } // namespace TANGYIXIAO

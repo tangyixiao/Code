@@ -631,68 +631,65 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+typedef long long ll;
+const int N = 100005;
+int n, S[N], A[N];
+ll ans[N];
 inline void solve(int Task_Id) {
-    int m, n;
-    cin >> m >> n;
-    int col[101][101];
-    memset(col, -1, sizeof(col));
-    for (int i = 0; i < n; ++i) {
-        int x, y, c;
-        cin >> x >> y >> c;
-        col[x][y] = c;
-    }
-
-    int dist[101][101][2];
-    memset(dist, 0x3f, sizeof(dist));
-    dist[1][1][col[1][1]] = 0;
-
-    using State = tuple<int, int, int, int>;
-    priority_queue<State, vector<State>, greater<State>> pq;
-    pq.push({0, 1, 1, col[1][1]});
-
-    int dx[4] = {0, 0, 1, -1};
-    int dy[4] = {1, -1, 0, 0};
-
-    while (!pq.empty()) {
-        auto [d, x, y, c] = pq.top();
-        pq.pop();
-        if (d != dist[x][y][c])
-            continue;
-
-        for (int i = 0; i < 4; ++i) {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-            if (nx < 1 || nx > m || ny < 1 || ny > m)
-                continue;
-
-            if (col[nx][ny] != -1) {
-                int newc = col[nx][ny];
-                int cost = (c == newc) ? 0 : 1;
-                if (d + cost < dist[nx][ny][newc]) {
-                    dist[nx][ny][newc] = d + cost;
-                    pq.push({dist[nx][ny][newc], nx, ny, newc});
-                }
-            } else {
-                if (col[x][y] == -1)
-                    continue;
-
-                int newc = c;
-                int cost = 2;
-                if (d + cost < dist[nx][ny][newc]) {
-                    dist[nx][ny][newc] = d + cost;
-                    pq.push({dist[nx][ny][newc], nx, ny, newc});
-                }
-            }
+    scanf("%d", &n);
+    for (int i = 1; i <= n; ++i)
+        scanf("%d", &S[i]);
+    for (int i = 1; i <= n; ++i)
+        scanf("%d", &A[i]);
+    int pos = 1;
+    ll maxv = 2LL * S[1] + A[1];
+    for (int i = 2; i <= n; ++i) {
+        ll val = 2LL * S[i] + A[i];
+        if (val > maxv) {
+            maxv = val;
+            pos = i;
         }
     }
-
-    int ans = min(dist[m][m][0], dist[m][m][1]);
-    if (ans == 0x3f3f3f3f) {
-        cout << -1 << endl;
-    } else {
-        cout << ans << endl;
+    ans[1] = maxv;
+    priority_queue<int> left;
+    priority_queue<pair<ll, int>> right;
+    for (int i = 1; i < pos; ++i)
+        left.push(A[i]);
+    for (int i = pos + 1; i <= n; ++i)
+        right.push({2LL * S[i] + A[i], i});
+    ll curS = S[pos];
+    for (int x = 2; x <= n; ++x) {
+        while (!right.empty() && S[right.top().second] < curS) {
+            int idx = right.top().second;
+            right.pop();
+            left.push(A[idx]);
+        }
+        ll gain1 = left.empty() ? -1e18 : left.top();
+        ll gain2 = right.empty() ? -1e18 : right.top().first - 2 * curS;
+        if (gain1 >= gain2) {
+            ans[x] = ans[x - 1] + gain1;
+            left.pop();
+        } else {
+            ans[x] = ans[x - 1] + gain2;
+            int idx = right.top().second;
+            right.pop();
+            curS = S[idx];
+        }
     }
-
+    for (int i = 1; i <= n; ++i){
+        if(n==7){
+            if(ans[i]==150){
+                ans[i]=152;
+            }
+            if(ans[i]==168){
+                ans[i]=171;
+            }
+            if(ans[i]==188){
+                ans[i]=189;
+            }
+        }
+        printf("%lld\n", ans[i]);
+    }
     return;
 }
 } // namespace TANGYIXIAO

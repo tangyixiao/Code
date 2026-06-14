@@ -631,68 +631,33 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+typedef long long ll;
+const int N = 2005;
+int n, m;
+ll h[N], v[N];
 inline void solve(int Task_Id) {
-    int m, n;
-    cin >> m >> n;
-    int col[101][101];
-    memset(col, -1, sizeof(col));
-    for (int i = 0; i < n; ++i) {
-        int x, y, c;
-        cin >> x >> y >> c;
-        col[x][y] = c;
-    }
-
-    int dist[101][101][2];
-    memset(dist, 0x3f, sizeof(dist));
-    dist[1][1][col[1][1]] = 0;
-
-    using State = tuple<int, int, int, int>;
-    priority_queue<State, vector<State>, greater<State>> pq;
-    pq.push({0, 1, 1, col[1][1]});
-
-    int dx[4] = {0, 0, 1, -1};
-    int dy[4] = {1, -1, 0, 0};
-
-    while (!pq.empty()) {
-        auto [d, x, y, c] = pq.top();
-        pq.pop();
-        if (d != dist[x][y][c])
-            continue;
-
-        for (int i = 0; i < 4; ++i) {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-            if (nx < 1 || nx > m || ny < 1 || ny > m)
-                continue;
-
-            if (col[nx][ny] != -1) {
-                int newc = col[nx][ny];
-                int cost = (c == newc) ? 0 : 1;
-                if (d + cost < dist[nx][ny][newc]) {
-                    dist[nx][ny][newc] = d + cost;
-                    pq.push({dist[nx][ny][newc], nx, ny, newc});
-                }
-            } else {
-                if (col[x][y] == -1)
-                    continue;
-
-                int newc = c;
-                int cost = 2;
-                if (d + cost < dist[nx][ny][newc]) {
-                    dist[nx][ny][newc] = d + cost;
-                    pq.push({dist[nx][ny][newc], nx, ny, newc});
-                }
-            }
+    scanf("%d%d", &n, &m);
+    for (int i = 0; i < n - 1; ++i)
+        scanf("%lld", &h[i]);
+    for (int i = 0; i < m - 1; ++i)
+        scanf("%lld", &v[i]);
+    sort(h, h + n - 1, greater<ll>());
+    sort(v, v + m - 1, greater<ll>());
+    ll ans = 0;
+    int i = 0, j = 0;
+    int cntH = 1, cntV = 1;
+    while (i < n - 1 || j < m - 1) {
+        if (i < n - 1 && (j == m - 1 || h[i] >= v[j])) {
+            ans += h[i] * cntV;
+            ++cntH;
+            ++i;
+        } else {
+            ans += v[j] * cntH;
+            ++cntV;
+            ++j;
         }
     }
-
-    int ans = min(dist[m][m][0], dist[m][m][1]);
-    if (ans == 0x3f3f3f3f) {
-        cout << -1 << endl;
-    } else {
-        cout << ans << endl;
-    }
-
+    printf("%lld\n", ans);
     return;
 }
 } // namespace TANGYIXIAO

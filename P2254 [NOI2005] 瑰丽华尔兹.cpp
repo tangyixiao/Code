@@ -631,68 +631,130 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+int n, m, sx, sy, k;
+char g[205][205];
+int dp[205][205], nxt[205][205];
+int q[205], hd, tl;
 inline void solve(int Task_Id) {
-    int m, n;
-    cin >> m >> n;
-    int col[101][101];
-    memset(col, -1, sizeof(col));
-    for (int i = 0; i < n; ++i) {
-        int x, y, c;
-        cin >> x >> y >> c;
-        col[x][y] = c;
+    if (!(cin >> n >> m >> sx >> sy >> k))
+        return;
+    for (int i = 1; i <= n; ++i) {
+        for (int j = 1; j <= m; ++j) {
+            cin >> g[i][j];
+            dp[i][j] = -1e9;
+        }
     }
-
-    int dist[101][101][2];
-    memset(dist, 0x3f, sizeof(dist));
-    dist[1][1][col[1][1]] = 0;
-
-    using State = tuple<int, int, int, int>;
-    priority_queue<State, vector<State>, greater<State>> pq;
-    pq.push({0, 1, 1, col[1][1]});
-
-    int dx[4] = {0, 0, 1, -1};
-    int dy[4] = {1, -1, 0, 0};
-
-    while (!pq.empty()) {
-        auto [d, x, y, c] = pq.top();
-        pq.pop();
-        if (d != dist[x][y][c])
-            continue;
-
-        for (int i = 0; i < 4; ++i) {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-            if (nx < 1 || nx > m || ny < 1 || ny > m)
-                continue;
-
-            if (col[nx][ny] != -1) {
-                int newc = col[nx][ny];
-                int cost = (c == newc) ? 0 : 1;
-                if (d + cost < dist[nx][ny][newc]) {
-                    dist[nx][ny][newc] = d + cost;
-                    pq.push({dist[nx][ny][newc], nx, ny, newc});
+    dp[sx][sy] = 0;
+    for (int r = 1; r <= k; ++r) {
+        int s, t, d;
+        cin >> s >> t >> d;
+        int len = t - s + 1;
+        if (d == 1) {
+            for (int j = 1; j <= m; ++j) {
+                hd = 1;
+                tl = 0;
+                for (int i = n; i >= 1; --i) {
+                    if (g[i][j] == 'x') {
+                        hd = 1;
+                        tl = 0;
+                        nxt[i][j] = -1e9;
+                        continue;
+                    }
+                    if (dp[i][j] >= 0) {
+                        while (hd <= tl && dp[q[tl]][j] + q[tl] <= dp[i][j] + i)
+                            tl--;
+                        q[++tl] = i;
+                    }
+                    while (hd <= tl && q[hd] > i + len)
+                        hd++;
+                    if (hd <= tl)
+                        nxt[i][j] = dp[q[hd]][j] + q[hd] - i;
+                    else
+                        nxt[i][j] = -1e9;
                 }
-            } else {
-                if (col[x][y] == -1)
-                    continue;
-
-                int newc = c;
-                int cost = 2;
-                if (d + cost < dist[nx][ny][newc]) {
-                    dist[nx][ny][newc] = d + cost;
-                    pq.push({dist[nx][ny][newc], nx, ny, newc});
+            }
+        } else if (d == 2) {
+            for (int j = 1; j <= m; ++j) {
+                hd = 1;
+                tl = 0;
+                for (int i = 1; i <= n; ++i) {
+                    if (g[i][j] == 'x') {
+                        hd = 1;
+                        tl = 0;
+                        nxt[i][j] = -1e9;
+                        continue;
+                    }
+                    if (dp[i][j] >= 0) {
+                        while (hd <= tl && dp[q[tl]][j] - q[tl] <= dp[i][j] - i)
+                            tl--;
+                        q[++tl] = i;
+                    }
+                    while (hd <= tl && q[hd] < i - len)
+                        hd++;
+                    if (hd <= tl)
+                        nxt[i][j] = dp[q[hd]][j] - q[hd] + i;
+                    else
+                        nxt[i][j] = -1e9;
+                }
+            }
+        } else if (d == 3) {
+            for (int i = 1; i <= n; ++i) {
+                hd = 1;
+                tl = 0;
+                for (int j = m; j >= 1; --j) {
+                    if (g[i][j] == 'x') {
+                        hd = 1;
+                        tl = 0;
+                        nxt[i][j] = -1e9;
+                        continue;
+                    }
+                    if (dp[i][j] >= 0) {
+                        while (hd <= tl && dp[i][q[tl]] + q[tl] <= dp[i][j] + j)
+                            tl--;
+                        q[++tl] = j;
+                    }
+                    while (hd <= tl && q[hd] > j + len)
+                        hd++;
+                    if (hd <= tl)
+                        nxt[i][j] = dp[i][q[hd]] + q[hd] - j;
+                    else
+                        nxt[i][j] = -1e9;
+                }
+            }
+        } else {
+            for (int i = 1; i <= n; ++i) {
+                hd = 1;
+                tl = 0;
+                for (int j = 1; j <= m; ++j) {
+                    if (g[i][j] == 'x') {
+                        hd = 1;
+                        tl = 0;
+                        nxt[i][j] = -1e9;
+                        continue;
+                    }
+                    if (dp[i][j] >= 0) {
+                        while (hd <= tl && dp[i][q[tl]] - q[tl] <= dp[i][j] - j)
+                            tl--;
+                        q[++tl] = j;
+                    }
+                    while (hd <= tl && q[hd] < j - len)
+                        hd++;
+                    if (hd <= tl)
+                        nxt[i][j] = dp[i][q[hd]] - q[hd] + j;
+                    else
+                        nxt[i][j] = -1e9;
                 }
             }
         }
+        memcpy(dp, nxt, sizeof(dp));
     }
-
-    int ans = min(dist[m][m][0], dist[m][m][1]);
-    if (ans == 0x3f3f3f3f) {
-        cout << -1 << endl;
-    } else {
-        cout << ans << endl;
+    int ans = 0;
+    for (int i = 1; i <= n; ++i) {
+        for (int j = 1; j <= m; ++j) {
+            ans = max(ans, dp[i][j]);
+        }
     }
-
+    cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO

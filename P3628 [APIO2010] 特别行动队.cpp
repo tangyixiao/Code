@@ -631,68 +631,36 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+typedef long long ll;
+const int N = 1000005;
+int n, q[N];
+ll a, b, c, x[N], s[N], dp[N];
+ll Y(int j) { return dp[j] + a * s[j] * s[j] - b * s[j]; }
+ll X(int j) { return s[j]; }
+double slope(int i, int j) {
+    if (X(i) == X(j))
+        return 1e18;
+    return (double)(Y(j) - Y(i)) / (X(j) - X(i));
+}
 inline void solve(int Task_Id) {
-    int m, n;
-    cin >> m >> n;
-    int col[101][101];
-    memset(col, -1, sizeof(col));
-    for (int i = 0; i < n; ++i) {
-        int x, y, c;
-        cin >> x >> y >> c;
-        col[x][y] = c;
+    scanf("%d%lld%lld%lld", &n, &a, &b, &c);
+    for (int i = 1; i <= n; ++i) {
+        scanf("%lld", &x[i]);
+        s[i] = s[i - 1] + x[i];
     }
-
-    int dist[101][101][2];
-    memset(dist, 0x3f, sizeof(dist));
-    dist[1][1][col[1][1]] = 0;
-
-    using State = tuple<int, int, int, int>;
-    priority_queue<State, vector<State>, greater<State>> pq;
-    pq.push({0, 1, 1, col[1][1]});
-
-    int dx[4] = {0, 0, 1, -1};
-    int dy[4] = {1, -1, 0, 0};
-
-    while (!pq.empty()) {
-        auto [d, x, y, c] = pq.top();
-        pq.pop();
-        if (d != dist[x][y][c])
-            continue;
-
-        for (int i = 0; i < 4; ++i) {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-            if (nx < 1 || nx > m || ny < 1 || ny > m)
-                continue;
-
-            if (col[nx][ny] != -1) {
-                int newc = col[nx][ny];
-                int cost = (c == newc) ? 0 : 1;
-                if (d + cost < dist[nx][ny][newc]) {
-                    dist[nx][ny][newc] = d + cost;
-                    pq.push({dist[nx][ny][newc], nx, ny, newc});
-                }
-            } else {
-                if (col[x][y] == -1)
-                    continue;
-
-                int newc = c;
-                int cost = 2;
-                if (d + cost < dist[nx][ny][newc]) {
-                    dist[nx][ny][newc] = d + cost;
-                    pq.push({dist[nx][ny][newc], nx, ny, newc});
-                }
-            }
-        }
+    int h = 0, t = 0;
+    q[0] = 0;
+    for (int i = 1; i <= n; ++i) {
+        ll K = 2 * a * s[i];
+        while (h < t && slope(q[h], q[h + 1]) >= K)
+            ++h;
+        int j = q[h];
+        dp[i] = dp[j] + a * (s[i] - s[j]) * (s[i] - s[j]) + b * (s[i] - s[j]) + c;
+        while (h < t && slope(q[t - 1], q[t]) <= slope(q[t], i))
+            --t;
+        q[++t] = i;
     }
-
-    int ans = min(dist[m][m][0], dist[m][m][1]);
-    if (ans == 0x3f3f3f3f) {
-        cout << -1 << endl;
-    } else {
-        cout << ans << endl;
-    }
-
+    printf("%lld\n", dp[n]);
     return;
 }
 } // namespace TANGYIXIAO

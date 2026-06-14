@@ -631,68 +631,43 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+using ll = long long;
 inline void solve(int Task_Id) {
-    int m, n;
-    cin >> m >> n;
-    int col[101][101];
-    memset(col, -1, sizeof(col));
-    for (int i = 0; i < n; ++i) {
-        int x, y, c;
-        cin >> x >> y >> c;
-        col[x][y] = c;
-    }
-
-    int dist[101][101][2];
-    memset(dist, 0x3f, sizeof(dist));
-    dist[1][1][col[1][1]] = 0;
-
-    using State = tuple<int, int, int, int>;
-    priority_queue<State, vector<State>, greater<State>> pq;
-    pq.push({0, 1, 1, col[1][1]});
-
-    int dx[4] = {0, 0, 1, -1};
-    int dy[4] = {1, -1, 0, 0};
-
-    while (!pq.empty()) {
-        auto [d, x, y, c] = pq.top();
+    int k, m;
+    cin >> k >> m;
+    priority_queue<ll, vector<ll>, greater<ll>> pq;
+    unordered_set<ll> vis;
+    pq.push(1);
+    vis.insert(1);
+    string raw;
+    for (int i = 0; i < k; ++i) {
+        ll cur = pq.top();
         pq.pop();
-        if (d != dist[x][y][c])
-            continue;
-
-        for (int i = 0; i < 4; ++i) {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-            if (nx < 1 || nx > m || ny < 1 || ny > m)
-                continue;
-
-            if (col[nx][ny] != -1) {
-                int newc = col[nx][ny];
-                int cost = (c == newc) ? 0 : 1;
-                if (d + cost < dist[nx][ny][newc]) {
-                    dist[nx][ny][newc] = d + cost;
-                    pq.push({dist[nx][ny][newc], nx, ny, newc});
-                }
-            } else {
-                if (col[x][y] == -1)
-                    continue;
-
-                int newc = c;
-                int cost = 2;
-                if (d + cost < dist[nx][ny][newc]) {
-                    dist[nx][ny][newc] = d + cost;
-                    pq.push({dist[nx][ny][newc], nx, ny, newc});
-                }
-            }
+        raw += to_string(cur);
+        ll a = 2 * cur + 1;
+        ll b = 4 * cur + 5;
+        if (!vis.count(a)) {
+            vis.insert(a);
+            pq.push(a);
+        }
+        if (!vis.count(b)) {
+            vis.insert(b);
+            pq.push(b);
         }
     }
-
-    int ans = min(dist[m][m][0], dist[m][m][1]);
-    if (ans == 0x3f3f3f3f) {
-        cout << -1 << endl;
-    } else {
-        cout << ans << endl;
+    cout << raw << endl;
+    string st;
+    int rem = m;
+    for (char c : raw) {
+        while (!st.empty() && st.back() < c && rem > 0) {
+            st.pop_back();
+            --rem;
+        }
+        st.push_back(c);
     }
-
+    if (rem > 0)
+        st.resize(st.size() - rem);
+    cout << st << endl;
     return;
 }
 } // namespace TANGYIXIAO
