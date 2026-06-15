@@ -7,7 +7,7 @@ Copyright (C) 2026 TangYixiao
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -608,7 +608,6 @@ signed main(int argc, char *argv[]) {
 #ifdef TIME_COUNT
     Start_Time_Count();
 #endif
-    IOSS_Init();
 #if JUDGE == 1
     Judge_File(FILE_NAME);
 #elif JUDGE == 2
@@ -631,8 +630,91 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+typedef long long ll;
+
+struct Item {
+    int id, s;
+    ll L, R, sum_fixed;
+    vector<int> row;
+    ll v;
+};
 inline void solve(int Task_Id) {
-    
+    int n, m;
+    ll k;
+    scanf("%d%d%lld", &n, &m, &k);
+    vector<Item> it(n);
+    for (int i = 0; i < n; ++i) {
+        it[i].id = i;
+        scanf("%d", &it[i].s);
+        it[i].row.resize(m);
+        ll sum = 0;
+        for (int j = 0; j < m; ++j) {
+            int x;
+            scanf("%d", &x);
+            it[i].row[j] = x;
+            if (x != -1)
+                sum += x;
+        }
+        int cnt = 0;
+        for (int x : it[i].row)
+            if (x == -1)
+                ++cnt;
+        it[i].sum_fixed = sum;
+        it[i].L = sum;
+        it[i].R = sum + k * cnt;
+    }
+
+    sort(it.begin(), it.end(), [](const Item &a, const Item &b) {
+        if (a.s != b.s)
+            return a.s < b.s;
+        if (a.L != b.L)
+            return a.L < b.L;
+        return a.R < b.R;
+    });
+
+    bool ok = true;
+    ll prv = -1;
+    int last_s = -1;
+    for (auto &x : it) {
+        ll need;
+        if (x.s != last_s) {
+            need = max(x.L, prv + 1);
+        } else {
+            need = max(x.L, prv);
+        }
+        if (need > x.R) {
+            ok = false;
+            break;
+        }
+        x.v = need;
+        prv = need;
+        last_s = x.s;
+    }
+
+    if (!ok) {
+        printf("No\n");
+        return;
+    }
+
+    printf("Yes\n");
+    sort(it.begin(), it.end(), [](const Item &a, const Item &b) {
+        return a.id < b.id;
+    });
+    for (auto &x : it) {
+        ll rem = x.v - x.sum_fixed;
+        for (int j = 0; j < m; ++j) {
+            if (x.row[j] != -1) {
+                printf("%d", x.row[j]);
+            } else {
+                ll fill = rem < k ? rem : k;
+                printf("%lld", fill);
+                rem -= fill;
+            }
+            if (j + 1 < m)
+                printf(" ");
+        }
+        printf("\n");
+    }
     return;
 }
 } // namespace TANGYIXIAO
