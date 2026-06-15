@@ -7,7 +7,7 @@ Copyright (C) 2026 TangYixiao
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-#define MULTIPLE_TEST
+// #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -608,6 +608,7 @@ signed main(int argc, char *argv[]) {
 #ifdef TIME_COUNT
     Start_Time_Count();
 #endif
+    IOSS_Init();
 #if JUDGE == 1
     Judge_File(FILE_NAME);
 #elif JUDGE == 2
@@ -616,7 +617,7 @@ signed main(int argc, char *argv[]) {
 #endif
     int T = 1;
 #ifdef MULTIPLE_TEST
-    scanf("%d", &T);
+    cin >> T;
 #endif
     for (int Tasks_Id = 1; Tasks_Id <= T; Tasks_Id++) {
         solve(Tasks_Id);
@@ -630,49 +631,8 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 100005;
-struct P {
-    long long x, y;
-} pt[N], stk[N];
-int m;
-P p0;
-
-long long cross(P a, P b, P c) {
-    return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
-}
-
-long long dist2(P a, P b) {
-    long long dx = b.x - a.x, dy = b.y - a.y;
-    return dx * dx + dy * dy;
-}
-
-bool cmp(P a, P b) {
-    long long c = cross(p0, a, b);
-    if (c == 0)
-        return dist2(p0, a) < dist2(p0, b);
-    return c > 0;
-}
-
 inline void solve(int Task_Id) {
-    int n; scanf("%d", &n);
-    m = 0;
-    for (int i = 0; i < n; ++i) {
-        long long x, y; char c;
-        scanf("%lld %lld %c", &x, &y, &c);
-        if (c == 'Y') { pt[m].x = x; pt[m].y = y; ++m; }
-    }
-    if (m == 0) { printf("0\n"); return; }
-    int id = 0;
-    for (int i = 1; i < m; ++i)
-        if (pt[i].x < pt[id].x || (pt[i].x == pt[id].x && pt[i].y < pt[id].y))
-            id = i;
-    swap(pt[0], pt[id]);
-    p0 = pt[0];
-    sort(pt + 1, pt + m, cmp);
-    printf("%d\n", m);
-    for (int i = 0; i < m; ++i)
-        printf("%lld %lld\n", pt[i].x, pt[i].y);
+    
+    return;
 }
 } // namespace TANGYIXIAO
-
-
