@@ -1,13 +1,16 @@
-#include <algorithm>
-#include <cstdio>
+#include <iostream>
 #include <vector>
+
 using namespace std;
 
+
+
+
+
 int main() {
-    int T;
-    scanf("%d", &T);
-    while (T--) {
-        
-    }
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    
     return 0;
 }
