@@ -608,7 +608,7 @@ signed main(int argc, char *argv[]) {
 #ifdef TIME_COUNT
     Start_Time_Count();
 #endif
-
+    // IOSS_Init();
 #if JUDGE == 1
     Judge_File(FILE_NAME);
 #elif JUDGE == 2
@@ -631,105 +631,24 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-
-const int N = 1000005;
-const int mod = 1000000007;
-
-int n, s;
-int hd[N], to[N * 2], nx[N * 2], edc;
-void add(int u, int v) {
-    to[++edc] = v;
-    nx[edc] = hd[u];
-    hd[u] = edc;
-}
-
-int pr[N], dep[N], ord[N], cc[N];
-int f0[N], f1[N], ot[N], an[N];
-bool mu[N], sm[N];
-int bid[N], bvl[N];
-int q[N];
-
+using ull = unsigned long long;
 inline void solve(int Task_Id) {
-
-    scanf("%d%d", &n, &s);
-    for (int i = 1; i < n; ++i) {
-        int u, v; scanf("%d%d", &u, &v);
-        add(u, v); add(v, u);
-    }
-
-    int qh = 0, qt = 0;
-    q[qt++] = 1;
-    pr[1] = 0; dep[1] = 0;
-    int oi = 0;
-    while (qh < qt) {
-        int u = q[qh++];
-        ord[oi++] = u;
-        for (int e = hd[u]; e; e = nx[e]) {
-            int v = to[e];
-            if (v == pr[u]) continue;
-            pr[v] = u;
-            dep[v] = dep[u] + 1;
-            cc[u]++;
-            q[qt++] = v;
+    int t;
+    scanf("%d", &t);
+    while (t--) {
+        int n;
+        ull m;
+        scanf("%d%llu", &n, &m);
+        int L = 0;
+        for (ull x = 1; x <= m; x <<= 1) ++L;
+        if (n > L) {
+            puts("No");
+        } else {
+            puts("Yes");
+            for (int i = 0; i < n; ++i)
+                printf("%llu%c", 1ULL << i, " \n"[i == n - 1]);
         }
     }
-
-    mu[1] = mu[s] = true;
-
-    for (int i = n - 1; i >= 0; --i) {
-        int u = ord[i];
-        bool smu = mu[u];
-        int prod = 1;
-        for (int e = hd[u]; e; e = nx[e]) {
-            int v = to[e];
-            if (v == pr[u]) continue;
-            if (sm[v]) smu = true;
-            prod = 1LL * prod * (f0[v] + f1[v]) % mod;
-        }
-        sm[u] = smu;
-        f0[u] = smu ? 0 : 1;
-        f1[u] = prod;
-    }
-
-    int C = f1[1];
-    long long S = f1[1];
-    ot[1] = 1;
-    int cur = 0;
-
-    for (int i = 0; i < n; ++i) {
-        int u = ord[i];
-        int st = cur;
-        for (int e = hd[u]; e; e = nx[e]) {
-            int v = to[e];
-            if (v == pr[u]) continue;
-            bid[cur] = v;
-            bvl[cur] = (f0[v] + f1[v]) % mod;
-            cur++;
-        }
-        int k = cur - st;
-        if (!k) continue;
-
-        long long pre = 1;
-        for (int j = st; j < cur; ++j) {
-            int v = bid[j];
-            ot[v] = ot[u] * pre % mod;
-            pre = pre * bvl[j] % mod;
-        }
-
-        long long suf = 1;
-        for (int j = cur - 1; j >= st; --j) {
-            int v = bid[j];
-            ot[v] = ot[v] * suf % mod;
-            an[v] = 1LL * ot[v] * f1[v] % mod;
-            S = (S + an[v]) % mod;
-            suf = suf * bvl[j] % mod;
-        }
-    }
-
-    int ds = dep[s];
-    long long ans = (2LL * S - (2LL + ds) * C) % mod;
-    if (ans < 0) ans += mod;
-    printf("%lld\n", ans);
     return;
 }
 } // namespace TANGYIXIAO
