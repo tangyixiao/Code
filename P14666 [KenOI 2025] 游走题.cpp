@@ -631,8 +631,114 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+
+typedef long long ll;
+const int N = 1000005;
+const int mod = 1000000007;
+
+int n, s;
+int head[N], to[N * 2], nxt[N * 2], edg_cnt = 1;
+int parent[N], order[N], o_cnt;
+int cnt_child[N], start_child[N], child[N];
+int cur_cnt[N];
+ll f[N], g[N];
+int path[N], path_len;
+
+void add_edge(int u, int v) {
+    to[edg_cnt] = v;
+    nxt[edg_cnt] = head[u];
+    head[u] = edg_cnt++;
+}
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> s;
+    for (int i = 1; i < n; ++i) {
+        int u, v;
+        cin >> u >> v;
+        add_edge(u, v);
+        add_edge(v, u);
+    }
+    if (n == 1) {
+        puts("0");
+        return;
+    }
+
+    int stk[N], top = 0;
+    stk[top++] = 1;
+    parent[1] = 0;
+    while (top) {
+        int u = stk[--top];
+        order[o_cnt++] = u;
+        for (int e = head[u]; e; e = nxt[e]) {
+            int v = to[e];
+            if (v == parent[u])
+                continue;
+            parent[v] = u;
+            stk[top++] = v;
+        }
+    }
+
+    for (int i = 1; i <= n; ++i)
+        cnt_child[i] = 0;
+    for (int i = 2; i <= n; ++i)
+        cnt_child[parent[i]]++;
+    start_child[1] = 1;
+    for (int i = 2; i <= n; ++i)
+        start_child[i] = start_child[i - 1] + cnt_child[i - 1];
+    for (int i = 1; i <= n; ++i)
+        cur_cnt[i] = 0;
+    for (int i = 2; i <= n; ++i) {
+        int u = parent[i];
+        int pos = start_child[u] + cur_cnt[u];
+        child[pos] = i;
+        cur_cnt[u]++;
+    }
+
+    for (int i = o_cnt - 1; i >= 0; --i) {
+        int u = order[i];
+        ll tot = 1, sum_g = 0;
+        int st = start_child[u], ed = st + cnt_child[u];
+        for (int j = st; j < ed; ++j) {
+            int v = child[j];
+            ll fv = (1 + f[v]) % mod;
+            ll nxt_tot = tot * fv % mod;
+            sum_g = (sum_g * fv + g[v] * tot) % mod;
+            tot = nxt_tot;
+        }
+        f[u] = tot;
+        g[u] = (tot + sum_g) % mod;
+    }
+
+    path_len = 0;
+    int cur = s;
+    while (1) {
+        path[path_len++] = cur;
+        if (cur == 1)
+            break;
+        cur = parent[cur];
+    }
+    for (int i = 0; i < path_len / 2; ++i)
+        swap(path[i], path[path_len - 1 - i]);
+    int dist = path_len - 1;
+
+    ll cur_total = 1, cur_sum = 0;
+    for (int i = 0; i < path_len; ++i) {
+        int u = path[i];
+        cur_sum = (cur_sum + cur_total) % mod;
+        int nxt = (i + 1 < path_len) ? path[i + 1] : 0;
+        int st = start_child[u], ed = st + cnt_child[u];
+        for (int j = st; j < ed; ++j) {
+            int v = child[j];
+            if (v == nxt)
+                continue;
+            ll fv = (1 + f[v]) % mod;
+            cur_sum = (cur_sum * fv + g[v] * cur_total) % mod;
+            cur_total = cur_total * fv % mod;
+        }
+    }
+    ll ans = (2LL * cur_sum - (2LL + dist) * cur_total) % mod;
+    ans = (ans % mod + mod) % mod;
+    cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO
