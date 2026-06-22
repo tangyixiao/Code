@@ -63,6 +63,9 @@
 
 2026.1.20 通过 1000 祭
 
+2026.6.22 AC 2000 祭
+
+
 ---
 
 ![](https://atrating.baoshuo.dev/rating?username=tangyixiao)
