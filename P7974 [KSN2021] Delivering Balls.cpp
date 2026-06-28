@@ -631,8 +631,43 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-inline void solve(int Task_Id) {
-    // do something here
-    return;
+const int N = 200005, LOG = 18;
+int H[N], lg[N], st[N][LOG];
+
+int qmax(int l, int r) {
+    int k = lg[r - l + 1];
+    return max(st[l][k], st[r - (1 << k) + 1][k]);
+}
+
+void solve(int) {
+    int n;
+    scanf("%d", &n);
+    for (int i = 1; i <= n; ++i)
+        scanf("%d", &H[i]);
+
+    lg[0] = -1;
+    for (int i = 1; i <= n; ++i)
+        lg[i] = lg[i >> 1] + 1, st[i][0] = H[i];
+    for (int j = 1; j < LOG; ++j)
+        for (int i = 1; i + (1 << j) - 1 <= n; ++i)
+            st[i][j] = max(st[i][j - 1], st[i + (1 << (j - 1))][j - 1]);
+
+    int q;
+    scanf("%d", &q);
+    while (q--) {
+        int s, t;
+        scanf("%d%d", &s, &t);
+        int l = min(s, t), r = max(s, t);
+        int mx = qmax(l, r);
+        long long U = max(0, mx - H[s]);
+        long long d = H[t] - H[s];
+        long long K = r - l;
+        long long ans;
+        if (2 * U - d <= K)
+            ans = U + d + 2 * K;
+        else
+            ans = 5 * U - d;
+        printf("%lld\n", ans);
+    }
 }
 } // namespace TANGYIXIAO
