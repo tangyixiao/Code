@@ -640,62 +640,57 @@ signed main(int argc, char *argv[]) {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 const int N = 300005;
-int a[N], b[N], c[N], B[N], C[N], s[N], l[N], r[N];
+int a[N], h[N / 2 + 5], g[N / 2 + 5], ans[N];
 inline void solve(int Task_Id) {
     int n;
-    cin >> n;
-    for (int i = 0; i < n; ++i)
-        cin >> a[i];
-    if (n == 1) {
-        cout << a[0] << '\n';
-        return;
-    }
-    int m = n - 1;
-    for (int i = 0; i < m; ++i) {
-        b[i] = max(a[i], a[i + 1]);
-        c[i] = min(a[i], a[i + 1]);
-    }
-    auto sol = [](int *arr, int *res, int m) {
-        int p;
-        p = 0;
-        for (int i = 0; i < m; ++i) {
-            while (p && arr[s[p - 1]] >= arr[i])
-                --p;
-            l[i] = p ? s[p - 1] : -1;
-            s[p++] = i;
-        }
-        p = 0;
-        for (int i = m - 1; i >= 0; --i) {
-            while (p && arr[s[p - 1]] >= arr[i])
-                --p;
-            r[i] = p ? s[p - 1] : m;
-            s[p++] = i;
-        }
-        for (int i = 0; i < m; ++i) {
-            int len = r[i] - l[i] - 1;
-            if (arr[i] > res[len])
-                res[len] = arr[i];
-        }
-        for (int w = m; w >= 1; --w)
-            if (res[w + 1] > res[w])
-                res[w] = res[w + 1];
-    };
-    sol(b, B, m);
-    sol(c, C, m);
-    int mx = a[0];
-    for (int i = 1; i < n; ++i)
+    scanf("%d", &n);
+    int mx = 0;
+    for (int i = 1; i <= n; ++i) {
+        scanf("%d", &a[i]);
         if (a[i] > mx)
             mx = a[i];
-    for (int k = 0; k < n; ++k) {
-        int L = n - k;
-        if (L == 1)
-            cout << mx;
-        else if (L % 2 == 0)
-            cout << B[L / 2];
-        else
-            cout << C[(L - 1) / 2];
-        cout << (k + 1 == n ? '\n' : ' ');
     }
+    if (n == 1) {
+        printf("%d\n", mx);
+        return;
+    }
+
+    int max_h = (n - 2) / 2;
+    for (int i = 0; i <= max_h; ++i)
+        h[i] = 0;
+    for (int i = 1; i < n; ++i) {
+        int d = min(i - 1, n - 1 - i);
+        int v = max(a[i], a[i + 1]);
+        if (v > h[d])
+            h[d] = v;
+    }
+    for (int d = max_h - 1; d >= 0; --d)
+        if (h[d + 1] > h[d])
+            h[d] = h[d + 1];
+
+    int max_g = (n - 3) / 2;
+    for (int i = 0; i <= max_g + 1; ++i)
+        g[i] = 0;
+    for (int i = 2; i < n; ++i) {
+        int d = min(i - 1, n - i) - 1;
+        int v = max(min(a[i - 1], a[i]), min(a[i], a[i + 1]));
+        if (v > g[d])
+            g[d] = v;
+    }
+    for (int d = max_g - 1; d >= 0; --d)
+        if (g[d + 1] > g[d])
+            g[d] = g[d + 1];
+
+    ans[1] = mx;
+    for (int L = 2; L <= n; ++L) {
+        if (L % 2 == 0)
+            ans[L] = h[L / 2 - 1];
+        else
+            ans[L] = g[(L - 1) / 2 - 1];
+    }
+
+    for (int k = 0; k < n; ++k)
+        printf("%d%c", ans[n - k], " \n"[k == n - 1]);
     return;
 }
 } // namespace TANGYIXIAO
