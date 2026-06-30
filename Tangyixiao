@@ -1,0 +1,206 @@
+[General]
+answer_file_save_path=./.cph/${basename}_${1-index}.ans
+ask_for_loading_external_changes=true
+auto_complete_parentheses=true
+auto_indent=true
+auto_load_external_changes_if_no_unsaved_modification=true
+auto_remove_parentheses=true
+auto_save=true
+auto_save_interval=1000
+auto_save_interval_type=After the last modification
+auto_uncheck_accepted_testcases=false
+beta=false
+check_on_testcases_with_empty_output=false
+check_update=true
+cursor_width=1
+custom_application_font=@Variant(\0\0\0@\0\0\0\x14\0S\0\x61\0n\0s\0 \0S\0\x65\0r\0i\0\x66@\"\0\0\0\0\0\0\xff\xff\xff\xff\x5\x1\0\x32\x10)
+default_file_paths_for_problem_urls=@Invalid()
+default_language=C++
+default_time_limit=5000
+detached_run_terminal_arguments=-e
+detached_run_terminal_program=xterm
+display_eoln_in_diff=false
+display_stopwatch=true
+display_test_case_length_limit=500000
+editor_font="@Variant(\0\0\0@\0\0\0\x1c\0J\0\x65\0t\0\x42\0r\0\x61\0i\0n\0s\0 \0M\0o\0n\0o@,\0\0\0\0\0\0\xff\xff\xff\xff\x5\x1\0K\x10)"
+editor_theme=GitHub Dark
+error_message_color=red
+extra_bottom_margin=false
+file_problem_binding=/home/tangyixiao/Code/ARC072D D - Alice_Brown.cpp, https://atcoder.jp/contests/abc059/tasks/arc072_b, /home/tangyixiao/Code/POJ2311 Cutting Game.cpp, "http://poj.org/problem?id=2311"
+first_time_user=false
+force_close=false
+format_on_auto_save=true
+format_on_manual_save=true
+full_screen_dialog_shown=false
+geometry=@Rect(0 0 0 0)
+hide_stopwatch_result=false
+highlight_error_line=false
+html_diff_viewer_length_limit=50000
+input_file_save_path=./.cph/${basename}_${1-index}.in
+locale=\x7b80\x4f53\x4e2d\x6587
+maximized_window=true
+message_length_limit=20000
+message_logger_font="@Variant(\0\0\0@\0\0\0\x1c\0J\0\x65\0t\0\x42\0r\0\x61\0i\0n\0s\0 \0M\0o\0n\0o@,\0\0\0\0\0\0\xff\xff\xff\xff\x5\x1\0\x32\x10)"
+number_of_problems_in_contest=5
+opacity=100
+open_file_length_limit=20000
+open_old_file_for_old_problem_url=false
+output_display_length_limit=50000
+output_length_limit=500000
+promotion_dialog_shown=false
+recent_files=/home/tangyixiao/Code/ARC072D D - Alice_Brown.cpp, /home/tangyixiao/Code/ARC072D D - Alice&Brown.cpp, /home/tangyixiao/Code/POJ2311 Cutting Game.cpp, /home/tangyixiao/CPedtior/arc072_b.cpp, /home/tangyixiao/CPedtior/Untitled-1.cpp
+replace_tabs=false
+restore_old_problem_url=true
+right_splitter_size=@ByteArray()
+run_on_empty_testcase=false
+save_faster=false
+save_file_on_compilation=true
+save_file_on_execution=true
+save_tests=true
+show_compile_and_run_only=false
+show_only_monospaced_font=true
+splitter_size=@ByteArray()
+tab_jump_out_parentheses=false
+tab_width=4
+test_case_maximum_height=300
+test_cases_font="@Variant(\0\0\0@\0\0\0\x1c\0J\0\x65\0t\0\x42\0r\0\x61\0i\0n\0s\0 \0M\0o\0n\0o@,\0\0\0\0\0\0\xff\xff\xff\xff\x5\x1\0\x32\x10)"
+testcases_matching_rules=@Variant(\0\0\0\v\0\0\0\x2\0\0\0\x10\0(\0.\0*\0)\0\\\0.\0i\0n\0\0\0\f\0\\\0\x31\0.\0\x61\0n\0s), @Variant(\0\0\0\v\0\0\0\x2\0\0\0\x10\0(\0.\0*\0)\0\\\0.\0i\0n\0\0\0\f\0\\\0\x31\0.\0o\0u\0t)
+toggle_stopwatch_on_tab_switch=false
+total_usage_time=4360
+ui_style=Dark Fusion
+use_custom_application_font=false
+view_mode=split
+warn_message_color=green
+wrap_text=true
+
+[cf]
+enable=true
+path=cf
+show_toast_messages=true
+
+[clang_format]
+arguments=
+program=clang-format
+style=# \x57fa\x4e8e LLVM \x98ce\x683c\xff0c\x8fd9\x662f LLVM \x9879\x76ee\x672c\x8eab\x7684\x7f16\x7801\x89c4\x8303\xff0c\x9002\x5408\x5927\x591a\x6570 C++ \x9879\x76ee\x3002\nBasedOnStyle: LLVM\n\n# \x6307\x5b9a\x8bed\x8a00\x4e3a C++\xff0c\x53ea\x5bf9 C++ \x6587\x4ef6\x751f\x6548\x3002\nLanguage: Cpp\n\n# \x7f29\x8fdb\x5bbd\x5ea6\xff1a\x4f7f\x7528 4 \x4e2a\x7a7a\x683c\xff08LLVM \x9ed8\x8ba4\xff09\x3002\nIndentWidth: 4\n\n# \x7eed\x884c\x7f29\x8fdb\x5bbd\x5ea6\xff1a\x51fd\x6570\x8c03\x7528\x6216\x8868\x8fbe\x5f0f\x6362\x884c\x65f6\x7684\x989d\x5916\x7f29\x8fdb\xff08LLVM \x9ed8\x8ba4 4\xff09\x3002\nContinuationIndentWidth: 4\n\n# \x5217\x9650\x5236\xff1a\x6bcf\x884c\x5b57\x7b26\x6570\x9650\x5236\xff08LLVM \x9ed8\x8ba4 80\xff09\x3002\nColumnLimit: 0
+
+[competitive_companion]
+connection_port=10045
+enable=true
+head_comments=By Tangyixiao \nProblem: ${json.name}\nContest: ${json.group}\nURL: ${json.url}\nMemory Limit: ${json.memoryLimit} MB\nTime Limit: ${json.timeLimit} ms
+head_comments_powered_by_cp_editor=true
+head_comments_time_format=yyyy-MM-dd HH:mm:ss
+open_new_tab=true
+set_time_limit_for_tab=true
+
+[cpp]
+compile_command=c++ -Wall
+compiler_output_codec=UTF-8
+output_path=${tmpdir}/${basename}
+parentheses=@Variant(\0\0\0\t\0\0\0\x5\0\0\0\a\0(\0\0\0\a\0)\0\0\0\x2\0\0\0\x1\0\0\0\x2\0\0\0\x1\0\0\0\x2\0\0\0\x1), @Variant(\0\0\0\t\0\0\0\x5\0\0\0\a\0{\0\0\0\a\0}\0\0\0\x2\0\0\0\x1\0\0\0\x2\0\0\0\x1\0\0\0\x2\0\0\0\x1), @Variant(\0\0\0\t\0\0\0\x5\0\0\0\a\0[\0\0\0\a\0]\0\0\0\x2\0\0\0\x1\0\0\0\x2\0\0\0\x1\0\0\0\x2\0\0\0\x1), @Variant(\0\0\0\t\0\0\0\x5\0\0\0\a\0\"\0\0\0\a\0\"\0\0\0\x2\0\0\0\x1\0\0\0\x2\0\0\0\x1\0\0\0\x2\0\0\0\x1), @Variant(\0\0\0\t\0\0\0\x5\0\0\0\a\0'\0\0\0\a\0'\0\0\0\x2\0\0\0\x2\0\0\0\x2\0\0\0\x2\0\0\0\x2\0\0\0\0)
+run_arguments=
+template_cursor_position_offset_characters=4
+template_cursor_position_offset_type=end
+template_cursor_position_regex=main\\(\\)
+template_path=
+
+[default_path]
+action\add_pairs_of_test_cases\changes=testcase
+action\add_pairs_of_test_cases\uses=${testcase}
+action\custom_checker\changes=checker
+action\custom_checker\uses=${checker}
+action\export_and_import_settings\changes=settings
+action\export_and_import_settings\uses=${settings}
+action\export_and_load_session\changes=session
+action\export_and_load_session\uses=${session}
+action\extract_and_load_snippets\changes=snippets
+action\extract_and_load_snippets\uses=${snippets}
+action\load_single_test_case\changes=testcase
+action\load_single_test_case\uses=${testcase}
+action\open_contest\changes="contest, file, testcase, checker"
+action\open_contest\uses=${contest}
+action\open_file\changes="file, testcase, checker"
+action\open_file\uses=${file}
+action\save_file\changes="file, testcase, checker"
+action\save_file\uses=${file}
+action\save_test_case_to_a_file\changes=testcase
+action\save_test_case_to_a_file\uses=${testcase}
+names_and_paths=@Variant(\0\0\0\v\0\0\0\x2\0\0\0\xe\0\x63\0h\0\x65\0\x63\0k\0\x65\0r\0\0\0*\0/\0h\0o\0m\0\x65\0/\0t\0\x61\0n\0g\0y\0i\0x\0i\0\x61\0o\0/\0\x43\0o\0\x64\0\x65), @Variant(\0\0\0\v\0\0\0\x2\0\0\0\b\0\x66\0i\0l\0\x65\0\0\0*\0/\0h\0o\0m\0\x65\0/\0t\0\x61\0n\0g\0y\0i\0x\0i\0\x61\0o\0/\0\x43\0o\0\x64\0\x65), @Variant(\0\0\0\v\0\0\0\x2\0\0\0\x10\0s\0\x65\0t\0t\0i\0n\0g\0s\0\0\0\0), @Variant(\0\0\0\v\0\0\0\x2\0\0\0\x10\0t\0\x65\0s\0t\0\x63\0\x61\0s\0\x65\0\0\0*\0/\0h\0o\0m\0\x65\0/\0t\0\x61\0n\0g\0y\0i\0x\0i\0\x61\0o\0/\0\x43\0o\0\x64\0\x65)
+
+[generator_template]
+language=C++
+template_cursor_position_offset_characters=0
+template_cursor_position_offset_type=end
+template_cursor_position_regex=
+template_path=
+
+[hot_exit]
+auto_save=true
+auto_save_interval=20000
+enable=true
+
+[hotkey]
+change_view_mode=
+compile=F9
+compile_run=F11
+format=Alt+Shift+F
+kill=
+run=F10
+snippets=
+
+[java]
+class_name=Main
+compile_command=javac
+compiler_output_codec=UTF-8
+output_path=${tmpdir}
+parentheses=@Variant(\0\0\0\t\0\0\0\x5\0\0\0\x2\0\0\0(\0\0\0\x2\0\0\0)\0\0\0\x2\0\0\0\x1\0\0\0\x2\0\0\0\x1\0\0\0\x2\0\0\0\x1), @Variant(\0\0\0\t\0\0\0\x5\0\0\0\x2\0\0\0{\0\0\0\x2\0\0\0}\0\0\0\x2\0\0\0\x1\0\0\0\x2\0\0\0\x1\0\0\0\x2\0\0\0\x1), @Variant(\0\0\0\t\0\0\0\x5\0\0\0\x2\0\0\0[\0\0\0\x2\0\0\0]\0\0\0\x2\0\0\0\x1\0\0\0\x2\0\0\0\x1\0\0\0\x2\0\0\0\x1), @Variant(\0\0\0\t\0\0\0\x5\0\0\0\x2\0\0\0\"\0\0\0\x2\0\0\0\"\0\0\0\x2\0\0\0\x1\0\0\0\x2\0\0\0\x1\0\0\0\x2\0\0\0\x1), @Variant(\0\0\0\t\0\0\0\x5\0\0\0\x2\0\0\0'\0\0\0\x2\0\0\0'\0\0\0\x2\0\0\0\x1\0\0\0\x2\0\0\0\x1\0\0\0\x2\0\0\0\x1)
+run_arguments=
+run_command=java
+template_cursor_position_offset_characters=0
+template_cursor_position_offset_type=end
+template_cursor_position_regex=
+template_path=
+
+[lsp]
+args_cpp=
+args_java=
+args_python=-m pyls
+delay_cpp=2000
+delay_java=2000
+delay_python=2000
+path_cpp=clangd
+path_java=
+path_python=python
+use_autocomplete_cpp=false
+use_autocomplete_java=false
+use_autocomplete_python=false
+use_linting_cpp=false
+use_linting_java=false
+use_linting_python=false
+
+[proxy]
+enabled=true
+host_name=127.0.0.1
+password=
+port=1080
+type=System
+user=
+
+[python]
+parentheses=@Variant(\0\0\0\t\0\0\0\x5\0\0\0\x2\0\0\0(\0\0\0\x2\0\0\0)\0\0\0\x2\0\0\0\x1\0\0\0\x2\0\0\0\x1\0\0\0\x2\0\0\0\x1), @Variant(\0\0\0\t\0\0\0\x5\0\0\0\x2\0\0\0{\0\0\0\x2\0\0\0}\0\0\0\x2\0\0\0\x1\0\0\0\x2\0\0\0\x1\0\0\0\x2\0\0\0\x1), @Variant(\0\0\0\t\0\0\0\x5\0\0\0\x2\0\0\0[\0\0\0\x2\0\0\0]\0\0\0\x2\0\0\0\x1\0\0\0\x2\0\0\0\x1\0\0\0\x2\0\0\0\x1), @Variant(\0\0\0\t\0\0\0\x5\0\0\0\x2\0\0\0\"\0\0\0\x2\0\0\0\"\0\0\0\x2\0\0\0\x1\0\0\0\x2\0\0\0\x1\0\0\0\x2\0\0\0\x1), @Variant(\0\0\0\t\0\0\0\x5\0\0\0\x2\0\0\0'\0\0\0\x2\0\0\0'\0\0\0\x2\0\0\0\x1\0\0\0\x2\0\0\0\x1\0\0\0\x2\0\0\0\x1)
+run_arguments=
+run_command=python
+template_cursor_position_offset_characters=0
+template_cursor_position_offset_type=end
+template_cursor_position_regex=
+template_path=
+
+[wakatime]
+api_key=waka_377db560-8012-47ed-b018-d9c158e02932
+enable=true
+path=wakatime
+proxy=true
+
+[yapf]
+arguments=-m yapf
+program=python
+style="[style]\nbased_on_style = pep8"
