@@ -195,7 +195,7 @@ template_cursor_position_regex=
 template_path=
 
 [wakatime]
-api_key=waka_377db560-8012-47ed-b018-d9c158e02932
+api_key=waka_367b92f4-a044-4e38-a457-f589ce0a3fe6
 enable=true
 path=wakatime
 proxy=true
