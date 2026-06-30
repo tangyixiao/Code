@@ -1,6 +1,6 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
-signed main(){
-	cout<<"hello world";
-	return 0;
+signed main() {
+    cout << "hello world";
+    return 0;
 }

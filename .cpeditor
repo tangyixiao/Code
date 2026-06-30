@@ -101,7 +101,7 @@ run_arguments=
 template_cursor_position_offset_characters=4
 template_cursor_position_offset_type=end
 template_cursor_position_regex=main\\(\\)
-template_path=
+template_path=template.cpp
 
 [default_path]
 action\add_pairs_of_test_cases\changes=testcase
