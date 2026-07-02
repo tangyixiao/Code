@@ -648,8 +648,58 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 500005, M = 4000005, B = 3000005, P = 5000005;
+int n, m, h[N], t[M], nx[M], ec, d[N], lw[N], tm, st[N], tp, bp[P], bs[B], bl[B], bc, pt;
+void ad(int u, int v) {
+    t[ec] = v;
+    nx[ec] = h[u];
+    h[u] = ec++;
+}
+void df(int u, int p) {
+    d[u] = lw[u] = ++tm;
+    st[++tp] = u;
+    for (int i = h[u]; ~i; i = nx[i]) {
+        if (i == (p ^ 1))
+            continue;
+        int v = t[i];
+        if (!d[v]) {
+            df(v, i);
+            lw[u] = min(lw[u], lw[v]);
+            if (lw[v] >= d[u]) {
+                ++bc;
+                bs[bc] = pt;
+                while (st[tp] != v)
+                    bp[pt++] = st[tp--];
+                bp[pt++] = st[tp--];
+                bp[pt++] = u;
+                bl[bc] = pt - bs[bc];
+            }
+        } else if (d[v] < d[u])
+            lw[u] = min(lw[u], d[v]);
+    }
+}
 inline void solve(int Task_Id) {
-
+    scanf("%d%d", &n, &m);
+    for (int i = 1; i <= n; ++i)
+        h[i] = -1;
+    for (int i = 0, u, v; i < m; ++i) {
+        scanf("%d%d", &u, &v);
+        if (u != v)
+            ad(u, v), ad(v, u);
+    }
+    for (int i = 1; i <= n; ++i)
+        if (!d[i] && h[i] == -1)
+            ++bc, bs[bc] = pt, bp[pt++] = i, bl[bc] = 1;
+    for (int i = 1; i <= n; ++i)
+        if (!d[i] && h[i] != -1)
+            tp = 0, df(i, -1);
+    printf("%d\n", bc);
+    for (int i = 1; i <= bc; ++i) {
+        printf("%d", bl[i]);
+        for (int j = 0; j < bl[i]; ++j)
+            printf(" %d", bp[bs[i] + j]);
+        printf("\n");
+    }
     return;
 }
 } // namespace TANGYIXIAO
