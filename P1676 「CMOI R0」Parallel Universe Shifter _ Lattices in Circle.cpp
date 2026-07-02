@@ -648,8 +648,98 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+typedef __int128 ll;
+const int N = 1000005;
+struct V {
+    ll p, q;
+} s[N];
+int tp;
+ll n, m, x, y, D, C;
+
+ll sq(ll v) {
+    ll r = sqrtl(v);
+    while (r * r > v)
+        --r;
+    while ((r + 1) * (r + 1) <= v)
+        ++r;
+    return r;
+}
+bool ok(ll X, ll Y) {
+    return (X - n) * (X - n) + (Y - n) * (Y - n) >= n * n;
+}
+void ad(ll &D, ll x, ll p, ll q) {
+    D += x * q + (p - 1) * (q + 1) / 2;
+}
+void pr(ll v) {
+    if (v > 9)
+        pr(v / 10);
+    putchar(v % 10 + '0');
+}
 inline void solve(int Task_Id) {
-    // do something here
+    long long rd;
+    scanf("%lld", &rd);
+    n = rd;
+    long double val = (1.0L - sqrtl(2.0L) / 2.0L) * rd;
+    m = floorl(val + 1e-12L);
+    if (m < 0)
+        m = 0;
+    if (m == 0)
+        C = 0;
+    else {
+        ll S = 2 * n * m - m * m;
+        ll sqv = sq(S);
+        bool perf = (sqv * sqv == S);
+        ll tx = n - sqv;
+        if (perf)
+            x = tx - 1;
+        else
+            x = tx;
+        y = m + 1;
+        tp = 0;
+        s[++tp] = {1, 0};
+        s[++tp] = {1, 1};
+        D = 0;
+        while (y > m) {
+            V l = s[tp];
+            if (ok(x + l.p, y - l.q)) {
+                ad(D, x, l.p, l.q);
+                x += l.p;
+                y -= l.q;
+                continue;
+            }
+            if (tp == 1)
+                break;
+            V r = s[tp - 1];
+            if (!ok(x + r.p, y - r.q)) {
+                --tp;
+                continue;
+            }
+            V L = l, R = r;
+            while (1) {
+                V mi = {L.p + R.p, L.q + R.q};
+                if (ok(x + mi.p, y - mi.q)) {
+                    R = mi;
+                    s[++tp] = mi;
+                } else {
+                    L = mi;
+                    ll X = x + mi.p;
+                    if (X > n)
+                        break;
+                    ll Dv = n * n - (X - n) * (X - n);
+                    ll A = (n - X) * R.p;
+                    if (R.q * R.q * Dv >= A * A)
+                        break;
+                }
+            }
+            ad(D, x, R.p, R.q);
+            x += R.p;
+            y -= R.q;
+        }
+        C = 2 * D - m * m;
+    }
+    ll A = 4 * n * n - 4 * C - 4 * n + 5;
+    pr(A);
+    putchar('\n');
     return;
 }
 } // namespace TANGYIXIAO
