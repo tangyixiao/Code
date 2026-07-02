@@ -631,88 +631,71 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-typedef long long ll;
-const int N = 500005, M = 1000005, MD = 1000000007;
-vector<int> g[N];
-int n, m, eu[M], ev[M], df[N], lo[N], st[N], tp, tm, id[N], sz[N], eg[N], bc;
-int hd[N], to[N * 2], nx[N * 2], te;
-ll pw[M], dp[N], sd[N], ans;
+const int N = 10005, M = 100005;
+int n, m;
+int h[N], to[M], nx[M], ec;
+int df[N], lo[N], stk[N], tp, in[N], tm, sc, id[N], sz[N];
+int ord[N], pos[N];
+bool vis[N];
 
 void ad(int u, int v) {
-    to[++te] = v;
-    nx[te] = hd[u];
-    hd[u] = te;
+    to[++ec] = v;
+    nx[ec] = h[u];
+    h[u] = ec;
 }
 
-void tj(int u, int fa) {
+void tj(int u) {
     df[u] = lo[u] = ++tm;
-    st[++tp] = u;
-    for (int v : g[u]) {
-        if (v == fa)
-            continue;
-        if (!df[v]) {
-            tj(v, u);
-            lo[u] = min(lo[u], lo[v]);
-        } else
-            lo[u] = min(lo[u], df[v]);
-    }
-    if (lo[u] == df[u]) {
-        ++bc;
-        int x;
-        do {
-            x = st[tp--];
-            id[x] = bc;
-            ++sz[bc];
-        } while (x != u);
-    }
-}
-
-void dfs(int u, int p) {
-    sd[u] = eg[u];
-    dp[u] = (pw[sz[u]] - 1 + MD) % MD * pw[eg[u]] % MD;
-    ans = (ans + dp[u] * pw[m - sd[u]]) % MD;
-    for (int i = hd[u]; i; i = nx[i]) {
+    stk[++tp] = u;
+    in[u] = 1;
+    for (int i = h[u]; i; i = nx[i]) {
         int v = to[i];
-        if (v == p)
-            continue;
-        dfs(v, u);
-        ans = (ans + dp[u] * dp[v] % MD * pw[m - sd[u] - sd[v] - 1]) % MD;
-        ll ndp = (dp[u] * pw[sd[v] + 1] % MD + dp[v] * pw[sd[u]] % MD + dp[u] * dp[v] % MD) % MD;
-        dp[u] = ndp;
-        sd[u] += sd[v] + 1;
+        if (!df[v]) {
+            tj(v);
+            lo[u] = min(lo[u], lo[v]);
+        } else if (in[v]) {
+            lo[u] = min(lo[u], df[v]);
+        }
+    }
+    if (df[u] == lo[u]) {
+        ++sc;
+        int v;
+        do {
+            v = stk[tp--];
+            in[v] = 0;
+            id[v] = sc;
+            ++sz[sc];
+        } while (v != u);
     }
 }
-
 inline void solve(int Task_Id) {
     scanf("%d%d", &n, &m);
-    pw[0] = 1;
-    for (int i = 1; i <= m + 1; ++i)
-        pw[i] = (pw[i - 1] * 2) % MD;
     for (int i = 0; i < m; ++i) {
         int u, v;
         scanf("%d%d", &u, &v);
-        g[u].push_back(v);
-        g[v].push_back(u);
-        eu[i] = u;
-        ev[i] = v;
+        ad(u, v);
     }
-    tj(1, 0);
-    for (int i = 0; i < m; ++i) {
-        int u = eu[i], v = ev[i];
-        if (u > v) {
-            int t = u;
-            u = v;
-            v = t;
-        }
-        if (id[u] == id[v])
-            ++eg[id[u]];
-        else {
-            ad(id[u], id[v]);
-            ad(id[v], id[u]);
+    for (int i = 1; i <= n; ++i)
+        if (!df[i])
+            tj(i);
+    for (int i = 2; i <= sc; ++i)
+        pos[i] = pos[i - 1] + sz[i - 1];
+    static int cur[N] = {0};
+    for (int i = 1; i <= n; ++i) {
+        int c = id[i];
+        ord[pos[c] + cur[c]++] = i;
+    }
+    for (int i = 1; i <= sc; ++i)
+        sort(ord + pos[i], ord + pos[i] + sz[i]);
+    printf("%d\n", sc);
+    for (int i = 1; i <= n; ++i) {
+        int c = id[i];
+        if (!vis[c]) {
+            vis[c] = 1;
+            for (int j = 0; j < sz[c]; ++j)
+                printf("%d%c", ord[pos[c] + j], " \n"[j == sz[c] - 1]);
         }
     }
-    dfs(1, 0);
-    printf("%lld\n", ans);
     return;
 }
 } // namespace TANGYIXIAO

@@ -631,87 +631,114 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-typedef long long ll;
-const int N = 500005, M = 1000005, MD = 1000000007;
-vector<int> g[N];
-int n, m, eu[M], ev[M], df[N], lo[N], st[N], tp, tm, id[N], sz[N], eg[N], bc;
-int hd[N], to[N * 2], nx[N * 2], te;
-ll pw[M], dp[N], sd[N], ans;
-
-void ad(int u, int v) {
-    to[++te] = v;
-    nx[te] = hd[u];
-    hd[u] = te;
+const int N = 100005, M = 300005;
+int n, m;
+int h[N], to[M], nx[M], wg[M], ed;
+int df[N], lo[N], id[N], sz[N], stk[N], tp, ins[N], tm, sc;
+int h2[N], t2[M], n2[M], w2[M], e2;
+int ind[N];
+long long f[N], ans;
+void ad(int u, int v, int c) {
+    to[++ed] = v;
+    wg[ed] = c;
+    nx[ed] = h[u];
+    h[u] = ed;
 }
-
-void tj(int u, int fa) {
+void ad2(int u, int v, int c) {
+    t2[++e2] = v;
+    w2[e2] = c;
+    n2[e2] = h2[u];
+    h2[u] = e2;
+    ++ind[v];
+}
+void tj(int u) {
     df[u] = lo[u] = ++tm;
-    st[++tp] = u;
-    for (int v : g[u]) {
-        if (v == fa)
-            continue;
-        if (!df[v]) {
-            tj(v, u);
-            lo[u] = min(lo[u], lo[v]);
-        } else
-            lo[u] = min(lo[u], df[v]);
-    }
-    if (lo[u] == df[u]) {
-        ++bc;
-        int x;
-        do {
-            x = st[tp--];
-            id[x] = bc;
-            ++sz[bc];
-        } while (x != u);
-    }
-}
-
-void dfs(int u, int p) {
-    sd[u] = eg[u];
-    dp[u] = (pw[sz[u]] - 1 + MD) % MD * pw[eg[u]] % MD;
-    ans = (ans + dp[u] * pw[m - sd[u]]) % MD;
-    for (int i = hd[u]; i; i = nx[i]) {
+    stk[++tp] = u;
+    ins[u] = 1;
+    for (int i = h[u]; i; i = nx[i]) {
         int v = to[i];
-        if (v == p)
-            continue;
-        dfs(v, u);
-        ans = (ans + dp[u] * dp[v] % MD * pw[m - sd[u] - sd[v] - 1]) % MD;
-        ll ndp = (dp[u] * pw[sd[v] + 1] % MD + dp[v] * pw[sd[u]] % MD + dp[u] * dp[v] % MD) % MD;
-        dp[u] = ndp;
-        sd[u] += sd[v] + 1;
+        if (!df[v]) {
+            tj(v);
+            lo[u] = min(lo[u], lo[v]);
+        } else if (ins[v]) {
+            lo[u] = min(lo[u], df[v]);
+        }
+    }
+    if (df[u] == lo[u]) {
+        ++sc;
+        int v;
+        do {
+            v = stk[tp--];
+            ins[v] = 0;
+            id[v] = sc;
+            ++sz[sc];
+        } while (v != u);
     }
 }
-
 inline void solve(int Task_Id) {
     scanf("%d%d", &n, &m);
-    pw[0] = 1;
-    for (int i = 1; i <= m + 1; ++i)
-        pw[i] = (pw[i - 1] * 2) % MD;
     for (int i = 0; i < m; ++i) {
-        int u, v;
-        scanf("%d%d", &u, &v);
-        g[u].push_back(v);
-        g[v].push_back(u);
-        eu[i] = u;
-        ev[i] = v;
-    }
-    tj(1, 0);
-    for (int i = 0; i < m; ++i) {
-        int u = eu[i], v = ev[i];
-        if (u > v) {
-            int t = u;
-            u = v;
-            v = t;
-        }
-        if (id[u] == id[v])
-            ++eg[id[u]];
-        else {
-            ad(id[u], id[v]);
-            ad(id[v], id[u]);
+        int op, a, b;
+        scanf("%d%d%d", &op, &a, &b);
+        if (op == 1) {
+            ad(a, b, 0);
+            ad(b, a, 0);
+        } else if (op == 2) {
+            if (a == b) {
+                puts("-1");
+                return;
+            }
+            ad(a, b, 1);
+        } else if (op == 3) {
+            ad(b, a, 0);
+        } else if (op == 4) {
+            if (a == b) {
+                puts("-1");
+                return;
+            }
+            ad(b, a, 1);
+        } else {
+            ad(a, b, 0);
         }
     }
-    dfs(1, 0);
+    for (int i = 1; i <= n; ++i)
+        if (!df[i])
+            tj(i);
+    for (int u = 1; u <= n; ++u) {
+        for (int i = h[u]; i; i = nx[i]) {
+            int v = to[i], w = wg[i];
+            if (id[u] == id[v] && w > 0) {
+                puts("-1");
+                return;
+            }
+        }
+    }
+    for (int u = 1; u <= n; ++u) {
+        for (int i = h[u]; i; i = nx[i]) {
+            int v = to[i], w = wg[i];
+            if (id[u] != id[v])
+                ad2(id[u], id[v], w);
+        }
+    }
+    static int q[N];
+    int ql = 0, qr = 0;
+    for (int i = 1; i <= sc; ++i) {
+        f[i] = 1;
+        if (!ind[i])
+            q[qr++] = i;
+    }
+    while (ql < qr) {
+        int u = q[ql++];
+        for (int i = h2[u]; i; i = n2[i]) {
+            int v = t2[i], w = w2[i];
+            if (f[u] + w > f[v])
+                f[v] = f[u] + w;
+            if (--ind[v] == 0)
+                q[qr++] = v;
+        }
+    }
+    for (int i = 1; i <= sc; ++i)
+        ans += f[i] * sz[i];
     printf("%lld\n", ans);
     return;
 }

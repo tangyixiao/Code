@@ -648,8 +648,34 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 20005, M = 100005;
+int n, m;
+struct Edge {
+    int u, v, w;
+    bool operator<(const Edge &o) const { return w > o.w; }
+} e[M];
+int fa[N * 2];
+
+int find(int x) { return fa[x] == x ? x : fa[x] = find(fa[x]); }
+
 inline void solve(int Task_Id) {
-    // do something here
+    scanf("%d%d", &n, &m);
+    for (int i = 0; i < m; ++i)
+        scanf("%d%d%d", &e[i].u, &e[i].v, &e[i].w);
+    sort(e, e + m);
+    for (int i = 1; i <= 2 * n; ++i)
+        fa[i] = i;
+    for (int i = 0; i < m; ++i) {
+        int u = e[i].u, v = e[i].v;
+        int fu = find(u), fv = find(v);
+        if (fu == fv) {
+            printf("%d\n", e[i].w);
+            return;
+        }
+        fa[fu] = find(v + n);
+        fa[fv] = find(u + n);
+    }
+    puts("0");
     return;
 }
 } // namespace TANGYIXIAO
