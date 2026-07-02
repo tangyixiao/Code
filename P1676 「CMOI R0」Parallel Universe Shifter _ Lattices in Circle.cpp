@@ -9,8 +9,8 @@
 //  Test Type: single
 //  Batch ID: 8dfa229c-c7e6-454d-8ebc-ffb6fc5b4908
 //
-// Algorithm:
-// Complexity: O()
+// Algorithm: 分块、计算几何
+// Complexity: O(n^(3/2) or ???)
 // Note:
 //
 //
@@ -649,12 +649,12 @@ signed main(int argc, char *argv[]) {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 typedef __int128 ll;
-const int N = 1000005;
+const int N = 100005;
 struct V {
     ll p, q;
 } s[N];
 int tp;
-ll n, m, x, y, D, C;
+ll n, m, x, y, cnt, dc;
 
 ll sq(ll v) {
     ll r = sqrtl(v);
@@ -667,42 +667,46 @@ ll sq(ll v) {
 bool ok(ll X, ll Y) {
     return (X - n) * (X - n) + (Y - n) * (Y - n) >= n * n;
 }
-void ad(ll &D, ll x, ll p, ll q) {
-    D += x * q + (p - 1) * (q + 1) / 2;
-}
 void pr(ll v) {
     if (v > 9)
         pr(v / 10);
     putchar(v % 10 + '0');
 }
+
 inline void solve(int Task_Id) {
+
     long long rd;
     scanf("%lld", &rd);
     n = rd;
-    long double val = (1.0L - sqrtl(2.0L) / 2.0L) * rd;
-    m = floorl(val + 1e-12L);
+    m = (ll)floorl(n * (1.0L - sqrtl(2.0L) / 2.0L) + 1e-12L);
     if (m < 0)
         m = 0;
-    if (m == 0)
-        C = 0;
-    else {
-        ll S = 2 * n * m - m * m;
-        ll sqv = sq(S);
-        bool perf = (sqv * sqv == S);
-        ll tx = n - sqv;
-        if (perf)
-            x = tx - 1;
-        else
-            x = tx;
-        y = m + 1;
+
+    if (m == 0) {
+        cnt = 0;
+        dc = 0;
+    } else {
+        ll x0, y0;
+        bool in = ok(m - 1, m);
+        if (in) {
+            x0 = m - 1;
+            y0 = m;
+            dc = (m - 1) * (m - 1);
+        } else {
+            x0 = m - 1;
+            y0 = m + 1;
+            dc = m * m - 1;
+        }
+        x = x0;
+        y = y0;
         tp = 0;
         s[++tp] = {1, 0};
         s[++tp] = {1, 1};
-        D = 0;
+        cnt = 0;
         while (y > m) {
             V l = s[tp];
             if (ok(x + l.p, y - l.q)) {
-                ad(D, x, l.p, l.q);
+                cnt += x * l.q + (l.p - 1) * (l.q + 1) / 2;
                 x += l.p;
                 y -= l.q;
                 continue;
@@ -716,13 +720,13 @@ inline void solve(int Task_Id) {
             }
             V L = l, R = r;
             while (1) {
-                V mi = {L.p + R.p, L.q + R.q};
-                if (ok(x + mi.p, y - mi.q)) {
-                    R = mi;
-                    s[++tp] = mi;
+                V mid = {L.p + R.p, L.q + R.q};
+                if (ok(x + mid.p, y - mid.q)) {
+                    R = mid;
+                    s[++tp] = mid;
                 } else {
-                    L = mi;
-                    ll X = x + mi.p;
+                    L = mid;
+                    ll X = x + mid.p;
                     if (X > n)
                         break;
                     ll Dv = n * n - (X - n) * (X - n);
@@ -731,14 +735,22 @@ inline void solve(int Task_Id) {
                         break;
                 }
             }
-            ad(D, x, R.p, R.q);
+            cnt += x * R.q + (R.p - 1) * (R.q + 1) / 2;
             x += R.p;
             y -= R.q;
         }
-        C = 2 * D - m * m;
     }
-    ll A = 4 * n * n - 4 * C - 4 * n + 5;
-    pr(A);
+
+    ll i_n = 0;
+    for (ll a = 1; a * a <= n * n / 2; ++a) {
+        ll b2 = n * n - a * a;
+        ll b = sq(b2);
+        if (b * b == b2 && b > 0)
+            ++i_n;
+    }
+
+    ll ans = 4 * ((n - 1) * (n - 1) - (2 * cnt - dc) + i_n) + 4 * n + 1;
+    pr(ans);
     putchar('\n');
     return;
 }
