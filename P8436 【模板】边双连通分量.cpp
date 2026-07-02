@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-// Time: 2026-07-02 15:52:21
-//  Problem: P3386 【模板】二分图最大匹配
+// Time: 2026-07-02 10:42:57
+//  Problem: P8436 【模板】边双连通分量
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P3386
+//  URL: https://www.luogu.com.cn/problem/P8436
 //  Memory Limit: 512 MB
-//  Time Limit: 1000 ms
+//  Time Limit: 5000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: e076179a-fd88-442a-b63e-b410abe7255a
+//  Batch ID: eb75aa6b-a6a9-4623-b5cb-0d6b392581f9
 //
 // Algorithm:
 // Complexity: O()
@@ -648,39 +648,62 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int MAXN = 510;
-const int MAXM = 50010;
-vector<int> graph[MAXN];
-int match[MAXN];
-bool vis[MAXN];
-bool dfs(int u) {
-    for (int v : graph[u]) {
-        if (!vis[v]) {
-            vis[v] = true;
-            if (match[v] == 0 || dfs(match[v])) {
-                match[v] = u;
-                return true;
-            }
-        }
+const int N = 500005, M = 2000005;
+int n, m, df[N], lw[N], tm, brg[M], ec, vis[N];
+vector<pair<int, int>> G[N];
+vector<vector<int>> ans;
+
+void dfs(int u, int pe) {
+    df[u] = lw[u] = ++tm;
+    for (auto &e : G[u]) {
+        int v = e.first, id = e.second;
+        if (id == pe)
+            continue;
+        if (!df[v]) {
+            dfs(v, id);
+            lw[u] = min(lw[u], lw[v]);
+            if (lw[v] > df[u])
+                brg[id] = 1;
+        } else if (df[v] < df[u])
+            lw[u] = min(lw[u], df[v]);
     }
-    return false;
 }
-inline void solve(int Task_Id) {
-    int n, m, e;
-    cin >> n >> m >> e;
-    for (int i = 0; i < e; i++) {
-        int u, v;
-        cin >> u >> v;
-        graph[u].push_back(v);
+
+void d2(int u) {
+    vis[u] = 1;
+    ans.back().push_back(u);
+    for (auto &e : G[u]) {
+        int v = e.first, id = e.second;
+        if (!vis[v] && !brg[id])
+            d2(v);
     }
-    int ans = 0;
-    for (int i = 1; i <= n; i++) {
-        memset(vis, false, sizeof(vis));
-        if (dfs(i)) {
-            ans++;
+}
+
+inline void solve(int Task_Id) {
+    scanf("%d%d", &n, &m);
+    for (int i = 0, u, v; i < m; ++i) {
+        scanf("%d%d", &u, &v);
+        if (u != v) {
+            G[u].push_back({v, ec});
+            G[v].push_back({u, ec});
+            ++ec;
         }
     }
-    cout << ans << endl;
+    for (int i = 1; i <= n; ++i)
+        if (!df[i])
+            dfs(i, -1);
+    for (int i = 1; i <= n; ++i)
+        if (!vis[i]) {
+            ans.push_back(vector<int>());
+            d2(i);
+        }
+    printf("%d\n", (int)ans.size());
+    for (auto &c : ans) {
+        printf("%d", (int)c.size());
+        for (int x : c)
+            printf(" %d", x);
+        printf("\n");
+    }
     return;
 }
 } // namespace TANGYIXIAO

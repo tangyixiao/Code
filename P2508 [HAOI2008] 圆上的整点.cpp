@@ -1,18 +1,13 @@
 //  Author: Tangyixiao
-// Time: 2026-07-02 15:52:21
-//  Problem: P3386 【模板】二分图最大匹配
+// Time: 2026-07-02 07:59:45
+//  Problem: P2508 [HAOI2008] 圆上的整点
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P3386
-//  Memory Limit: 512 MB
+//  URL: https://www.luogu.com.cn/problem/P2508
+//  Memory Limit: 125 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: e076179a-fd88-442a-b63e-b410abe7255a
-//
-// Algorithm:
-// Complexity: O()
-// Note:
-//
+//  Batch ID: ae0adebd-81f0-41c0-a022-8a14267c1f73
 //
 // Powered by CP Editor (https://cpeditor.org)
 
@@ -553,6 +548,7 @@ using namespace __gnu_pbds;
 
 #pragma region TANGYIXIAO
 namespace TANGYIXIAO {
+#define int __int128
 #pragma region IO
 namespace IO {
 namespace FAST_IO {
@@ -565,19 +561,52 @@ inline void IOSS_Init() { std::ios::sync_with_stdio(false); std::cin.tie(0); std
 }
 using namespace FAST_IO;
 #pragma region FILE_IO
+/*
+
 namespace FILE_IO {
 const std::string Insuffix = ".in", Outsuffix = ".out", Anssuffix = ".ans";
 inline void Judge_File(std::string File_Name) { freopen((File_Name + Insuffix).c_str(), "r", stdin), freopen((File_Name + Outsuffix).c_str(), "w", stdout); return; }
 inline void Local_File(std::string File_Name, int File_Idx) { freopen((File_Name + std::to_string(File_Idx) + Insuffix).c_str(), "r", stdin), freopen((File_Name + std::to_string(File_Idx) + Outsuffix).c_str(), "w", stdout); return; }
 } // namespace FILE_IO
 using namespace FILE_IO;
+
+*/
+
 #pragma endregion FILE_IO
 #pragma region INT128_IO
+/*
+
 namespace INT128_IO {
 std::istream &operator>>(std::istream &is, __int128 &x) { std::string s; is >> s; bool neg = false; x = 0; for (char c : s) { if (c == '-') { neg = true; } else { x = x * 10 + (c - '0'); } } if (neg) { x = -x; } return is; }
 std::ostream &operator<<(std::ostream &os, __int128 x) { if (x == 0) { os << 0; } else { std::string s, t;if (x < 0) { x = -x, t = "-"; } for (; x;) { s.push_back('0' + x % 10), x /= 10; } std::reverse(s.begin(), s.end()); os << t << s; } return os; }
 } // namespace INT128_IO
 using namespace INT128_IO;
+
+*/
+namespace int128_read_write {
+int read() {
+    int x = 0, f = 1;
+    char c = getchar();
+    while (c < '0' || c > '9') {
+        if (c == '-')
+            f = -1;
+        c = getchar();
+    }
+    while (c >= '0' && c <= '9') {
+        x = x * 10 + c - '0';
+        c = getchar();
+    }
+    return x * f;
+}
+void write(int x) {
+    if (x < 0)
+        putchar('-'), x = -x;
+    if (x > 9)
+        write(x / 10);
+    putchar(x % 10 + '0');
+    return;
+}
+} // namespace int128_read_write
 #pragma endregion INT128_IO
 } // namespace IO
 using namespace IO;
@@ -621,7 +650,7 @@ using namespace TANGYIXIAO;
 // clang-format on
 #pragma endregion TANGYIXIAO
 #pragma region MAIN
-signed main(int argc, char *argv[]) {
+signed main() {
 #ifdef TIME_COUNT
     Start_Time_Count();
 #endif
@@ -648,39 +677,24 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int MAXN = 510;
-const int MAXM = 50010;
-vector<int> graph[MAXN];
-int match[MAXN];
-bool vis[MAXN];
-bool dfs(int u) {
-    for (int v : graph[u]) {
-        if (!vis[v]) {
-            vis[v] = true;
-            if (match[v] == 0 || dfs(match[v])) {
-                match[v] = u;
-                return true;
+int r, ans1 = 1;
+
+inline void solve(int Task_Id) {
+    r = int128_read_write::read();
+    for (int i = 2, cnt; i * i <= r; ++i) {
+        if (!(r % i)) {
+            cnt = 0;
+            do {
+                r /= i;
+                ++cnt;
+            } while (!(r % i));
+            if (i % 4 == 1) {
+                ans1 *= cnt << 1 | 1;
             }
         }
     }
-    return false;
-}
-inline void solve(int Task_Id) {
-    int n, m, e;
-    cin >> n >> m >> e;
-    for (int i = 0; i < e; i++) {
-        int u, v;
-        cin >> u >> v;
-        graph[u].push_back(v);
-    }
-    int ans = 0;
-    for (int i = 1; i <= n; i++) {
-        memset(vis, false, sizeof(vis));
-        if (dfs(i)) {
-            ans++;
-        }
-    }
-    cout << ans << endl;
+    ans1 = (r != 1 && r % 4 == 1 ? ans1 * 3 : ans1) << 2;
+    int128_read_write::write(ans1);
     return;
 }
 } // namespace TANGYIXIAO

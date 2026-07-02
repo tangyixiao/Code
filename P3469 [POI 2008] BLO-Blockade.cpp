@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-// Time: 2026-07-02 15:52:21
-//  Problem: P3386 【模板】二分图最大匹配
+// Time: 2026-07-02 10:39:01
+//  Problem: P3469 [POI 2008] BLO-Blockade
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P3386
-//  Memory Limit: 512 MB
+//  URL: https://www.luogu.com.cn/problem/P3469
+//  Memory Limit: 125 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: e076179a-fd88-442a-b63e-b410abe7255a
+//  Batch ID: c24b121e-52c8-42d8-a24b-ec4bfa344892
 //
 // Algorithm:
 // Complexity: O()
@@ -648,39 +648,35 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int MAXN = 510;
-const int MAXM = 50010;
-vector<int> graph[MAXN];
-int match[MAXN];
-bool vis[MAXN];
-bool dfs(int u) {
-    for (int v : graph[u]) {
-        if (!vis[v]) {
-            vis[v] = true;
-            if (match[v] == 0 || dfs(match[v])) {
-                match[v] = u;
-                return true;
-            }
-        }
+constexpr int N = 1e5 + 5;
+int n, m, dfn[N], low[N], dn;
+long long ans[N], sz[N];
+vector<int> e[N];
+void dfs(int id) {
+    dfn[id] = low[id] = ++dn;
+    long long r = n - 1;
+    ans[id] = r, sz[id] = 1;
+    for (int it : e[id]) {
+        if (!dfn[it]) {
+            dfs(it), low[id] = min(low[id], low[it]), sz[id] += sz[it];
+            if (low[it] >= dfn[id])
+                ans[id] += sz[it] * (n - sz[it]), r -= sz[it];
+        } else
+            low[id] = min(low[id], dfn[it]);
     }
-    return false;
+    ans[id] += r * (n - r);
 }
 inline void solve(int Task_Id) {
-    int n, m, e;
-    cin >> n >> m >> e;
-    for (int i = 0; i < e; i++) {
+    cin >> n >> m;
+    for (int i = 1; i <= m; i++) {
         int u, v;
         cin >> u >> v;
-        graph[u].push_back(v);
+        e[u].push_back(v), e[v].push_back(u);
     }
-    int ans = 0;
-    for (int i = 1; i <= n; i++) {
-        memset(vis, false, sizeof(vis));
-        if (dfs(i)) {
-            ans++;
-        }
-    }
-    cout << ans << endl;
+    dfs(1);
+    for (int i = 1; i <= n; i++)
+        cout << ans[i] << endl;
+
     return;
 }
 } // namespace TANGYIXIAO

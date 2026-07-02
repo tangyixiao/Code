@@ -1,18 +1,9 @@
-//  Author: Tangyixiao
-// Time: 2026-07-02 15:52:21
-//  Problem: P3386 【模板】二分图最大匹配
-//  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P3386
-//  Memory Limit: 512 MB
-//  Time Limit: 1000 ms
-//  Interactive: false
-//  Test Type: single
-//  Batch ID: e076179a-fd88-442a-b63e-b410abe7255a
-//
-// Algorithm:
-// Complexity: O()
-// Note:
-//
+// By Tangyixiao
+// Problem: P17014 [GESP202606 七级] 染色
+// Contest: Luogu
+// URL: https://www.luogu.com.cn/problem/P17014
+// Memory Limit: 512 MB
+// Time Limit: 1000 ms
 //
 // Powered by CP Editor (https://cpeditor.org)
 
@@ -648,39 +639,50 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int MAXN = 510;
-const int MAXM = 50010;
-vector<int> graph[MAXN];
-int match[MAXN];
-bool vis[MAXN];
-bool dfs(int u) {
-    for (int v : graph[u]) {
-        if (!vis[v]) {
-            vis[v] = true;
-            if (match[v] == 0 || dfs(match[v])) {
-                match[v] = u;
-                return true;
-            }
-        }
+const int N = 100005;
+int h[N], to[N << 1], nx[N << 1], ec;
+bool vs[N];
+void add(int u, int v) {
+    to[++ec] = v;
+    nx[ec] = h[u];
+    h[u] = ec;
+}
+int dfs(int u) {
+    vs[u] = 1;
+    int sz = 1;
+    for (int e = h[u]; e; e = nx[e]) {
+        int v = to[e];
+        if (!vs[v])
+            sz += dfs(v);
     }
-    return false;
+    return sz;
 }
 inline void solve(int Task_Id) {
-    int n, m, e;
-    cin >> n >> m >> e;
-    for (int i = 0; i < e; i++) {
-        int u, v;
-        cin >> u >> v;
-        graph[u].push_back(v);
-    }
-    int ans = 0;
-    for (int i = 1; i <= n; i++) {
-        memset(vis, false, sizeof(vis));
-        if (dfs(i)) {
-            ans++;
+    int t;
+    scanf("%d", &t);
+    while (t--) {
+        int n;
+        scanf("%d", &n);
+        for (int i = 1; i <= n; ++i)
+            h[i] = vs[i] = 0;
+        ec = 0;
+        for (int i = 1; i <= n; ++i) {
+            int u, v;
+            scanf("%d%d", &u, &v);
+            add(u, v);
+            add(v, u);
         }
+        bool odd = 0;
+        for (int i = 1; i <= n; ++i)
+            if (!vs[i]) {
+                int sz = dfs(i);
+                if (sz & 1) {
+                    odd = 1;
+                    break;
+                }
+            }
+        printf("%d\n", odd ? 3 : 2);
     }
-    cout << ans << endl;
     return;
 }
 } // namespace TANGYIXIAO

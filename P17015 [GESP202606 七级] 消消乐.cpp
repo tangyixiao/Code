@@ -1,18 +1,9 @@
-//  Author: Tangyixiao
-// Time: 2026-07-02 15:52:21
-//  Problem: P3386 【模板】二分图最大匹配
-//  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P3386
-//  Memory Limit: 512 MB
-//  Time Limit: 1000 ms
-//  Interactive: false
-//  Test Type: single
-//  Batch ID: e076179a-fd88-442a-b63e-b410abe7255a
-//
-// Algorithm:
-// Complexity: O()
-// Note:
-//
+// By Tangyixiao
+// Problem: P17015 [GESP202606 七级] 消消乐
+// Contest: Luogu
+// URL: https://www.luogu.com.cn/problem/P17015
+// Memory Limit: 512 MB
+// Time Limit: 1000 ms
 //
 // Powered by CP Editor (https://cpeditor.org)
 
@@ -648,39 +639,22 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int MAXN = 510;
-const int MAXM = 50010;
-vector<int> graph[MAXN];
-int match[MAXN];
-bool vis[MAXN];
-bool dfs(int u) {
-    for (int v : graph[u]) {
-        if (!vis[v]) {
-            vis[v] = true;
-            if (match[v] == 0 || dfs(match[v])) {
-                match[v] = u;
-                return true;
-            }
-        }
-    }
-    return false;
-}
+typedef long long ll;
+const int N = 105;
+ll a[N], dp[N][N];
 inline void solve(int Task_Id) {
-    int n, m, e;
-    cin >> n >> m >> e;
-    for (int i = 0; i < e; i++) {
-        int u, v;
-        cin >> u >> v;
-        graph[u].push_back(v);
-    }
-    int ans = 0;
-    for (int i = 1; i <= n; i++) {
-        memset(vis, false, sizeof(vis));
-        if (dfs(i)) {
-            ans++;
+    int n;
+    scanf("%d", &n);
+    for (int i = 1; i <= n; ++i)
+        scanf("%lld", &a[i]);
+    a[0] = a[n + 1] = 0;
+    for (int len = 2; len <= n + 1; ++len)
+        for (int i = 0; i + len <= n + 1; ++i) {
+            int j = i + len;
+            for (int k = i + 1; k < j; ++k)
+                dp[i][j] = max(dp[i][j], dp[i][k] + dp[k][j] + a[i] + a[j]);
         }
-    }
-    cout << ans << endl;
+    printf("%lld\n", dp[0][n + 1]);
     return;
 }
 } // namespace TANGYIXIAO

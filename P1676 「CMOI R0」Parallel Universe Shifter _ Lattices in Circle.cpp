@@ -1,16 +1,16 @@
 //  Author: Tangyixiao
-// Time: 2026-07-02 15:52:21
-//  Problem: P3386 【模板】二分图最大匹配
+// Time: 2026-07-02 09:08:25
+//  Problem: P1676 「CMOI R0」Parallel Universe Shifter / Lattices in Circle
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P3386
+//  URL: https://www.luogu.com.cn/problem/P1676
 //  Memory Limit: 512 MB
-//  Time Limit: 1000 ms
+//  Time Limit: 4000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: e076179a-fd88-442a-b63e-b410abe7255a
+//  Batch ID: 8dfa229c-c7e6-454d-8ebc-ffb6fc5b4908
 //
-// Algorithm:
-// Complexity: O()
+// Algorithm: 分块、计算几何
+// Complexity: O(n^(3/2) or ???)
 // Note:
 //
 //
@@ -648,39 +648,209 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int MAXN = 510;
-const int MAXM = 50010;
-vector<int> graph[MAXN];
-int match[MAXN];
-bool vis[MAXN];
-bool dfs(int u) {
-    for (int v : graph[u]) {
-        if (!vis[v]) {
-            vis[v] = true;
-            if (match[v] == 0 || dfs(match[v])) {
-                match[v] = u;
-                return true;
-            }
-        }
-    }
-    return false;
+typedef __int128 ll;
+const int N = 100005;
+struct V {
+    ll p, q;
+} s[N];
+int tp;
+ll n, m, x, y, cnt, dc;
+
+ll sq(ll v) {
+    ll r = sqrtl(v);
+    while (r * r > v)
+        --r;
+    while ((r + 1) * (r + 1) <= v)
+        ++r;
+    return r;
 }
+bool ok(ll X, ll Y) {
+    return (X - n) * (X - n) + (Y - n) * (Y - n) >= n * n;
+}
+void pr(ll v) {
+    if (v > 9)
+        pr(v / 10);
+    putchar(v % 10 + '0');
+}
+
 inline void solve(int Task_Id) {
-    int n, m, e;
-    cin >> n >> m >> e;
-    for (int i = 0; i < e; i++) {
-        int u, v;
-        cin >> u >> v;
-        graph[u].push_back(v);
-    }
-    int ans = 0;
-    for (int i = 1; i <= n; i++) {
-        memset(vis, false, sizeof(vis));
-        if (dfs(i)) {
-            ans++;
+
+    long long rd;
+    scanf("%lld", &rd);
+    n = rd;
+    m = (ll)floorl(n * (1.0L - sqrtl(2.0L) / 2.0L) + 1e-12L);
+    if (m < 0)
+        m = 0;
+
+    if (m == 0) {
+        cnt = 0;
+        dc = 0;
+    } else {
+        ll x0, y0;
+        bool in = ok(m - 1, m);
+        if (in) {
+            x0 = m - 1;
+            y0 = m;
+            dc = (m - 1) * (m - 1);
+        } else {
+            x0 = m - 1;
+            y0 = m + 1;
+            dc = m * m - 1;
+        }
+        x = x0;
+        y = y0;
+        tp = 0;
+        s[++tp] = {1, 0};
+        s[++tp] = {1, 1};
+        cnt = 0;
+        while (y > m) {
+            V l = s[tp];
+            if (ok(x + l.p, y - l.q)) {
+                cnt += x * l.q + (l.p - 1) * (l.q + 1) / 2;
+                x += l.p;
+                y -= l.q;
+                continue;
+            }
+            if (tp == 1)
+                break;
+            V r = s[tp - 1];
+            if (!ok(x + r.p, y - r.q)) {
+                --tp;
+                continue;
+            }
+            V L = l, R = r;
+            while (1) {
+                V mid = {L.p + R.p, L.q + R.q};
+                if (ok(x + mid.p, y - mid.q)) {
+                    R = mid;
+                    s[++tp] = mid;
+                } else {
+                    L = mid;
+                    ll X = x + mid.p;
+                    if (X > n)
+                        break;
+                    ll Dv = n * n - (X - n) * (X - n);
+                    ll A = (n - X) * R.p;
+                    if (R.q * R.q * Dv >= A * A)
+                        break;
+                }
+            }
+            cnt += x * R.q + (R.p - 1) * (R.q + 1) / 2;
+            x += R.p;
+            y -= R.q;
         }
     }
-    cout << ans << endl;
+
+    ll i_n = 0;
+    for (ll a = 1; a * a <= n * n / 2; ++a) {
+        ll b2 = n * n - a * a;
+        ll b = sq(b2);
+        if (b * b == b2 && b > 0)
+            ++i_n;
+    }
+
+    ll ans = 4 * ((n - 1) * (n - 1) - (2 * cnt - dc) + i_n) + 4 * n + 1;
+    pr(ans);
+    putchar('\n');
     return;
 }
 } // namespace TANGYIXIAO
+
+/*
+namespace TANGYIXIAO {
+typedef __int128 ll;
+const int N = 1000005;
+struct V {
+    ll p, q;
+} s[N];
+int tp;
+ll n, m, x, y, D, C;
+
+ll sq(ll v) {
+    ll r = sqrtl(v);
+    while (r * r > v)
+        --r;
+    while ((r + 1) * (r + 1) <= v)
+        ++r;
+    return r;
+}
+bool ok(ll X, ll Y) {
+    return (X - n) * (X - n) + (Y - n) * (Y - n) <= n * n;
+}
+void ad(ll &D, ll x, ll p, ll q) {
+    D += x * q + (p - 1) * (q + 1) / 2;
+}
+void pr(ll v) {
+    if (v > 9)
+        pr(v / 10);
+    putchar(v % 10 + '0');
+}
+inline void solve(int Task_Id) {
+    long long rd;
+    scanf("%lld", &rd);
+    n = rd;
+    long double s2 = sqrtl(2.0L);
+    long long t = ceill(rd * s2 / 2.0L);
+    while ((ll)2 * t * t < (ll)n * n)
+        ++t;
+    while (t > 1 && (ll)2 * (t - 1) * (t - 1) >= (ll)n * n)
+        --t;
+    long long mm = rd - t;
+    if (mm < 0)
+        mm = 0;
+    m = mm;
+    if (m == 0)
+        C = 0;
+    else {
+        ll S = n * n - (n - m) * (n - m);
+        ll sqv = sq(S);
+        x = n - sqv - 1;
+        y = m + 1;
+        tp = 0;
+        s[++tp] = {1, 0};
+        s[++tp] = {1, 1};
+        D = 0;
+        while (y > m) {
+            V l = s[tp];
+            if (ok(x + l.p, y - l.q)) {
+                ad(D, x, l.p, l.q);
+                x += l.p;
+                y -= l.q;
+                continue;
+            }
+            if (tp == 1)
+                break;
+            V r = s[tp - 1];
+            if (ok(x + r.p, y - r.q)) {
+                V L = l, R = r;
+                while (1) {
+                    V mi = {L.p + R.p, L.q + R.q};
+                    if (ok(x + mi.p, y - mi.q)) {
+                        R = mi;
+                        s[++tp] = mi;
+                    } else {
+                        L = mi;
+                        ll X = x + mi.p;
+                        if (X > n)
+                            break;
+                        ll Dv = n * n - (X - n) * (X - n);
+                        ll A = (n - X) * R.p;
+                        if (R.q * R.q * Dv >= A * A)
+                            break;
+                    }
+                }
+                ad(D, x, R.p, R.q);
+                x += R.p;
+                y -= R.q;
+            } else
+                --tp;
+        }
+        C = 2 * D - m * m;
+    }
+    ll A = 4 * n * n - 4 * C - 4 * n + 5;
+    pr(A);
+    putchar('\n');
+    return;
+}
+} // namespace TANGYIXIAO
+*/

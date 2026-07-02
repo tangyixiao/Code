@@ -1,18 +1,13 @@
 //  Author: Tangyixiao
-// Time: 2026-07-02 15:52:21
-//  Problem: P3386 【模板】二分图最大匹配
+// Time: 2026-07-02 08:05:26
+//  Problem: P5174 圆点
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P3386
-//  Memory Limit: 512 MB
+//  URL: https://www.luogu.com.cn/problem/P5174
+//  Memory Limit: 15 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: e076179a-fd88-442a-b63e-b410abe7255a
-//
-// Algorithm:
-// Complexity: O()
-// Note:
-//
+//  Batch ID: 34222457-4cd1-4695-a57f-83c48e3d3e1f
 //
 // Powered by CP Editor (https://cpeditor.org)
 
@@ -648,39 +643,26 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int MAXN = 510;
-const int MAXM = 50010;
-vector<int> graph[MAXN];
-int match[MAXN];
-bool vis[MAXN];
-bool dfs(int u) {
-    for (int v : graph[u]) {
-        if (!vis[v]) {
-            vis[v] = true;
-            if (match[v] == 0 || dfs(match[v])) {
-                match[v] = u;
-                return true;
-            }
-        }
-    }
-    return false;
-}
+typedef long long ll;
+const ll M = 1000000007, inv6 = 166666668;
 inline void solve(int Task_Id) {
-    int n, m, e;
-    cin >> n >> m >> e;
-    for (int i = 0; i < e; i++) {
-        int u, v;
-        cin >> u >> v;
-        graph[u].push_back(v);
+    ll R;
+    scanf("%lld", &R);
+    ll X = 0;
+    while ((X + 1) * (X + 1) <= R)
+        ++X;
+    ll Y = X, ans = 0;
+    for (ll x = 1; x <= X; ++x) {
+        while (Y * Y > R - x * x)
+            --Y;
+        ll S2 = Y * (Y + 1) % M * (2 * Y + 1) % M * inv6 % M;
+        ll t = ((2 * Y + 1) % M) * (x % M) % M * (x % M) % M;
+        ans = (ans + t + 2 * S2) % M;
     }
-    int ans = 0;
-    for (int i = 1; i <= n; i++) {
-        memset(vis, false, sizeof(vis));
-        if (dfs(i)) {
-            ans++;
-        }
-    }
-    cout << ans << endl;
+    ans = ans * 2 % M;
+    ll S0 = X * (X + 1) % M * (2 * X + 1) % M * inv6 % M;
+    ans = (ans + 2 * S0) % M;
+    printf("%lld", ans);
     return;
 }
 } // namespace TANGYIXIAO

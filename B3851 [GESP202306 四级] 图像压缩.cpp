@@ -1,18 +1,13 @@
 //  Author: Tangyixiao
-// Time: 2026-07-02 15:52:21
-//  Problem: P3386 【模板】二分图最大匹配
+// Time: 2026-07-02 07:56:37
+//  Problem: B3851 [GESP202306 四级] 图像压缩
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P3386
+//  URL: https://www.luogu.com.cn/problem/B3851
 //  Memory Limit: 512 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: e076179a-fd88-442a-b63e-b410abe7255a
-//
-// Algorithm:
-// Complexity: O()
-// Note:
-//
+//  Batch ID: 7224f345-301c-4598-bdf6-e081d2ebd293
 //
 // Powered by CP Editor (https://cpeditor.org)
 
@@ -648,39 +643,50 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int MAXN = 510;
-const int MAXM = 50010;
-vector<int> graph[MAXN];
-int match[MAXN];
-bool vis[MAXN];
-bool dfs(int u) {
-    for (int v : graph[u]) {
-        if (!vis[v]) {
-            vis[v] = true;
-            if (match[v] == 0 || dfs(match[v])) {
-                match[v] = u;
-                return true;
+int n, cnt[256], m, sel[16], mp[256];
+char s[22][44];
+inline void solve(int Task_Id) {
+    scanf("%d\n", &n);
+    for (int i = 0; i < n; ++i) {
+        scanf("%s", s[i]);
+        for (int j = 0; s[i][j]; j += 2) {
+            int h = (s[i][j] >= 'A' ? s[i][j] - 'A' + 10 : s[i][j] - '0') * 16;
+            h += (s[i][j + 1] >= 'A' ? s[i][j + 1] - 'A' + 10 : s[i][j + 1] - '0');
+            ++cnt[h];
+        }
+    }
+    int v[256];
+    for (int i = 0; i < 256; ++i)
+        v[i] = i;
+    sort(v, v + 256, [](int a, int b) { return cnt[a] != cnt[b] ? cnt[a] > cnt[b] : a < b; });
+    for (int i = 0; i < 16; ++i)
+        sel[i] = v[i];
+    for (int i = 0; i < 256; ++i) {
+        if (find(sel, sel + 16, i) != sel + 16)
+            continue;
+        int bd = 1000, bi = 0;
+        for (int j = 0; j < 16; ++j) {
+            int d = abs(i - sel[j]);
+            if (d < bd) {
+                bd = d;
+                bi = j;
             }
         }
+        mp[i] = bi;
     }
-    return false;
-}
-inline void solve(int Task_Id) {
-    int n, m, e;
-    cin >> n >> m >> e;
-    for (int i = 0; i < e; i++) {
-        int u, v;
-        cin >> u >> v;
-        graph[u].push_back(v);
-    }
-    int ans = 0;
-    for (int i = 1; i <= n; i++) {
-        memset(vis, false, sizeof(vis));
-        if (dfs(i)) {
-            ans++;
+    for (int i = 0; i < 16; ++i)
+        mp[sel[i]] = i;
+    for (int i = 0; i < 16; ++i)
+        printf("%02X", sel[i]);
+    puts("");
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; s[i][j]; j += 2) {
+            int h = (s[i][j] >= 'A' ? s[i][j] - 'A' + 10 : s[i][j] - '0') * 16;
+            h += (s[i][j + 1] >= 'A' ? s[i][j + 1] - 'A' + 10 : s[i][j + 1] - '0');
+            putchar(mp[h] < 10 ? mp[h] + '0' : mp[h] - 10 + 'A');
         }
+        puts("");
     }
-    cout << ans << endl;
     return;
 }
 } // namespace TANGYIXIAO

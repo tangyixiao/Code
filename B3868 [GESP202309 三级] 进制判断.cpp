@@ -1,16 +1,16 @@
 //  Author: Tangyixiao
-// Time: 2026-07-02 15:52:21
-//  Problem: P3386 【模板】二分图最大匹配
+// Time: 2026-07-02 08:35:20
+//  Problem: B3868 [GESP202309 三级] 进制判断
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P3386
-//  Memory Limit: 512 MB
+//  URL: https://www.luogu.com.cn/problem/B3868
+//  Memory Limit: 128 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: e076179a-fd88-442a-b63e-b410abe7255a
+//  Batch ID: b823a70c-0130-43f4-8384-a95fd78d2269
 //
 // Algorithm:
-// Complexity: O()
+// Complexity: O(26n)
 // Note:
 //
 //
@@ -648,39 +648,26 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int MAXN = 510;
-const int MAXM = 50010;
-vector<int> graph[MAXN];
-int match[MAXN];
-bool vis[MAXN];
-bool dfs(int u) {
-    for (int v : graph[u]) {
-        if (!vis[v]) {
-            vis[v] = true;
-            if (match[v] == 0 || dfs(match[v])) {
-                match[v] = u;
-                return true;
-            }
-        }
-    }
-    return false;
-}
 inline void solve(int Task_Id) {
-    int n, m, e;
-    cin >> n >> m >> e;
-    for (int i = 0; i < e; i++) {
-        int u, v;
-        cin >> u >> v;
-        graph[u].push_back(v);
-    }
-    int ans = 0;
-    for (int i = 1; i <= n; i++) {
-        memset(vis, false, sizeof(vis));
-        if (dfs(i)) {
-            ans++;
+    int n;
+    scanf("%d", &n);
+    while (n--) {
+        char s[15];
+        scanf("%s", s);
+        int b2 = 1, b8 = 1, b10 = 1, b16 = 1;
+        for (int i = 0; s[i]; ++i) {
+            char c = s[i];
+            if (c < '0' || c > '1')
+                b2 = 0;
+            if (c < '0' || c > '7')
+                b8 = 0;
+            if (c < '0' || c > '9')
+                b10 = 0;
+            if (!((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F')))
+                b16 = 0;
         }
+        printf("%d %d %d %d\n", b2, b8, b10, b16);
     }
-    cout << ans << endl;
     return;
 }
 } // namespace TANGYIXIAO

@@ -1,18 +1,13 @@
 //  Author: Tangyixiao
-// Time: 2026-07-02 15:52:21
-//  Problem: P3386 【模板】二分图最大匹配
+// Time: 2026-07-02 07:57:53
+//  Problem: B3866 [GESP202309 二级] 数字黑洞
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P3386
-//  Memory Limit: 512 MB
+//  URL: https://www.luogu.com.cn/problem/B3866
+//  Memory Limit: 128 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: e076179a-fd88-442a-b63e-b410abe7255a
-//
-// Algorithm:
-// Complexity: O()
-// Note:
-//
+//  Batch ID: fad114e0-c52f-4e32-824b-8a294cc3c3a1
 //
 // Powered by CP Editor (https://cpeditor.org)
 
@@ -648,39 +643,18 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int MAXN = 510;
-const int MAXM = 50010;
-vector<int> graph[MAXN];
-int match[MAXN];
-bool vis[MAXN];
-bool dfs(int u) {
-    for (int v : graph[u]) {
-        if (!vis[v]) {
-            vis[v] = true;
-            if (match[v] == 0 || dfs(match[v])) {
-                match[v] = u;
-                return true;
-            }
-        }
-    }
-    return false;
-}
 inline void solve(int Task_Id) {
-    int n, m, e;
-    cin >> n >> m >> e;
-    for (int i = 0; i < e; i++) {
-        int u, v;
-        cin >> u >> v;
-        graph[u].push_back(v);
+    int n, c = 0;
+    scanf("%d", &n);
+    while (n != 495) {
+        int a[3] = {n / 100, n / 10 % 10, n % 10};
+        sort(a, a + 3);
+        int mn = a[0] * 100 + a[1] * 10 + a[2];
+        int mx = a[2] * 100 + a[1] * 10 + a[0];
+        n = mx - mn;
+        ++c;
     }
-    int ans = 0;
-    for (int i = 1; i <= n; i++) {
-        memset(vis, false, sizeof(vis));
-        if (dfs(i)) {
-            ans++;
-        }
-    }
-    cout << ans << endl;
+    printf("%d", c);
     return;
 }
 } // namespace TANGYIXIAO
