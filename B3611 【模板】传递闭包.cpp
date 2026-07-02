@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-// Time: 2026-07-02 10:49:13
-//  Problem: B3610 [图论与代数结构 801] 无向图的块
+// Time: 2026-07-02 11:02:48
+//  Problem: B3611 【模板】传递闭包
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/B3610
-//  Memory Limit: 512 MB
+//  URL: https://www.luogu.com.cn/problem/B3611
+//  Memory Limit: 128 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 98b2db05-cb85-4d65-9c77-83f28850b63e
+//  Batch ID: 9f086c7f-af30-42f9-b9ee-d9b4ecf7b0c9
 //
 // Algorithm:
 // Complexity: O()
@@ -387,7 +387,7 @@ Copyright (C) 2026 TangYixiao
 #include <cstdio>  // 标准 I/O (printf, FILE, fopen)
 #include <cstdlib> // 通用工具
 #include <cstring> // 字符串操作 (strcpy, memcpy)
-#include <ctime>   // 时间和日期 (time, clock, tmd)
+#include <ctime>   // 时间和日期 (time, clock, tm)
 #include <cwchar>  // 宽字符处理 (wchar_t, wcslen)
 #include <cwctype> // 宽字符分类 (iswdigit, towupper)
 
@@ -648,61 +648,32 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 50005;
-int n, m, dfn[N], low[N], st[N], tp, tim, ec;
-vector<pair<int, int>> G[N];
-vector<vector<int>> bcc;
-
-void tarjan(int u, int pe) {
-    dfn[u] = low[u] = ++tim;
-    st[++tp] = u;
-    for (auto &e : G[u]) {
-        int v = e.first, id = e.second;
-        if (id == pe)
-            continue;
-        if (!dfn[v]) {
-            tarjan(v, id);
-            low[u] = min(low[u], low[v]);
-            if (low[v] >= dfn[u]) {
-                vector<int> c;
-                int t;
-                do {
-                    t = st[tp--];
-                    c.push_back(t);
-                } while (t != v);
-                c.push_back(u);
-                bcc.push_back(c);
-            }
-        } else if (dfn[v] < dfn[u]) {
-            low[u] = min(low[u], dfn[v]);
-        }
-    }
-}
-
+bool dist[105][105];
 inline void solve(int Task_Id) {
-
-    scanf("%d%d", &n, &m);
-    for (int i = 0; i < m; ++i) {
-        int u, v;
-        scanf("%d%d", &u, &v);
-        if (u == v)
-            continue;
-        G[u].push_back({v, ec});
-        G[v].push_back({u, ec});
-        ++ec;
-    }
-    for (int i = 1; i <= n; ++i)
-        if (!dfn[i] && !G[i].empty()) {
-            tp = 0;
-            tarjan(i, -1);
+    int n;
+    cin >> n;
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= n; j++) {
+            int x;
+            cin >> x;
+            if (x == 1) {
+                dist[i][j] = 1;
+            }
         }
-    for (auto &c : bcc)
-        sort(c.begin(), c.end());
-    sort(bcc.begin(), bcc.end());
-    printf("%d\n", (int)bcc.size());
-    for (auto &c : bcc) {
-        for (int i = 0; i < (int)c.size(); ++i)
-            printf("%d%c", c[i], " \n"[i == c.size() - 1]);
+    }
+
+    for (int k = 1; k <= n; k++) {
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= n; j++) {
+                dist[i][j] |= (dist[i][k] && dist[k][j]);
+            }
+        }
+    }
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= n; j++) {
+            cout << dist[i][j] << " ";
+        }
+        cout << endl;
     }
     return;
 }
