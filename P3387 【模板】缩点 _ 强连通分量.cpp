@@ -648,8 +648,139 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 10005;
+int n, m, w[N], df[N], lw[N], st[N], tp, in[N], tm, sid, id[N], sm[N];
+vector<int> G[N], G2[N];
+int ind[N], dp[N], q[N], ql, qr, ans;
+
+void tj(int u) {
+    df[u] = lw[u] = ++tm;
+    st[++tp] = u;
+    in[u] = 1;
+    for (int v : G[u]) {
+        if (!df[v])
+            tj(v), lw[u] = min(lw[u], lw[v]);
+        else if (in[v])
+            lw[u] = min(lw[u], df[v]);
+    }
+    if (df[u] == lw[u]) {
+        ++sid;
+        int z;
+        do {
+            z = st[tp--];
+            in[z] = 0;
+            id[z] = sid;
+            sm[sid] += w[z];
+        } while (z != u);
+    }
+}
 inline void solve(int Task_Id) {
-    // do something here
+    scanf("%d%d", &n, &m);
+    for (int i = 1; i <= n; ++i)
+        scanf("%d", w + i);
+    for (int i = 0, u, v; i < m; ++i) {
+        scanf("%d%d", &u, &v);
+        G[u].push_back(v);
+    }
+    for (int i = 1; i <= n; ++i)
+        if (!df[i])
+            tj(i);
+    for (int u = 1; u <= n; ++u)
+        for (int v : G[u]) {
+            if (id[u] != id[v])
+                G2[id[u]].push_back(id[v]), ++ind[id[v]];
+        }
+    for (int i = 1; i <= sid; ++i)
+        dp[i] = sm[i];
+    ql = qr = 0;
+    for (int i = 1; i <= sid; ++i)
+        if (!ind[i])
+            q[qr++] = i;
+    while (ql < qr) {
+        int u = q[ql++];
+        for (int v : G2[u]) {
+            dp[v] = max(dp[v], dp[u] + sm[v]);
+            if (!--ind[v])
+                q[qr++] = v;
+        }
+        ans = max(ans, dp[u]);
+    }
+    printf("%d\n", ans);
     return;
 }
 } // namespace TANGYIXIAO
+/*
+namespace TANGYIXIAO {
+const int N = 10005, M = 200005;
+int n, m, a[N], H[N], T[M], Nx[M], ec, df[N], lw[N], st[N], tp, in[N], tm, sid, id[N], sm[N];
+int H2[N], T2[M], N2[M], e2, ind[N], dp[N], q[N], ql, qr, ans;
+void ad(int u, int v) {
+    T[ec] = v;
+    Nx[ec] = H[u];
+    H[u] = ec++;
+}
+void ad2(int u, int v) {
+    T2[e2] = v;
+    N2[e2] = H2[u];
+    H2[u] = e2++;
+}
+void tj(int u) {
+    df[u] = lw[u] = ++tm;
+    st[++tp] = u;
+    in[u] = 1;
+    for (int i = H[u]; ~i; i = Nx[i]) {
+        int v = T[i];
+        if (!df[v])
+            tj(v), lw[u] = min(lw[u], lw[v]);
+        else if (in[v])
+            lw[u] = min(lw[u], df[v]);
+    }
+    if (df[u] == lw[u]) {
+        ++sid;
+        int z;
+        do {
+            z = st[tp--];
+            in[z] = 0;
+            id[z] = sid;
+            sm[sid] += a[z];
+        } while (z != u);
+    }
+}
+inline void solve(int Task_Id) {
+    scanf("%d%d", &n, &m);
+    for (int i = 1; i <= n; ++i)
+        scanf("%d", a + i), H[i] = H2[i] = -1;
+    for (int i = 0, u, v; i < m; ++i)
+        scanf("%d%d", &u, &v), ad(u, v);
+    for (int i = 1; i <= n; ++i)
+        if (!df[i])
+            tj(i);
+    for (int u = 1; u <= n; ++u)
+        for (int i = H[u]; ~i; i = Nx[i]) {
+            int v = T[i];
+            if (id[u] != id[v])
+                ad2(id[u], id[v]), ++ind[id[v]];
+        }
+    for (int i = 1; i <= sid; ++i)
+        dp[i] = sm[i];
+    ql = qr = 0;
+    for (int i = 1; i <= sid; ++i)
+        if (!ind[i])
+            q[qr++] = i;
+    while (ql < qr) {
+        int u = q[ql++];
+        for (int i = H2[u]; ~i; i = N2[i]) {
+            int v = T2[i];
+            dp[v] = max(dp[v], dp[u] + sm[v]);
+            if (!--ind[v])
+                q[qr++] = v;
+        }
+    }
+    for (int i = 1; i <= sid; ++i)
+        ans = max(ans, dp[i]);
+    printf("%d\n", ans);
+    return;
+}
+} // namespace TANGYIXIAO
+
+*/

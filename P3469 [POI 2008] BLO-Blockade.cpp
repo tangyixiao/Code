@@ -1,16 +1,16 @@
 //  Author: Tangyixiao
-// Time: 2026-07-02 09:57:07
-//  Problem: P8435 【模板】点双连通分量
+// Time: 2026-07-02 10:39:01
+//  Problem: P3469 [POI 2008] BLO-Blockade
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P8435
-//  Memory Limit: 500 MB
-//  Time Limit: 5000 ms
+//  URL: https://www.luogu.com.cn/problem/P3469
+//  Memory Limit: 125 MB
+//  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 03bdaf18-4d79-49f7-81dd-fec2ba4867eb
+//  Batch ID: c24b121e-52c8-42d8-a24b-ec4bfa344892
 //
-// Algorithm: Tarjan
-// Complexity: O(n + m)
+// Algorithm:
+// Complexity: O()
 // Note:
 //
 //
@@ -648,116 +648,35 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 500005;
-int n, m;
-vector<int> G[N];
-int df[N], lw[N], st[N], tp, tm;
-vector<vector<int>> bcc;
-
-void dfs(int u, int fa) {
-    df[u] = lw[u] = ++tm;
-    st[++tp] = u;
-    for (int v : G[u]) {
-        if (v == fa)
-            continue;
-        if (!df[v]) {
-            dfs(v, u);
-            lw[u] = min(lw[u], lw[v]);
-            if (lw[v] >= df[u]) {
-                vector<int> c;
-                c.push_back(u);
-                while (st[tp] != v)
-                    c.push_back(st[tp--]);
-                c.push_back(st[tp--]);
-                bcc.push_back(c);
-            }
-        } else if (df[v] < df[u])
-            lw[u] = min(lw[u], df[v]);
+constexpr int N = 1e5 + 5;
+int n, m, dfn[N], low[N], dn;
+long long ans[N], sz[N];
+vector<int> e[N];
+void dfs(int id) {
+    dfn[id] = low[id] = ++dn;
+    long long r = n - 1;
+    ans[id] = r, sz[id] = 1;
+    for (int it : e[id]) {
+        if (!dfn[it]) {
+            dfs(it), low[id] = min(low[id], low[it]), sz[id] += sz[it];
+            if (low[it] >= dfn[id])
+                ans[id] += sz[it] * (n - sz[it]), r -= sz[it];
+        } else
+            low[id] = min(low[id], dfn[it]);
     }
+    ans[id] += r * (n - r);
 }
-
 inline void solve(int Task_Id) {
-    scanf("%d%d", &n, &m);
-    for (int i = 0, u, v; i < m; ++i) {
-        scanf("%d%d", &u, &v);
-        if (u != v) {
-            G[u].push_back(v);
-            G[v].push_back(u);
-        }
+    cin >> n >> m;
+    for (int i = 1; i <= m; i++) {
+        int u, v;
+        cin >> u >> v;
+        e[u].push_back(v), e[v].push_back(u);
     }
-    for (int i = 1; i <= n; ++i)
-        if (!df[i] && G[i].empty())
-            bcc.push_back({i});
-    for (int i = 1; i <= n; ++i)
-        if (!df[i] && !G[i].empty()) {
-            tp = 0;
-            dfs(i, 0);
-        }
-    printf("%d\n", (int)bcc.size());
-    for (auto &c : bcc) {
-        printf("%d", (int)c.size());
-        for (int x : c)
-            printf(" %d", x);
-        printf("\n");
-    }
+    dfs(1);
+    for (int i = 1; i <= n; i++)
+        cout << ans[i] << endl;
+
     return;
 }
 } // namespace TANGYIXIAO
-/*
-namespace TANGYIXIAO {
-const int N = 500005, M = 4000005, B = 3000005, P = 5000005;
-int n, m, h[N], t[M], nx[M], ec, d[N], lw[N], tm, st[N], tp, bp[P], bs[B], bl[B], bc, pt;
-void ad(int u, int v) {
-    t[ec] = v;
-    nx[ec] = h[u];
-    h[u] = ec++;
-}
-void df(int u, int p) {
-    d[u] = lw[u] = ++tm;
-    st[++tp] = u;
-    for (int i = h[u]; ~i; i = nx[i]) {
-        if (i == (p ^ 1))
-            continue;
-        int v = t[i];
-        if (!d[v]) {
-            df(v, i);
-            lw[u] = min(lw[u], lw[v]);
-            if (lw[v] >= d[u]) {
-                ++bc;
-                bs[bc] = pt;
-                while (st[tp] != v)
-                    bp[pt++] = st[tp--];
-                bp[pt++] = st[tp--];
-                bp[pt++] = u;
-                bl[bc] = pt - bs[bc];
-            }
-        } else if (d[v] < d[u])
-            lw[u] = min(lw[u], d[v]);
-    }
-}
-inline void solve(int Task_Id) {
-    scanf("%d%d", &n, &m);
-    for (int i = 1; i <= n; ++i)
-        h[i] = -1;
-    for (int i = 0, u, v; i < m; ++i) {
-        scanf("%d%d", &u, &v);
-        if (u != v)
-            ad(u, v), ad(v, u);
-    }
-    for (int i = 1; i <= n; ++i)
-        if (!d[i] && h[i] == -1)
-            ++bc, bs[bc] = pt, bp[pt++] = i, bl[bc] = 1;
-    for (int i = 1; i <= n; ++i)
-        if (!d[i] && h[i] != -1)
-            tp = 0, df(i, -1);
-    printf("%d\n", bc);
-    for (int i = 1; i <= bc; ++i) {
-        printf("%d", bl[i]);
-        for (int j = 0; j < bl[i]; ++j)
-            printf(" %d", bp[bs[i] + j]);
-        printf("\n");
-    }
-    return;
-}
-} // namespace TANGYIXIAO
-*/
