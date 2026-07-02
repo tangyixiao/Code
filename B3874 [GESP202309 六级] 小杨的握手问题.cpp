@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-// Time: 2026-07-02 08:46:03
-//  Problem: B3873 [GESP202309 六级] 小杨买饮料
+// Time: 2026-07-02 08:48:37
+//  Problem: B3874 [GESP202309 六级] 小杨的握手问题
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/B3873
+//  URL: https://www.luogu.com.cn/problem/B3874
 //  Memory Limit: 128 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 13f24afb-ca27-4c5d-b86d-f6a1c657c672
+//  Batch ID: 9b727dd8-b6a9-4f1d-b9e7-ea1d3aea3714
 //
 // Algorithm:
 // Complexity: O()
@@ -648,24 +648,36 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-inline void solve(int Task_Id) {
-    int n, L, c, v, dp[2005];
-    scanf("%d%d", &n, &L);
-    memset(dp, 0x3f, sizeof(dp));
-    dp[0] = 0;
-    for (int i = 0; i < n; ++i) {
-        scanf("%d%d", &c, &v);
-        if (v > L)
-            v = L;
-        for (int j = L; j >= 0; --j) {
-            int nv = j + v > L ? L : j + v;
-            dp[nv] = min(dp[nv], dp[j] + c);
+const int N = 300005;
+int a[N], t[N];
+long long ms(int l, int r) {
+    if (l >= r)
+        return 0;
+    int m = (l + r) >> 1;
+    long long s = ms(l, m) + ms(m + 1, r);
+    int i = l, j = m + 1, k = l;
+    while (i <= m && j <= r) {
+        if (a[i] > a[j])
+            t[k++] = a[i++];
+        else {
+            s += m - i + 1;
+            t[k++] = a[j++];
         }
     }
-    if (dp[L] == 0x3f3f3f3f)
-        puts("no solution");
-    else
-        printf("%d", dp[L]);
+    while (i <= m)
+        t[k++] = a[i++];
+    while (j <= r)
+        t[k++] = a[j++];
+    for (i = l; i <= r; ++i)
+        a[i] = t[i];
+    return s;
+}
+inline void solve(int Task_Id) {
+    int n;
+    scanf("%d", &n);
+    for (int i = 1; i <= n; ++i)
+        scanf("%d", &a[i]);
+    printf("%lld\n", ms(1, n));
     return;
 }
 } // namespace TANGYIXIAO
