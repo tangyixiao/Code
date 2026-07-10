@@ -689,8 +689,9 @@ inline void solve(int Task_Id) {
         }
     }
     d[0] = 1;
-    for (int i = 1; i <= L; ++i)
+    for (int i = 1; i <= L; ++i) {
         d[i] = (ll)d[i - 1] * (n - i + 1) % M;
+    }
     ll ifv = 1;
     for (int i = 1; i <= L; ++i)
         ifv = ifv * iv[i] % M;
