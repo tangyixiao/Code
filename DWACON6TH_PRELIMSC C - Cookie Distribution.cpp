@@ -1,20 +1,3 @@
-//  Author: Tangyixiao
-// Time: 2026-07-07 08:32:26
-//  Problem: C - YY Square
-//  Contest: AtCoder - AtCoder Regular Contest 157
-//  URL: https://atcoder.jp/contests/arc157/tasks/arc157_c
-//  Memory Limit: 1024 MB
-//  Time Limit: 3000 ms
-//  Interactive: false
-//  Test Type: single
-//  Batch ID: 4496bc16-2f21-489d-86dc-ff4a1b4a97fe
-//
-// Algorithm:
-// Complexity: O()
-// Note:
-//
-//
-// Powered by CP Editor (https://cpeditor.org)
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -648,68 +631,8 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-typedef long long ll;
-const int MOD = 998244353;
-const int X = 2005;
-char s[X][X];
-ll pr[X][2][3], cu[X][2][3];
 inline void solve(int Task_Id) {
-    int h, w;
-    scanf("%d%d", &h, &w);
-    for (int i = 0; i < h; ++i)
-        scanf("%s", s[i]);
-    for (int i = 0; i < w; ++i)
-        for (int p = 0; p < 2; ++p)
-            for (int k = 0; k < 3; ++k)
-                pr[i][p][k] = 0;
-    if (s[0][0] == 'X')
-        pr[0][0][0] = 1;
-    else
-        pr[0][1][0] = 1;
-    for (int i = 0; i < h; ++i) {
-        for (int j = 0; j < w; ++j) {
-            if (i == 0 && j == 0) {
-                for (int p = 0; p < 2; ++p)
-                    for (int k = 0; k < 3; ++k)
-                        cu[0][p][k] = pr[0][p][k];
-                continue;
-            }
-            for (int p = 0; p < 2; ++p)
-                cu[j][p][0] = cu[j][p][1] = cu[j][p][2] = 0;
-            char c = s[i][j];
-            if (i > 0) {
-                for (int pc = 0; pc < 2; ++pc) {
-                    ll cnt = pr[j][pc][0], s1 = pr[j][pc][1], s2 = pr[j][pc][2];
-                    if (!cnt)
-                        continue;
-                    int d = (pc == 1 && c == 'Y') ? 1 : 0;
-                    int nxt = (c == 'Y') ? 1 : 0;
-                    cu[j][nxt][0] = (cu[j][nxt][0] + cnt) % MOD;
-                    cu[j][nxt][1] = (cu[j][nxt][1] + s1 + d * cnt) % MOD;
-                    cu[j][nxt][2] = (cu[j][nxt][2] + s2 + 2 * d * s1 + 1LL * d * d * cnt) % MOD;
-                }
-            }
-            if (j > 0) {
-                for (int pc = 0; pc < 2; ++pc) {
-                    ll cnt = cu[j - 1][pc][0], s1 = cu[j - 1][pc][1], s2 = cu[j - 1][pc][2];
-                    if (!cnt)
-                        continue;
-                    int d = (pc == 1 && c == 'Y') ? 1 : 0;
-                    int nxt = (c == 'Y') ? 1 : 0;
-                    cu[j][nxt][0] = (cu[j][nxt][0] + cnt) % MOD;
-                    cu[j][nxt][1] = (cu[j][nxt][1] + s1 + d * cnt) % MOD;
-                    cu[j][nxt][2] = (cu[j][nxt][2] + s2 + 2 * d * s1 + 1LL * d * d * cnt) % MOD;
-                }
-            }
-        }
-        if (i < h - 1) {
-            for (int j = 0; j < w; ++j)
-                for (int p = 0; p < 2; ++p)
-                    for (int k = 0; k < 3; ++k)
-                        pr[j][p][k] = cu[j][p][k];
-        }
-    }
-    printf("%lld\n", (cu[w - 1][0][2] + cu[w - 1][1][2]) % MOD);
+    
     return;
 }
 } // namespace TANGYIXIAO

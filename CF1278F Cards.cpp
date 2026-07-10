@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-// Time: 2026-07-07 08:32:26
-//  Problem: C - YY Square
-//  Contest: AtCoder - AtCoder Regular Contest 157
-//  URL: https://atcoder.jp/contests/arc157/tasks/arc157_c
-//  Memory Limit: 1024 MB
-//  Time Limit: 3000 ms
+// Time: 2026-07-10 07:59:38
+//  Problem: F. Cards
+//  Contest: Codeforces - Educational Codeforces Round 78 (Rated for Div. 2)
+//  URL: https://codeforces.com/problemset/problem/1278/F
+//  Memory Limit: 256 MB
+//  Time Limit: 4000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 4496bc16-2f21-489d-86dc-ff4a1b4a97fe
+//  Batch ID: f6a77168-811e-495c-b487-517c01479872
 //
 // Algorithm:
 // Complexity: O()
@@ -649,67 +649,80 @@ signed main(int argc, char *argv[]) {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 typedef long long ll;
-const int MOD = 998244353;
-const int X = 2005;
-char s[X][X];
-ll pr[X][2][3], cu[X][2][3];
+const int M = 998244353, SZ = 10000005;
+int f[SZ], d[SZ], iv[SZ];
+char vs[SZ];
+int prm[SZ / 10];
+ll pw(ll a, ll b) {
+    ll r = 1;
+    while (b) {
+        if (b & 1)
+            r = r * a % M;
+        a = a * a % M;
+        b >>= 1;
+    }
+    return r;
+}
 inline void solve(int Task_Id) {
-    int h, w;
-    scanf("%d%d", &h, &w);
-    for (int i = 0; i < h; ++i)
-        scanf("%s", s[i]);
-    for (int i = 0; i < w; ++i)
-        for (int p = 0; p < 2; ++p)
-            for (int k = 0; k < 3; ++k)
-                pr[i][p][k] = 0;
-    if (s[0][0] == 'X')
-        pr[0][0][0] = 1;
-    else
-        pr[0][1][0] = 1;
-    for (int i = 0; i < h; ++i) {
-        for (int j = 0; j < w; ++j) {
-            if (i == 0 && j == 0) {
-                for (int p = 0; p < 2; ++p)
-                    for (int k = 0; k < 3; ++k)
-                        cu[0][p][k] = pr[0][p][k];
-                continue;
-            }
-            for (int p = 0; p < 2; ++p)
-                cu[j][p][0] = cu[j][p][1] = cu[j][p][2] = 0;
-            char c = s[i][j];
-            if (i > 0) {
-                for (int pc = 0; pc < 2; ++pc) {
-                    ll cnt = pr[j][pc][0], s1 = pr[j][pc][1], s2 = pr[j][pc][2];
-                    if (!cnt)
-                        continue;
-                    int d = (pc == 1 && c == 'Y') ? 1 : 0;
-                    int nxt = (c == 'Y') ? 1 : 0;
-                    cu[j][nxt][0] = (cu[j][nxt][0] + cnt) % MOD;
-                    cu[j][nxt][1] = (cu[j][nxt][1] + s1 + d * cnt) % MOD;
-                    cu[j][nxt][2] = (cu[j][nxt][2] + s2 + 2 * d * s1 + 1LL * d * d * cnt) % MOD;
-                }
-            }
-            if (j > 0) {
-                for (int pc = 0; pc < 2; ++pc) {
-                    ll cnt = cu[j - 1][pc][0], s1 = cu[j - 1][pc][1], s2 = cu[j - 1][pc][2];
-                    if (!cnt)
-                        continue;
-                    int d = (pc == 1 && c == 'Y') ? 1 : 0;
-                    int nxt = (c == 'Y') ? 1 : 0;
-                    cu[j][nxt][0] = (cu[j][nxt][0] + cnt) % MOD;
-                    cu[j][nxt][1] = (cu[j][nxt][1] + s1 + d * cnt) % MOD;
-                    cu[j][nxt][2] = (cu[j][nxt][2] + s2 + 2 * d * s1 + 1LL * d * d * cnt) % MOD;
-                }
-            }
+    int n, m, k;
+    scanf("%d%d%d", &n, &m, &k);
+    int L = n < k ? n : k;
+    int K2 = k + 2;
+    iv[1] = 1;
+    for (int i = 2; i <= K2; ++i)
+        iv[i] = M - (ll)(M / i) * iv[M % i] % M;
+    f[0] = 0;
+    if (L >= 1)
+        f[1] = 1;
+    int pc = 0;
+    for (int i = 2; i <= L; ++i) {
+        if (!vs[i]) {
+            prm[pc++] = i;
+            f[i] = pw(i, k);
         }
-        if (i < h - 1) {
-            for (int j = 0; j < w; ++j)
-                for (int p = 0; p < 2; ++p)
-                    for (int k = 0; k < 3; ++k)
-                        pr[j][p][k] = cu[j][p][k];
+        for (int j = 0; j < pc && (ll)i * prm[j] <= L; ++j) {
+            int p = prm[j], ip = i * p;
+            vs[ip] = 1;
+            f[ip] = (ll)f[i] * f[p] % M;
+            if (i % p == 0)
+                break;
         }
     }
-    printf("%lld\n", (cu[w - 1][0][2] + cu[w - 1][1][2]) % MOD);
+    d[0] = 1;
+    for (int i = 1; i <= L; ++i)
+        d[i] = (ll)d[i - 1] * (n - i + 1) % M;
+    ll ifv = 1;
+    for (int i = 1; i <= L; ++i)
+        ifv = ifv * iv[i] % M;
+    ll pb = pw(m, M - 2);
+    ll q = (M + 1 - pb) % M;
+    ll u = M - pb;
+    ll ipb = pw(pb, M - 2);
+    ll pp = pw(pb, L);
+    ll ur = pw(u, k - L + 1);
+    ll s = 1, as = 0, cc, cr;
+    if (n > k) {
+        cc = (n - k) % M;
+        cr = 1;
+    } else {
+        cc = 0;
+        cr = k - L + 1;
+    }
+    for (int j = L; j >= 1; --j) {
+        as = (as + s * f[j] % M * d[j] % M * pp % M * ifv) % M;
+        ll ad = cc * ur % M;
+        s = (q * s + ad) % M;
+        pp = pp * ipb % M;
+        ur = ur * u % M;
+        ifv = ifv * j % M;
+        if (n > k) {
+            int N1 = (n - j + 1) % M;
+            int r1 = cr + 1;
+            cc = cc * N1 % M * iv[r1] % M;
+            cr = r1;
+        }
+    }
+    printf("%lld\n", as);
     return;
 }
 } // namespace TANGYIXIAO
