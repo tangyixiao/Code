@@ -648,132 +648,139 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 5005, M = 200005, T = 1500000;
-const double INF = 1e100, eps = 1e-8;
-int n, m;
-double E;
-struct Ed {
-    int t, n;
-    double w;
-} e[M], er[M];
-int h1[N], h2[N], ec;
-void ae(int u, int v, double w) {
-    ++ec;
-    e[ec] = {v, h1[u], w};
-    h1[u] = ec;
-    er[ec] = {u, h2[v], w};
-    h2[v] = ec;
+const int N = 5005;
+const int M = 200005;
+const int H = 6000005;
+
+int h[N], t[M], nx[M], ec;
+double v[M];
+
+int rh[N], rt[M], rnx[M];
+double rv[M];
+
+void add(int u, int V, double w) {
+    ec++;
+    t[ec] = V;
+    v[ec] = w;
+    nx[ec] = h[u];
+    h[u] = ec;
+    rt[ec] = u;
+    rv[ec] = w;
+    rnx[ec] = rh[V];
+    rh[V] = ec;
 }
+
 double d[N];
-int pr[N];
-struct Nd {
-    int l, r, d, v;
-    double w;
-} nd[T];
-int tot;
-int nn(double w, int v) {
-    ++tot;
-    nd[tot] = {0, 0, 1, v, w};
-    return tot;
-}
+bool vs[N];
+int id[N], f[N], te[N], num;
+
+int rot[N];
+int l[H], r[H], dh[H], ei[H], hc;
+double wh[H];
+
 int mg(int x, int y) {
     if (!x || !y)
-        return x | y;
-    if (nd[x].w > nd[y].w)
+        return x + y;
+    if (wh[x] > wh[y])
         swap(x, y);
-    int t = ++tot;
-    nd[t] = nd[x];
-    nd[t].r = mg(nd[t].r, y);
-    if (nd[nd[t].l].d < nd[nd[t].r].d)
-        swap(nd[t].l, nd[t].r);
-    nd[t].d = nd[nd[t].r].d + 1;
-    return t;
+    int p = ++hc;
+    l[p] = l[x];
+    r[p] = r[x];
+    dh[p] = dh[x];
+    wh[p] = wh[x];
+    ei[p] = ei[x];
+    r[p] = mg(r[p], y);
+    if (dh[l[p]] < dh[r[p]])
+        swap(l[p], r[p]);
+    dh[p] = dh[r[p]] + 1;
+    return p;
 }
-int rt[N];
-struct Q {
-    double w;
-    int id;
-    bool operator<(const Q &o) const { return w > o.w; }
-};
 
+struct S {
+    double tw;
+    int p;
+    bool operator>(const S &o) const { return tw > o.tw; }
+};
 inline void solve(int Task_Id) {
-    scanf("%d%d%lf", &n, &m, &E);
-    for (int i = 1; i <= m; ++i) {
-        int u, v;
-        double w;
-        scanf("%d%d%lf", &u, &v, &w);
-        ae(u, v, w);
-    }
-    for (int i = 1; i <= n; ++i)
-        d[i] = INF;
-    d[n] = 0;
-    priority_queue<Q> pq;
-    pq.push({0, n});
-    while (!pq.empty()) {
-        Q s = pq.top();
-        pq.pop();
-        int x = s.id;
-        double w = s.w;
-        if (fabs(w - d[x]) > eps)
-            continue;
-        for (int i = h2[x]; i; i = er[i].n) {
-            int y = er[i].t;
-            double w2 = er[i].w;
-            if (d[y] > d[x] + w2 + eps) {
-                d[y] = d[x] + w2;
-                pr[y] = i;
-                pq.push({d[y], y});
-            }
-        }
-    }
-    if (d[1] > E + eps) {
-        puts("0");
+    int n, m;
+    double E;
+    if (!(cin >> n >> m >> E))
         return;
+    for (int i = 0; i < m; i++) {
+        int u, V;
+        double w;
+        cin >> u >> V >> w;
+        add(u, V, w);
     }
-    int ord[N];
-    for (int i = 1; i <= n; ++i)
-        ord[i] = i;
-    sort(ord + 1, ord + n + 1, [](int x, int y) { return d[x] > d[y]; });
-    for (int idx = 1; idx <= n; ++idx) {
-        int u = ord[idx], h = 0;
-        for (int i = h1[u]; i; i = e[i].n) {
-            if (i == pr[u])
-                continue;
-            int v = e[i].t;
-            double w = e[i].w;
-            if (d[v] < INF) {
-                double dt = d[v] + w - d[u];
-                if (dt > -eps)
-                    h = mg(h, nn(dt, v));
+
+    priority_queue<pair<double, int>, vector<pair<double, int>>, greater<pair<double, int>>> q;
+    for (int i = 1; i <= n; i++)
+        d[i] = 1e18;
+    d[n] = 0;
+    q.push({0, n});
+    while (!q.empty()) {
+        auto cur = q.top();
+        q.pop();
+        int u = cur.second;
+        if (vs[u])
+            continue;
+        vs[u] = true;
+        id[++num] = u;
+        for (int i = rh[u]; i; i = rnx[i]) {
+            int V = rt[i];
+            if (d[V] > d[u] + rv[i]) {
+                d[V] = d[u] + rv[i];
+                f[V] = u;
+                te[V] = i;
+                q.push({d[V], V});
             }
         }
-        if (pr[u]) {
-            int v = e[pr[u]].t;
-            h = mg(h, rt[v]);
+    }
+
+    dh[0] = 0;
+    for (int i = 2; i <= num; i++) {
+        int u = id[i];
+        rot[u] = rot[f[u]];
+        for (int e = h[u]; e; e = nx[e]) {
+            if (e == te[u])
+                continue;
+            int V = t[e];
+            if (d[V] > 1e17)
+                continue;
+            double dt = v[e] + d[V] - d[u];
+            int p = ++hc;
+            wh[p] = dt;
+            ei[p] = e;
+            dh[p] = 1;
+            rot[u] = mg(rot[u], p);
         }
-        rt[u] = h;
     }
-    int ans = 1;
-    priority_queue<Q> q;
-    if (rt[1])
-        q.push({d[1] + nd[rt[1]].w, rt[1]});
-    while (!q.empty()) {
-        Q s = q.top();
-        q.pop();
-        double w = s.w;
-        int p = s.id;
-        if (w > E + eps)
+
+    int ans = 0;
+    priority_queue<S, vector<S>, greater<S>> pq;
+    if (d[1] <= E) {
+        E -= d[1];
+        ans++;
+        if (rot[1])
+            pq.push({d[1] + wh[rot[1]], rot[1]});
+    }
+    while (!pq.empty()) {
+        S cur = pq.top();
+        pq.pop();
+        if (cur.tw > E)
             break;
-        ++ans;
-        int L = nd[p].l, R = nd[p].r, v = nd[p].v;
-        if (L)
-            q.push({w - nd[p].w + nd[L].w, L});
-        if (R)
-            q.push({w - nd[p].w + nd[R].w, R});
-        if (rt[v])
-            q.push({w + nd[rt[v]].w, rt[v]});
+        E -= cur.tw;
+        ans++;
+        int p = cur.p;
+        if (l[p])
+            pq.push({cur.tw - wh[p] + wh[l[p]], l[p]});
+        if (r[p])
+            pq.push({cur.tw - wh[p] + wh[r[p]], r[p]});
+        int V = t[ei[p]];
+        if (rot[V])
+            pq.push({cur.tw + wh[rot[V]], rot[V]});
     }
-    printf("%d\n", ans);
+    cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO
