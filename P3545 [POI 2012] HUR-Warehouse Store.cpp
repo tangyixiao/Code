@@ -1,20 +1,3 @@
-//  Author: Tangyixiao
-// Time: 2026-07-10 19:00:39
-//  Problem: P2483 【模板】k 短路 / [SDOI2010] 魔法猪学院
-//  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P2483
-//  Memory Limit: 128 MB
-//  Time Limit: 1000 ms
-//  Interactive: false
-//  Test Type: single
-//  Batch ID: 99e258ee-251c-4473-baf6-eb1c97f9d9a1
-//
-// Algorithm:
-// Complexity: O()
-// Note:
-//
-//
-// Powered by CP Editor (https://cpeditor.org)
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -648,132 +631,70 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 5005, M = 200005, T = 1500000;
-const double INF = 1e100, eps = 1e-8;
-int n, m;
-double E;
-struct Ed {
-    int t, n;
-    double w;
-} e[M], er[M];
-int h1[N], h2[N], ec;
-void ae(int u, int v, double w) {
-    ++ec;
-    e[ec] = {v, h1[u], w};
-    h1[u] = ec;
-    er[ec] = {u, h2[v], w};
-    h2[v] = ec;
+const int N = 250005;
+int a[N], b[N], H[N], I[N], sz, sel[N];
+long long s;
+void swp(int &x, int &y) {
+    int t = x;
+    x = y;
+    y = t;
 }
-double d[N];
-int pr[N];
-struct Nd {
-    int l, r, d, v;
-    double w;
-} nd[T];
-int tot;
-int nn(double w, int v) {
-    ++tot;
-    nd[tot] = {0, 0, 1, v, w};
-    return tot;
+void up(int i) {
+    for (; i > 1 && H[i] > H[i / 2]; i /= 2) {
+        swp(H[i], H[i / 2]);
+        swp(I[i], I[i / 2]);
+    }
 }
-int mg(int x, int y) {
-    if (!x || !y)
-        return x | y;
-    if (nd[x].w > nd[y].w)
-        swap(x, y);
-    int t = ++tot;
-    nd[t] = nd[x];
-    nd[t].r = mg(nd[t].r, y);
-    if (nd[nd[t].l].d < nd[nd[t].r].d)
-        swap(nd[t].l, nd[t].r);
-    nd[t].d = nd[nd[t].r].d + 1;
-    return t;
-}
-int rt[N];
-struct Q {
-    double w;
-    int id;
-    bool operator<(const Q &o) const { return w > o.w; }
-};
-
-inline void solve(int Task_Id) {
-    scanf("%d%d%lf", &n, &m, &E);
-    for (int i = 1; i <= m; ++i) {
-        int u, v;
-        double w;
-        scanf("%d%d%lf", &u, &v, &w);
-        ae(u, v, w);
-    }
-    for (int i = 1; i <= n; ++i)
-        d[i] = INF;
-    d[n] = 0;
-    priority_queue<Q> pq;
-    pq.push({0, n});
-    while (!pq.empty()) {
-        Q s = pq.top();
-        pq.pop();
-        int x = s.id;
-        double w = s.w;
-        if (fabs(w - d[x]) > eps)
-            continue;
-        for (int i = h2[x]; i; i = er[i].n) {
-            int y = er[i].t;
-            double w2 = er[i].w;
-            if (d[y] > d[x] + w2 + eps) {
-                d[y] = d[x] + w2;
-                pr[y] = i;
-                pq.push({d[y], y});
-            }
-        }
-    }
-    if (d[1] > E + eps) {
-        puts("0");
-        return;
-    }
-    int ord[N];
-    for (int i = 1; i <= n; ++i)
-        ord[i] = i;
-    sort(ord + 1, ord + n + 1, [](int x, int y) { return d[x] > d[y]; });
-    for (int idx = 1; idx <= n; ++idx) {
-        int u = ord[idx], h = 0;
-        for (int i = h1[u]; i; i = e[i].n) {
-            if (i == pr[u])
-                continue;
-            int v = e[i].t;
-            double w = e[i].w;
-            if (d[v] < INF) {
-                double dt = d[v] + w - d[u];
-                if (dt > -eps)
-                    h = mg(h, nn(dt, v));
-            }
-        }
-        if (pr[u]) {
-            int v = e[pr[u]].t;
-            h = mg(h, rt[v]);
-        }
-        rt[u] = h;
-    }
-    int ans = 1;
-    priority_queue<Q> q;
-    if (rt[1])
-        q.push({d[1] + nd[rt[1]].w, rt[1]});
-    while (!q.empty()) {
-        Q s = q.top();
-        q.pop();
-        double w = s.w;
-        int p = s.id;
-        if (w > E + eps)
+void down(int i) {
+    while (i * 2 <= sz) {
+        int j = i * 2;
+        if (j + 1 <= sz && H[j + 1] > H[j])
+            ++j;
+        if (H[i] >= H[j])
             break;
-        ++ans;
-        int L = nd[p].l, R = nd[p].r, v = nd[p].v;
-        if (L)
-            q.push({w - nd[p].w + nd[L].w, L});
-        if (R)
-            q.push({w - nd[p].w + nd[R].w, R});
-        if (rt[v])
-            q.push({w + nd[rt[v]].w, rt[v]});
+        swp(H[i], H[j]);
+        swp(I[i], I[j]);
+        i = j;
     }
-    printf("%d\n", ans);
+}
+void push(int v, int id) {
+    ++sz;
+    H[sz] = v;
+    I[sz] = id;
+    sel[id] = 1;
+    up(sz);
+}
+void pop() {
+    sel[I[1]] = 0;
+    H[1] = H[sz];
+    I[1] = I[sz];
+    --sz;
+    down(1);
+}
+inline void solve(int Task_Id) {
+    int n;
+    scanf("%d", &n);
+    for (int i = 1; i <= n; ++i)
+        scanf("%d", &a[i]);
+    for (int i = 1; i <= n; ++i)
+        scanf("%d", &b[i]);
+    sz = 0;
+    s = 0;
+    for (int i = 1; i <= n; ++i) {
+        s += a[i];
+        if (s >= b[i]) {
+            s -= b[i];
+            push(b[i], i);
+        } else if (sz && H[1] > b[i]) {
+            s += H[1] - b[i];
+            pop();
+            push(b[i], i);
+        }
+    }
+    printf("%d\n", sz);
+    for (int i = 1; i <= n; ++i)
+        if (sel[i])
+            printf("%d ", i);
     return;
 }
 } // namespace TANGYIXIAO
