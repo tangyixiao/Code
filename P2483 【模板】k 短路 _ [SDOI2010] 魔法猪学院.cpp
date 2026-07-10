@@ -1,20 +1,3 @@
-//  Author: Tangyixiao
-// Time: 2026-07-10 10:09:38
-//  Problem: P8289 [省选联考 2022] 预处理器
-//  Contest: Luogu - 2.2 模拟&搜索②
-//  URL: https://www.luogu.com.cn/problem/P8289
-//  Memory Limit: 512 MB
-//  Time Limit: 1000 ms
-//  Interactive: false
-//  Test Type: single
-//  Batch ID: ab287ea2-2bff-4646-a2e3-8e8ef090c099
-//
-// Algorithm:
-// Complexity: O()
-// Note:
-//
-//
-// Powered by CP Editor (https://cpeditor.org)
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -648,73 +631,80 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-int dc;
-char dn[105][105], dv[105][105];
-bool in[105];
-int f(char *s) {
-    for (int i = 0; i < dc; ++i)
-        if (!strcmp(dn[i], s))
-            return i;
-    return -1;
+const int N = 5005, M = 200005;
+struct E {
+    int t, ne;
+    double w;
+} e1[M], e2[M];
+int h1[N], h2[N], tot;
+void add(int u, int v, double w) {
+    e1[++tot] = {v, h1[u], w};
+    h1[u] = tot;
+    e2[tot] = {u, h2[v], w};
+    h2[v] = tot;
 }
-bool idc(char c) { return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '_'; }
-string e(string s) {
-    string r;
-    for (int i = 0; i < (int)s.size();) {
-        if (idc(s[i])) {
-            int j = i;
-            while (j < (int)s.size() && idc(s[j]))
-                ++j;
-            string t = s.substr(i, j - i);
-            int p = f((char *)t.c_str());
-            if (p != -1 && !in[p]) {
-                in[p] = 1;
-                string tmp = e(dv[p]);
-                r += tmp;
-                in[p] = 0;
-            } else
-                r += t;
-            i = j;
-        } else {
-            r += s[i];
-            ++i;
-        }
+int n, m;
+double E;
+double d[N];
+bool vis[N];
+struct D {
+    int x;
+    double g, f;
+    bool operator<(const D &o) const {
+        if (f != o.f)
+            return f > o.f;
+        return g > o.g;
     }
-    return r;
-}
+};
 inline void solve(int Task_Id) {
-    int n;
-    string s;
-    cin >> n;
-    getline(cin, s);
-    while (n--) {
-        getline(cin, s);
-        if (s[0] == '#') {
-            if (s[1] == 'd') {
-                string t = s.substr(8);
-                int p = t.find(' ');
-                string nm = p == string::npos ? t : t.substr(0, p);
-                string ct = p == string::npos ? "" : t.substr(p + 1);
-                strcpy(dn[dc], nm.c_str());
-                strcpy(dv[dc], ct.c_str());
-                ++dc;
-            } else {
-                string nm = s.substr(7);
-                int p = f((char *)nm.c_str());
-                if (p != -1) {
-                    for (int i = p; i < dc - 1; ++i) {
-                        strcpy(dn[i], dn[i + 1]);
-                        strcpy(dv[i], dv[i + 1]);
-                    }
-                    --dc;
-                }
+    scanf("%d%d%lf", &n, &m, &E);
+    for (int i = 1; i <= m; ++i) {
+        int u, v;
+        double w;
+        scanf("%d%d%lf", &u, &v, &w);
+        add(u, v, w);
+    }
+    for (int i = 1; i <= n; ++i)
+        d[i] = 1e100;
+    d[n] = 0;
+    priority_queue<pair<double, int>, vector<pair<double, int>>, greater<pair<double, int>>> pq;
+    pq.push({0, n});
+    while (!pq.empty()) {
+        auto p = pq.top();
+        pq.pop();
+        double w = p.first;
+        int x = p.second;
+        if (w > d[x])
+            continue;
+        for (int i = h2[x]; i; i = e2[i].ne) {
+            int y = e2[i].t;
+            if (d[y] > w + e2[i].w) {
+                d[y] = w + e2[i].w;
+                pq.push({d[y], y});
             }
-            cout << endl;
-        } else {
-            memset(in, 0, sizeof(in));
-            cout << e(s) << endl;
         }
     }
+    priority_queue<D> q;
+    q.push({1, 0, d[1]});
+    int cnt = 0;
+    double sum = 0;
+    while (!q.empty()) {
+        D u = q.top();
+        q.pop();
+        if (u.x == n) {
+            if (sum + u.g > E)
+                break;
+            ++cnt;
+            sum += u.g;
+            continue;
+        }
+        for (int i = h1[u.x]; i; i = e1[i].ne) {
+            int y = e1[i].t;
+            double ng = u.g + e1[i].w;
+            q.push({y, ng, ng + d[y]});
+        }
+    }
+    printf("%d\n", cnt);
     return;
 }
 } // namespace TANGYIXIAO
