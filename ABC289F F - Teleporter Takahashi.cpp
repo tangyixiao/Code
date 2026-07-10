@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-// Time: 2026-07-10 10:09:38
-//  Problem: P8289 [省选联考 2022] 预处理器
-//  Contest: Luogu - 2.2 模拟&搜索②
-//  URL: https://www.luogu.com.cn/problem/P8289
-//  Memory Limit: 512 MB
-//  Time Limit: 1000 ms
+// Time: 2026-07-10 08:04:59
+//  Problem: F - Teleporter Takahashi
+//  Contest: AtCoder - Ｓｋｙ Inc, Programming Contest 2023（AtCoder Beginner Contest 289）
+//  URL: https://atcoder.jp/contests/abc289/tasks/abc289_f
+//  Memory Limit: 1024 MB
+//  Time Limit: 2000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: ab287ea2-2bff-4646-a2e3-8e8ef090c099
+//  Batch ID: 1417401c-2dde-4271-80ab-12bb5b36603c
 //
 // Algorithm:
 // Complexity: O()
@@ -648,56 +648,95 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+int ox[2000005], oy[2000005], cnt;
 inline void solve(int Task_Id) {
-    int n;
-    string s;
-    cin >> n;
-    getline(cin, s);
-    unordered_map<string, string> def;
-    while (n--) {
-        getline(cin, s);
-        if (s.empty()) {
-            cout << endl;
-            continue;
-        }
-        if (s[0] == '#') {
-            if (s[1] == 'd') {
-                string t = s.substr(8);
-                int p = t.find(' ');
-                string nm = t.substr(0, p);
-                string ct = (p == string::npos ? "" : t.substr(p + 1));
-                def[nm] = ct;
-            } else {
-                string nm = s.substr(7);
-                def.erase(nm);
-            }
-            cout << endl;
-        } else {
-            set<string> ban;
-            while (1) {
-                bool f = 0;
-                for (int i = 0; i < (int)s.size();) {
-                    if (isalnum(s[i]) || s[i] == '_') {
-                        int j = i;
-                        while (j < (int)s.size() && (isalnum(s[j]) || s[j] == '_'))
-                            ++j;
-                        string tk = s.substr(i, j - i);
-                        if (def.count(tk) && !ban.count(tk)) {
-                            ban.insert(tk);
-                            s.replace(i, j - i, def[tk]);
-                            f = 1;
-                            break;
-                        }
-                        i = j;
-                    } else
-                        ++i;
-                }
-                if (!f)
-                    break;
-            }
-            cout << s << endl;
-        }
+    int sx, sy, tx, ty, a, b, c, d;
+    scanf("%d%d%d%d%d%d%d%d", &sx, &sy, &tx, &ty, &a, &b, &c, &d);
+    if (((sx ^ tx) & 1) || ((sy ^ ty) & 1)) {
+        puts("No");
+        return;
     }
+    int W = b - a, H = d - c;
+    if (!W && !H) {
+        if (sx == tx && sy == ty) {
+            puts("Yes");
+            puts("0");
+            return;
+        }
+        if (tx == 2 * a - sx && ty == 2 * c - sy) {
+            puts("Yes");
+            printf("1\n%d %d\n", a, c);
+            return;
+        }
+        puts("No");
+        return;
+    }
+    int cx = sx, cy = sy;
+    if (!W && cx != tx) {
+        if (tx != 2 * a - cx) {
+            puts("No");
+            return;
+        }
+        ox[cnt] = a;
+        oy[cnt] = c;
+        cnt++;
+        cx = tx;
+        cy = 2 * c - cy;
+    }
+    if (!H && cy != ty) {
+        if (ty != 2 * c - cy) {
+            puts("No");
+            return;
+        }
+        ox[cnt] = a;
+        oy[cnt] = c;
+        cnt++;
+        cy = ty;
+        cx = 2 * a - cx;
+    }
+    if ((!W && cx != tx) || (!H && cy != ty)) {
+        puts("No");
+        return;
+    }
+    while (cx != tx || cy != ty) {
+        int dx = (tx - cx) / 2, dy = (ty - cy) / 2;
+        int sx_ = dx, sy_ = dy;
+        if (sx_ > W)
+            sx_ = W;
+        else if (sx_ < -W)
+            sx_ = -W;
+        if (sy_ > H)
+            sy_ = H;
+        else if (sy_ < -H)
+            sy_ = -H;
+        int x1, y1, x2, y2;
+        if (sx_ >= 0) {
+            x1 = a;
+            x2 = a + sx_;
+        } else {
+            x1 = b;
+            x2 = b + sx_;
+        }
+        if (sy_ >= 0) {
+            y1 = c;
+            y2 = c + sy_;
+        } else {
+            y1 = d;
+            y2 = d + sy_;
+        }
+        ox[cnt] = x1;
+        oy[cnt] = y1;
+        cnt++;
+        ox[cnt] = x2;
+        oy[cnt] = y2;
+        cnt++;
+        cx += 2 * sx_;
+        cy += 2 * sy_;
+    }
+    puts("Yes");
+    //  printf("%d\n", cnt);
+    for (int i = 0; i < cnt; ++i)
+        printf("%d %d\n", ox[i], oy[i]);
     return;
 }
 } // namespace TANGYIXIAO

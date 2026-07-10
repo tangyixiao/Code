@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-// Time: 2026-07-10 10:09:38
-//  Problem: P8289 [省选联考 2022] 预处理器
-//  Contest: Luogu - 2.2 模拟&搜索②
-//  URL: https://www.luogu.com.cn/problem/P8289
+// Time: 2026-07-10 10:19:02
+//  Problem: P16669 [CSPro 30] 解压缩
+//  Contest: Luogu
+//  URL: https://www.luogu.com.cn/problem/P16669
 //  Memory Limit: 512 MB
-//  Time Limit: 1000 ms
+//  Time Limit: 2000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: ab287ea2-2bff-4646-a2e3-8e8ef090c099
+//  Batch ID: 2d09e11e-8256-41f7-a0f5-64e51ecc1cbd
 //
 // Algorithm:
 // Complexity: O()
@@ -648,56 +648,68 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+unsigned char I[2000005], O[2100005];
 inline void solve(int Task_Id) {
-    int n;
-    string s;
-    cin >> n;
-    getline(cin, s);
-    unordered_map<string, string> def;
-    while (n--) {
-        getline(cin, s);
-        if (s.empty()) {
-            cout << endl;
-            continue;
-        }
-        if (s[0] == '#') {
-            if (s[1] == 'd') {
-                string t = s.substr(8);
-                int p = t.find(' ');
-                string nm = t.substr(0, p);
-                string ct = (p == string::npos ? "" : t.substr(p + 1));
-                def[nm] = ct;
+    int s;
+    if (!(cin >> s)) {
+        return;
+    }
+    for (int i = 0; i < s; ++i) {
+        char c1, c2;
+        cin >> c1 >> c2;
+        int v1 = (c1 >= 'a') ? (c1 - 'a' + 10) : (c1 - '0');
+        int v2 = (c2 >= 'a') ? (c2 - 'a' + 10) : (c2 - '0');
+        I[i] = (v1 << 4) | v2;
+    }
+    int p = 0, q = 0, n = 0, h = 0;
+    while (true) {
+        unsigned char b = I[p++];
+        n |= (b & 127) << h;
+        h += 7;
+        if (!(b & 128))
+            break;
+    }
+    while (q < n) {
+        unsigned char H = I[p++];
+        int t = H & 3;
+        if (t == 0) {
+            int m = H >> 2, l = 0;
+            if (m < 60) {
+                l = m + 1;
             } else {
-                string nm = s.substr(7);
-                def.erase(nm);
-            }
-            cout << endl;
-        } else {
-            set<string> ban;
-            while (1) {
-                bool f = 0;
-                for (int i = 0; i < (int)s.size();) {
-                    if (isalnum(s[i]) || s[i] == '_') {
-                        int j = i;
-                        while (j < (int)s.size() && (isalnum(s[j]) || s[j] == '_'))
-                            ++j;
-                        string tk = s.substr(i, j - i);
-                        if (def.count(tk) && !ban.count(tk)) {
-                            ban.insert(tk);
-                            s.replace(i, j - i, def[tk]);
-                            f = 1;
-                            break;
-                        }
-                        i = j;
-                    } else
-                        ++i;
+                int k = m - 59, v = 0;
+                for (int i = 0; i < k; ++i) {
+                    v |= (I[p++] << (8 * i));
                 }
-                if (!f)
-                    break;
+                l = v + 1;
             }
-            cout << s << endl;
+            for (int i = 0; i < l; ++i) {
+                O[q++] = I[p++];
+            }
+        } else if (t == 1) {
+            int l = ((H >> 2) & 7) + 4;
+            int o = (H >> 5) << 8 | I[p++];
+            for (int i = 0; i < l; ++i) {
+                O[q] = O[q - o];
+                q++;
+            }
+        } else if (t == 2) {
+            int l = (H >> 2) + 1;
+            int o = I[p++];
+            o |= (I[p++] << 8);
+            for (int i = 0; i < l; ++i) {
+                O[q] = O[q - o];
+                q++;
+            }
         }
     }
+    for (int i = 0; i < q; ++i) {
+        printf("%02x", O[i]);
+        if ((i + 1) % 8 == 0 || i == q - 1) {
+            printf("\n");
+        }
+    }
+
     return;
 }
 } // namespace TANGYIXIAO
