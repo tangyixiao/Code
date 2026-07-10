@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-// Time: 2026-07-10 10:49:22
-//  Problem: P1275 魔板
+// Time: 2026-07-10 10:26:53
+//  Problem: P16696 [CSPro 29] LDAP
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P1275
-//  Memory Limit: 125 MB
-//  Time Limit: 1000 ms
+//  URL: https://www.luogu.com.cn/problem/P16696
+//  Memory Limit: 512 MB
+//  Time Limit: 3000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 0d867a50-f95d-4c5c-87ba-bf9c33205184
+//  Batch ID: f24d895f-36bc-44d6-90cc-ac21afc3c78a
 //
 // Algorithm:
 // Complexity: O()
@@ -24,7 +24,7 @@ Copyright (C) 2026 TangYixiao
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-#define MULTIPLE_TEST
+// #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -648,65 +648,145 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-int n, m;
+struct U {
+    int dn, id;
+} u[2505];
 
-struct C {
-    int v[105];
-    bool operator<(const C &o) const {
-        for (int i = 0; i < n; ++i) {
-            if (v[i] != o.v[i])
-                return v[i] < o.v[i];
-        }
-        return false;
-    }
-    bool operator==(const C &o) const {
-        for (int i = 0; i < n; ++i) {
-            if (v[i] != o.v[i])
-                return false;
-        }
-        return true;
-    }
-} t[105], w[105];
+struct T {
+    int a, v, uid;
+} g[1250005];
 
-int a[105][105], b[105][105], f[105];
+struct B {
+    unsigned long long w[40];
+    void clear() {
+        for (int i = 0; i < 40; ++i)
+            w[i] = 0;
+    }
+    void set(int i) { w[i >> 6] |= (1ULL << (i & 63)); }
+} st[2005];
 
-inline void solve(int Task_Id) {
-    cin >> n >> m;
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < m; ++j)
-            cin >> a[i][j];
+int ta[2505][505], tv[2505][505], tk[2505];
+int gc = 0, tp = 0;
+string s;
+
+bool cu(const U &a, const U &b) { return a.dn < b.dn; }
+bool ct(const T &a, const T &b) {
+    if (a.a != b.a)
+        return a.a < b.a;
+    if (a.v != b.v)
+        return a.v < b.v;
+    return a.uid < b.uid;
+}
+
+int fa(int a) {
+    int l = 0, r = gc - 1, ans = gc;
+    while (l <= r) {
+        int m = (l + r) / 2;
+        if (g[m].a >= a) {
+            ans = m;
+            r = m - 1;
+        } else
+            l = m + 1;
     }
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < m; ++j)
-            cin >> b[i][j];
+    return ans;
+}
+
+int fav(int a, int v) {
+    int l = 0, r = gc - 1, ans = gc;
+    while (l <= r) {
+        int m = (l + r) / 2;
+        if (g[m].a > a || (g[m].a == a && g[m].v >= v)) {
+            ans = m;
+            r = m - 1;
+        } else
+            l = m + 1;
     }
-    for (int j = 0; j < m; ++j) {
-        for (int i = 0; i < n; ++i)
-            t[j].v[i] = b[i][j];
-    }
-    sort(t, t + m);
-    for (int j = 0; j < m; ++j) {
-        for (int i = 0; i < n; ++i)
-            f[i] = (a[i][0] != b[i][j]);
-        for (int c = 0; c < m; ++c) {
-            for (int r = 0; r < n; ++r)
-                w[c].v[r] = a[r][c] ^ f[r];
+    return ans;
+}
+
+void ev(int &p, int idx) {
+    if (s[p] == '&' || s[p] == '|') {
+        char op = s[p];
+        p += 2;
+        int left = tp++;
+        ev(p, left);
+        p += 2;
+        int right = tp++;
+        ev(p, right);
+        p++;
+        if (op == '&') {
+            for (int i = 0; i < 40; ++i)
+                st[idx].w[i] = st[left].w[i] & st[right].w[i];
+        } else {
+            for (int i = 0; i < 40; ++i)
+                st[idx].w[i] = st[left].w[i] | st[right].w[i];
         }
-        sort(w, w + m);
-        bool ok = true;
-        for (int c = 0; c < m; ++c) {
-            if (!(w[c] == t[c])) {
-                ok = false;
-                break;
+        tp -= 2;
+    } else {
+        int attr = 0;
+        while (p < s.length() && isdigit(s[p])) {
+            attr = attr * 10 + (s[p] - '0');
+            p++;
+        }
+        char op = s[p++];
+        int val = 0;
+        while (p < s.length() && isdigit(s[p])) {
+            val = val * 10 + (s[p] - '0');
+            p++;
+        }
+        st[idx].clear();
+        if (op == ':') {
+            int V1 = fav(attr, val);
+            for (int i = V1; i < gc && g[i].a == attr && g[i].v == val; ++i) {
+                st[idx].set(g[i].uid);
+            }
+        } else {
+            int L1 = fa(attr);
+            for (int i = L1; i < gc && g[i].a == attr; ++i) {
+                if (g[i].v != val) {
+                    st[idx].set(g[i].uid);
+                }
             }
         }
-        if (ok) {
-            cout << "YES\n";
-            return;
+    }
+}
+inline void solve(int Task_Id) {
+
+    int n, q;
+    if (!(cin >> n))
+        return;
+    for (int i = 0; i < n; ++i) {
+        cin >> u[i].dn >> tk[i];
+        u[i].id = i;
+        for (int j = 0; j < tk[i]; ++j) {
+            cin >> ta[i][j] >> tv[i][j];
         }
     }
-    cout << "NO\n";
-
+    sort(u, u + n, cu);
+    for (int i = 0; i < n; ++i) {
+        int oid = u[i].id;
+        for (int j = 0; j < tk[oid]; ++j) {
+            g[gc++] = {ta[oid][j], tv[oid][j], i};
+        }
+    }
+    sort(g, g + gc, ct);
+    cin >> q;
+    while (q--) {
+        cin >> s;
+        int p = 0;
+        tp = 1;
+        ev(p, 0);
+        bool first = true;
+        for (int i = 0; i < n; ++i) {
+            if ((st[0].w[i >> 6] >> (i & 63)) & 1) {
+                if (!first)
+                    cout << " ";
+                cout << u[i].dn;
+                first = false;
+            }
+        }
+        cout << "\n";
+    }
     return;
 }
 } // namespace TANGYIXIAO

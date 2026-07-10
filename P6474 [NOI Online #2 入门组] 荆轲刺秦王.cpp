@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-// Time: 2026-07-10 10:49:22
-//  Problem: P1275 魔板
+// Time: 2026-07-10 10:42:05
+//  Problem: P6474 [NOI Online #2 入门组] 荆轲刺秦王
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P1275
-//  Memory Limit: 125 MB
-//  Time Limit: 1000 ms
+//  URL: https://www.luogu.com.cn/problem/P6474
+//  Memory Limit: 512 MB
+//  Time Limit: 3000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 0d867a50-f95d-4c5c-87ba-bf9c33205184
+//  Batch ID: 3371c42a-c95a-4383-9549-32d3395cd86f
 //
 // Algorithm:
 // Complexity: O()
@@ -24,7 +24,7 @@ Copyright (C) 2026 TangYixiao
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-#define MULTIPLE_TEST
+// #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -648,64 +648,143 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-int n, m;
+int n, m, c1, c2, D;
+int sr, sc, tr, tc;
+bool g[350][350], o[350][350];
+int f[350][352];
+unsigned int v[1000005];
+int q[31360005];
+int hd, tl;
 
-struct C {
-    int v[105];
-    bool operator<(const C &o) const {
-        for (int i = 0; i < n; ++i) {
-            if (v[i] != o.v[i])
-                return v[i] < o.v[i];
-        }
-        return false;
-    }
-    bool operator==(const C &o) const {
-        for (int i = 0; i < n; ++i) {
-            if (v[i] != o.v[i])
-                return false;
-        }
-        return true;
-    }
-} t[105], w[105];
-
-int a[105][105], b[105][105], f[105];
+int d8r[] = {-1, -1, -1, 0, 0, 1, 1, 1};
+int d8c[] = {-1, 0, 1, -1, 1, -1, 0, 1};
+int d4r[] = {-1, 1, 0, 0};
+int d4c[] = {0, 0, -1, 1};
 
 inline void solve(int Task_Id) {
-    cin >> n >> m;
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < m; ++j)
-            cin >> a[i][j];
-    }
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < m; ++j)
-            cin >> b[i][j];
-    }
-    for (int j = 0; j < m; ++j) {
-        for (int i = 0; i < n; ++i)
-            t[j].v[i] = b[i][j];
-    }
-    sort(t, t + m);
-    for (int j = 0; j < m; ++j) {
-        for (int i = 0; i < n; ++i)
-            f[i] = (a[i][0] != b[i][j]);
+    if (!(cin >> n >> m >> c1 >> c2 >> D))
+        return;
+    for (int r = 0; r < n; ++r) {
         for (int c = 0; c < m; ++c) {
-            for (int r = 0; r < n; ++r)
-                w[c].v[r] = a[r][c] ^ f[r];
-        }
-        sort(w, w + m);
-        bool ok = true;
-        for (int c = 0; c < m; ++c) {
-            if (!(w[c] == t[c])) {
-                ok = false;
-                break;
+            string s;
+            cin >> s;
+            if (s == "S") {
+                sr = r;
+                sc = c;
+            } else if (s == "T") {
+                tr = r;
+                tc = c;
+            } else if (s != ".") {
+                int A = 0;
+                for (char ch : s)
+                    A = A * 10 + (ch - '0');
+                g[r][c] = true;
+                for (int dr = -(A - 1); dr <= A - 1; ++dr) {
+                    int nr = r + dr;
+                    if (nr >= 0 && nr < n) {
+                        int rem = A - 1 - (dr < 0 ? -dr : dr);
+                        int L = c - rem;
+                        if (L < 0)
+                            L = 0;
+                        int R = c + rem;
+                        if (R > m - 1)
+                            R = m - 1;
+                        f[nr][L]++;
+                        f[nr][R + 1]--;
+                    }
+                }
             }
         }
-        if (ok) {
-            cout << "YES\n";
-            return;
+    }
+    for (int r = 0; r < n; ++r) {
+        int cur = 0;
+        for (int c = 0; c < m; ++c) {
+            cur += f[r][c];
+            if (cur > 0)
+                o[r][c] = true;
         }
     }
-    cout << "NO\n";
+    int s_str = (sr * m + sc) << 8;
+    v[s_str >> 5] |= (1U << (s_str & 31));
+    q[tl++] = s_str;
+    int ans_t = -1, ans_u1 = 1e9, ans_u2 = 1e9;
+    int tm = 0;
+    while (hd < tl) {
+        int sz = tl - hd;
+        bool flg = false;
+        for (int k = 0; k < sz; ++k) {
+            int cur = q[hd++];
+            int j = cur & 15;
+            int i = (cur >> 4) & 15;
+            int rc = cur >> 8;
+            int r = rc / m;
+            int c = rc % m;
+            if (r == tr && c == tc) {
+                flg = true;
+                if (i + j < ans_u1 + ans_u2 || (i + j == ans_u1 + ans_u2 && i < ans_u1)) {
+                    ans_u1 = i;
+                    ans_u2 = j;
+                }
+            }
+            if (flg)
+                continue;
+            for (int d = 0; d < 8; ++d) {
+                int nr = r + d8r[d], nc = c + d8c[d];
+                if (nr >= 0 && nr < n && nc >= 0 && nc < m && !g[nr][nc] && !o[nr][nc]) {
+                    int nxt = (nr * m + nc) << 8 | i << 4 | j;
+                    if (!((v[nxt >> 5] >> (nxt & 31)) & 1)) {
+                        v[nxt >> 5] |= (1U << (nxt & 31));
+                        q[tl++] = nxt;
+                    }
+                }
+            }
+            if (i < c1) {
+                for (int d = 0; d < 8; ++d) {
+                    int nr = r + d8r[d], nc = c + d8c[d];
+                    if (nr >= 0 && nr < n && nc >= 0 && nc < m && !g[nr][nc]) {
+                        int nxt = (nr * m + nc) << 8 | (i + 1) << 4 | j;
+                        if (!((v[nxt >> 5] >> (nxt & 31)) & 1)) {
+                            v[nxt >> 5] |= (1U << (nxt & 31));
+                            q[tl++] = nxt;
+                        }
+                    }
+                }
+            }
+            if (j < c2) {
+                for (int d = 0; d < 4; ++d) {
+                    int nr = r + d4r[d] * D, nc = c + d4c[d] * D;
+                    if (nr >= 0 && nr < n && nc >= 0 && nc < m && !g[nr][nc] && !o[nr][nc]) {
+                        int nxt = (nr * m + nc) << 8 | i << 4 | (j + 1);
+                        if (!((v[nxt >> 5] >> (nxt & 31)) & 1)) {
+                            v[nxt >> 5] |= (1U << (nxt & 31));
+                            q[tl++] = nxt;
+                        }
+                    }
+                }
+            }
+            if (i < c1 && j < c2) {
+                for (int d = 0; d < 4; ++d) {
+                    int nr = r + d4r[d] * D, nc = c + d4c[d] * D;
+                    if (nr >= 0 && nr < n && nc >= 0 && nc < m && !g[nr][nc]) {
+                        int nxt = (nr * m + nc) << 8 | (i + 1) << 4 | (j + 1);
+                        if (!((v[nxt >> 5] >> (nxt & 31)) & 1)) {
+                            v[nxt >> 5] |= (1U << (nxt & 31));
+                            q[tl++] = nxt;
+                        }
+                    }
+                }
+            }
+        }
+        if (flg) {
+            ans_t = tm;
+            break;
+        }
+        tm++;
+    }
+    if (ans_t == -1)
+        cout << -1 << "\n";
+    else
+        cout << ans_t << " " << ans_u1 << " " << ans_u2 << "\n";
 
     return;
 }

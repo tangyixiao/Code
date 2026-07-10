@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-// Time: 2026-07-10 10:49:22
-//  Problem: P1275 魔板
+// Time: 2026-07-10 10:45:07
+//  Problem: P2668 [NOIP 2015 提高组] 斗地主
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P1275
-//  Memory Limit: 125 MB
-//  Time Limit: 1000 ms
+//  URL: https://www.luogu.com.cn/problem/P2668
+//  Memory Limit: 1000 MB
+//  Time Limit: 2000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 0d867a50-f95d-4c5c-87ba-bf9c33205184
+//  Batch ID: 311c1f62-4d56-4e28-bed3-82f8f908f97d
 //
 // Algorithm:
 // Complexity: O()
@@ -24,7 +24,7 @@ Copyright (C) 2026 TangYixiao
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-#define MULTIPLE_TEST
+// #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -648,65 +648,118 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-int n, m;
-
-struct C {
-    int v[105];
-    bool operator<(const C &o) const {
-        for (int i = 0; i < n; ++i) {
-            if (v[i] != o.v[i])
-                return v[i] < o.v[i];
-        }
-        return false;
+int T, n;
+int cnt[20];
+int ans;
+int calc() {
+    int c[5] = {0};
+    int tmp[18];
+    for (int i = 3; i <= 17; ++i)
+        tmp[i] = cnt[i];
+    for (int i = 3; i <= 17; ++i)
+        ++c[tmp[i]];
+    int res = 0;
+    if (tmp[16] && tmp[17]) {
+        --c[1];
+        --c[1];
+        ++res;
     }
-    bool operator==(const C &o) const {
-        for (int i = 0; i < n; ++i) {
-            if (v[i] != o.v[i])
-                return false;
-        }
-        return true;
+    while (c[4] > 0) {
+        if (c[1] >= 2)
+            c[1] -= 2;
+        else if (c[2] >= 2)
+            c[2] -= 2;
+        else if (c[2] >= 1)
+            --c[2];
+        else if (c[1] >= 1)
+            --c[1];
+        --c[4];
+        ++res;
     }
-} t[105], w[105];
-
-int a[105][105], b[105][105], f[105];
-
-inline void solve(int Task_Id) {
-    cin >> n >> m;
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < m; ++j)
-            cin >> a[i][j];
+    while (c[3] > 0) {
+        if (c[1] >= 1)
+            --c[1];
+        else if (c[2] >= 1)
+            --c[2];
+        --c[3];
+        ++res;
     }
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < m; ++j)
-            cin >> b[i][j];
-    }
-    for (int j = 0; j < m; ++j) {
-        for (int i = 0; i < n; ++i)
-            t[j].v[i] = b[i][j];
-    }
-    sort(t, t + m);
-    for (int j = 0; j < m; ++j) {
-        for (int i = 0; i < n; ++i)
-            f[i] = (a[i][0] != b[i][j]);
-        for (int c = 0; c < m; ++c) {
-            for (int r = 0; r < n; ++r)
-                w[c].v[r] = a[r][c] ^ f[r];
-        }
-        sort(w, w + m);
-        bool ok = true;
-        for (int c = 0; c < m; ++c) {
-            if (!(w[c] == t[c])) {
-                ok = false;
-                break;
+    res += c[4] + c[3] + c[2] + c[1];
+    return res;
+}
+void dfs(int used) {
+    if (used >= ans)
+        return;
+    int tmp = calc();
+    ans = min(ans, used + tmp);
+    if (tmp == 0)
+        return;
+    for (int l = 3; l <= 10; ++l) {
+        int r = l;
+        while (r <= 14 && cnt[r] >= 1)
+            ++r;
+        if (r - l >= 5) {
+            for (int ed = l + 4; ed < r; ++ed) {
+                for (int i = l; i <= ed; ++i)
+                    --cnt[i];
+                dfs(used + 1);
+                for (int i = l; i <= ed; ++i)
+                    ++cnt[i];
             }
         }
-        if (ok) {
-            cout << "YES\n";
-            return;
+    }
+    for (int l = 3; l <= 12; ++l) {
+        int r = l;
+        while (r <= 14 && cnt[r] >= 2)
+            ++r;
+        if (r - l >= 3) {
+            for (int ed = l + 2; ed < r; ++ed) {
+                for (int i = l; i <= ed; ++i)
+                    cnt[i] -= 2;
+                dfs(used + 1);
+                for (int i = l; i <= ed; ++i)
+                    cnt[i] += 2;
+            }
         }
     }
-    cout << "NO\n";
-
+    for (int l = 3; l <= 13; ++l) {
+        int r = l;
+        while (r <= 14 && cnt[r] >= 3)
+            ++r;
+        if (r - l >= 2) {
+            for (int ed = l + 1; ed < r; ++ed) {
+                for (int i = l; i <= ed; ++i)
+                    cnt[i] -= 3;
+                dfs(used + 1);
+                for (int i = l; i <= ed; ++i)
+                    cnt[i] += 3;
+            }
+        }
+    }
+}
+inline void solve(int Task_Id) {
+    cin >> T >> n;
+    while (T--) {
+        memset(cnt, 0, sizeof(cnt));
+        for (int i = 1; i <= n; ++i) {
+            int a, b;
+            cin >> a >> b;
+            if (a == 1)
+                a = 14;
+            else if (a == 2)
+                a = 15;
+            else if (a == 0) {
+                if (b == 1)
+                    a = 16;
+                else
+                    a = 17;
+            }
+            ++cnt[a];
+        }
+        ans = n;
+        dfs(0);
+        cout << ans << '\n';
+    }
     return;
 }
 } // namespace TANGYIXIAO
