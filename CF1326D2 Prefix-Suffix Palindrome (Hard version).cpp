@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-// Time: 2026-07-15 07:46:37
-//  Problem: P1119 灾后重建
-//  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P1119
-//  Memory Limit: 125 MB
-//  Time Limit: 1000 ms
+// Time: 2026-07-15 14:30:07
+//  Problem: D2. Prefix-Suffix Palindrome (Hard version)
+//  Contest: Codeforces - Codeforces Global Round 7
+//  URL: https://codeforces.com/problemset/problem/1326/D2
+//  Memory Limit: 256 MB
+//  Time Limit: 2000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 90336473-e1c0-4e3e-a6f8-b56e70746b44
+//  Batch ID: 2330c1d8-36e4-431d-94fb-ee52d445fae2
 //
 // Algorithm:
 // Complexity: O()
@@ -15,7 +15,6 @@
 //
 //
 // Powered by CP Editor (https://cpeditor.org)
-
 /*
 Copyright (C) 2026 TangYixiao
 */
@@ -24,7 +23,7 @@ Copyright (C) 2026 TangYixiao
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -648,64 +647,67 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+
+const int N = 1e6 + 5;
+char s[N];
+int d1[N], d2[N], n;
+
+bool pal(int L, int R) {
+    if (L >= R)
+        return 1;
+    int len = R - L + 1;
+    if (len & 1) {
+        int mid = (L + R) >> 1;
+        return d1[mid] * 2 - 1 >= len;
+    } else {
+        int mid = (L + R + 1) >> 1;
+        return d2[mid] * 2 >= len;
+    }
+}
+
 inline void solve(int Task_Id) {
-    const int INF = 1e9;
-
-    int N, M;
-    cin >> N >> M;
-
-    vector<int> t(N);
-    for (int i = 0; i < N; ++i) {
-        cin >> t[i];
+    scanf("%s", s);
+    n = strlen(s);
+    int l = 0, r = n - 1;
+    while (l < r && s[l] == s[r])
+        ++l, --r;
+    if (l >= r) {
+        puts(s);
+        return;
     }
-
-    vector<vector<int>> dist(N, vector<int>(N, INF));
-    for (int i = 0; i < N; ++i) {
-        dist[i][i] = 0;
+    for (int i = 0, l1 = 0, r1 = -1; i < n; ++i) {
+        int k = (i > r1) ? 1 : min(d1[l1 + r1 - i], r1 - i + 1);
+        while (i - k >= 0 && i + k < n && s[i - k] == s[i + k])
+            ++k;
+        d1[i] = k--;
+        if (i + k > r1)
+            l1 = i - k, r1 = i + k;
     }
-
-    for (int i = 0; i < M; ++i) {
-        int u, v, w;
-        cin >> u >> v >> w;
-        dist[u][v] = min(dist[u][v], w);
-        dist[v][u] = min(dist[v][u], w);
+    for (int i = 0, l1 = 0, r1 = -1; i < n; ++i) {
+        int k = (i > r1) ? 0 : min(d2[l1 + r1 - i + 1], r1 - i + 1);
+        while (i - k - 1 >= 0 && i + k < n && s[i - k - 1] == s[i + k])
+            ++k;
+        d2[i] = k--;
+        if (i + k > r1)
+            l1 = i - k - 1, r1 = i + k;
     }
-
-    int Q;
-    cin >> Q;
-
-    int cur = 0;
-    while (Q--) {
-        int x, y, time;
-        cin >> x >> y >> time;
-
-        if (t[x] > time || t[y] > time) {
-            cout << -1 << '\n';
-            continue;
-        }
-
-        while (cur < N && t[cur] <= time) {
-            for (int i = 0; i < N; ++i) {
-                if (dist[i][cur] == INF)
-                    continue;
-                for (int j = 0; j < N; ++j) {
-                    if (dist[cur][j] == INF)
-                        continue;
-                    if (dist[i][j] > dist[i][cur] + dist[cur][j]) {
-                        dist[i][j] = dist[i][cur] + dist[cur][j];
-                    }
-                }
-            }
-            ++cur;
-        }
-
-        if (dist[x][y] == INF) {
-            cout << -1 << '\n';
-        } else {
-            cout << dist[x][y] << '\n';
-        }
-    }
-
+    int p = r, q = l;
+    while (p >= l && !pal(l, p))
+        --p;
+    while (q <= r && !pal(q, r))
+        ++q;
+    int lp = p - l + 1, lq = r - q + 1;
+    for (int i = 0; i < l; ++i)
+        putchar(s[i]);
+    if (lp >= lq)
+        for (int i = l; i <= p; ++i)
+            putchar(s[i]);
+    else
+        for (int i = q; i <= r; ++i)
+            putchar(s[i]);
+    for (int i = r + 1; i < n; ++i)
+        putchar(s[i]);
+    puts("");
     return;
 }
 } // namespace TANGYIXIAO

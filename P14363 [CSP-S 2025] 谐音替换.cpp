@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-// Time: 2026-07-15 07:46:37
-//  Problem: P1119 灾后重建
+// Time: 2026-07-15 14:46:48
+//  Problem: P14363 [CSP-S 2025] 谐音替换
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P1119
-//  Memory Limit: 125 MB
-//  Time Limit: 1000 ms
+//  URL: https://www.luogu.com.cn/problem/P14363
+//  Memory Limit: 2048 MB
+//  Time Limit: 2000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 90336473-e1c0-4e3e-a6f8-b56e70746b44
+//  Batch ID: c39136ae-a05a-4b57-95ac-ea62e51e034f
 //
 // Algorithm:
 // Complexity: O()
@@ -648,64 +648,202 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+typedef long long ll;
+
+const int MAXN = 5000005;
+const int MAXM = 5000005;
+const int MAXP = 200005;
+const int MAXQ = 200005;
+const int MAXL = 5000005;
+
+int he[MAXN], to[MAXM], ch[MAXM], nx[MAXM], e_tot;
+int fail[MAXN];
+int mhd[MAXN], mlen[MAXP], mcnt[MAXP], mnx[MAXP], mp;
+int qhd[MAXN], qid[MAXL], qk[MAXL], qnx[MAXL], qc;
+int fhd[MAXN], fto[MAXN], fnx[MAXN], fc;
+
+int vr[MAXN];
+ll ans[MAXQ];
+
+int uls[MAXP], uls_sz;
+int bit[MAXP];
+
+void add_edge(int u, int c, int v) {
+    to[e_tot] = v;
+    ch[e_tot] = c;
+    nx[e_tot] = he[u];
+    he[u] = e_tot++;
+}
+
+int get_to(int u, int c) {
+    for (int e = he[u]; ~e; e = nx[e])
+        if (ch[e] == c)
+            return to[e];
+    return -1;
+}
+
+int go(int u, int c) {
+    while (u) {
+        int v = get_to(u, c);
+        if (~v)
+            return v;
+        u = fail[u];
+    }
+    int v = get_to(0, c);
+    return ~v ? v : 0;
+}
+
+int new_node() {
+    static int cur = 1;
+    return cur++;
+}
+
+void bit_add(int i, int v) {
+    for (; i <= uls_sz; i += i & -i)
+        bit[i] += v;
+}
+
+int bit_sum(int i) {
+    int s = 0;
+    for (; i; i -= i & -i)
+        s += bit[i];
+    return s;
+}
+
+char s1[MAXN], s2[MAXN];
+
 inline void solve(int Task_Id) {
-    const int INF = 1e9;
+    int n, q;
+    scanf("%d%d", &n, &q);
 
-    int N, M;
-    cin >> N >> M;
+    memset(he, -1, sizeof(he));
+    memset(mhd, -1, sizeof(mhd));
+    memset(qhd, -1, sizeof(qhd));
+    memset(fhd, -1, sizeof(fhd));
 
-    vector<int> t(N);
-    for (int i = 0; i < N; ++i) {
-        cin >> t[i];
+    for (int i = 0; i < n; ++i) {
+        scanf("%s%s", s1, s2);
+        int len = strlen(s1);
+        int u = 0;
+        for (int j = 0; j < len; ++j) {
+            int c = (s1[j] - 'a') * 26 + (s2[j] - 'a');
+            int v = get_to(u, c);
+            if (v == -1) {
+                v = new_node();
+                add_edge(u, c, v);
+            }
+            u = v;
+        }
+        mlen[mp] = len;
+        mcnt[mp] = 1;
+        mnx[mp] = mhd[u];
+        mhd[u] = mp++;
     }
 
-    vector<vector<int>> dist(N, vector<int>(N, INF));
-    for (int i = 0; i < N; ++i) {
-        dist[i][i] = 0;
+    int qh = 0, qt = 0;
+    static int que[MAXN];
+    for (int e = he[0]; ~e; e = nx[e]) {
+        int v = to[e];
+        fail[v] = 0;
+        fto[fc] = v;
+        fnx[fc] = fhd[0];
+        fhd[0] = fc++;
+        que[qt++] = v;
+    }
+    while (qh < qt) {
+        int u = que[qh++];
+        for (int e = he[u]; ~e; e = nx[e]) {
+            int c = ch[e], v = to[e];
+            int p = fail[u];
+            while (p && get_to(p, c) == -1)
+                p = fail[p];
+            int f = get_to(p, c);
+            fail[v] = (~f) ? f : 0;
+            fto[fc] = v;
+            fnx[fc] = fhd[fail[v]];
+            fhd[fail[v]] = fc++;
+            que[qt++] = v;
+        }
     }
 
-    for (int i = 0; i < M; ++i) {
-        int u, v, w;
-        cin >> u >> v >> w;
-        dist[u][v] = min(dist[u][v], w);
-        dist[v][u] = min(dist[v][u], w);
-    }
-
-    int Q;
-    cin >> Q;
-
-    int cur = 0;
-    while (Q--) {
-        int x, y, time;
-        cin >> x >> y >> time;
-
-        if (t[x] > time || t[y] > time) {
-            cout << -1 << '\n';
+    for (int j = 1; j <= q; ++j) {
+        scanf("%s%s", s1, s2);
+        int L1 = strlen(s1), L2 = strlen(s2);
+        if (L1 != L2) {
+            ans[j] = 0;
             continue;
         }
+        int L = L1;
+        int L0 = 1, R0 = L;
+        while (L0 <= L && s1[L0 - 1] == s2[L0 - 1])
+            ++L0;
+        if (L0 > L) {
+            ans[j] = 0;
+            continue;
+        }
+        while (R0 >= 1 && s1[R0 - 1] == s2[R0 - 1])
+            --R0;
 
-        while (cur < N && t[cur] <= time) {
-            for (int i = 0; i < N; ++i) {
-                if (dist[i][cur] == INF)
-                    continue;
-                for (int j = 0; j < N; ++j) {
-                    if (dist[cur][j] == INF)
-                        continue;
-                    if (dist[i][j] > dist[i][cur] + dist[cur][j]) {
-                        dist[i][j] = dist[i][cur] + dist[cur][j];
-                    }
-                }
-            }
-            ++cur;
+        int u = 0;
+        for (int i = 1; i <= L; ++i) {
+            int c = (s1[i - 1] - 'a') * 26 + (s2[i - 1] - 'a');
+            u = go(u, c);
+            vr[i] = u;
         }
 
-        if (dist[x][y] == INF) {
-            cout << -1 << '\n';
-        } else {
-            cout << dist[x][y] << '\n';
+        for (int r = R0; r <= L; ++r) {
+            int K = r - L0 + 1;
+            if (K < 1)
+                K = 1;
+            int node = vr[r];
+            qid[qc] = j;
+            qk[qc] = K;
+            qnx[qc] = qhd[node];
+            qhd[node] = qc++;
         }
     }
 
+    for (int i = 0; i < mp; ++i)
+        uls[i] = mlen[i];
+    sort(uls, uls + mp);
+    uls_sz = unique(uls, uls + mp) - uls;
+
+    int top = 0;
+    static int stk_u[MAXN], stk_st[MAXN];
+    stk_u[top] = 0;
+    stk_st[top++] = 0;
+    while (top) {
+        int u = stk_u[--top];
+        int st = stk_st[top];
+        if (st == 0) {
+            for (int e = mhd[u]; ~e; e = mnx[e]) {
+                int p = lower_bound(uls, uls + uls_sz, mlen[e]) - uls + 1;
+                bit_add(p, mcnt[e]);
+            }
+            for (int e = qhd[u]; ~e; e = qnx[e]) {
+                int K = qk[e];
+                int p = lower_bound(uls, uls + uls_sz, K) - uls + 1;
+                if (p <= uls_sz)
+                    ans[qid[e]] += bit_sum(uls_sz) - bit_sum(p - 1);
+            }
+            stk_u[top] = u;
+            stk_st[top] = 1;
+            ++top;
+            for (int e = fhd[u]; ~e; e = fnx[e]) {
+                stk_u[top] = fto[e];
+                stk_st[top] = 0;
+                ++top;
+            }
+        } else {
+            for (int e = mhd[u]; ~e; e = mnx[e]) {
+                int p = lower_bound(uls, uls + uls_sz, mlen[e]) - uls + 1;
+                bit_add(p, -mcnt[e]);
+            }
+        }
+    }
+
+    for (int j = 1; j <= q; ++j)
+        printf("%lld\n", ans[j]);
     return;
 }
 } // namespace TANGYIXIAO

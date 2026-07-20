@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-// Time: 2026-07-15 07:46:37
-//  Problem: P1119 灾后重建
+//  Time: 2026-07-17 11:49:05
+//  Problem: P2949 [USACO09OPEN] Work Scheduling G
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P1119
+//  URL: https://www.luogu.com.cn/problem/P2949
 //  Memory Limit: 125 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 90336473-e1c0-4e3e-a6f8-b56e70746b44
+//  Batch ID: 187dfc7b-6f13-4616-8c84-1731a9777254
 //
 // Algorithm:
 // Complexity: O()
@@ -648,64 +648,34 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+struct J {
+    int d, p;
+} a[100005];
+bool cmp(J x, J y) { return x.d < y.d; }
+priority_queue<int, vector<int>, greater<int>> q;
 inline void solve(int Task_Id) {
-    const int INF = 1e9;
-
-    int N, M;
-    cin >> N >> M;
-
-    vector<int> t(N);
-    for (int i = 0; i < N; ++i) {
-        cin >> t[i];
+    int n;
+    scanf("%d", &n);
+    for (int i = 0; i < n; ++i) {
+        scanf("%d%d", &a[i].d, &a[i].p);
     }
-
-    vector<vector<int>> dist(N, vector<int>(N, INF));
-    for (int i = 0; i < N; ++i) {
-        dist[i][i] = 0;
-    }
-
-    for (int i = 0; i < M; ++i) {
-        int u, v, w;
-        cin >> u >> v >> w;
-        dist[u][v] = min(dist[u][v], w);
-        dist[v][u] = min(dist[v][u], w);
-    }
-
-    int Q;
-    cin >> Q;
-
-    int cur = 0;
-    while (Q--) {
-        int x, y, time;
-        cin >> x >> y >> time;
-
-        if (t[x] > time || t[y] > time) {
-            cout << -1 << '\n';
-            continue;
-        }
-
-        while (cur < N && t[cur] <= time) {
-            for (int i = 0; i < N; ++i) {
-                if (dist[i][cur] == INF)
-                    continue;
-                for (int j = 0; j < N; ++j) {
-                    if (dist[cur][j] == INF)
-                        continue;
-                    if (dist[i][j] > dist[i][cur] + dist[cur][j]) {
-                        dist[i][j] = dist[i][cur] + dist[cur][j];
-                    }
-                }
-            }
-            ++cur;
-        }
-
-        if (dist[x][y] == INF) {
-            cout << -1 << '\n';
+    sort(a, a + n, cmp);
+    for (int i = 0; i < n; ++i) {
+        if ((int)q.size() < a[i].d) {
+            q.push(a[i].p);
         } else {
-            cout << dist[x][y] << '\n';
+            if (!q.empty() && q.top() < a[i].p) {
+                q.pop();
+                q.push(a[i].p);
+            }
         }
     }
-
+    long long ans = 0;
+    while (!q.empty()) {
+        ans += q.top();
+        q.pop();
+    }
+    printf("%lld", ans);
     return;
 }
 } // namespace TANGYIXIAO

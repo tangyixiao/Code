@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-// Time: 2026-07-15 07:46:37
-//  Problem: P1119 灾后重建
-//  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P1119
-//  Memory Limit: 125 MB
-//  Time Limit: 1000 ms
+//  Time: 2026-07-17 10:43:32
+//  Problem: D. Buy Low Sell High
+//  Contest: Codeforces - MemSQL Start[c]UP 3.0 - Round 2 (onsite finalists)
+//  URL: https://codeforces.com/problemset/problem/865/D
+//  Memory Limit: 256 MB
+//  Time Limit: 2000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 90336473-e1c0-4e3e-a6f8-b56e70746b44
+//  Batch ID: 908c2e90-d75d-4b8d-9ad6-e0a27beec057
 //
 // Algorithm:
 // Complexity: O()
@@ -551,6 +551,7 @@ using namespace __gnu_pbds;
 #endif
 #pragma endregion INCLUDES
 
+#define int long long
 #pragma region TANGYIXIAO
 namespace TANGYIXIAO {
 #pragma region IO
@@ -621,7 +622,7 @@ using namespace TANGYIXIAO;
 // clang-format on
 #pragma endregion TANGYIXIAO
 #pragma region MAIN
-signed main(int argc, char *argv[]) {
+signed main() {
 #ifdef TIME_COUNT
     Start_Time_Count();
 #endif
@@ -648,64 +649,20 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+priority_queue<int, vector<int>, greater<int>> q;
+int n, ans;
 inline void solve(int Task_Id) {
-    const int INF = 1e9;
-
-    int N, M;
-    cin >> N >> M;
-
-    vector<int> t(N);
-    for (int i = 0; i < N; ++i) {
-        cin >> t[i];
-    }
-
-    vector<vector<int>> dist(N, vector<int>(N, INF));
-    for (int i = 0; i < N; ++i) {
-        dist[i][i] = 0;
-    }
-
-    for (int i = 0; i < M; ++i) {
-        int u, v, w;
-        cin >> u >> v >> w;
-        dist[u][v] = min(dist[u][v], w);
-        dist[v][u] = min(dist[v][u], w);
-    }
-
-    int Q;
-    cin >> Q;
-
-    int cur = 0;
-    while (Q--) {
-        int x, y, time;
-        cin >> x >> y >> time;
-
-        if (t[x] > time || t[y] > time) {
-            cout << -1 << '\n';
-            continue;
+    cin >> n;
+    for (int i = 1, k; i <= n; ++i) {
+        cin >> k;
+        if (!q.empty() && q.top() < k) {
+            ans += k - q.top();
+            q.pop();
+            q.push(k);
         }
-
-        while (cur < N && t[cur] <= time) {
-            for (int i = 0; i < N; ++i) {
-                if (dist[i][cur] == INF)
-                    continue;
-                for (int j = 0; j < N; ++j) {
-                    if (dist[cur][j] == INF)
-                        continue;
-                    if (dist[i][j] > dist[i][cur] + dist[cur][j]) {
-                        dist[i][j] = dist[i][cur] + dist[cur][j];
-                    }
-                }
-            }
-            ++cur;
-        }
-
-        if (dist[x][y] == INF) {
-            cout << -1 << '\n';
-        } else {
-            cout << dist[x][y] << '\n';
-        }
+        q.push(k);
     }
-
+    cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO

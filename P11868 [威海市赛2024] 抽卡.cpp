@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-// Time: 2026-07-15 07:46:37
-//  Problem: P1119 灾后重建
+// Time: 2026-07-15 07:41:17
+//  Problem: P11868 [威海市赛2024] 抽卡
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P1119
-//  Memory Limit: 125 MB
+//  URL: https://www.luogu.com.cn/problem/P11868
+//  Memory Limit: 512 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 90336473-e1c0-4e3e-a6f8-b56e70746b44
+//  Batch ID: a27a8de5-f250-45a6-809b-96f5ce082c70
 //
 // Algorithm:
 // Complexity: O()
@@ -648,64 +648,10 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+int a, b;
 inline void solve(int Task_Id) {
-    const int INF = 1e9;
-
-    int N, M;
-    cin >> N >> M;
-
-    vector<int> t(N);
-    for (int i = 0; i < N; ++i) {
-        cin >> t[i];
-    }
-
-    vector<vector<int>> dist(N, vector<int>(N, INF));
-    for (int i = 0; i < N; ++i) {
-        dist[i][i] = 0;
-    }
-
-    for (int i = 0; i < M; ++i) {
-        int u, v, w;
-        cin >> u >> v >> w;
-        dist[u][v] = min(dist[u][v], w);
-        dist[v][u] = min(dist[v][u], w);
-    }
-
-    int Q;
-    cin >> Q;
-
-    int cur = 0;
-    while (Q--) {
-        int x, y, time;
-        cin >> x >> y >> time;
-
-        if (t[x] > time || t[y] > time) {
-            cout << -1 << '\n';
-            continue;
-        }
-
-        while (cur < N && t[cur] <= time) {
-            for (int i = 0; i < N; ++i) {
-                if (dist[i][cur] == INF)
-                    continue;
-                for (int j = 0; j < N; ++j) {
-                    if (dist[cur][j] == INF)
-                        continue;
-                    if (dist[i][j] > dist[i][cur] + dist[cur][j]) {
-                        dist[i][j] = dist[i][cur] + dist[cur][j];
-                    }
-                }
-            }
-            ++cur;
-        }
-
-        if (dist[x][y] == INF) {
-            cout << -1 << '\n';
-        } else {
-            cout << dist[x][y] << '\n';
-        }
-    }
-
+    cin >> a >> b;
+    cout << max(a, b);
     return;
 }
 } // namespace TANGYIXIAO

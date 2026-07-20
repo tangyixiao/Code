@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-// Time: 2026-07-15 07:46:37
-//  Problem: P1119 灾后重建
+// Time: 2026-07-13 08:00:50
+//  Problem: P17105 [入门赛 #49] 拓展位运算
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P1119
-//  Memory Limit: 125 MB
+//  URL: https://www.luogu.com.cn/problem/P17105
+//  Memory Limit: 512 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 90336473-e1c0-4e3e-a6f8-b56e70746b44
+//  Batch ID: b9a97d48-df07-4a1f-967c-9a995b9ddeab
 //
 // Algorithm:
 // Complexity: O()
@@ -649,63 +649,66 @@ signed main(int argc, char *argv[]) {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 inline void solve(int Task_Id) {
-    const int INF = 1e9;
-
-    int N, M;
-    cin >> N >> M;
-
-    vector<int> t(N);
-    for (int i = 0; i < N; ++i) {
-        cin >> t[i];
+    int k;
+    scanf("%d", &k);
+    int A[10][10], B[10][10];
+    for (int i = 0; i < k; ++i) {
+        for (int j = 0; j < k; ++j) {
+            scanf("%d", &A[i][j]);
+        }
     }
-
-    vector<vector<int>> dist(N, vector<int>(N, INF));
-    for (int i = 0; i < N; ++i) {
-        dist[i][i] = 0;
+    for (int i = 0; i < k; ++i) {
+        for (int j = 0; j < k; ++j) {
+            scanf("%d", &B[i][j]);
+        }
     }
-
-    for (int i = 0; i < M; ++i) {
-        int u, v, w;
-        cin >> u >> v >> w;
-        dist[u][v] = min(dist[u][v], w);
-        dist[v][u] = min(dist[v][u], w);
+    char ns[20], xs[20], ys[20];
+    scanf("%s%s%s", ns, xs, ys);
+    int N = 0;
+    for (int i = 0; ns[i]; ++i) {
+        N = N * k + ns[i] - '0';
     }
-
-    int Q;
-    cin >> Q;
-
-    int cur = 0;
-    while (Q--) {
-        int x, y, time;
-        cin >> x >> y >> time;
-
-        if (t[x] > time || t[y] > time) {
-            cout << -1 << '\n';
+    int X[20], Y[20], lx = strlen(xs), ly = strlen(ys);
+    for (int i = 0; i < lx; ++i) {
+        X[lx - 1 - i] = xs[i] - '0';
+    }
+    for (int i = 0; i < ly; ++i) {
+        Y[ly - 1 - i] = ys[i] - '0';
+    }
+    int cnt = 0;
+    for (int a = 1; a <= N; ++a) {
+        int tmp = a, la = 0, Ad[20] = {};
+        do {
+            Ad[la++] = tmp % k;
+            tmp /= k;
+        } while (tmp);
+        int L = la > lx ? la : lx;
+        L = L > ly ? L : ly;
+        int f = 0;
+        for (int i = 0; i < L; ++i) {
+            int va = (i < la ? Ad[i] : 0), vx = (i < lx ? X[i] : 0), vy = (i < ly ? Y[i] : 0);
+            if (A[va][vx] != vy) {
+                f = 1;
+                break;
+            }
+        }
+        if (!f) {
+            ++cnt;
             continue;
         }
-
-        while (cur < N && t[cur] <= time) {
-            for (int i = 0; i < N; ++i) {
-                if (dist[i][cur] == INF)
-                    continue;
-                for (int j = 0; j < N; ++j) {
-                    if (dist[cur][j] == INF)
-                        continue;
-                    if (dist[i][j] > dist[i][cur] + dist[cur][j]) {
-                        dist[i][j] = dist[i][cur] + dist[cur][j];
-                    }
-                }
+        f = 0;
+        for (int i = 0; i < L; ++i) {
+            int va = (i < la ? Ad[i] : 0), vx = (i < lx ? X[i] : 0), vy = (i < ly ? Y[i] : 0);
+            if (B[va][vx] != vy) {
+                f = 1;
+                break;
             }
-            ++cur;
         }
-
-        if (dist[x][y] == INF) {
-            cout << -1 << '\n';
-        } else {
-            cout << dist[x][y] << '\n';
+        if (!f) {
+            ++cnt;
         }
     }
-
+    printf("%d\n", cnt);
     return;
 }
 } // namespace TANGYIXIAO
