@@ -631,33 +631,50 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 114;
-int n, d[N], a[N], p[N], maxn;
+typedef long long ll;
+const int N = 5005;
+const ll INF = 1e18;
+int n, w, s, a[N];
+ll d[2][N];
+int q[N];
 inline void solve(int Task_Id) {
-    cin >> n;
-    for (int i = 1; i <= n; i++) {
-        cin >> a[i];
-    }
-    for (int i = 1; i <= n; i++) {
-        d[i] = 1;
-        for (int j = 1; j < i; j++) {
-            if (a[i] > a[j]) {
-                d[i] = max(d[j] + 1, d[i]);
+    scanf("%d%d%d", &n, &w, &s);
+    for (int i = 1; i <= n; ++i)
+        scanf("%d", a + i);
+    for (int i = 0; i < 2; ++i)
+        for (int j = 0; j <= w; ++j)
+            d[i][j] = -INF;
+    d[0][0] = 0;
+    int c = 0;
+    for (int i = 1; i <= n; ++i) {
+        int x = c ^ 1;
+        for (int j = 0; j <= w; ++j)
+            d[x][j] = -INF;
+        int lim = min(i - 1, w);
+        int hd = 0, tl = 0, p = -1;
+        for (int j = 1; j <= min(i, w); ++j) {
+            int L = j - 1;
+            int R = min(lim, j - 1 + s);
+            while (p < R) {
+                ++p;
+                if (d[c][p] > -INF / 2) {
+                    while (hd < tl && d[c][q[tl - 1]] <= d[c][p])
+                        --tl;
+                    q[tl++] = p;
+                }
             }
+            while (hd < tl && q[hd] < L)
+                ++hd;
+            if (hd < tl)
+                d[x][j] = d[c][q[hd]] + (ll)j * a[i];
         }
+        c = x;
     }
-    for (int i = n; i >= 1; i--) {
-        p[i] = 1;
-        for (int j = n; j > i; j--) {
-            if (a[i] > a[j]) {
-                p[i] = max(p[j] + 1, p[i]);
-            }
-        }
-    }
-    for (int i = 1; i <= n; i++) {
-        maxn = max(d[i] + p[i] - 1, maxn);
-    }
-    cout << n - maxn;
+    ll ans = -INF;
+    for (int j = 1; j <= w; ++j)
+        if (d[c][j] > ans)
+            ans = d[c][j];
+    printf("%lld\n", ans);
     return;
 }
 } // namespace TANGYIXIAO

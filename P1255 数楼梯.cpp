@@ -631,8 +631,40 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int L = 2005;
+int a[L], b[L], c[L];
+void add(int *u, int *v, int *w) {
+    int len = max(u[0], v[0]), carry = 0;
+    for (int i = 1; i <= len; ++i) {
+        int sum = (i <= u[0] ? u[i] : 0) + (i <= v[0] ? v[i] : 0) + carry;
+        w[i] = sum % 10;
+        carry = sum / 10;
+    }
+    w[0] = len;
+    if (carry) {
+        w[++w[0]] = carry;
+    }
+    return;
+}
 inline void solve(int Task_Id) {
-    // do something here
+    int n;
+    scanf("%d", &n);
+    if (n <= 2) {
+        printf("%d\n", n == 1 ? 1 : 2);
+        return;
+    }
+    a[0] = 1;
+    a[1] = 1;
+    b[0] = 1;
+    b[1] = 2;
+    for (int i = 3; i <= n; ++i) {
+        add(a, b, c);
+        memcpy(a, b, sizeof(b));
+        memcpy(b, c, sizeof(c));
+    }
+    for (int i = b[0]; i >= 1; --i)
+        putchar(b[i] + '0');
+    putchar('\n');
     return;
 }
 } // namespace TANGYIXIAO

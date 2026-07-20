@@ -631,33 +631,29 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 114;
-int n, d[N], a[N], p[N], maxn;
 inline void solve(int Task_Id) {
-    cin >> n;
-    for (int i = 1; i <= n; i++) {
-        cin >> a[i];
+    int n, k;
+    cin >> n >> k;
+    vector<vector<int>> tasks(n + 2);
+    for (int i = 0; i < k; ++i) {
+        int p, t;
+        cin >> p >> t;
+        tasks[p].push_back(t);
     }
-    for (int i = 1; i <= n; i++) {
-        d[i] = 1;
-        for (int j = 1; j < i; j++) {
-            if (a[i] > a[j]) {
-                d[i] = max(d[j] + 1, d[i]);
+
+    vector<int> dp(n + 2, 0);
+    for (int i = n; i >= 1; --i) {
+        if (tasks[i].empty()) {
+            dp[i] = dp[i + 1] + 1;
+        } else {
+
+            for (int t : tasks[i]) {
+                dp[i] = max(dp[i], dp[i + t]);
             }
         }
     }
-    for (int i = n; i >= 1; i--) {
-        p[i] = 1;
-        for (int j = n; j > i; j--) {
-            if (a[i] > a[j]) {
-                p[i] = max(p[j] + 1, p[i]);
-            }
-        }
-    }
-    for (int i = 1; i <= n; i++) {
-        maxn = max(d[i] + p[i] - 1, maxn);
-    }
-    cout << n - maxn;
+
+    cout << dp[1] << endl;
     return;
 }
 } // namespace TANGYIXIAO
