@@ -631,70 +631,69 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-
-const int N = 6000005, I = 0x3f3f3f3f;
-int rt, nc, stk2[N], tp;
+const int N = 1000005, I = 0x3f3f3f3f;
+int rt, nc, stk[N], tp;
 
 struct Nd {
     int l, r, v, p, sz;
     long long s;
     int lm, rm, mx, tg;
     bool rv;
-} a[N];
+} t[N];
 
 int nw(int x) {
-    int u = tp ? stk2[--tp] : ++nc;
-    a[u] = {0, 0, x, rand(), 1, x, x, x, x, I, 0};
+    int u = tp ? stk[--tp] : ++nc;
+    t[u] = {0, 0, x, rand(), 1, x, x, x, x, I, 0};
     return u;
 }
 
 void up(int u) {
-    int L = a[u].l, R = a[u].r;
-    a[u].sz = 1 + a[L].sz + a[R].sz;
-    a[u].s = a[L].s + a[R].s + a[u].v;
-    int rlm = max(0, a[R].lm), lrm = max(0, a[L].rm);
-    a[u].lm = max(a[L].lm, (int)(a[L].s + a[u].v + rlm));
-    a[u].rm = max(a[R].rm, (int)(a[R].s + a[u].v + lrm));
-    a[u].mx = max(max(a[L].mx, a[R].mx), (int)(lrm + a[u].v + rlm));
+    int L = t[u].l, R = t[u].r;
+    t[u].sz = 1 + t[L].sz + t[R].sz;
+    t[u].s = t[L].s + t[R].s + t[u].v;
+    int rl = max(0, t[R].lm), lr = max(0, t[L].rm);
+    t[u].lm = max(t[L].lm, (int)(t[L].s + t[u].v + rl));
+    t[u].rm = max(t[R].rm, (int)(t[R].s + t[u].v + lr));
+    t[u].mx = max(max(t[L].mx, t[R].mx), (int)(lr + t[u].v + rl));
 }
 
 void ap(int u, int c) {
     if (!u)
         return;
-    a[u].v = c;
-    a[u].s = 1LL * a[u].sz * c;
+    t[u].v = c;
+    t[u].s = 1LL * t[u].sz * c;
     if (c > 0)
-        a[u].lm = a[u].rm = a[u].mx = a[u].s;
+        t[u].lm = t[u].rm = t[u].mx = t[u].s;
     else
-        a[u].lm = a[u].rm = a[u].mx = c;
-    a[u].tg = c;
-    a[u].rv = 0;
+        t[u].lm = t[u].rm = t[u].mx = c;
+    t[u].tg = c;
+    t[u].rv = 0;
 }
 
 void rv(int u) {
     if (!u)
         return;
-    swap(a[u].l, a[u].r);
-    swap(a[u].lm, a[u].rm);
-    a[u].rv ^= 1;
+    swap(t[u].l, t[u].r);
+    swap(t[u].lm, t[u].rm);
+    t[u].rv ^= 1;
 }
 
 void ps(int u) {
     if (!u)
         return;
-    if (a[u].tg != I) {
-        if (a[u].l)
-            ap(a[u].l, a[u].tg);
-        if (a[u].r)
-            ap(a[u].r, a[u].tg);
-        a[u].tg = I;
+    if (t[u].tg != I) {
+        if (t[u].l)
+            ap(t[u].l, t[u].tg);
+        if (t[u].r)
+            ap(t[u].r, t[u].tg);
+        t[u].tg = I;
     }
-    if (a[u].rv) {
-        if (a[u].l)
-            rv(a[u].l);
-        if (a[u].r)
-            rv(a[u].r);
-        a[u].rv = 0;
+    if (t[u].rv) {
+        if (t[u].l)
+            rv(t[u].l);
+        if (t[u].r)
+            rv(t[u].r);
+        t[u].rv = 0;
     }
 }
 
@@ -704,13 +703,13 @@ void sp(int u, int k, int &x, int &y) {
         return;
     }
     ps(u);
-    int lsz = a[a[u].l].sz;
+    int lsz = t[t[u].l].sz;
     if (k <= lsz) {
         y = u;
-        sp(a[u].l, k, x, a[u].l);
+        sp(t[u].l, k, x, t[u].l);
     } else {
         x = u;
-        sp(a[u].r, k - lsz - 1, a[u].r, y);
+        sp(t[u].r, k - lsz - 1, t[u].r, y);
     }
     up(u);
 }
@@ -720,12 +719,12 @@ int mg(int x, int y) {
         return x | y;
     ps(x);
     ps(y);
-    if (a[x].p > a[y].p) {
-        a[x].r = mg(a[x].r, y);
+    if (t[x].p > t[y].p) {
+        t[x].r = mg(t[x].r, y);
         up(x);
         return x;
     } else {
-        a[y].l = mg(x, a[y].l);
+        t[y].l = mg(x, t[y].l);
         up(y);
         return y;
     }
@@ -734,84 +733,96 @@ int mg(int x, int y) {
 void rc(int u) {
     if (!u)
         return;
-    rc(a[u].l);
-    rc(a[u].r);
-    stk2[tp++] = u;
+    rc(t[u].l);
+    rc(t[u].r);
+    stk[tp++] = u;
 }
 
 int bd(int *v, int n) {
     static int st[N];
     int top = 0;
     for (int i = 1; i <= n; ++i) {
-        int u = nw(v[i]);
-        while (top && a[st[top]].p < a[u].p) {
-            int vv = st[top--];
-            a[vv].r = a[u].l;
-            a[u].l = vv;
-            up(vv);
+        int u = nw(v[i]), lst = 0;
+        while (top && t[st[top]].p < t[u].p) {
+            lst = st[top];
+            up(lst);
+            --top;
         }
+        t[u].l = lst;
         if (top)
-            a[st[top]].r = u;
+            t[st[top]].r = u;
         st[++top] = u;
     }
-    for (int i = top; i >= 1; --i)
-        up(st[i]);
+    while (top)
+        up(st[top--]);
     return st[1];
 }
 
 inline void solve(int Task_Id) {
-        srand(time(0));
-        a[0].lm = a[0].rm = a[0].mx = -2000000000;
-        int n, m;
-        scanf("%d%d", &n, &m);
-        static int v[N];
-        for (int i = 1; i <= n; ++i)
-            scanf("%d", v + i);
-        rt = bd(v, n);
-        char op[20];
-        int p, tot, c;
-        while (m--) {
-            scanf("%s", op);
-            if (op[2] == 'S') {
-                scanf("%d%d", &p, &tot);
-                for (int i = 1; i <= tot; ++i)
-                    scanf("%d", v + i);
-                int tr = bd(v, tot);
-                int a1, b1;
-                sp(rt, p, a1, b1);
-                rt = mg(mg(a1, tr), b1);
-            } else if (op[0] == 'D') {
-                scanf("%d%d", &p, &tot);
-                int a1, b1, c1;
-                sp(rt, p - 1, a1, b1);
-                sp(b1, tot, b1, c1);
-                rc(b1);
-                rt = mg(a1, c1);
-            } else if (op[0] == 'M' && op[2] == 'K') {
-                scanf("%d%d%d", &p, &tot, &c);
-                int a1, b1, c1;
-                sp(rt, p - 1, a1, b1);
-                sp(b1, tot, b1, c1);
-                ap(b1, c);
-                rt = mg(a1, mg(b1, c1));
-            } else if (op[0] == 'R') {
-                scanf("%d%d", &p, &tot);
-                int a1, b1, c1;
-                sp(rt, p - 1, a1, b1);
-                sp(b1, tot, b1, c1);
-                rv(b1);
-                rt = mg(a1, mg(b1, c1));
-            } else if (op[0] == 'G') {
-                scanf("%d%d", &p, &tot);
-                int a1, b1, c1;
-                sp(rt, p - 1, a1, b1);
-                sp(b1, tot, b1, c1);
-                printf("%lld\n", a[b1].s);
-                rt = mg(a1, mg(b1, c1));
-            } else {
-                printf("%d\n", a[rt].mx);
-            }
+    srand(time(0));
+    t[0] = {0, 0, 0, 0, 0, 0, (int)-2000000000, (int)-2000000000, (int)-2000000000, I, 0};
+    int n, m;
+    scanf("%d%d", &n, &m);
+    static int v[N];
+    for (int i = 1; i <= n; ++i)
+        scanf("%d", v + i);
+    rt = bd(v, n);
+    char op[20];
+    int x, k, c;
+    while (m--) {
+        scanf("%s", op);
+        if (op[2] == 'S') { // INSERT
+            scanf("%d%d", &x, &k);
+            for (int i = 1; i <= k; ++i)
+                scanf("%d", v + i);
+            int tr = bd(v, k);
+            int a, b;
+            sp(rt, x, a, b);
+            rt = mg(mg(a, tr), b);
+        } else if (op[0] == 'D') { // DELETE
+            scanf("%d%d", &x, &k);
+            int a, b, c;
+            sp(rt, x - 1, a, b);
+            sp(b, k, b, c);
+            rc(b);
+            rt = mg(a, c);
+        } else if (op[0] == 'R') { // REVERSE
+            scanf("%d%d", &x, &k);
+            int a, b, c;
+            sp(rt, x - 1, a, b);
+            sp(b, k, b, c);
+            rv(b);
+            rt = mg(a, mg(b, c));
+        } else if (op[0] == 'M' && op[2] == 'K') { // MAKE-SAME
+            scanf("%d%d%d", &x, &k, &c);
+            int a, b, d;
+            sp(rt, x - 1, a, b);
+            sp(b, k, b, d);
+            ap(b, c);
+            rt = mg(a, mg(b, d));
+        } else if (op[0] == 'G' && op[3] == 'S') { // GET-SUM
+            scanf("%d%d", &x, &k);
+            int a, b, c;
+            sp(rt, x - 1, a, b);
+            sp(b, k, b, c);
+            printf("%lld\n", t[b].s);
+            rt = mg(a, mg(b, c));
+        } else if (op[0] == 'G') { // GET
+            scanf("%d", &x);
+            int a, b, c;
+            sp(rt, x - 1, a, b);
+            sp(b, 1, b, c);
+            printf("%d\n", t[b].v);
+            rt = mg(a, mg(b, c));
+        } else { // MAX-SUM
+            scanf("%d%d", &x, &k);
+            int a, b, c;
+            sp(rt, x - 1, a, b);
+            sp(b, k, b, c);
+            printf("%d\n", t[b].mx);
+            rt = mg(a, mg(b, c));
         }
-        return;
+    }
+    return;
 }
 } // namespace TANGYIXIAO
