@@ -631,8 +631,73 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+typedef long long ll;
+const int P = 2333;
+int f[P], fi[P], sm[P][P], p2[P];
+
+int mpw(int a, int b) {
+    int r = 1;
+    while (b) {
+        if (b & 1)
+            r = r * a % P;
+        a = a * a % P;
+        b >>= 1;
+    }
+    return r;
+}
+
+int C(ll n, ll m) {
+    if (m < 0 || m > n)
+        return 0;
+    int res = 1;
+    while (n || m) {
+        int nn = n % P, mm = m % P;
+        if (mm > nn)
+            return 0;
+        res = res * f[nn] % P * fi[mm] % P * fi[nn - mm] % P;
+        n /= P;
+        m /= P;
+    }
+    return res;
+}
+
+int S(ll n, ll k) {
+    if (k < 0)
+        return 0;
+    if (k > n)
+        k = n;
+    if (n < P)
+        return sm[n][k];
+    ll a = n / P, b = n % P;
+    ll c = k / P, d = k % P;
+    int ans = S(a, c - 1) * p2[b] % P;
+    ans = (ans + C(a, c) * S(b, d)) % P;
+    return ans;
+}
+
 inline void solve(int Task_Id) {
-    // do something here
+    f[0] = 1;
+    for (int i = 1; i < P; ++i)
+        f[i] = f[i - 1] * i % P;
+    fi[P - 1] = mpw(f[P - 1], P - 2);
+    for (int i = P - 1; i; --i)
+        fi[i - 1] = fi[i] * i % P;
+    p2[0] = 1;
+    for (int i = 1; i < P; ++i)
+        p2[i] = p2[i - 1] * 2 % P;
+    for (int n = 0; n < P; ++n) {
+        sm[n][0] = 1;
+        for (int k = 1; k < P; ++k) {
+            sm[n][k] = (sm[n][k - 1] + C(n, k)) % P;
+        }
+    }
+    int t;
+    scanf("%d", &t);
+    while (t--) {
+        ll n, k;
+        scanf("%lld%lld", &n, &k);
+        printf("%d\n", S(n, k));
+    }
     return;
 }
 } // namespace TANGYIXIAO
