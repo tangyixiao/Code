@@ -633,50 +633,36 @@ signed main(int argc, char *argv[]) {
 namespace TANGYIXIAO {
 typedef long long ll;
 const int MAXN = 10000000;
-int T, R, maxN, maxM;
-struct Q {
-    int n, m, id;
-} q[10005];
-int ans[10005];
+int T, R, N[10005], M[10005], maxN, maxM;
+int prime[MAXN], pc, pre_e[MAXN], pre_fm[MAXN], pre_fd[MAXN];
+int e_fac[MAXN + 1], f_fac[MAXN + 1];
 
 int qpow(ll a, int b, int mod) {
-    ll res = 1;
+    ll r = 1;
     for (; b; b >>= 1) {
         if (b & 1)
-            res = res * a % mod;
+            r = r * a % mod;
         a = a * a % mod;
     }
-    return (int)res;
+    return (int)r;
 }
 
-int fac[MAXN + 5], g[MAXN + 5];
-int fac_noR[MAXN + 5], e_fac[MAXN + 5];
-bitset<MAXN + 5> isp;
-int primes[MAXN], pcnt;
-
-void pre1() {
-    fac[0] = 1;
-    for (int i = 1; i <= maxN; ++i)
-        fac[i] = (ll)fac[i - 1] * i % R;
-    g[0] = 1;
-    for (int i = 1; i <= maxM; ++i) {
-        if (isp[i]) {
-            int inv = qpow(i, R - 2, R);
-            g[i] = (ll)g[i - 1] * (i - 1) % R * inv % R;
-        } else
-            g[i] = g[i - 1];
-    }
-}
-
-void pre2() {
-    fac_noR[0] = 1;
-    e_fac[0] = 0;
-    for (int i = 1; i <= maxN; ++i) {
-        int v = i, c = 0;
-        while (v % R == 0)
-            v /= R, ++c;
-        e_fac[i] = e_fac[i - 1] + c;
-        fac_noR[i] = (ll)fac_noR[i - 1] * (v % R) % R;
+void add(int p, int &pe, int &pfm, int &pfd) {
+    int pm = p - 1, e_m = 0, v_m = pm;
+    while (v_m % R == 0)
+        v_m /= R, ++e_m;
+    if (p == R) {
+        pe += e_m - 1;
+        pfm = (ll)pfm * (v_m % R) % R;
+        pfd = (ll)pfd * 1 % R;
+    } else {
+        pe += e_m;
+        pfm = (ll)pfm * (v_m % R) % R;
+        int e_d = 0, v_d = p;
+        while (v_d % R == 0)
+            v_d /= R, ++e_d;
+        pfd = (ll)pfd * (v_d % R) % R;
+        pe -= e_d;
     }
 }
 
@@ -685,67 +671,60 @@ inline void solve(int Task_Id) {
     scanf("%d%d", &T, &R);
     maxN = maxM = 0;
     for (int i = 0; i < T; ++i) {
-        scanf("%d%d", &q[i].n, &q[i].m);
-        if (q[i].n > maxN)
-            maxN = q[i].n;
-        if (q[i].m > maxM)
-            maxM = q[i].m;
-        q[i].id = i;
+        scanf("%d%d", N + i, M + i);
+        if (N[i] > maxN)
+            maxN = N[i];
+        if (M[i] > maxM)
+            maxM = M[i];
     }
-
-    int lim = max(maxN, maxM);
-    isp.set();
-    isp[0] = isp[1] = 0;
-    pcnt = 0;
-    for (int i = 2; i <= lim; ++i) {
+    static bool isp[MAXN + 1];
+    fill(isp, isp + maxM + 1, true);
+    isp[0] = isp[1] = false;
+    pc = 0;
+    for (int i = 2; i <= maxM; ++i) {
         if (isp[i])
-            primes[pcnt++] = i;
-        for (int j = 0; j < pcnt && (ll)primes[j] * i <= lim; ++j) {
-            isp[primes[j] * i] = 0;
-            if (i % primes[j] == 0)
+            prime[pc++] = i;
+        for (int j = 0; j < pc && (ll)prime[j] * i <= maxM; ++j) {
+            isp[prime[j] * i] = false;
+            if (i % prime[j] == 0)
                 break;
         }
     }
-
-    if (R > lim) {
-        pre1();
-        for (int i = 0; i < T; ++i)
-            ans[q[i].id] = (ll)fac[q[i].n] * g[q[i].m] % R;
-    } else {
-        pre2();
-        sort(q, q + T, [](const Q &a, const Q &b) { return a.m < b.m; });
-        int cur_prem = 1, cur_pred = 1, cur_inv_pred = 1, cur_enum = 0;
-        int idx = 0;
-        for (int M = 1; M <= maxM; ++M) {
-            if (isp[M]) {
-                int p = M;
-                if (p != R) {
-                    cur_pred = (ll)cur_pred * p % R;
-                    cur_inv_pred = (ll)cur_inv_pred * qpow(p, R - 2, R) % R;
-                }
-                int pm = p - 1, v = pm, c = 0;
-                while (v % R == 0)
-                    v /= R, ++c;
-                cur_enum += c;
-                cur_prem = (ll)cur_prem * (v % R) % R;
-            }
-            while (idx < T && q[idx].m == M) {
-                int N = q[idx].n;
-                if (N >= R && M < R)
-                    ans[q[idx].id] = 0;
-                else {
-                    int exp = e_fac[N] + cur_enum - (M >= R ? 1 : 0);
-                    if (exp > 0)
-                        ans[q[idx].id] = 0;
-                    else
-                        ans[q[idx].id] = (ll)fac_noR[N] * cur_prem % R * cur_inv_pred % R;
-                }
-                ++idx;
-            }
-        }
+    e_fac[0] = 0;
+    f_fac[0] = 1;
+    for (int i = 1; i <= maxN; ++i) {
+        int v = i, c = 0;
+        while (v % R == 0)
+            v /= R, ++c;
+        e_fac[i] = e_fac[i - 1] + c;
+        f_fac[i] = (ll)f_fac[i - 1] * (v % R) % R;
     }
-    for (int i = 0; i < T; ++i)
-        printf("%d\n", ans[i]);
+    int pe = 0, pfm = 1, pfd = 1;
+    for (int i = 0; i < pc; ++i) {
+        add(prime[i], pe, pfm, pfd);
+        pre_e[i] = pe;
+        pre_fm[i] = pfm;
+        pre_fd[i] = pfd;
+    }
+    for (int i = 0; i < T; ++i) {
+        int n = N[i], m = M[i];
+        int idx = upper_bound(prime, prime + pc, m) - prime;
+        int c_e = e_fac[n];
+        int c_fm = f_fac[n];
+        int t_e = c_e, t_fm = c_fm;
+        if (idx) {
+            t_e += pre_e[idx - 1];
+            t_fm = (ll)t_fm * pre_fm[idx - 1] % R;
+        }
+        int ans;
+        if (t_e > 0)
+            ans = 0;
+        else {
+            int den = idx ? pre_fd[idx - 1] : 1;
+            ans = (ll)t_fm * qpow(den, R - 2, R) % R;
+        }
+        printf("%d\n", ans);
+    }
     return;
 }
 } // namespace TANGYIXIAO
