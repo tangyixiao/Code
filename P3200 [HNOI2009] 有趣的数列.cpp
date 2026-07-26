@@ -665,7 +665,6 @@ int get(int n, int p) {
         c += n / p, n /= p;
     return c;
 }
-
 inline void solve(int Task_Id) {
     int n, p;
     scanf("%d%d", &n, &p);
@@ -678,7 +677,7 @@ inline void solve(int Task_Id) {
     int ans = 1;
     for (int i = 0; i < tot; ++i) {
         int q = pr[i];
-        int e = get(m, q) - 2 * get(n, q) - get(n + 1, q);
+        int e = get(m, q) - get(n, q) - get(n + 1, q);
         if (e > 0)
             ans = (ll)ans * pw(q, e, p) % p;
     }

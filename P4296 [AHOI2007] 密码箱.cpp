@@ -633,7 +633,7 @@ signed main(int argc, char *argv[]) {
 namespace TANGYIXIAO {
 typedef long long ll;
 
-const int MAXS = 10000;
+const int MAXS = 100000;
 ll ans[MAXS];
 int ac;
 
@@ -661,19 +661,24 @@ void add(ll n, ll u, ll v, ll a, ll b) {
     ll uu = u / g, vv = v / g;
     ll d = (b - a) / g;
     ll invu = inv(uu, vv);
-    ll lcm = uu * v; // = u/g * v
+    ll lcm = uu * v;
     ll x0 = a + u * (d * invu % vv);
     x0 = (x0 % lcm + lcm) % lcm;
     for (ll k = 0; k < g; ++k) {
         ll x = x0 + k * lcm;
         x %= n;
-        ans[ac++] = x;
+        if (x >= 0 && x < n && (x * x) % n == 1)
+            ans[ac++] = x;
     }
 }
 
 inline void solve(int Task_Id) {
     ll n;
     scanf("%lld", &n);
+    if (n == 1) {
+        puts("None");
+        return;
+    }
     ac = 0;
     for (ll i = 1; i * i <= n; ++i) {
         if (n % i != 0)
