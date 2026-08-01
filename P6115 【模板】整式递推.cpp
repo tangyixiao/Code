@@ -631,95 +631,119 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-inline void solve(int Task_Id) {
-    using ll = long long;
-    const ll INF = 1e18;
-    int T;
-    cin >> T;
-    while (T--) {
-        ll x, y;
-        int k;
-        cin >> x >> y >> k;
-        vector<ll> a(k + 1);
-        for (int i = 0; i <= k; ++i)
-            cin >> a[i];
-        ll d = y - x;
-        if (d == 0) {
-            cout << 0 << '\n';
-            continue;
-        }
-        if (k == 0) {
-            cout << abs(d) * a[0] << '\n';
-            continue;
-        }
-        const int MAXB = 62;
-        vector<int> b(MAXB, 0);
-        if (d > 0) {
-            for (int i = 0; i < MAXB; ++i) {
-                b[i] = (d >> i) & 1;
-            }
-        } else {
-            d = -d;
-            for (int i = 0; i < MAXB; ++i)
-                b[i] = (d >> i) & 1;
-        }
-        int top = MAXB - 1;
-        while (top >= 0 && b[top] == 0)
-            --top;
-        top = max(top, k);
-        ll T_val = 0;
-        for (int i = top; i > k; --i) {
-            T_val = T_val * 2 + b[i];
-        }
-        map<pair<int, ll>, ll> memo;
-        function<ll(int, ll)> dp = [&](int i, ll t) -> ll {
-            if (i == k + 1)
-                return t == T_val ? 0 : INF;
-            auto key = make_pair(i, t);
-            if (memo.count(key))
-                return memo[key];
-            auto eval = [&](ll s) {
-                return a[i] * llabs(b[i] - t + 2 * s) + dp(i + 1, s);
-            };
-            ll s0 = (t - b[i]) / 2;
-            ll lo = s0, hi = s0;
-            ll vlo = eval(s0), vhi = vlo;
-            for (ll st = 1;; st <<= 1) {
-                ll ns = s0 - st;
-                ll v = eval(ns);
-                if (v > vlo)
-                    break;
-                vlo = v;
-                lo = ns;
-                if (st > (1LL << 40))
-                    break;
-            }
-            for (ll st = 1;; st <<= 1) {
-                ll ns = s0 + st;
-                ll v = eval(ns);
-                if (v > vhi)
-                    break;
-                vhi = v;
-                hi = ns;
-                if (st > (1LL << 40))
-                    break;
-            }
-            ll ans = INF;
-            while (hi - lo > 2) {
-                ll m1 = lo + (hi - lo) / 3;
-                ll m2 = hi - (hi - lo) / 3;
-                ll v1 = eval(m1), v2 = eval(m2);
-                if (v1 < v2)
-                    hi = m2;
-                else
-                    lo = m1;
-            }
-            for (ll s = lo; s <= hi; ++s)
-                ans = min(ans, eval(s));
-            return memo[key] = ans;
-        };
-        cout << dp(0, 0) << '\n';
+const uint32_t M = 998244353;
+typedef int32_t v8i attribute((vector_size(32)));
+union V8I {
+    v8i v;
+    int32_t a[8];
+};
+
+uint32_t N, m, d, A[8], P[8][8];
+V8I D[8];
+
+uint32_t ev(uint32_t *p, uint32_t x) {
+    uint64_t r = 0, xp = 1;
+    for (int i = 0; i <= d; ++i) {
+        r = (r + p[i] * xp) % M;
+        xp = (xp * x) % M;
     }
+    return r;
+}
+
+uint32_t qp(uint32_t a, uint32_t b) {
+    uint32_t r = 1;
+    while (b) {
+        if (b & 1)
+            r = 1ull * r * a % M;
+        a = 1ull * a * a % M;
+        b >>= 1;
+    }
+    return r;
+}
+
+inline void solve(int Task_Id) {
+    cin >> N >> m >> d;
+    for (int i = 0; i < m; ++i) {
+        cin >> A[i];
+        A[i] %= M;
+    }
+    for (int k = 0; k <= m; ++k) {
+        for (int i = 0; i <= d; ++i) {
+            cin >> P[k][i];
+            P[k][i] %= M;
+        }
+    }
+
+    if (N < m) {
+        cout << A[N] << "\n";
+        return 0;
+    }
+
+    for (int i = 0; i < 8; ++i)
+        for (int k = 0; k < 8; ++k)
+            D[i].a[k] = 0;
+
+    int32_t T[8][8] = {0};
+    for (int i = 0; i <= d; ++i)
+        for (int k = 0; k <= m; ++k)
+            T[i][k] = ev(P[k], m + i);
+
+    for (int i = 0; i <= d; ++i) {
+        for (int k = 0; k <= m; ++k)
+            D[i].a[k] = T[0][k];
+        for (int j = 0; j < d - i; ++j)
+            for (int k = 0; k <= m; ++k)
+                T[j][k] = (T[j + 1][k] + M - T[j][k]) % M;
+    }
+
+    uint32_t V[8] = {0};
+    for (int k = 1; k <= m; ++k)
+        V[k] = A[m - k];
+
+    const v8i vm = {(int32_t)M, (int32_t)M, (int32_t)M, (int32_t)M, (int32_t)M, (int32_t)M, (int32_t)M, (int32_t)M};
+    uint64_t hp = 1;
+
+#define S(i)              \
+    D[i].v += D[i + 1].v; \
+    c = D[i].v >= vm;     \
+    D[i].v -= c & vm;
+
+    for (int n = m; n <= N; ++n) {
+        uint64_t s = 0;
+        s += 1ull * V[1] * (uint32_t)D[0].a[1];
+        s += 1ull * V[2] * (uint32_t)D[0].a[2];
+        s += 1ull * V[3] * (uint32_t)D[0].a[3];
+        s += 1ull * V[4] * (uint32_t)D[0].a[4];
+        s += 1ull * V[5] * (uint32_t)D[0].a[5];
+        s += 1ull * V[6] * (uint32_t)D[0].a[6];
+        s += 1ull * V[7] * (uint32_t)D[0].a[7];
+
+        uint32_t H = D[0].a[0];
+        s %= M;
+        s = s ? M - s : 0;
+
+        V[7] = 1ull * V[6] * H % M;
+        V[6] = 1ull * V[5] * H % M;
+        V[5] = 1ull * V[4] * H % M;
+        V[4] = 1ull * V[3] * H % M;
+        V[3] = 1ull * V[2] * H % M;
+        V[2] = 1ull * V[1] * H % M;
+        V[1] = s;
+
+        hp = 1ull * hp * H % M;
+
+        v8i c;
+        S(0);
+        S(1);
+        S(2);
+        S(3);
+        S(4);
+        S(5);
+        S(6);
+    }
+
+    uint32_t ans = 1ull * V[1] * qp(hp, M - 2) % M;
+    cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO
