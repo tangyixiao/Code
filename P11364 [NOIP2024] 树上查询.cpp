@@ -631,146 +631,168 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int INF = 1000;
-struct State {
-    long long sum_unknown;
-    bool has_unknown;
-    int val[20];
-    long long sum_val[20];
-};
-const int MAX_NODES = 1 << 18;
-State known_state[MAX_NODES];
-State unknown_state[MAX_NODES];
-int d_bit[MAX_NODES];
-int a[MAX_NODES], a_prime[MAX_NODES];
-int C[MAX_NODES];
-long long ans_for_c[MAX_NODES];
-inline void calc_state(State &res, const State &L, const State &R_child, int d, int R) {
-    if (d == 0) {
-        bool req_L = L.has_unknown || (L.val[0] < R);
-        res.has_unknown = L.has_unknown || (req_L && R_child.has_unknown);
-        res.sum_unknown = L.sum_unknown + (req_L ? R_child.sum_unknown : 0);
-        for (int H = 0; H <= 17; ++H) {
-            int mH = (H > R) ? H : R;
-            res.val[H] = L.val[mH];
-            res.sum_val[H] = L.sum_val[mH];
-            if (req_L) {
-                if (R_child.val[H] < res.val[H])
-                    res.val[H] = R_child.val[H];
-                res.sum_val[H] += R_child.sum_val[H];
-            }
-        }
-    } else {
-        bool req_R = R_child.has_unknown || (R_child.val[0] < R);
-        res.has_unknown = R_child.has_unknown || (req_R && L.has_unknown);
-        res.sum_unknown = R_child.sum_unknown + (req_R ? L.sum_unknown : 0);
-        for (int H = 0; H <= 17; ++H) {
-            int mH = (H > R) ? H : R;
-            res.val[H] = R_child.val[mH];
-            res.sum_val[H] = R_child.sum_val[mH];
-            if (req_R) {
-                if (L.val[H] < res.val[H])
-                    res.val[H] = L.val[H];
-                res.sum_val[H] += L.sum_val[H];
-            }
-        }
+const int N = 1e6 + 5;
+int n, q, hd[N], to[N * 2], nx[N * 2], ec;
+int d[N], sz[N], son[N], fa[N], tp[N], tr[N * 4];
+void add(int a, int b) {
+    to[++ec] = b;
+    nx[ec] = hd[a];
+    hd[a] = ec;
+}
+void dfs1(int u, int f) {
+    fa[u] = f;
+    d[u] = d[f] + 1;
+    sz[u] = 1;
+    for (int i = hd[u]; i; i = nx[i]) {
+        int v = to[i];
+        if (v == f)
+            continue;
+        dfs1(v, u);
+        sz[u] += sz[v];
+        if (sz[v] > sz[son[u]])
+            son[u] = v;
     }
 }
-inline void solve(int Task_Id) {
-    int N, M;
-    if (!(cin >> N >> M))
+void dfs2(int u, int t) {
+    tp[u] = t;
+    if (son[u])
+        dfs2(son[u], t);
+    for (int i = hd[u]; i; i = nx[i]) {
+        int v = to[i];
+        if (v != fa[u] && v != son[u])
+            dfs2(v, v);
+    }
+}
+int lca(int a, int b) {
+    while (tp[a] != tp[b]) {
+        if (d[tp[a]] < d[tp[b]])
+            swap(a, b);
+        a = fa[tp[a]];
+    }
+    return d[a] < d[b] ? a : b;
+}
+void build(int u, int l, int r) {
+    if (l == r) {
+        tr[u] = d[l];
         return;
-    for (int i = 1; i <= N; ++i)
-        cin >> a_prime[i];
-    for (int i = 1; i <= M; ++i)
-        cin >> C[i];
-    int K = 0;
-    while ((1 << K) < N)
-        K++;
-    for (int R = 1; R <= K; ++R) {
-        string s;
-        cin >> s;
-        for (int G = 1; G <= (1 << (K - R)); ++G) {
-            d_bit[(1 << (K - R)) + G - 1] = s[G - 1] - '0';
+    }
+    int m = (l + r) >> 1;
+    build(u << 1, l, m);
+    build(u << 1 | 1, m + 1, r);
+    tr[u] = max(tr[u << 1], tr[u << 1 | 1]);
+}
+int ask(int u, int l, int r, int x, int y) {
+    if (x <= l && r <= y)
+        return tr[u];
+    int m = (l + r) >> 1, res = 0;
+    if (x <= m)
+        res = max(res, ask(u << 1, l, m, x, y));
+    if (y > m)
+        res = max(res, ask(u << 1 | 1, m + 1, r, x, y));
+    return res;
+}
+struct S {
+    int L, R, len, v, pos;
+} s[N], b[N];
+int ans[N], w[N], st[N], top, nw;
+bool cmp1(S a, S b) { return a.len == b.len ? a.pos < b.pos : a.len > b.len; }
+bool cmp2(S a, S b) { return a.R == b.R ? a.pos < b.pos : a.R > b.R; }
+struct BIT {
+    int a[N];
+    void add(int x, int y) {
+        for (; x <= n; x += x & -x)
+            a[x] = max(a[x], y);
+    }
+    void del(int x) {
+        for (; x <= n; x += x & -x)
+            a[x] = 0;
+    }
+    int ask(int x) {
+        int r = 0;
+        for (; x; x -= x & -x)
+            r = max(r, a[x]);
+        return r;
+    }
+} bt;
+void cdq(int l, int r) {
+    if (l == r)
+        return;
+    int m = (l + r) >> 1, c = 0;
+    for (int i = l; i <= m; i++)
+        if (!s[i].pos)
+            b[++c] = s[i];
+    for (int i = m + 1; i <= r; i++)
+        if (s[i].pos)
+            b[++c] = s[i];
+    sort(b + 1, b + c + 1, cmp2);
+    for (int i = 1; i <= c; i++) {
+        if (!b[i].pos)
+            bt.add(b[i].L, b[i].v);
+        else
+            ans[b[i].pos] = max(ans[b[i].pos], bt.ask(b[i].L));
+    }
+    for (int i = 1; i <= c; i++)
+        if (!b[i].pos)
+            bt.del(b[i].L);
+    cdq(l, m);
+    cdq(m + 1, r);
+}
+inline void solve(int Task_Id) {
+    cin >> n;
+    for (int i = 1, u, v; i < n; i++) {
+        cin >> u >> v;
+        add(u, v);
+        add(v, u);
+    }
+    dfs1(1, 0);
+    dfs2(1, 1);
+    build(1, 1, n);
+    for (int i = 1; i < n; i++)
+        w[i] = d[lca(i, i + 1)];
+    for (int i = 1; i < n; i++)
+        s[i].v = w[i];
+    s[1].L = 1;
+    st[top = 1] = 1;
+    for (int i = 2; i < n; i++) {
+        int x = i;
+        while (top && w[st[top]] >= w[i])
+            x = s[st[top--]].L;
+        s[i].L = x;
+        st[++top] = i;
+    }
+    s[n - 1].R = n - 1;
+    top = 1;
+    st[1] = n - 1;
+    for (int i = n - 2; i; i--) {
+        int x = i;
+        while (top && w[st[top]] >= w[i])
+            x = s[st[top--]].R;
+        s[i].R = x;
+        st[++top] = i;
+    }
+    for (int i = 1; i < n; i++) {
+        s[i].R++;
+        s[i].len = s[i].R - s[i].L + 1;
+    }
+    build(1, 1, n);
+    cin >> q;
+    nw = n - 1;
+    for (int i = 1, l, r, k; i <= q; i++) {
+        cin >> l >> r >> k;
+        if (k == 1)
+            ans[i] = ask(1, 1, n, l, r);
+        else {
+            ++nw;
+            s[nw].L = r - k + 1;
+            s[nw].R = l + k - 1;
+            s[nw].len = k;
+            s[nw].pos = i;
         }
     }
-    for (int i = 1; i <= (1 << K); ++i) {
-        int u = (1 << K) + i - 1;
-        unknown_state[u].has_unknown = true;
-        unknown_state[u].sum_unknown = i;
-        for (int H = 0; H <= 17; ++H) {
-            unknown_state[u].val[H] = INF;
-            unknown_state[u].sum_val[H] = 0;
-        }
-    }
-    for (int R = 1; R <= K; ++R) {
-        for (int G = 1; G <= (1 << (K - R)); ++G) {
-            int u = (1 << (K - R)) + G - 1;
-            calc_state(unknown_state[u], unknown_state[2 * u], unknown_state[2 * u + 1], d_bit[u], R);
-        }
-    }
-    int T;
-    cin >> T;
-    while (T--) {
-        int X[4];
-        cin >> X[0] >> X[1] >> X[2] >> X[3];
-        for (int i = 1; i <= N; ++i)
-            a[i] = a_prime[i] ^ X[i % 4];
-        for (int i = N + 1; i <= (1 << K); ++i)
-            a[i] = 0;
-        for (int i = 1; i <= (1 << K); ++i) {
-            int u = (1 << K) + i - 1;
-            known_state[u].has_unknown = false;
-            known_state[u].sum_unknown = 0;
-            long long capped_a = min((long long)a[i], 18LL);
-            for (int H = 0; H <= 17; ++H) {
-                known_state[u].val[H] = (capped_a >= H ? capped_a : INF);
-                known_state[u].sum_val[H] = (capped_a >= H ? i : 0);
-            }
-        }
-        for (int R = 1; R <= K; ++R) {
-            for (int G = 1; G <= (1 << (K - R)); ++G) {
-                int u = (1 << (K - R)) + G - 1;
-                calc_state(known_state[u], known_state[2 * u], known_state[2 * u + 1], d_bit[u], R);
-            }
-        }
-        fill(ans_for_c, ans_for_c + N + 1, -1);
-        long long ans_hash = 0;
-        for (int i = 1; i <= M; ++i) {
-            int c = C[i];
-            if (ans_for_c[c] != -1) {
-                ans_hash ^= ((long long)i * ans_for_c[c]);
-                continue;
-            }
-            int k = 0;
-            while ((1 << k) < c)
-                k++;
-            long long ans = 0;
-            if (c == (1 << k)) {
-                int u = (1 << (K - k));
-                ans = known_state[u].sum_val[0] + known_state[u].sum_unknown;
-            } else {
-                int pos = c - 1;
-                State curr_state = known_state[(1 << K) + pos];
-                for (int R = 1; R <= k; ++R) {
-                    int G = (pos >> R) + 1;
-                    int u = (1 << (K - R)) + G - 1;
-                    int d = d_bit[u];
-                    State next_state;
-                    if (((pos >> (R - 1)) & 1) == 0) {
-                        calc_state(next_state, curr_state, unknown_state[2 * u + 1], d, R);
-                    } else {
-                        calc_state(next_state, known_state[2 * u], curr_state, d, R);
-                    }
-                    curr_state = next_state;
-                }
-                ans = curr_state.sum_val[0] + curr_state.sum_unknown;
-            }
-            ans_for_c[c] = ans;
-            ans_hash ^= ((long long)i * ans);
-        }
-        cout << ans_hash << "\n";
-    }
+    sort(s + 1, s + nw + 1, cmp1);
+    cdq(1, nw);
+    for (int i = 1; i <= q; i++)
+        cout << ans[i] << "\n";
     return;
 }
 } // namespace TANGYIXIAO

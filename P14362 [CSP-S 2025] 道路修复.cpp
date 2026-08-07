@@ -631,146 +631,121 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int INF = 1000;
-struct State {
-    long long sum_unknown;
-    bool has_unknown;
-    int val[20];
-    long long sum_val[20];
-};
-const int MAX_NODES = 1 << 18;
-State known_state[MAX_NODES];
-State unknown_state[MAX_NODES];
-int d_bit[MAX_NODES];
-int a[MAX_NODES], a_prime[MAX_NODES];
-int C[MAX_NODES];
-long long ans_for_c[MAX_NODES];
-inline void calc_state(State &res, const State &L, const State &R_child, int d, int R) {
-    if (d == 0) {
-        bool req_L = L.has_unknown || (L.val[0] < R);
-        res.has_unknown = L.has_unknown || (req_L && R_child.has_unknown);
-        res.sum_unknown = L.sum_unknown + (req_L ? R_child.sum_unknown : 0);
-        for (int H = 0; H <= 17; ++H) {
-            int mH = (H > R) ? H : R;
-            res.val[H] = L.val[mH];
-            res.sum_val[H] = L.sum_val[mH];
-            if (req_L) {
-                if (R_child.val[H] < res.val[H])
-                    res.val[H] = R_child.val[H];
-                res.sum_val[H] += R_child.sum_val[H];
-            }
-        }
-    } else {
-        bool req_R = R_child.has_unknown || (R_child.val[0] < R);
-        res.has_unknown = R_child.has_unknown || (req_R && L.has_unknown);
-        res.sum_unknown = R_child.sum_unknown + (req_R ? L.sum_unknown : 0);
-        for (int H = 0; H <= 17; ++H) {
-            int mH = (H > R) ? H : R;
-            res.val[H] = R_child.val[mH];
-            res.sum_val[H] = R_child.sum_val[mH];
-            if (req_R) {
-                if (L.val[H] < res.val[H])
-                    res.val[H] = L.val[H];
-                res.sum_val[H] += L.sum_val[H];
+
+const int N = 1e4 + 5, M = 1e6 + 5, K = 12, V = N + K;
+const long long I = 1e18;
+
+int u[M], v[M], fa[V];
+long long w[M], c[K], a[K][N], ans = I, D[V];
+bool act[V];
+struct E {
+    int t;
+    long long w;
+} G[M * 3 + N * K];
+int H[V], NX[M * 3 + N * K], C = 0;
+
+void add(int x, int y, long long z) {
+    NX[++C] = H[x];
+    G[C] = {y, z};
+    H[x] = C;
+}
+
+int GF(int x) { return fa[x] == x ? x : fa[x] = GF(fa[x]); }
+
+void dij(int n) {
+    for (int i = 1; i <= n; ++i)
+        if (act[i])
+            D[i] = 0;
+        else
+            D[i] = I;
+    priority_queue<pair<long long, int>, vector<pair<long long, int>>, greater<pair<long long, int>>> q;
+    for (int i = 1; i <= n; ++i)
+        if (act[i])
+            q.push({0, i});
+    while (!q.empty()) {
+        auto p = q.top();
+        q.pop();
+        int x = p.second;
+        if (p.first > D[x])
+            continue;
+        for (int i = H[x]; i; i = NX[i]) {
+            int y = G[i].t;
+            long long z = G[i].w;
+            if (D[y] > D[x] + z) {
+                D[y] = D[x] + z;
+                q.push({D[y], y});
             }
         }
     }
 }
+
 inline void solve(int Task_Id) {
-    int N, M;
-    if (!(cin >> N >> M))
-        return;
-    for (int i = 1; i <= N; ++i)
-        cin >> a_prime[i];
-    for (int i = 1; i <= M; ++i)
-        cin >> C[i];
-    int K = 0;
-    while ((1 << K) < N)
-        K++;
-    for (int R = 1; R <= K; ++R) {
-        string s;
-        cin >> s;
-        for (int G = 1; G <= (1 << (K - R)); ++G) {
-            d_bit[(1 << (K - R)) + G - 1] = s[G - 1] - '0';
-        }
+    int n, m, k;
+    cin >> n >> m >> k;
+    for (int i = 1; i <= m; ++i)
+        cin >> u[i] >> v[i] >> w[i];
+    for (int j = 0; j < k; ++j) {
+        cin >> c[j];
+        for (int i = 1; i <= n; ++i)
+            cin >> a[j][i];
     }
-    for (int i = 1; i <= (1 << K); ++i) {
-        int u = (1 << K) + i - 1;
-        unknown_state[u].has_unknown = true;
-        unknown_state[u].sum_unknown = i;
-        for (int H = 0; H <= 17; ++H) {
-            unknown_state[u].val[H] = INF;
-            unknown_state[u].sum_val[H] = 0;
-        }
-    }
-    for (int R = 1; R <= K; ++R) {
-        for (int G = 1; G <= (1 << (K - R)); ++G) {
-            int u = (1 << (K - R)) + G - 1;
-            calc_state(unknown_state[u], unknown_state[2 * u], unknown_state[2 * u + 1], d_bit[u], R);
-        }
-    }
-    int T;
-    cin >> T;
-    while (T--) {
-        int X[4];
-        cin >> X[0] >> X[1] >> X[2] >> X[3];
-        for (int i = 1; i <= N; ++i)
-            a[i] = a_prime[i] ^ X[i % 4];
-        for (int i = N + 1; i <= (1 << K); ++i)
-            a[i] = 0;
-        for (int i = 1; i <= (1 << K); ++i) {
-            int u = (1 << K) + i - 1;
-            known_state[u].has_unknown = false;
-            known_state[u].sum_unknown = 0;
-            long long capped_a = min((long long)a[i], 18LL);
-            for (int H = 0; H <= 17; ++H) {
-                known_state[u].val[H] = (capped_a >= H ? capped_a : INF);
-                known_state[u].sum_val[H] = (capped_a >= H ? i : 0);
-            }
-        }
-        for (int R = 1; R <= K; ++R) {
-            for (int G = 1; G <= (1 << (K - R)); ++G) {
-                int u = (1 << (K - R)) + G - 1;
-                calc_state(known_state[u], known_state[2 * u], known_state[2 * u + 1], d_bit[u], R);
-            }
-        }
-        fill(ans_for_c, ans_for_c + N + 1, -1);
-        long long ans_hash = 0;
-        for (int i = 1; i <= M; ++i) {
-            int c = C[i];
-            if (ans_for_c[c] != -1) {
-                ans_hash ^= ((long long)i * ans_for_c[c]);
-                continue;
-            }
-            int k = 0;
-            while ((1 << k) < c)
-                k++;
-            long long ans = 0;
-            if (c == (1 << k)) {
-                int u = (1 << (K - k));
-                ans = known_state[u].sum_val[0] + known_state[u].sum_unknown;
-            } else {
-                int pos = c - 1;
-                State curr_state = known_state[(1 << K) + pos];
-                for (int R = 1; R <= k; ++R) {
-                    int G = (pos >> R) + 1;
-                    int u = (1 << (K - R)) + G - 1;
-                    int d = d_bit[u];
-                    State next_state;
-                    if (((pos >> (R - 1)) & 1) == 0) {
-                        calc_state(next_state, curr_state, unknown_state[2 * u + 1], d, R);
-                    } else {
-                        calc_state(next_state, known_state[2 * u], curr_state, d, R);
+    for (int S = 0; S < (1 << k); ++S) {
+        C = 0;
+        for (int i = 1; i <= n + k; ++i)
+            H[i] = 0;
+        long long base = 0;
+        for (int j = 0; j < k; ++j)
+            if ((S >> j) & 1)
+                base += c[j];
+        for (int i = 1; i <= n; ++i) {
+            act[i] = 0;
+            for (int j = 0; j < k; ++j)
+                if ((S >> j) & 1) {
+                    if (c[j] + a[j][i] < 1e18) {
+                        add(n + j + 1, i, c[j] + a[j][i]);
+                        act[i] = 1;
                     }
-                    curr_state = next_state;
                 }
-                ans = curr_state.sum_val[0] + curr_state.sum_unknown;
-            }
-            ans_for_c[c] = ans;
-            ans_hash ^= ((long long)i * ans);
         }
-        cout << ans_hash << "\n";
+        for (int i = 1; i <= m; ++i) {
+            add(u[i], v[i], w[i]);
+            add(v[i], u[i], w[i]);
+        }
+        dij(n + k);
+        long long res = base;
+        for (int i = 1; i <= n + k; ++i)
+            fa[i] = i;
+        int cnt = n;
+        for (int i = 1; i <= n; ++i)
+            if (act[i])
+                for (int j = i + 1; j <= n; ++j)
+                    if (act[j]) {
+                        if (GF(i) != GF(j)) {
+                            fa[GF(i)] = GF(j);
+                            cnt--;
+                            res += D[i] + D[j];
+                        }
+                    }
+        if (cnt > 1) {
+            vector<pair<long long, pair<int, int>>> E;
+            for (int i = 1; i <= m; ++i) {
+                int fu = GF(u[i]), fv = GF(v[i]);
+                if (fu != fv)
+                    E.push_back({w[i], {fu, fv}});
+            }
+            sort(E.begin(), E.end());
+            for (auto &e : E) {
+                if (GF(e.second.first) != GF(e.second.second)) {
+                    fa[GF(e.second.first)] = GF(e.second.second);
+                    res += e.first;
+                    if (--cnt == 1)
+                        break;
+                }
+            }
+        }
+        ans = min(ans, res);
     }
+    cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO
