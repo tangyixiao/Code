@@ -678,7 +678,7 @@ void dij(int n) {
         }
     }
 }
-
+    
 inline void solve(int Task_Id) {
     int n, m, k;
     cin >> n >> m >> k;
