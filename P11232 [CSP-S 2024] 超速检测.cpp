@@ -1,4 +1,47 @@
 #include <bits/stdc++.h>
+using namespace std;
+const int N = 1e5 + 5;
+struct I {
+    int l, r;
+    bool operator<(const I &o) const { return r < o.r; }
+} A[N];
+int t, n, m, L, V, P[N], D[N], W[N], K[N];
+void S() {
+    cin >> n >> m >> L >> V;
+    for (int i = 1; i <= n; ++i)
+        cin >> D[i] >> W[i] >> K[i];
+    for (int i = 1; i <= m; ++i)
+        cin >> P[i];
+    int c = 0, l = 0, a = 0;
+    for (int i = 1; i <= n; ++i) {
+        if (W[i] <= V && K[i] <= 0)
+            continue;
+        int s = D[i], e = L;
+        if (K[i] > 0 && W[i] <= V)
+            s += (V * V - W[i] * W[i]) / (2 * K[i]) + 1;
+        if (K[i] < 0 && W[i] > V)
+            e = D[i] + (W[i] * W[i] - V * V - 1) / (-2 * K[i]);
+        int x = lower_bound(P + 1, P + m + 1, s) - P, y = upper_bound(P + 1, P + m + 1, e) - P - 1;
+        if (x <= y)
+            A[c++] = {x, y};
+    }
+    sort(A, A + c);
+    for (int i = 0; i < c; ++i)
+        if (A[i].l > l)
+            l = A[i].r, a++;
+    cout << c << " " << m - a << "\n";
+}
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cin >> t;
+    while (t--)
+        S();
+}
+/*
+
+
+#include <bits/stdc++.h>
 #define int long long
 // #define local
 using namespace std;
@@ -167,3 +210,5 @@ signed main() {
     }
     return 0;
 }
+
+*/
