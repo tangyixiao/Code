@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CodeHub · 代码仓库浏览</title>
+<meta name="description" content="在线浏览 tangyixiao/Code 仓库的全部 OI/ACM 题解代码与题目描述" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%92%BB%3C/text%3E%3C/svg%3E" />
+
+<!-- ================================================================
+  CodeHub — GitHub Pages 静态代码浏览器（单文件，无构建步骤）
+  ------------------------------------------------------------------
+  配置：修改下方 CONFIG 即可指向任意公开仓库。
+  数据来源：
+    · 文件列表 → GitHub Contents API（未认证限额 60 次/小时，页面做了
+                 30 分钟本地缓存 + 手动刷新兜底）
+    · 文件内容 → raw.githubusercontent.com（跨域 CDN，不受 API 限额）
+  部署：提交本文件到 main 分支后，在仓库
+        Settings → Pages → Deploy from a branch → main / (root)
+        即可上线为 https://&lt;owner&gt;.github.io/&lt;repo&gt;/
+================================================================= -->
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/github-dark.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@5.5.1/github-markdown-dark.min.css" />
+<style>
+  :root {
+    --bg: #0d1117;
+    --panel: #161b22;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --hover: #1f2630;
+    --active-bg: #1f6feb33;
+    --mono: Consolas, "JetBrains Mono", "Courier New", monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", "Microsoft YaHei", system-ui, -apple-system, sans-serif;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ---------- 顶栏 ---------- */
+  header {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 16px;
+    height: 52px;
+    background: var(--panel);
+    border-bottom: 1px solid var(--border);
+  }
+  header .logo {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  header .logo .code { color: var(--accent); }
+  header .sub {
+    color: var(--muted);
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  header .spacer { flex: 1; }
+  #status {
+    color: var(--muted);
+    font-size: 12px;
+    max-width: 40%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .btn {
+    flex: none;
+    background: #21262d;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 5px 12px;
+    font-size: 13px;
+    cursor: pointer;
+    user-select: none;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+  .btn:hover { background: #30363d; }
+  .btn:active { transform: translateY(1px); }
+  .btn.primary { background: #238636; border-color: #2ea043; }
+  .btn.primary:hover { background: #2ea043; }
+
+  /* ---------- 主体布局 ---------- */
+  .layout { flex: 1; display: flex; min-height: 0; }
+
+  aside {
+    flex: 0 0 380px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    background: var(--panel);
+    border-right: 1px solid var(--border);
+  }
+  .sidebar-top {
+    flex: none;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .search-wrap { position: relative; }
+  .search-wrap .icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 13px;
+    pointer-events: none;
+  }
+  #search {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    padding: 7px 10px 7px 30px;
+    font-size: 13px;
+    outline: none;
+  }
+  #search:focus { border-color: var(--accent); }
+  .tabs { display: flex; gap: 6px; }
+  .tab {
+    flex: 1;
+    text-align: center;
+    padding: 5px 0;
+    font-size: 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    user-select: none;
+  }
+  .tab.active { background: var(--active-bg); color: var(--accent); border-color: var(--accent); }
+  .sort-row { display: flex; align-items: center; justify-content: space-between; color: var(--muted); font-size: 12px; }
+  #sort {
+    background: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 3px 6px;
+    font-size: 12px;
+  }
+
+  #file-list { flex: 1; overflow: auto; padding: 4px 0; }
+  .file-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-left: 2px solid transparent;
+    font-size: 13px;
+  }
+  .file-row:hover { background: var(--hover); }
+  .file-row.active { background: var(--active-bg); border-left-color: var(--accent); }
+  .badge {
+    flex: none;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-family: var(--mono);
+  }
+  .badge.cpp { background: #005cc533; color: #79b8ff; }
+  .badge.md  { background: #6f42c133; color: #d2a8ff; }
+  .fname {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .fsize { flex: none; color: var(--muted); font-size: 11px; font-family: var(--mono); }
+  .empty { padding: 24px 16px; color: var(--muted); font-size: 13px; text-align: center; }
+
+  /* ---------- 右侧内容区 ---------- */
+  main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+  .file-bar {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: var(--panel);
+    border-bottom: 1px solid var(--border);
+  }
+  .meta { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  #meta-name {
+    font-size: 14px;
+    font-weight: 600;
+    font-family: var(--mono);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  #meta-sub { color: var(--muted); font-size: 12px; }
+  .bar-actions { display: flex; gap: 6px; }
+  .bar-actions .btn { font-size: 12px; padding: 4px 10px; }
+
+  .viewer-scroll { flex: 1; overflow: auto; min-height: 0; }
+  .viewer-scroll .placeholder { padding: 40px; color: var(--muted); font-size: 14px; text-align: center; }
+  .viewer-scroll .error-box {
+    margin: 24px;
+    padding: 16px;
+    border: 1px solid #f8514966;
+    background: #f851490f;
+    border-radius: 8px;
+    color: #f85149;
+    font-size: 13px;
+  }
+
+  /* 代码查看：行号与代码分离，整块横向滚动时行号列保持可见 */
+  .code-viewer {
+    display: flex;
+    overflow: auto;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .code-viewer .gutter {
+    position: sticky;
+    left: 0;
+    flex: none;
+    padding: 14px 10px 14px 14px;
+    text-align: right;
+    color: #484f58;
+    background: var(--bg);
+    user-select: none;
+    z-index: 1;
+    border-right: 1px solid var(--border);
+  }
+  .code-viewer .gutter span { display: block; }
+  .code-viewer pre {
+    margin: 0;
+    padding: 14px 16px;
+    min-width: max-content;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.6;
+    tab-size: 4;
+  }
+  .code-viewer pre code {
+    font-family: var(--mono);
+    background: transparent;
+    padding: 0;
+  }
+
+  /* Markdown 渲染 */
+  .markdown-body {
+    padding: 20px 28px;
+    background: transparent;
+    max-width: 980px;
+  }
+  .markdown-body pre { background: var(--panel); }
+  .md-raw {
+    font-family: var(--mono);
+    font-size: 13px;
+    white-space: pre-wrap;
+    word-break: break-all;
+    color: var(--text);
+    background: transparent;
+    padding: 12px;
+    border: 1px dashed var(--border);
+    border-radius: 6px;
+  }
+
+  /* 底部提示条 */
+  footer {
+    flex: none;
+    padding: 6px 16px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 11px;
+    background: var(--panel);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Toast */
+  #toast {
+    position: fixed;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #1c2128;
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 9px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s, transform 0.2s;
+    z-index: 99;
+    box-shadow: 0 6px 24px #00000066;
+    max-width: 80%;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  #toast.error { border-color: #f85149; color: #f85149; }
+
+  @media (max-width: 720px) {
+    aside { flex-basis: 280px; }
+    header .sub { display: none; }
+    #status { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="logo">Code<span class="code">Hub</span></span>
+  <span class="sub" id="header-sub"></span>
+  <div class="spacer"></div>
+  <span id="status">加载中…</span>
+  <a class="btn" id="btn-repo" target="_blank" rel="noopener">GitHub ↗</a>
+  <button class="btn primary" id="btn-refresh" title="强制重新拉取文件列表（消耗 1 次 API 配额）">刷新列表</button>
+</header>
+
+<div class="layout">
+  <aside>
+    <div class="sidebar-top">
+      <div class="search-wrap">
+        <span class="icon">🔍</span>
+        <input id="search" type="text" placeholder="搜索题目编号 / 文件名…" autocomplete="off" />
+      </div>
+      <div class="tabs">
+        <button class="tab active" data-filter="all">全部</button>
+        <button class="tab" data-filter="cpp">C++ 代码</button>
+        <button class="tab" data-filter="md">Markdown</button>
+      </div>
+      <div class="sort-row">
+        <span id="count-text">—</span>
+        <label>排序
+          <select id="sort">
+            <option value="name">名称</option>
+            <option value="size">大小</option>
+          </select>
+        </label>
+      </div>
+    </div>
+    <div id="file-list"><div class="empty">正在连接 GitHub 拉取文件列表…</div></div>
+  </aside>
+
+  <main>
+    <div class="file-bar">
+      <div class="meta">
+        <div id="meta-name">未选择文件</div>
+        <div id="meta-sub"></div>
+      </div>
+      <div class="bar-actions">
+        <button class="btn" id="btn-paired" style="display:none">📄 查看配对文件</button>
+        <button class="btn" id="btn-copy" title="复制文件内容">复制</button>
+        <a class="btn" id="btn-raw" target="_blank" rel="noopener">原文 ↗</a>
+      </div>
+    </div>
+    <div class="viewer-scroll" id="viewer">
+      <div class="placeholder">👈 从左侧选择一个文件，或先点击「刷新列表」</div>
+    </div>
+  </main>
+</div>
+
+<footer id="footer"></footer>
+
+<div id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+<script>
+'use strict';
+
+/* ================= 配置（改这里指向其他仓库） ================= */
+const CONFIG = { owner: 'tangyixiao', repo: 'Code', branch: 'main' };
+/* ============================================================== */
+
+const API_ROOT = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/`;
+const RAW_ROOT = `https://raw.githubusercontent.com/${CONFIG.owner}/${CONFIG.repo}/${CONFIG.branch}/`;
+const REPO_URL = `https://github.com/${CONFIG.owner}/${CONFIG.repo}`;
+const CACHE_KEY = 'codehub.list.v1';
+const CACHE_TTL = 30 * 60 * 1000; // 列表缓存 30 分钟（规避未认证 API 60 次/小时限制）
+
+const state = {
+  files: [],        // { name, size, raw }
+  filter: 'all',    // all | cpp | md
+  query: '',
+  sortBy: 'name',   // name | size
+  selected: null,
+  lastRawText: '',
+  busy: false,
+};
+
+const $ = (sel) => document.querySelector(sel);
+const $$ = (sel) => document.querySelectorAll(sel);
+
+/* ================= 工具函数 ================= */
+
+function escHtml(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+function escAttr(s) {
+  return escHtml(s).replace(/"/g, '&quot;');
+}
+function fmtSize(bytes) {
+  if (bytes == null) return '';
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+  return (bytes / 1024 / 1024).toFixed(2) + ' MB';
+}
+function naturalCmp(a, b) {
+  return a.localeCompare(b, 'zh-CN', { numeric: true, sensitivity: 'base' });
+}
+function getExt(name) {
+  return /\.cpp$/i.test(name) ? 'cpp' : 'md';
+}
+function loadCache() {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    const data = JSON.parse(raw);
+    if (!data || !Array.isArray(data.files)) return null;
+    return data;
+  } catch (e) { return null; }
+}
+function setStatus(text) {
+  $('#status').textContent = text;
+}
+
+let toastTimer = null;
+function showToast(text, type) {
+  const el = $('#toast');
+  el.textContent = text;
+  el.className = 'show' + (type === 'error' ? ' error' : '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.className = '', 2600);
+}
+
+/* ================= 文件列表（GitHub Contents API，分页拉全） ================= */
+
+function nextLink(linkHeader) {
+  if (!linkHeader) return null;
+  const m = /<([^>]+)>;\s*rel="next"/.exec(linkHeader);
+  return m ? m[1] : null;
+}
+
+async function fetchFileList(force) {
+  if (state.busy) return;
+  state.busy = true;
+
+  // 先用缓存（除非强制刷新或缓存过期）
+  if (!force) {
+    const cached = loadCache();
+    if (cached && Date.now() - cached.ts < CACHE_TTL) {
+      state.files = cached.files;
+      state.busy = false;
+      renderList();
+      setStatus(`共 ${state.files.length} 个文件（来自缓存）`);
+      if (!state.selected && state.files.length) openFile(state.files[0].name);
+      return;
+    }
+  }
+
+  setStatus('正在从 GitHub 拉取文件列表…');
+  try {
+    const all = [];
+    let url = API_ROOT + '?per_page=1000';
+    while (url) {
+      const res = await fetch(url, { headers: { Accept: 'application/vnd.github+json' } });
+      if (res.status === 403 || res.status === 429) {
+        // 触发 API 限流时退回缓存
+        const cached = loadCache();
+        if (cached && cached.files.length) {
+          state.files = cached.files;
+          renderList();
+          setStatus('列表来自缓存（API 限流，每小时 60 次），稍后可用「刷新列表」重试');
+        } else {
+          setStatus('GitHub API 限流，且无可用缓存');
+          showToast('GitHub API 请求过于频繁，请稍后再试', 'error');
+        }
+        return;
+      }
+      if (!res.ok) throw new Error(`GitHub API 返回 HTTP ${res.status}`);
+      const data = await res.json();
+      if (Array.isArray(data)) all.push(...data);
+      url = nextLink(res.headers.get('Link'));
+    }
+
+    // 只保留 .cpp 与 .md（该仓库其余为缓存/数据文件）
+    const files = all
+      .filter((f) => f.type === 'file' && /\.(cpp|md)$/i.test(f.name))
+      .map((f) => ({ name: f.name, size: f.size, raw: f.download_url || null }));
+    files.sort((a, b) => naturalCmp(a.name, b.name));
+    state.files = files;
+
+    try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), files })); } catch (e) { /* 隐私模式等场景忽略 */ }
+
+    renderList();
+    setStatus(`共 ${files.length} 个文件`);
+    if (!state.selected && files.length) openFile(files[0].name);
+  } catch (err) {
+    const cached = loadCache();
+    if (cached && cached.files.length) {
+      state.files = cached.files;
+      renderList();
+      setStatus('列表来自缓存（网络错误），点击「刷新列表」重试');
+    } else {
+      setStatus('加载失败');
+      $('#file-list').innerHTML =
+        `<div class="empty">加载失败：${escHtml(err.message)}<br/>请检查网络后点击「刷新列表」</div>`;
+      showToast('加载失败：' + err.message, 'error');
+    }
+  } finally {
+    state.busy = false;
+  }
+}
+
+/* ================= 列表渲染 ================= */
+
+function getVisible() {
+  let list = state.files;
+  if (state.filter === 'cpp') list = list.filter((f) => /\.cpp$/i.test(f.name));
+  else if (state.filter === 'md') list = list.filter((f) => /\.md$/i.test(f.name));
+  if (state.query) {
+    const q = state.query.toLowerCase();
+    list = list.filter((f) => f.name.toLowerCase().includes(q));
+  }
+  const sorted = [...list];
+  if (state.sortBy === 'size') sorted.sort((a, b) => (a.size - b.size) || naturalCmp(a.name, b.name));
+  else sorted.sort((a, b) => naturalCmp(a.name, b.name));
+  return sorted;
+}
+
+function renderList() {
+  const visible = getVisible();
+  $('#count-text').textContent = `显示 ${visible.length} / ${state.files.length} 个文件`;
+  const listEl = $('#file-list');
+
+  if (!visible.length) {
+    listEl.innerHTML = `<div class="empty">${state.files.length ? '没有匹配的文件' : '暂无文件，请点击「刷新列表」'}</div>`;
+    return;
+  }
+
+  listEl.innerHTML = visible.map((f) => {
+    const ext = getExt(f.name);
+    return `<div class="file-row${f.name === state.selected ? ' active' : ''}" data-name="${escAttr(f.name)}" title="${escAttr(f.name)}">
+      <span class="badge ${ext}">${ext === 'cpp' ? 'C++' : 'MD'}</span>
+      <span class="fname">${escHtml(f.name)}</span>
+      <span class="fsize">${fmtSize(f.size)}</span>
+    </div>`;
+  }).join('');
+
+  $$('#file-list .file-row').forEach((row) => {
+    row.addEventListener('click', () => openFile(row.dataset.name));
+  });
+}
+
+/* ================= 打开 / 渲染文件内容 ================= */
+
+function findPaired(name) {
+  const base = name.replace(/\.(cpp|md)$/i, '');
+  const target = base + (getExt(name) === 'cpp' ? '.md' : '.cpp');
+  return state.files.some((f) => f.name === target) ? target : null;
+}
+
+function setFileBar(name, size, lines) {
+  $('#meta-name').textContent = name;
+  $('#meta-name').title = name;
+  const parts = [];
+  if (size != null) parts.push(fmtSize(size));
+  if (lines != null) parts.push(lines + ' 行');
+  $('#meta-sub').textContent = parts.join(' · ');
+
+  const paired = findPaired(name);
+  const btn = $('#btn-paired');
+  if (paired) {
+    btn.style.display = '';
+    btn.dataset.name = paired;
+  } else {
+    btn.style.display = 'none';
+    btn.dataset.name = '';
+  }
+  $('#btn-raw').href = RAW_ROOT + encodeURIComponent(name);
+}
+
+async function openFile(name) {
+  state.selected = name;
+  $$('#file-list .file-row').forEach((r) => r.classList.toggle('active', r.dataset.name === name));
+
+  const file = state.files.find((f) => f.name === name);
+  if (!file) return;
+  setFileBar(name, file.size, null);
+
+  const viewer = $('#viewer');
+  viewer.innerHTML = '<div class="placeholder">正在加载 <code>' + escHtml(name) + '</code> …</div>';
+  setStatus('加载中：' + name);
+
+  try {
+    const rawUrl = file.raw || RAW_ROOT + encodeURIComponent(name);
+    const res = await fetch(rawUrl);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const text = await res.text();
+    state.lastRawText = text;
+    renderContent(text, name);
+    setStatus('已显示：' + name);
+  } catch (err) {
+    viewer.innerHTML = `<div class="error-box">内容加载失败：${escHtml(err.message)}<br/>可尝试「原文 ↗」在新标签页打开。</div>`;
+    setStatus('加载失败：' + name);
+  }
+}
+
+function renderContent(text, name) {
+  const viewer = $('#viewer');
+
+  if (getExt(name) === 'md') {
+    viewer.innerHTML = '<div class="markdown-body" id="md-body"></div>';
+    const mdBody = $('#md-body');
+    if (window.marked) {
+      try { mdBody.innerHTML = marked.parse(text); } catch (e) { mdBody.innerHTML = '<pre class="md-raw">' + escHtml(text) + '</pre>'; }
+      if (window.hljs) {
+        $$('#md-body pre code').forEach((el) => { try { hljs.highlightElement(el); } catch (e) { /* 忽略个别语言高亮失败 */ } });
+      }
+    } else {
+      // CDN 加载失败兜底：显示纯文本
+      mdBody.innerHTML = '<pre class="md-raw">' + escHtml(text) + '</pre>';
+    }
+  } else {
+    // C++：highlight.js 高亮 + 行号
+    let html = escHtml(text);
+    if (window.hljs) {
+      try { html = hljs.highlight(text, { language: 'cpp', ignoreIllegals: true }).value; } catch (e) { /* 保持纯文本 */ }
+    }
+    const norm = text.replace(/\r\n/g, '\n').replace(/\n$/, '');
+    const lineCount = norm ? norm.split('\n').length : (text ? 1 : 0);
+    const gutter = Array.from({ length: lineCount }, (_, i) => `<span>${i + 1}</span>`).join('');
+    viewer.innerHTML = `<div class="code-viewer">
+      <div class="gutter">${gutter}</div>
+      <pre class="code-block"><code class="language-cpp">${html}</code></pre>
+    </div>`;
+  }
+}
+
+/* ================= 事件绑定 ================= */
+
+$('#btn-refresh').addEventListener('click', () => {
+  try { localStorage.removeItem(CACHE_KEY); } catch (e) {}
+  fetchFileList(true);
+});
+
+$('#search').addEventListener('input', (e) => { state.query = e.target.value.trim(); renderList(); });
+
+$$('.tab').forEach((tab) => {
+  tab.addEventListener('click', () => {
+    $$('.tab').forEach((t) => t.classList.toggle('active', t === tab));
+    state.filter = tab.dataset.filter;
+    renderList();
+  });
+});
+
+$('#sort').addEventListener('change', (e) => { state.sortBy = e.target.value; renderList(); });
+
+$('#btn-paired').addEventListener('click', () => {
+  const target = $('#btn-paired').dataset.name;
+  if (target) openFile(target);
+});
+
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); showToast('已复制到剪贴板'); }
+  catch (e) { showToast('复制失败，请手动选择复制', 'error'); }
+  document.body.removeChild(ta);
+}
+
+$('#btn-copy').addEventListener('click', () => {
+  if (!state.lastRawText) { showToast('暂无可复制的内容', 'error'); return; }
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(state.lastRawText).then(
+      () => showToast('已复制到剪贴板'),
+      () => fallbackCopy(state.lastRawText)
+    );
+  } else {
+    fallbackCopy(state.lastRawText);
+  }
+});
+
+/* ================= 初始化 ================= */
+
+function init() {
+  $('#header-sub').textContent = `${CONFIG.owner}/${CONFIG.repo} · ${CONFIG.branch} 分支 · 实时读取`;
+  $('#btn-repo').textContent = 'GitHub ↗';
+  $('#btn-repo').href = REPO_URL;
+  $('#footer').textContent =
+    `CodeHub · 数据实时读取自 github.com/${CONFIG.owner}/${CONFIG.repo}（${CONFIG.branch} 分支）` +
+    ` · 文件列表走 GitHub Contents API 并缓存 30 分钟（未认证限额 60 次/小时） · 内容走 raw.githubusercontent.com 跨域 CDN`;
+
+  const forceRefresh = new URLSearchParams(location.search).has('refresh');
+  fetchFileList(forceRefresh);
+}
+
+init();
+</script>
+</body>
+</html>

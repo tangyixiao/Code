@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>fetch test 3</title></head>
+<body>
+<pre id="out">testing…</pre>
+<script>
+const out = document.getElementById("out");
+const log = [];
+async function test(name, url) {
+  try {
+    const res = await fetch(url, { headers: { Accept: "application/vnd.github+json" } });
+    const txt = await res.text();
+    let info = "";
+    try { const d = JSON.parse(txt); info = " items=" + (Array.isArray(d) ? d.length : "obj"); } catch (e) { info = " non-json len=" + txt.length; }
+    log.push(name + " -> status=" + res.status + info);
+  } catch (e) {
+    log.push(name + " -> ERROR: " + e.message);
+  }
+}
+async function run() {
+  await test("contents slash p3", "https://api.github.com/repos/tangyixiao/Code/contents/?per_page=3");
+  await test("contents no-slash p3", "https://api.github.com/repos/tangyixiao/Code/contents?per_page=3");
+  await test("contents slash no-q", "https://api.github.com/repos/tangyixiao/Code/contents/");
+  await test("contents slash p1", "https://api.github.com/repos/tangyixiao/Code/contents/?per_page=1");
+  out.textContent = log.join("\n");
+}
+run();
+</script>
+</body>
+</html>
