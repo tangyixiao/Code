@@ -631,122 +631,73 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 8010;
-const int M = 6500000;
+const int N = 8005, M = 805;
 
-int n, m;
-int hd[N], nx[N], to[N], ec;
-int sz[N], ht[N], hv[N];
-int f[N], g[N][2], h[N];
-int *sh[N];
-int pl[M], ln, dl[N];
-int U;
+int n, m, t, f[N], d[N], in[N], ou[N], w[N], c;
+int h[N], to[N], nx[N], cnt;
+int dp[N][M][2], tr[N][M];
 
-void add(int a, int b) {
-    to[++ec] = b;
-    nx[ec] = hd[a];
-    hd[a] = ec;
+void ad(int a, int b) {
+    to[++cnt] = b;
+    nx[cnt] = h[a];
+    h[a] = cnt;
 }
 
-void dfs1(int x) {
-    sz[x] = 1;
-    ht[x] = 1;
-    hv[x] = 0;
-    for (int i = hd[x]; i; i = nx[i]) {
-        int v = to[i];
-        dfs1(v);
-        sz[x] += sz[v];
-        if (ht[v] + 1 > ht[x]) {
-            ht[x] = ht[v] + 1;
-            hv[x] = v;
-        }
-    }
+int lb(int x) { return x & -x; }
+
+void add(int x, int y, int z) {
+    for (; x <= n; x += lb(x))
+        tr[x][z] += y;
 }
 
-void dfs2(int x) {
-    int t = 0;
+int sum(int x, int z) {
+    int r = 0;
+    for (; x; x -= lb(x))
+        r += tr[x][z];
+    return r;
+}
 
-    if (!sh[x]) {
-        sh[x] = pl + ln;
-        ln += ht[x] + 2;
-    }
-
-    if (hv[x])
-        sh[hv[x]] = sh[x] + 1;
-
-    f[x] = g[x][0] = U * sz[x];
-
-    for (int i = hd[x]; i; i = nx[i]) {
-        int v = to[i];
-        dfs2(v);
-        t += f[v];
-    }
-
-    for (int i = hd[x]; i; i = nx[i]) {
-        int v = to[i];
-        h[v] = t - f[v];
-        if (g[v][1] + U + h[v] > g[x][0])
-            g[x][0] = g[v][1] + U + h[v];
-    }
-
-    if (hv[x]) {
-        dl[x] = dl[hv[x]] + h[hv[x]];
-        for (int i = hd[x]; i; i = nx[i]) {
+void dfs(int u) {
+    d[u] = d[f[u]] + 1;
+    in[u] = ++c;
+    w[c] = u;
+    for (int i = h[u]; i; i = nx[i])
+        dfs(to[i]);
+    ou[u] = c;
+    for (int k = 1; k <= d[u]; k++) {
+        dp[u][k][0] = dp[u][k][1] = k;
+        for (int i = h[u]; i; i = nx[i])
+            dp[u][k][0] += dp[to[i]][k][0];
+        for (int i = h[u]; i; i = nx[i]) {
             int v = to[i];
-            if (v == hv[x])
-                continue;
-            for (int j = 1; j <= ht[v]; j++) {
-                int z = sh[v][j] + h[v] + dl[v] - dl[x];
-                if (z > sh[x][j + 1])
-                    sh[x][j + 1] = z;
-            }
+            dp[u][k][1] = max(dp[u][k][1], dp[v][k + 1][1] + dp[u][k][0] - dp[v][k][0]);
+            add(in[v], dp[u][k][0] - dp[v][k][0], k);
+            add(ou[v] + 1, dp[v][k][0] - dp[u][k][0], k);
         }
     }
-
-    sh[x][1] = g[x][0] - dl[x];
-
-    if (ht[x] >= U) {
-        int z = sh[x][U] + dl[x] + U * (U - 1);
-        if (z > f[x])
-            f[x] = z;
+    for (int i = in[u] + 1; i <= ou[u]; i++) {
+        int v = w[i], k = d[v] - d[u];
+        if (k <= m)
+            dp[u][k][0] = max(dp[u][k][0], sum(i, k) + dp[v][k + 1][1]);
     }
-
-    g[x][1] = f[x];
 }
+
 inline void solve(int Task_Id) {
-
-    int T;
-    cin >> T;
-
-    while (T--) {
+    cin >> t;
+    while (t--) {
         cin >> n >> m;
-
-        memset(hd, 0, sizeof(hd));
-        ec = 0;
-
-        for (int i = 2, p; i <= n; i++) {
-            cin >> p;
-            add(p, i);
+        memset(h, 0, sizeof h);
+        memset(dp, 0, sizeof dp);
+        memset(tr, 0, sizeof tr);
+        memset(d, 0, sizeof d);
+        cnt = c = 0;
+        for (int i = 2; i <= n; i++) {
+            cin >> f[i];
+            ad(f[i], i);
         }
-
-        dfs1(1);
-
-        for (int i = 1; i <= n; i++) {
-            f[i] = g[i][0] = g[i][1] = 0;
-        }
-
-        for (U = m + 1; U >= 1; U--) {
-            ln = 0;
-            memset(sh, 0, sizeof(sh));
-            memset(dl, 0, sizeof(dl));
-            for (int i = 1; i <= n; i++)
-                swap(g[i][0], g[i][1]);
-            dfs2(1);
-        }
-
-        cout << g[1][0] << '\n';
+        dfs(1);
+        cout << dp[1][1][1] << "\n";
     }
-
     return;
 }
 } // namespace TANGYIXIAO

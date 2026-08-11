@@ -536,6 +536,8 @@ using namespace __gnu_pbds;
 
 #pragma region TANGYIXIAO
 namespace TANGYIXIAO {
+#define int long long
+#define ull unsigned long long
 #pragma region IO
 namespace IO {
 namespace FAST_IO {
@@ -604,7 +606,7 @@ using namespace TANGYIXIAO;
 // clang-format on
 #pragma endregion TANGYIXIAO
 #pragma region MAIN
-signed main(int argc, char *argv[]) {
+signed main() {
 #ifdef TIME_COUNT
     Start_Time_Count();
 #endif
@@ -631,88 +633,87 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 1e4 + 5, M = 1e6 + 5, K = 12;
-struct E {
-    int u, v, w;
-} e[M], t[N];
-struct A {
-    int u, v, w, s;
-} p[N * 11];
-int f[N + K], h[N + K];
-int n, m, k, c[K];
-long long ans;
-int F(int x) { return f[x] == x ? x : f[x] = F(f[x]); }
-inline void solve(int Task_Id) {
+const int N = 50005;
+int a[50010], s[50010];
+int c, st[50010], ed[50010], w[50010], pr[50010], nx[50010];
+int f(pair<int, int> x) { return s[x.first] - x.second; }
+void m(int x, int y) {
+    while (st[x] != ed[x] && s[ed[x]] <= s[st[y]])
+        ed[x] = pr[ed[x]];
+    if (st[x] == ed[x] && s[ed[x]] <= s[st[y]])
+        ;
+    else
+        nx[ed[x]] = st[y], pr[st[y]] = ed[x], st[y] = st[x];
+    st[x] = ed[x] = w[x] = 0;
+}
 
-    cin >> n >> m >> k;
-    for (int i = 0; i < m; ++i)
-        cin >> e[i].u >> e[i].v >> e[i].w;
-    sort(e, e + m, [](E a, E b) { return a.w < b.w; });
-    for (int i = 1; i <= n; ++i)
-        f[i] = i;
-    int ct = 0, ts = 0;
-    long long C = 0;
-    for (int i = 0; i < m && ct < n - 1; ++i) {
-        int u = e[i].u, v = e[i].v;
-        int fu = F(u), fv = F(v);
-        if (fu != fv) {
-            f[fu] = fv;
-            t[ts++] = e[i];
-            C += e[i].w;
-            ct++;
+inline void solve(int Task_Id) {
+    int n, q;
+    cin >> n;
+    for (int i = 1; i <= n; i++)
+        cin >> a[i], s[i] = s[i - 1] + a[i];
+    cin >> q;
+    while (q--) {
+        memset(st, 0, sizeof st);
+        memset(ed, 0, sizeof ed);
+        memset(w, 0, sizeof w);
+        memset(pr, 0, sizeof pr);
+        memset(nx, 0, sizeof nx);
+        c = 0;
+        int l, r;
+        cin >> l >> r;
+        deque<pair<int, int>> q1;
+        deque<int> q2;
+        q2.push_back(++c);
+        st[c] = ed[c] = l;
+        for (int i = l + 1; i <= r; i++) {
+            while (st[c] != ed[c] && s[ed[c]] <= s[i])
+                ed[c] = pr[ed[c]];
+            if (st[c] == ed[c] && s[ed[c]] <= s[i])
+                st[c] = ed[c] = i;
+            else
+                nx[ed[c]] = i, pr[i] = ed[c], ed[c] = i;
         }
-    }
-    int T = 0;
-    for (int j = 1; j <= k; ++j) {
-        cin >> c[j];
-        for (int i = 1; i <= n; ++i) {
-            int w;
-            cin >> w;
-            p[T++] = {i, n + j, w, j};
-        }
-    }
-    for (int i = 0; i < ts; ++i)
-        p[T++] = {t[i].u, t[i].v, t[i].w, 0};
-    sort(p, p + T, [](A a, A b) { return a.w < b.w; });
-    ans = C;
-    for (int S = 0; S < (1 << k); ++S) {
-        long long sm = 0;
-        for (int j = 0; j < k; ++j)
-            if (S >> j & 1)
-                sm += c[j + 1];
-        if (sm >= ans)
-            continue;
-        for (int i = 1; i <= n + k; ++i)
-            f[i] = i, h[i] = (i <= n);
-        int o = n;
-        long long cur = sm;
-        if (o == 1) {
-            if (cur < ans)
-                ans = cur;
-            continue;
-        }
-        for (int i = 0; i < T; ++i) {
-            int s = p[i].s;
-            if (s && !((S >> (s - 1)) & 1))
-                continue;
-            int u = p[i].u, v = p[i].v;
-            int fu = F(u), fv = F(v);
-            if (fu != fv) {
-                if (h[fu] && h[fv])
-                    o--;
-                f[fu] = fv;
-                h[fv] |= h[fu];
-                cur += p[i].w;
-                if (cur >= ans)
-                    break;
-                if (o == 1)
-                    break;
+        ull ans = (ull)(q1.empty() ? s[st[q2.front()]] - w[q2.front()] : f(q1.front()));
+        for (int i = 2; i <= n; i++) {
+            while (!q2.empty() && st[q2.front()] < i + l - 1) {
+                q1.push_back({st[q2.front()], w[q2.front()]});
+                if (st[q2.front()] == ed[q2.front()])
+                    q2.pop_front();
+                else
+                    st[q2.front()] = nx[st[q2.front()]];
             }
+            if (!q1.empty() && q1.front().first < i)
+                q1.pop_front();
+            if (i + r - 1 <= n) {
+                q2.push_back(++c);
+                st[c] = ed[c] = i + r - 1;
+                w[c] = s[i - 1];
+            }
+            if (!q2.empty() && w[q2.back()] >= s[i - 1]) {
+                int x = q2.back();
+                q2.pop_back();
+                while (!q2.empty() && w[q2.back()] >= s[i - 1]) {
+                    m(q2.back(), x);
+                    q2.pop_back();
+                }
+                w[x] = s[i - 1];
+                while (!q2.empty() && s[ed[q2.back()]] - w[q2.back()] <= s[st[x]] - w[x]) {
+                    int y = q2.back();
+                    while (st[y] != ed[y] && s[ed[y]] - w[y] <= s[st[x]] - w[x])
+                        ed[y] = pr[ed[y]];
+                    if (st[y] == ed[y] && s[ed[y]] - w[y] <= s[st[x]] - w[x])
+                        q2.pop_back();
+                }
+                q2.push_back(x);
+            }
+            while (!q1.empty() && !q2.empty() && f(q1.back()) <= s[st[q2.front()]] - w[q2.front()])
+                q1.pop_back();
+            ans ^= (ull)i * (ull)(q1.empty() ? s[st[q2.front()]] - w[q2.front()] : f(q1.front()));
         }
-        if (o == 1 && cur < ans)
-            ans = cur;
+        cout << ans << '\n';
     }
-    cout << ans << '\n';
+
     return;
 }
 } // namespace TANGYIXIAO
