@@ -536,17 +536,6 @@ using namespace __gnu_pbds;
 
 #pragma region TANGYIXIAO
 namespace TANGYIXIAO {
-const long long P = 998244353;
-const int N = 5005;
-
-long long a[N], f[N][N], p[N];
-
-long long C(int n, int m) {
-    if (n < 0 || m < 0 || m > n)
-        return 0;
-    return f[n][m];
-}
-
 #pragma region IO
 namespace IO {
 namespace FAST_IO {
@@ -626,19 +615,9 @@ signed main(int argc, char *argv[]) {
     Local_File(FILE_NAME, FILE_IDX);
 #else
 #endif
-
-    for (int i = 0; i < N; i++) {
-        f[i][0] = f[i][i] = 1;
-        for (int j = 1; j < i; j++)
-            f[i][j] = (f[i - 1][j - 1] + f[i - 1][j]) % P;
-    }
-    p[0] = 1;
-    for (int i = 1; i < N; i++)
-        p[i] = p[i - 1] * 2 % P;
-
-    int c, T;
+    int T = 1;
 #ifdef MULTIPLE_TEST
-    cin >> c >> T;
+    cin >> T;
 #endif
     for (int Tasks_Id = 1; Tasks_Id <= T; Tasks_Id++) {
         solve(Tasks_Id);
@@ -652,25 +631,104 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-inline void solve(int Task_Id) {
-    int n, m;
-    cin >> n >> m;
-    for (int i = 1; i <= n; i++)
-        cin >> a[i];
-    sort(a + 1, a + n + 1);
-    long long r = p[n];
-    for (int i = 1; i <= n; i++) {
-        int x = 0;
-        for (int j = i + 1; j <= n && a[i] * 2 > a[j]; j++) {
-            while (x < i && a[x + 1] + a[i] < a[j])
-                x++;
-            if (x >= i)
-                break;
-            if (a[j] != a[i])
-                r = (r - p[x] * C(n - i - 1, m - 2 - n + j) % P + P) % P;
-        }
+const long long C = 1e9 + 7;
+
+struct E {
+    long long x, y;
+};
+E e[100005];
+
+long long v, a, b, s, x;
+int m;
+
+long long pw(long long a, long long b) {
+    long long r = 1;
+    while (b) {
+        if (b & 1)
+            r = r * a % C;
+        a = a * a % C;
+        b >>= 1;
     }
-    cout << r << "\n";
+    return r;
+}
+
+struct M {
+    long long a[2][2];
+};
+
+M mm(M x, M y) {
+    M z{};
+    for (int i = 0; i < 2; i++)
+        for (int j = 0; j < 2; j++)
+            for (int k = 0; k < 2; k++)
+                z.a[i][j] = (z.a[i][j] + x.a[i][k] * y.a[k][j]) % C;
+    return z;
+}
+
+void ad(long long k) {
+    if (!k)
+        return;
+    if (s) {
+        a = (a * v % C * v % C + s * (v - 1) % C * v) % C;
+        b = s;
+        s = 0;
+        k--;
+        if (!k)
+            return;
+    }
+    M z{{{v * v % C, v * v % C * (v - 1) % C}, {0, v % C}}}, r{{{1, 0}, {0, 1}}};
+    while (k) {
+        if (k & 1)
+            r = mm(r, z);
+        z = mm(z, z);
+        k >>= 1;
+    }
+    long long na = (r.a[0][0] * a + r.a[0][1] * b) % C;
+    long long nb = (r.a[1][0] * a + r.a[1][1] * b) % C;
+    a = na;
+    b = nb;
+}
+inline void solve(int Task_Id) {
+
+    long long n;
+    cin >> n >> m >> v;
+    for (int i = 0; i < m; i++)
+        cin >> e[i].x >> e[i].y;
+    sort(e, e + m, [](E a, E b) { return a.x < b.x; });
+    a = 1;
+    b = 0;
+    s = 0;
+    x = 1;
+    int i = 0;
+    bool ok = 1;
+    while (i < m) {
+        long long p = e[i].x, d = e[i].y;
+        int j = i + 1;
+        while (j < m && e[j].x == p) {
+            if (e[j].y != d)
+                ok = 0;
+            j++;
+        }
+        ad(p - x);
+        if (!ok)
+            break;
+        long long t = s;
+        if (s && x == d)
+            t = s;
+        else if (!s)
+            t = b;
+        s = (a + t) % C;
+        a = 0;
+        x = d;
+        i = j;
+        x = p;
+    }
+    if (!ok) {
+        cout << 0 << "\n";
+        return;
+    }
+    ad(n - x);
+    cout << (a + (s ? s : v * b % C)) % C << "\n";
 
     return;
 }
