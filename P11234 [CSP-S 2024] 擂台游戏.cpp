@@ -1,118 +1,160 @@
-#include <iostream>
+#include <bits/stdc++.h>
 using namespace std;
-const int N = 1E5 + 5;
-int n, m, A[N], C[N], D[19][1 << 17], win[1 << 19], a[1 << 18], V[N];
-long long M[N];
+#define ls x << 1
+#define rs x << 1 | 1
+#define ll long long
+const int N = (1 << 17) + 5;
+
+int mx[20][N << 2], lg[N], aa[N], ok[N], a[N], c[N];
+int n, m, nn = 1;
+bool vis[N];
+ll ans[N], sum;
+
+struct node {
+    ll sum;
+    int x;
+    bool tp, d;
+} t[N << 2];
+
+void build(int x, int l, int r) {
+    if (l == r) {
+        t[x].x = l;
+        return;
+    }
+    int mid = (l + r) >> 1, k = lg[r - l + 1], d = t[x].d;
+    build(ls, l, mid);
+    build(rs, mid + 1, r);
+    int w = a[t[x << 1 | d].x] >= k;
+    t[x].x = t[x << 1 | (d ^ !w)].x;
+    if (!d && w)
+        t[x].tp = 1, ok[r]++, ok[mid]--;
+    else
+        t[x].tp = 0;
+}
+
+void build2(int x, int l, int r, int *m) {
+    t[x].sum = 1LL * (l + r) * (r - l + 1) / 2;
+    if (l == r)
+        return;
+    int mid = (l + r) >> 1, k = lg[r - l + 1];
+    if (~m[x])
+        m[ls] = m[rs] = m[x];
+    else
+        m[x << 1 | t[x].d] = k;
+    build2(ls, l, mid, m);
+    build2(rs, mid + 1, r, m);
+}
+
+void up(int x) {
+    if (!vis[x]) {
+        sum += x;
+        vis[x] = 1;
+    }
+}
+
+int rd() {
+    char c;
+    int f = 1;
+    while (!isdigit(c = getchar()))
+        if (c == '-')
+            f = -1;
+    int x = c - '0';
+    while (isdigit(c = getchar()))
+        x = x * 10 + (c ^ 48);
+    return x * f;
+}
+
+char gc() {
+    char c;
+    while ((c = getchar()) <= ' ')
+        ;
+    return c;
+}
+
 int main() {
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    cin >> n >> m;
-    for (int i = 0; i < n; ++i)
-        cin >> A[i];
-    for (int i = 0; i < m; ++i)
-        cin >> C[i];
-    int K = 0;
-    while ((1 << K) < n)
-        K++;
-    for (int R = 1; R <= K; ++R) {
-        string s;
-        cin >> s;
-        for (int G = 1; G <= (1 << (K - R)); ++G)
-            D[R][G] = s[G - 1] - '0';
-    }
-    int T;
-    cin >> T;
-    for (int t = 1; t <= T; ++t) {
-        int X[4];
-        cin >> X[0] >> X[1] >> X[2] >> X[3];
-        for (int i = 0; i < n; ++i)
-            a[i] = A[i] ^ X[(i + 1) % 4];
-        for (int i = n; i < (1 << K); ++i)
-            a[i] = 0;
-        for (int i = 0; i < (1 << K); ++i)
-            win[(1 << K) + i] = i;
-        for (int R = 1; R <= K; ++R) {
-            for (int G = 1; G <= (1 << (K - R)); ++G) {
-                int u = (1 << (K - R)) + G - 1, ls = 2 * u, rs = 2 * u + 1;
-                win[u] = D[R][G] ? (a[win[rs]] >= R ? win[rs] : win[ls]) : (a[win[ls]] >= R ? win[ls] : win[rs]);
-            }
-        }
-        long long F = 0;
-        for (int i = 0; i < m; ++i) {
-            int c = C[i];
-            if (V[c] == t) {
-                F ^= 1LL * (i + 1) * M[c];
-                continue;
-            }
-            int k = 0;
-            while ((1 << k) < c)
-                k++;
-            long long ans = 0;
-            if (c == (1 << k))
-                ans = win[1 << (K - k)] + 1;
-            else {
-                long long Sum = c + 1;
-                int cands[18], sz = 0;
-                for (int R = 1; R <= k; ++R) {
-                    int p = ((1 << K) + c) >> R, ls = 2 * p, rs = 2 * p + 1;
-                    int d = D[R][p - (1 << (K - R)) + 1];
-                    if ((c >> (R - 1)) & 1) {
-                        int w = win[ls], ncands[18], nsz = 0;
-                        long long RS = Sum;
-                        Sum = 0;
-                        if (d == 0) {
-                            bool ll = (a[w] < R);
-                            Sum = ll ? RS : 0;
-                            if (a[w] >= R)
-                                ncands[nsz++] = w;
-                            if (ll)
-                                for (int j = 0; j < sz; ++j)
-                                    ncands[nsz++] = cands[j];
-                        } else {
-                            bool rl = (RS > 0);
-                            for (int j = 0; !rl && j < sz; ++j)
-                                if (a[cands[j]] < R)
-                                    rl = true;
-                            Sum = RS;
-                            for (int j = 0; j < sz; ++j)
-                                if (a[cands[j]] >= R)
-                                    ncands[nsz++] = cands[j];
-                            if (rl)
-                                ncands[nsz++] = w;
-                        }
-                        sz = nsz;
-                        for (int j = 0; j < sz; ++j)
-                            cands[j] = ncands[j];
-                    } else {
-                        long long LS = Sum, cnt = 1LL << (R - 1);
-                        long long fv = ((1LL * rs) << (R - 1)) - (1 << K) + 1;
-                        long long RS = (fv * 2 + cnt - 1) * cnt / 2;
-                        Sum = 0;
-                        int ncands[18], nsz = 0;
-                        if (d == 0) {
-                            bool ll = (LS > 0);
-                            for (int j = 0; !ll && j < sz; ++j)
-                                if (a[cands[j]] < R)
-                                    ll = true;
-                            Sum = LS + (ll ? RS : 0);
-                            for (int j = 0; j < sz; ++j)
-                                if (a[cands[j]] >= R)
-                                    ncands[nsz++] = cands[j];
-                            sz = nsz;
-                            for (int j = 0; j < sz; ++j)
-                                cands[j] = ncands[j];
-                        } else
-                            Sum = RS + LS;
-                    }
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    n = rd();
+    m = rd();
+
+    for (int i = 1; i <= n; i++)
+        aa[i] = rd();
+    for (int i = 1; i <= m; i++)
+        c[i] = rd();
+
+    while (nn < n)
+        nn <<= 1;
+
+    for (int i = 2; i <= nn; i++)
+        lg[i] = lg[i >> 1] + 1;
+
+    for (int i = nn / 2; i; i >>= 1)
+        for (int j = i; j < i * 2; j++)
+            t[j].d = gc() - '0';
+
+    memset(mx, -1, sizeof mx);
+
+    for (int s = 0; (1 << s) <= nn; s++)
+        build2(1 << s, 1, nn >> s, mx[s]);
+
+    int T = rd();
+
+    while (T--) {
+        int y[4] = {rd(), rd(), rd(), rd()};
+
+        for (int i = 1; i <= n; i++)
+            a[i] = aa[i] ^ y[i & 3];
+
+        memset(ok, 0, sizeof ok);
+
+        build(1, 1, nn);
+
+        unsigned long long res = 0;
+
+        for (int i = nn, rt = 1, s = 0; i; i--) {
+            if ((1 << lg[i]) == i) {
+                if (i != nn) {
+                    rt <<= 1;
+                    s++;
                 }
-                ans = Sum;
-                for (int j = 0; j < sz; ++j)
-                    ans += cands[j] + 1;
+                memset(vis, 0, sizeof vis);
+                sum = 0;
+                up(t[rt].x);
             }
-            V[c] = t;
-            M[c] = ans;
-            F ^= 1LL * (i + 1) * ans;
+
+            ans[i] = sum;
+
+            if ((ok[i] += ok[i + 1]))
+                continue;
+
+            up(i);
+
+            int x = i + nn - 1;
+
+            while (x != rt) {
+                int d = x & 1;
+                x >>= 1;
+
+                if (!d) {
+                    if (t[x].tp)
+                        sum += t[rs].sum;
+                    else
+                        break;
+                } else {
+                    if (a[t[ls].x] >= mx[s][ls])
+                        up(t[ls].x);
+                }
+            }
         }
-        cout << F << '\n';
+
+        unsigned long long out = 0;
+
+        for (int i = 1; i <= m; i++)
+            out ^= (unsigned long long)i * (unsigned long long)ans[c[i]];
+
+        cout << out << "\n";
     }
+
+    return 0;
 }
