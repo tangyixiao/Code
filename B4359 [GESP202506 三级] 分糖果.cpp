@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-12 10:52:58
-//  Problem: P12230 【模板】集合幂级数 exp
-//  Contest: Luogu - 2026 省选赛前模板赛
-//  URL: https://www.luogu.com.cn/problem/P12230
+//  Time: 2026-08-12 12:43:26
+//  Problem: B4359 [GESP202506 三级] 分糖果
+//  Contest: Luogu
+//  URL: https://www.luogu.com.cn/problem/B4359
 //  Memory Limit: 512 MB
-//  Time Limit: 2500 ms
+//  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: ca670ad0-7aee-49b1-899b-309686b26408
+//  Batch ID: 9285ebc0-9a3c-4044-92fe-4cc669a660e6
 //
 // Algorithm:
 // Complexity: O()
@@ -648,78 +648,23 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-
-const int P = 998244353;
-
-static int f[21][1 << 20], g[21][1 << 20], iv[21];
-
-int pw(int a, int b) {
-    int r = 1;
-    while (b) {
-        if (b & 1)
-            r = 1LL * r * a % P;
-        a = 1LL * a * a % P;
-        b >>= 1;
-    }
-    return r;
-}
-
-void w(int *a, int n) {
-    for (int i = 1; i < n; i <<= 1)
-        for (int j = 0; j < n; j += i << 1)
-            for (int k = 0; k < i; k++) {
-                int x = a[j + k], y = a[j + k + i];
-                a[j + k] = x + y;
-                if (a[j + k] >= P)
-                    a[j + k] -= P;
-                a[j + k + i] = x - y;
-                if (a[j + k + i] < 0)
-                    a[j + k + i] += P;
-            }
-}
+int n;
+long long a[100001];
+unsigned long long s;
 inline void solve(int Task_Id) {
-    int n;
     cin >> n;
-    int m = 1 << n;
-
-    for (int i = 0, x; i < m; i++) {
-        cin >> x;
-        f[__builtin_popcount((unsigned)i)][i] = x;
+    for (int i = 0; i < n; i++)
+        cin >> a[i];
+    for (int i = 1; i < n; i++) {
+        if (a[i] <= a[i - 1])
+            a[i] = a[i - 1] + 1;
+    }
+    for (int i = 0; i < n; i++) {
+        s += a[i];
     }
 
-    for (int i = 1; i <= n; i++)
-        iv[i] = pw(i, P - 2);
+    cout << s;
 
-    for (int i = 0; i <= n; i++)
-        w(f[i], m);
-
-    for (int s = 0; s < m; s++) {
-        int a[21] = {}, b[21] = {};
-        for (int i = 0; i <= n; i++)
-            a[i] = f[i][s];
-
-        b[0] = 1;
-
-        for (int i = 1; i <= n; i++) {
-            long long z = 0;
-            for (int j = 1; j <= i; j++)
-                z = (z + 1LL * j * a[j] % P * b[i - j]) % P;
-            b[i] = z % P * iv[i] % P;
-        }
-
-        for (int i = 0; i <= n; i++)
-            g[i][s] = b[i];
-    }
-
-    for (int i = 0; i <= n; i++)
-        w(g[i], m);
-
-    int z = pw(m, P - 2);
-
-    for (int i = 0; i < m; i++) {
-        int x = 1LL * g[__builtin_popcount((unsigned)i)][i] * z % P;
-        cout << x << (i + 1 == m ? '\n' : ' ');
-    }
     return;
 }
 } // namespace TANGYIXIAO

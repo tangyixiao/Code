@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-12 10:52:58
-//  Problem: P12230 【模板】集合幂级数 exp
-//  Contest: Luogu - 2026 省选赛前模板赛
-//  URL: https://www.luogu.com.cn/problem/P12230
-//  Memory Limit: 512 MB
-//  Time Limit: 2500 ms
+//  Time: 2026-08-12 11:12:53
+//  Problem: P4406 [CQOI2005] 三角形面积并
+//  Contest: Luogu
+//  URL: https://www.luogu.com.cn/problem/P4406
+//  Memory Limit: 128 MB
+//  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: ca670ad0-7aee-49b1-899b-309686b26408
+//  Batch ID: 3a848171-59d2-494b-a44b-53f9b687d801
 //
 // Algorithm:
 // Complexity: O()
@@ -648,78 +648,164 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 5e4;
 
-const int P = 998244353;
+struct P {
+    long double x, y;
+};
 
-static int f[21][1 << 20], g[21][1 << 20], iv[21];
+struct E {
+    P a, b;
+};
 
-int pw(int a, int b) {
-    int r = 1;
-    while (b) {
-        if (b & 1)
-            r = 1LL * r * a % P;
-        a = 1LL * a * a % P;
-        b >>= 1;
-    }
-    return r;
+struct I {
+    long double l, r;
+};
+
+P p[105][3];
+E e[305];
+I q[105];
+long double x[N];
+
+long double cr(P a, P b, P c) {
+    return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
 }
 
-void w(int *a, int n) {
-    for (int i = 1; i < n; i <<= 1)
-        for (int j = 0; j < n; j += i << 1)
-            for (int k = 0; k < i; k++) {
-                int x = a[j + k], y = a[j + k + i];
-                a[j + k] = x + y;
-                if (a[j + k] >= P)
-                    a[j + k] -= P;
-                a[j + k + i] = x - y;
-                if (a[j + k + i] < 0)
-                    a[j + k + i] += P;
+bool in(long double x, long double l, long double r) {
+    return x >= min(l, r) - 1e-18L && x <= max(l, r) + 1e-18L;
+}
+
+bool cut(E a, E b, long double &x) {
+    long double A = a.b.x - a.a.x;
+    long double B = -(b.b.x - b.a.x);
+    long double C = b.a.x - a.a.x;
+    long double D = a.b.y - a.a.y;
+    long double E1 = -(b.b.y - b.a.y);
+    long double F = b.a.y - a.a.y;
+
+    long double z = A * E1 - B * D;
+    if (fabsl(z) < 1e-24L)
+        return 0;
+
+    long double t = (C * E1 - B * F) / z;
+    long double u = (A * F - C * D) / z;
+
+    if (t < -1e-18L || t > 1 + 1e-18L || u < -1e-18L || u > 1 + 1e-18L)
+        return 0;
+
+    x = a.a.x + t * A;
+    return 1;
+}
+
+I get(int k, long double z) {
+    long double l = 1e100L, r = -1e100L;
+
+    for (int i = 0; i < 3; i++) {
+        P a = p[k][i], b = p[k][(i + 1) % 3];
+
+        if (fabsl(a.x - b.x) < 1e-24L) {
+            if (fabsl(z - a.x) < 1e-18L) {
+                l = min(l, min(a.y, b.y));
+                r = max(r, max(a.y, b.y));
             }
-}
-inline void solve(int Task_Id) {
-    int n;
-    cin >> n;
-    int m = 1 << n;
-
-    for (int i = 0, x; i < m; i++) {
-        cin >> x;
-        f[__builtin_popcount((unsigned)i)][i] = x;
-    }
-
-    for (int i = 1; i <= n; i++)
-        iv[i] = pw(i, P - 2);
-
-    for (int i = 0; i <= n; i++)
-        w(f[i], m);
-
-    for (int s = 0; s < m; s++) {
-        int a[21] = {}, b[21] = {};
-        for (int i = 0; i <= n; i++)
-            a[i] = f[i][s];
-
-        b[0] = 1;
-
-        for (int i = 1; i <= n; i++) {
-            long long z = 0;
-            for (int j = 1; j <= i; j++)
-                z = (z + 1LL * j * a[j] % P * b[i - j]) % P;
-            b[i] = z % P * iv[i] % P;
+            continue;
         }
 
-        for (int i = 0; i <= n; i++)
-            g[i][s] = b[i];
+        if (!in(z, a.x, b.x))
+            continue;
+
+        long double y = a.y + (b.y - a.y) * (z - a.x) / (b.x - a.x);
+        l = min(l, y);
+        r = max(r, y);
     }
 
-    for (int i = 0; i <= n; i++)
-        w(g[i], m);
+    if (l > r)
+        return {0, 0};
+    return {l, r};
+}
 
-    int z = pw(m, P - 2);
+long double len(int n, long double z) {
+    int c = 0;
 
-    for (int i = 0; i < m; i++) {
-        int x = 1LL * g[__builtin_popcount((unsigned)i)][i] * z % P;
-        cout << x << (i + 1 == m ? '\n' : ' ');
+    for (int i = 0; i < n; i++) {
+        q[c] = get(i, z);
+        if (q[c].l <= q[c].r + 1e-18L)
+            c++;
     }
+
+    sort(q, q + c, [](I a, I b) {
+        if (fabsl(a.l - b.l) > 1e-18L)
+            return a.l < b.l;
+        return a.r < b.r;
+    });
+
+    long double s = 0;
+    long double l, r;
+
+    for (int i = 0; i < c;) {
+        l = q[i].l;
+        r = q[i].r;
+
+        i++;
+
+        while (i < c && q[i].l <= r + 1e-18L) {
+            r = max(r, q[i].r);
+            i++;
+        }
+
+        s += r - l;
+    }
+
+    return s;
+}
+inline void solve(int Task_Id) {
+
+    int n;
+    cin >> n;
+
+    int m = 0, c = 0;
+
+    for (int i = 0; i < n; i++) {
+        cin >> p[i][0].x >> p[i][0].y >> p[i][1].x >> p[i][1].y >> p[i][2].x >> p[i][2].y;
+
+        if (cr(p[i][0], p[i][1], p[i][2]) < 0)
+            swap(p[i][1], p[i][2]);
+
+        for (int j = 0; j < 3; j++) {
+            e[m++] = {p[i][j], p[i][(j + 1) % 3]};
+            x[c++] = p[i][j].x;
+        }
+    }
+
+    for (int i = 0; i < m; i++)
+        for (int j = i + 1; j < m; j++) {
+            long double z;
+            if (cut(e[i], e[j], z))
+                x[c++] = z;
+        }
+
+    sort(x, x + c);
+
+    int k = 0;
+    for (int i = 0; i < c; i++)
+        if (!k || fabsl(x[i] - x[k - 1]) > 1e-15L)
+            x[k++] = x[i];
+
+    long double ans = 0;
+
+    for (int i = 0; i + 1 < k; i++) {
+        long double l = x[i], r = x[i + 1];
+
+        if (r - l < 1e-18L)
+            continue;
+
+        long double a = len(n, l);
+        long double b = len(n, r);
+
+        ans += (a + b) * (r - l) / 2;
+    }
+
+    cout << fixed << setprecision(2) << (double)ans << '\n';
     return;
 }
 } // namespace TANGYIXIAO

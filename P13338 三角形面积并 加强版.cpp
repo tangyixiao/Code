@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-12 10:52:58
-//  Problem: P12230 【模板】集合幂级数 exp
-//  Contest: Luogu - 2026 省选赛前模板赛
-//  URL: https://www.luogu.com.cn/problem/P12230
+//  Time: 2026-08-12 11:11:21
+//  Problem: P13338 三角形面积并 加强版
+//  Contest: Luogu
+//  URL: https://www.luogu.com.cn/problem/P13338
 //  Memory Limit: 512 MB
-//  Time Limit: 2500 ms
+//  Time Limit: 3000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: ca670ad0-7aee-49b1-899b-309686b26408
+//  Batch ID: 089c980b-2a6b-4a2f-8f27-9f5428a454d9
 //
 // Algorithm:
 // Complexity: O()
@@ -648,78 +648,157 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 1e4 + 5;
 
-const int P = 998244353;
+struct P {
+    long long x, y;
+};
+struct E {
+    P a, b;
+    int id;
+};
+struct I {
+    long double l, r;
+};
 
-static int f[21][1 << 20], g[21][1 << 20], iv[21];
+E e[N];
+I q[N];
+P t[N][3];
 
-int pw(int a, int b) {
-    int r = 1;
-    while (b) {
-        if (b & 1)
-            r = 1LL * r * a % P;
-        a = 1LL * a * a % P;
-        b >>= 1;
+long long cr(P a, P b, P c) {
+    return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
+}
+
+long long dt(P a, P b) {
+    return a.x * b.x + a.y * b.y;
+}
+
+I cut(E z, P *p) {
+    long double l = 0, r = 1;
+    P d{z.b.x - z.a.x, z.b.y - z.a.y};
+
+    for (int i = 0; i < 3; i++) {
+        P x = p[i], y = p[(i + 1) % 3];
+        P s{y.x - x.x, y.y - x.y};
+        long long A = s.x * (z.a.y - x.y) - s.y * (z.a.x - x.x);
+        long long B = s.x * d.y - s.y * d.x;
+
+        if (!B) {
+            if (A < 0)
+                return {1, 0};
+        } else {
+            long double v = -(long double)A / B;
+            if (B > 0)
+                l = max(l, v);
+            else
+                r = min(r, v);
+            if (l > r)
+                return {1, 0};
+        }
     }
-    return r;
+
+    return {max(l, (long double)0), min(r, (long double)1)};
 }
 
-void w(int *a, int n) {
-    for (int i = 1; i < n; i <<= 1)
-        for (int j = 0; j < n; j += i << 1)
-            for (int k = 0; k < i; k++) {
-                int x = a[j + k], y = a[j + k + i];
-                a[j + k] = x + y;
-                if (a[j + k] >= P)
-                    a[j + k] -= P;
-                a[j + k + i] = x - y;
-                if (a[j + k + i] < 0)
-                    a[j + k + i] += P;
-            }
-}
 inline void solve(int Task_Id) {
-    int n;
-    cin >> n;
-    int m = 1 << n;
 
-    for (int i = 0, x; i < m; i++) {
-        cin >> x;
-        f[__builtin_popcount((unsigned)i)][i] = x;
+    int n, E = 0;
+    cin >> n;
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < 3; j++)
+            cin >> t[i][j].x >> t[i][j].y;
+
+        if (cr(t[i][0], t[i][1], t[i][2]) < 0)
+            swap(t[i][1], t[i][2]);
+
+        for (int j = 0; j < 3; j++) {
+            e[E] = {t[i][j], t[i][(j + 1) % 3], E};
+            E++;
+        }
     }
 
-    for (int i = 1; i <= n; i++)
-        iv[i] = pw(i, P - 2);
+    long double ans = 0;
 
-    for (int i = 0; i <= n; i++)
-        w(f[i], m);
+    for (int z = 0; z < E; z++) {
+        int c = 0;
+        P d{e[z].b.x - e[z].a.x, e[z].b.y - e[z].a.y};
 
-    for (int s = 0; s < m; s++) {
-        int a[21] = {}, b[21] = {};
-        for (int i = 0; i <= n; i++)
-            a[i] = f[i][s];
+        for (int j = 0; j < n; j++) {
+            long long mn = LLONG_MAX;
 
-        b[0] = 1;
+            for (int k = 0; k < 3; k++)
+                mn = min(mn,
+                         d.x * (t[j][k].y - e[z].a.y) -
+                             d.y * (t[j][k].x - e[z].a.x));
 
-        for (int i = 1; i <= n; i++) {
-            long long z = 0;
-            for (int j = 1; j <= i; j++)
-                z = (z + 1LL * j * a[j] % P * b[i - j]) % P;
-            b[i] = z % P * iv[i] % P;
+            if (mn < 0) {
+                I v = cut(e[z], t[j]);
+                if (v.l <= v.r)
+                    q[c++] = v;
+            }
         }
 
-        for (int i = 0; i <= n; i++)
-            g[i][s] = b[i];
+        for (int j = 0; j < E; j++)
+            if (e[j].id < e[z].id) {
+                P d2{e[j].b.x - e[j].a.x, e[j].b.y - e[j].a.y};
+
+                if (d.x * d2.y - d.y * d2.x)
+                    continue;
+
+                P w{e[j].a.x - e[z].a.x, e[j].a.y - e[z].a.y};
+
+                if (d.x * w.y - d.y * w.x)
+                    continue;
+
+                long long dd = d.x * d.x + d.y * d.y;
+
+                long double l =
+                    (long double)dt(d, w) / dd;
+
+                long double r =
+                    (long double)dt(
+                        d,
+                        P{e[j].b.x - e[z].a.x, e[j].b.y - e[z].a.y}) /
+                    dd;
+
+                if (l > r)
+                    swap(l, r);
+
+                l = max(l, (long double)0);
+                r = min(r, (long double)1);
+
+                if (l <= r)
+                    q[c++] = {l, r};
+            }
+
+        sort(q, q + c, [](I a, I b) {
+            return a.l < b.l || (a.l == b.l && a.r < b.r);
+        });
+
+        long double p = 0;
+
+        for (int i = 0; i < c;) {
+            long double l = q[i].l, r = q[i].r;
+
+            while (i < c && q[i].l <= r)
+                r = max(r, q[i++].r);
+
+            if (l > p)
+                ans += (long double)cr(
+                           {0, 0}, e[z].a, e[z].b) *
+                       .5L * (l - p);
+
+            p = max(p, r);
+        }
+
+        if (p < 1)
+            ans += (long double)cr(
+                       {0, 0}, e[z].a, e[z].b) *
+                   .5L * (1 - p);
     }
 
-    for (int i = 0; i <= n; i++)
-        w(g[i], m);
-
-    int z = pw(m, P - 2);
-
-    for (int i = 0; i < m; i++) {
-        int x = 1LL * g[__builtin_popcount((unsigned)i)][i] * z % P;
-        cout << x << (i + 1 == m ? '\n' : ' ');
-    }
+    cout << fixed << setprecision(15) << ans << '\n';
     return;
 }
 } // namespace TANGYIXIAO

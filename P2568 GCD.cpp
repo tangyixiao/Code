@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-12 10:52:58
-//  Problem: P12230 【模板】集合幂级数 exp
-//  Contest: Luogu - 2026 省选赛前模板赛
-//  URL: https://www.luogu.com.cn/problem/P12230
-//  Memory Limit: 512 MB
-//  Time Limit: 2500 ms
+//  Time: 2026-08-12 11:01:47
+//  Problem: P2568 GCD
+//  Contest: Luogu
+//  URL: https://www.luogu.com.cn/problem/P2568
+//  Memory Limit: 250 MB
+//  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: ca670ad0-7aee-49b1-899b-309686b26408
+//  Batch ID: 1823c9a9-7cd0-433f-a95a-e22ab2b87044
 //
 // Algorithm:
 // Complexity: O()
@@ -648,78 +648,36 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 1e7 + 5, M = 1e6 + 5;
+int n, tot, p[M], phi[N];
+long long sum[N];
+bool flg[N];
 
-const int P = 998244353;
-
-static int f[21][1 << 20], g[21][1 << 20], iv[21];
-
-int pw(int a, int b) {
-    int r = 1;
-    while (b) {
-        if (b & 1)
-            r = 1LL * r * a % P;
-        a = 1LL * a * a % P;
-        b >>= 1;
-    }
-    return r;
-}
-
-void w(int *a, int n) {
-    for (int i = 1; i < n; i <<= 1)
-        for (int j = 0; j < n; j += i << 1)
-            for (int k = 0; k < i; k++) {
-                int x = a[j + k], y = a[j + k + i];
-                a[j + k] = x + y;
-                if (a[j + k] >= P)
-                    a[j + k] -= P;
-                a[j + k + i] = x - y;
-                if (a[j + k + i] < 0)
-                    a[j + k + i] += P;
+void sieve(int n) {
+    phi[1] = 1;
+    for (int i = 2; i <= n; ++i) {
+        if (!flg[i])
+            p[++tot] = i, phi[i] = i - 1;
+        for (int j = 1; j <= tot && i * p[j] <= n; ++j) {
+            flg[i * p[j]] = 1;
+            if (i % p[j] == 0) {
+                phi[i * p[j]] = phi[i] * p[j];
+                break;
+            } else {
+                phi[i * p[j]] = phi[i] * phi[p[j]];
             }
+        }
+    }
+    for (int i = 1; i <= n; ++i)
+        sum[i] = sum[i - 1] + phi[i];
 }
 inline void solve(int Task_Id) {
-    int n;
-    cin >> n;
-    int m = 1 << n;
-
-    for (int i = 0, x; i < m; i++) {
-        cin >> x;
-        f[__builtin_popcount((unsigned)i)][i] = x;
-    }
-
-    for (int i = 1; i <= n; i++)
-        iv[i] = pw(i, P - 2);
-
-    for (int i = 0; i <= n; i++)
-        w(f[i], m);
-
-    for (int s = 0; s < m; s++) {
-        int a[21] = {}, b[21] = {};
-        for (int i = 0; i <= n; i++)
-            a[i] = f[i][s];
-
-        b[0] = 1;
-
-        for (int i = 1; i <= n; i++) {
-            long long z = 0;
-            for (int j = 1; j <= i; j++)
-                z = (z + 1LL * j * a[j] % P * b[i - j]) % P;
-            b[i] = z % P * iv[i] % P;
-        }
-
-        for (int i = 0; i <= n; i++)
-            g[i][s] = b[i];
-    }
-
-    for (int i = 0; i <= n; i++)
-        w(g[i], m);
-
-    int z = pw(m, P - 2);
-
-    for (int i = 0; i < m; i++) {
-        int x = 1LL * g[__builtin_popcount((unsigned)i)][i] * z % P;
-        cout << x << (i + 1 == m ? '\n' : ' ');
-    }
+    scanf("%d", &n);
+    sieve(n);
+    long long ans = 0;
+    for (int i = 1; i <= tot; ++i)
+        ans += 2 * sum[n / p[i]] - 1;
+    printf("%lld\n", ans);
     return;
 }
 } // namespace TANGYIXIAO
