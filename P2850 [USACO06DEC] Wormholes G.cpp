@@ -648,8 +648,67 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 505, M = 5505;
+
+int n, m, w, h[N], to[M], nx[M], c[M], d[N], q[M], e;
+bool in[N];
+
+void add(int a, int b, int z) {
+    to[++e] = b;
+    c[e] = z;
+    nx[e] = h[a];
+    h[a] = e;
+}
+
+bool ck() {
+    int l = 0, r = 0;
+    for (int i = 1; i <= n; i++) {
+        d[i] = 0;
+        q[r++] = i;
+        in[i] = 1;
+    }
+    while (l < r) {
+        int u = q[l++];
+        in[u] = 0;
+        for (int i = h[u]; i; i = nx[i]) {
+            int v = to[i];
+            if (d[v] > d[u] + c[i]) {
+                d[v] = d[u] + c[i];
+                if (!in[v]) {
+                    if (++d[N - 1] >= n) {
+                        d[N - 1] = 0;
+                        return 1;
+                    }
+                    q[r++] = v;
+                    in[v] = 1;
+                }
+            }
+        }
+    }
+    return 0;
+}
+
 inline void solve(int Task_Id) {
-    // do something here
+    int T;
+    cin >> T;
+    while (T--) {
+        cin >> n >> m >> w;
+        e = 0;
+        memset(h, 0, sizeof h);
+
+        for (int i = 1, a, b, z; i <= m; i++) {
+            cin >> a >> b >> z;
+            add(a, b, z);
+            add(b, a, z);
+        }
+
+        for (int i = 1, a, b, z; i <= w; i++) {
+            cin >> a >> b >> z;
+            add(a, b, -z);
+        }
+
+        cout << (ck() ? "YES" : "NO") << '\n';
+    }
     return;
 }
 } // namespace TANGYIXIAO
