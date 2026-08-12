@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-12 08:28:35
-//  Problem: P2850 [USACO06DEC] Wormholes G
+//  Time: 2026-08-12 10:01:33
+//  Problem: P5043 【模板】树同构 / [BJOI2015] 树的同构
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P2850
-//  Memory Limit: 128 MB
+//  URL: https://www.luogu.com.cn/problem/P5043
+//  Memory Limit: 250 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 83cc708c-258f-4ad2-a2b1-4575847e3046
+//  Batch ID: d7f85fb2-fa9c-4ee7-b126-b9054d07bc17
 //
 // Algorithm:
 // Complexity: O()
@@ -646,55 +646,113 @@ signed main(int argc, char *argv[]) {
     return EXIT_SUCCESS;
 }
 #pragma endregion MAIN
-#pragma endregion PREPROCESSOR
+#pragma endregion PREPROCE
 namespace TANGYIXIAO {
-const int INF = 0x3f3f3f3f;
-int T, n, m, W, dis[505][505];
-inline int read() {
-    register int x = 0;
-    char c = getchar();
-    while (c < '0' || c > '9')
-        c = getchar();
-    while (c >= '0' && c <= '9') {
-        x = (x << 3) + (x << 1) + c - '0';
-        c = getchar();
-    }
-    return x;
+const int N = 55;
+
+int m, n, h[N], to[N << 1], nx[N << 1], e, fa[N], d[N], q[N];
+string s[N];
+
+void add(int u, int v) {
+    to[++e] = v;
+    nx[e] = h[u];
+    h[u] = e;
 }
-bool check() {
-    for (register int k = 1; k <= n; k++)
-        for (register int i = 1; i <= n; i++) {
-            for (register int j = 1; j <= n; j++) {
-                int res = dis[i][k] + dis[k][j];
-                if (dis[i][j] > res)
-                    dis[i][j] = res;
-            }
-            if (dis[i][i] < 0)
-                return 1;
-        }
-    return 0;
+
+string dfs(int u, int p) {
+    string a[N], r = "(";
+    int c = 0;
+    for (int i = h[u]; i; i = nx[i]) {
+        int v = to[i];
+        if (v != p)
+            a[c++] = dfs(v, u);
+    }
+    sort(a, a + c);
+    for (int i = 0; i < c; i++)
+        r += a[i];
+    return r + ")";
 }
 
 inline void solve(int Task_Id) {
-    T = read();
-    while (T--) {
-        n = read(), m = read(), W = read();
-        for (register int i = 1; i <= n; i++)
-            for (register int j = 1; j <= n; j++)
-                dis[i][j] = INF;
-        for (int i = 1; i <= m; i++) {
-            int u = read(), v = read(), w = read();
-            if (dis[u][v] > w)
-                dis[u][v] = dis[v][u] = w;
+    cin >> m;
+    for (int k = 1; k <= m; k++) {
+        cin >> n;
+        e = 0;
+        memset(h, 0, sizeof h);
+
+        for (int i = 1, x; i <= n; i++) {
+            cin >> x;
+            if (x) {
+                add(i, x);
+                add(x, i);
+            }
         }
-        for (int i = 1; i <= W; i++) {
-            int u = read(), v = read(), w = read();
-            dis[u][v] = -w;
+
+        int u = 1, l = 0, r = 0;
+        memset(fa, 0, sizeof fa);
+        memset(d, 0, sizeof d);
+        q[r++] = u;
+
+        while (l < r) {
+            int x = q[l++];
+            for (int i = h[x]; i; i = nx[i]) {
+                int v = to[i];
+                if (v == fa[x])
+                    continue;
+                fa[v] = x;
+                d[v] = d[x] + 1;
+                q[r++] = v;
+            }
         }
-        if (check())
-            printf("YES\n");
-        else
-            printf("NO\n");
+
+        for (int i = 1; i <= n; i++)
+            if (d[i] > d[u])
+                u = i;
+
+        l = r = 0;
+        memset(fa, 0, sizeof fa);
+        memset(d, 0, sizeof d);
+        q[r++] = u;
+
+        while (l < r) {
+            int x = q[l++];
+            for (int i = h[x]; i; i = nx[i]) {
+                int v = to[i];
+                if (v == fa[x])
+                    continue;
+                fa[v] = x;
+                d[v] = d[x] + 1;
+                q[r++] = v;
+            }
+        }
+
+        int v = u;
+        for (int i = 1; i <= n; i++)
+            if (d[i] > d[v])
+                v = i;
+
+        int x = v;
+        for (int i = 0; i < d[v] / 2; i++)
+            x = fa[x];
+
+        if (d[v] & 1) {
+            int y = fa[x];
+            string a = dfs(x, 0), b = dfs(y, 0);
+            if (a > b)
+                swap(a, b);
+            s[k] = "(" + a + b + ")";
+        } else
+            s[k] = dfs(x, 0);
+    }
+
+    for (int i = 1; i <= m; i++) {
+        int x = i;
+        for (int j = 1; j < i; j++)
+            if (s[i] == s[j]) {
+                x = j;
+                break;
+            }
+        cout << x << '\n';
     }
     return;
 }

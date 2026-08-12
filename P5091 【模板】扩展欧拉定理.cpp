@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-12 08:28:35
-//  Problem: P2850 [USACO06DEC] Wormholes G
+//  Time: 2026-08-12 09:30:50
+//  Problem: P5091 【模板】扩展欧拉定理
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P2850
+//  URL: https://www.luogu.com.cn/problem/P5091
 //  Memory Limit: 128 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 83cc708c-258f-4ad2-a2b1-4575847e3046
+//  Batch ID: 9c42cee6-ddd9-4977-8d7e-826166450922
 //
 // Algorithm:
 // Complexity: O()
@@ -648,54 +648,44 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int INF = 0x3f3f3f3f;
-int T, n, m, W, dis[505][505];
-inline int read() {
-    register int x = 0;
-    char c = getchar();
-    while (c < '0' || c > '9')
-        c = getchar();
-    while (c >= '0' && c <= '9') {
-        x = (x << 3) + (x << 1) + c - '0';
-        c = getchar();
-    }
-    return x;
-}
-bool check() {
-    for (register int k = 1; k <= n; k++)
-        for (register int i = 1; i <= n; i++) {
-            for (register int j = 1; j <= n; j++) {
-                int res = dis[i][k] + dis[k][j];
-                if (dis[i][j] > res)
-                    dis[i][j] = res;
-            }
-            if (dis[i][i] < 0)
-                return 1;
-        }
-    return 0;
-}
+int a, m, phi = 1;
+int bm, flag;
 
+int qPow(int b, int e) {
+    int a = 1;
+    for (; e; e >>= 1, b = (long long)b * b % m)
+        if (e & 1)
+            a = (long long)a * b % m;
+    return a;
+}
 inline void solve(int Task_Id) {
-    T = read();
-    while (T--) {
-        n = read(), m = read(), W = read();
-        for (register int i = 1; i <= n; i++)
-            for (register int j = 1; j <= n; j++)
-                dis[i][j] = INF;
-        for (int i = 1; i <= m; i++) {
-            int u = read(), v = read(), w = read();
-            if (dis[u][v] > w)
-                dis[u][v] = dis[v][u] = w;
-        }
-        for (int i = 1; i <= W; i++) {
-            int u = read(), v = read(), w = read();
-            dis[u][v] = -w;
-        }
-        if (check())
-            printf("YES\n");
-        else
-            printf("NO\n");
+
+    scanf("%d%d", &a, &m);
+    a %= m;
+    int mm = m;
+    for (int i = 2; i * i <= mm; ++i) {
+        if (mm % i)
+            continue;
+        phi *= i - 1;
+        mm /= i;
+        while (mm % i == 0)
+            phi *= i,
+                mm /= i;
     }
+    if (mm > 1)
+        phi *= mm - 1;
+    char ch;
+    while ((ch = getchar()) < '0' || ch > '9')
+        ;
+    while (bm = bm * 10ll + (ch ^ '0'), (ch = getchar()) >= '0' && ch <= '9')
+        if (bm >= phi)
+            flag = 1, bm %= phi;
+    if (bm >= phi)
+        flag = 1, bm %= phi;
+    if (flag)
+        bm += phi;
+    printf("%d", qPow(a, bm));
+
     return;
 }
 } // namespace TANGYIXIAO

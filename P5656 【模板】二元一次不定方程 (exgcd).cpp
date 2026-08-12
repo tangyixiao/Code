@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-12 08:28:35
-//  Problem: P2850 [USACO06DEC] Wormholes G
+//  Time: 2026-08-12 09:33:41
+//  Problem: P5656 【模板】二元一次不定方程 (exgcd)
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P2850
-//  Memory Limit: 128 MB
-//  Time Limit: 1000 ms
+//  URL: https://www.luogu.com.cn/problem/P5656
+//  Memory Limit: 16 MB
+//  Time Limit: 500 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 83cc708c-258f-4ad2-a2b1-4575847e3046
+//  Batch ID: cf24ab71-1afb-47ae-a9ef-14dcf9721d09
 //
 // Algorithm:
 // Complexity: O()
@@ -553,6 +553,7 @@ using namespace __gnu_pbds;
 
 #pragma region TANGYIXIAO
 namespace TANGYIXIAO {
+#define int long long
 #pragma region IO
 namespace IO {
 namespace FAST_IO {
@@ -621,7 +622,7 @@ using namespace TANGYIXIAO;
 // clang-format on
 #pragma endregion TANGYIXIAO
 #pragma region MAIN
-signed main(int argc, char *argv[]) {
+signed main() {
 #ifdef TIME_COUNT
     Start_Time_Count();
 #endif
@@ -648,53 +649,67 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int INF = 0x3f3f3f3f;
-int T, n, m, W, dis[505][505];
-inline int read() {
-    register int x = 0;
-    char c = getchar();
-    while (c < '0' || c > '9')
-        c = getchar();
-    while (c >= '0' && c <= '9') {
-        x = (x << 3) + (x << 1) + c - '0';
-        c = getchar();
+inline int Exgcd(int a, int b, int &x, int &y) {
+    if (!b) {
+        x = 1;
+        y = 0;
+        return a;
     }
-    return x;
+    int d = Exgcd(b, a % b, x, y);
+    int t = x;
+    x = y;
+    y = t - (a / b) * y;
+    return d;
 }
-bool check() {
-    for (register int k = 1; k <= n; k++)
-        for (register int i = 1; i <= n; i++) {
-            for (register int j = 1; j <= n; j++) {
-                int res = dis[i][k] + dis[k][j];
-                if (dis[i][j] > res)
-                    dis[i][j] = res;
-            }
-            if (dis[i][i] < 0)
-                return 1;
-        }
-    return 0;
-}
-
+int T, a, b, c, t, d, minx, miny, maxx, maxy, x, y, p, q;
 inline void solve(int Task_Id) {
-    T = read();
+    cin >> T;
     while (T--) {
-        n = read(), m = read(), W = read();
-        for (register int i = 1; i <= n; i++)
-            for (register int j = 1; j <= n; j++)
-                dis[i][j] = INF;
-        for (int i = 1; i <= m; i++) {
-            int u = read(), v = read(), w = read();
-            if (dis[u][v] > w)
-                dis[u][v] = dis[v][u] = w;
+        x = y = 0;
+        cin >> a >> b >> c;
+        d = __gcd(a, b);
+        if (c % d) {
+            cout << -1 << '\n';
+            continue;
         }
-        for (int i = 1; i <= W; i++) {
-            int u = read(), v = read(), w = read();
-            dis[u][v] = -w;
+        a /= d, b /= d, c /= d;
+        Exgcd(a, b, x, y);
+        x *= c, y *= c;
+        if (x <= 0) {
+            t = abs(x) / b + 1;
+            x = (x % b) + b;
+            y -= t * a;
+            if (y <= 0) {
+                cout << x << ' ' << y % a + a << '\n';
+                continue;
+            }
         }
-        if (check())
-            printf("YES\n");
-        else
-            printf("NO\n");
+        if (y <= 0) {
+            t = abs(y) / a + 1;
+            y = (y % a) + a;
+            x -= t * b;
+            if (x <= 0) {
+                cout << x % b + b << ' ' << y << '\n';
+                continue;
+            }
+        }
+        p = x / b;
+        x %= b;
+        if (!x) {
+            x += b;
+            p--;
+        }
+        y += p * a;
+        minx = x, maxy = y;
+        q = y / a;
+        y %= a;
+        if (!y) {
+            y += a;
+            q--;
+        }
+        x += q * b;
+        maxx = x, miny = y;
+        cout << (maxx - minx) / b + 1 << ' ' << minx << ' ' << miny << ' ' << maxx << ' ' << maxy << '\n';
     }
     return;
 }

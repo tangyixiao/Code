@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-12 08:28:35
-//  Problem: P2850 [USACO06DEC] Wormholes G
+//  Time: 2026-08-12 09:27:32
+//  Problem: P3199 [HNOI2009] 最小圈
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P2850
-//  Memory Limit: 128 MB
-//  Time Limit: 1000 ms
+//  URL: https://www.luogu.com.cn/problem/P3199
+//  Memory Limit: 512 MB
+//  Time Limit: 5000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 83cc708c-258f-4ad2-a2b1-4575847e3046
+//  Batch ID: 73219926-759a-487b-9573-024a6cc0e616
 //
 // Algorithm:
 // Complexity: O()
@@ -648,54 +648,52 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int INF = 0x3f3f3f3f;
-int T, n, m, W, dis[505][505];
-inline int read() {
-    register int x = 0;
-    char c = getchar();
-    while (c < '0' || c > '9')
-        c = getchar();
-    while (c >= '0' && c <= '9') {
-        x = (x << 3) + (x << 1) + c - '0';
-        c = getchar();
-    }
-    return x;
-}
-bool check() {
-    for (register int k = 1; k <= n; k++)
-        for (register int i = 1; i <= n; i++) {
-            for (register int j = 1; j <= n; j++) {
-                int res = dis[i][k] + dis[k][j];
-                if (dis[i][j] > res)
-                    dis[i][j] = res;
-            }
-            if (dis[i][i] < 0)
-                return 1;
-        }
-    return 0;
-}
+const int N = 3e3 + 5, M = 1e4 + 5;
 
+int n, m, h[N], to[M], nx[M], e, s;
+double w[M], d[N][N];
+
+void add(int a, int b, double c) {
+    to[++e] = b;
+    w[e] = c;
+    nx[e] = h[a];
+    h[a] = e;
+}
 inline void solve(int Task_Id) {
-    T = read();
-    while (T--) {
-        n = read(), m = read(), W = read();
-        for (register int i = 1; i <= n; i++)
-            for (register int j = 1; j <= n; j++)
-                dis[i][j] = INF;
-        for (int i = 1; i <= m; i++) {
-            int u = read(), v = read(), w = read();
-            if (dis[u][v] > w)
-                dis[u][v] = dis[v][u] = w;
-        }
-        for (int i = 1; i <= W; i++) {
-            int u = read(), v = read(), w = read();
-            dis[u][v] = -w;
-        }
-        if (check())
-            printf("YES\n");
-        else
-            printf("NO\n");
+
+    cin >> n >> m;
+    for (int i = 1, a, b; i <= m; i++) {
+        double c;
+        cin >> a >> b >> c;
+        add(a, b, c);
     }
+
+    s = 1;
+    const double inf = 1e100;
+
+    for (int i = 1; i <= n; i++)
+        for (int j = 1; j <= n; j++)
+            d[i][j] = inf;
+    d[0][s] = 0;
+
+    for (int k = 1; k <= n; k++)
+        for (int u = 1; u <= n; u++)
+            if (d[k - 1][u] < inf)
+                for (int i = h[u]; i; i = nx[i])
+                    d[k][to[i]] = min(d[k][to[i]], d[k - 1][u] + w[i]);
+
+    double ans = inf;
+
+    for (int v = 1; v <= n; v++) {
+        double x = -inf;
+        for (int k = 0; k < n; k++)
+            if (d[n][v] < inf && d[k][v] < inf)
+                x = max(x, (d[n][v] - d[k][v]) / (n - k));
+        ans = min(ans, x);
+    }
+
+    cout << fixed << setprecision(8) << ans << '\n';
+
     return;
 }
 } // namespace TANGYIXIAO

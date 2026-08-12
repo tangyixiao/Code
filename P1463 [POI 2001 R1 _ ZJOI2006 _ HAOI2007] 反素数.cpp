@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-12 08:28:35
-//  Problem: P2850 [USACO06DEC] Wormholes G
+//  Time: 2026-08-12 09:56:27
+//  Problem: P1463 [POI 2001 R1 / ZJOI2006 / HAOI2007] 反素数
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P2850
-//  Memory Limit: 128 MB
+//  URL: https://www.luogu.com.cn/problem/P1463
+//  Memory Limit: 125 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 83cc708c-258f-4ad2-a2b1-4575847e3046
+//  Batch ID: 6faa08e7-c44c-400e-9e37-bc5a7d9d8f56
 //
 // Algorithm:
 // Complexity: O()
@@ -648,53 +648,16 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int INF = 0x3f3f3f3f;
-int T, n, m, W, dis[505][505];
-inline int read() {
-    register int x = 0;
-    char c = getchar();
-    while (c < '0' || c > '9')
-        c = getchar();
-    while (c >= '0' && c <= '9') {
-        x = (x << 3) + (x << 1) + c - '0';
-        c = getchar();
-    }
-    return x;
-}
-bool check() {
-    for (register int k = 1; k <= n; k++)
-        for (register int i = 1; i <= n; i++) {
-            for (register int j = 1; j <= n; j++) {
-                int res = dis[i][k] + dis[k][j];
-                if (dis[i][j] > res)
-                    dis[i][j] = res;
-            }
-            if (dis[i][i] < 0)
-                return 1;
-        }
-    return 0;
-}
-
+int p[500] = {1, 2, 4, 6, 12, 24, 36, 48, 60, 120, 180, 240, 360, 720, 840, 1260, 1680, 2520, 5040, 7560, 10080, 15120, 20160, 25200, 27720, 45360, 50400, 55440, 83160, 110880, 166320, 221760, 277200, 332640, 498960, 554400, 665280, 720720, 1081080, 1441440, 2162160, 2882880, 3603600, 4324320, 6486480, 7207200, 8648640, 10810800, 14414400, 17297280, 21621600, 32432400, 36756720, 43243200, 61261200, 73513440, 110270160, 122522400, 147026880, 183783600, 245044800, 294053760, 367567200, 551350800, 698377680, 735134400, 1102701600, 1396755360, 2001000000};
 inline void solve(int Task_Id) {
-    T = read();
-    while (T--) {
-        n = read(), m = read(), W = read();
-        for (register int i = 1; i <= n; i++)
-            for (register int j = 1; j <= n; j++)
-                dis[i][j] = INF;
-        for (int i = 1; i <= m; i++) {
-            int u = read(), v = read(), w = read();
-            if (dis[u][v] > w)
-                dis[u][v] = dis[v][u] = w;
+    int n;
+    cin >> n;
+    int ans;
+    for (int i = 0;; i++) {
+        if (p[i] > n) {
+            cout << p[i - 1] << endl;
+            return;
         }
-        for (int i = 1; i <= W; i++) {
-            int u = read(), v = read(), w = read();
-            dis[u][v] = -w;
-        }
-        if (check())
-            printf("YES\n");
-        else
-            printf("NO\n");
     }
     return;
 }

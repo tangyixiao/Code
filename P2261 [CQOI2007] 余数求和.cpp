@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-12 08:28:35
-//  Problem: P2850 [USACO06DEC] Wormholes G
+//  Time: 2026-08-12 09:46:37
+//  Problem: P2261 [CQOI2007] 余数求和
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P2850
-//  Memory Limit: 128 MB
+//  URL: https://www.luogu.com.cn/problem/P2261
+//  Memory Limit: 512 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 83cc708c-258f-4ad2-a2b1-4575847e3046
+//  Batch ID: 0abb612e-1cee-44cc-a8dc-4178b52a1a92
 //
 // Algorithm:
 // Complexity: O()
@@ -553,6 +553,7 @@ using namespace __gnu_pbds;
 
 #pragma region TANGYIXIAO
 namespace TANGYIXIAO {
+#define int long long
 #pragma region IO
 namespace IO {
 namespace FAST_IO {
@@ -621,7 +622,7 @@ using namespace TANGYIXIAO;
 // clang-format on
 #pragma endregion TANGYIXIAO
 #pragma region MAIN
-signed main(int argc, char *argv[]) {
+signed main() {
 #ifdef TIME_COUNT
     Start_Time_Count();
 #endif
@@ -648,54 +649,25 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int INF = 0x3f3f3f3f;
-int T, n, m, W, dis[505][505];
-inline int read() {
-    register int x = 0;
-    char c = getchar();
-    while (c < '0' || c > '9')
-        c = getchar();
-    while (c >= '0' && c <= '9') {
-        x = (x << 3) + (x << 1) + c - '0';
-        c = getchar();
-    }
-    return x;
+int n, k;
+int fun(int l, int r) {
+    return ((l + r) * (r - l + 1)) >> 1;
 }
-bool check() {
-    for (register int k = 1; k <= n; k++)
-        for (register int i = 1; i <= n; i++) {
-            for (register int j = 1; j <= n; j++) {
-                int res = dis[i][k] + dis[k][j];
-                if (dis[i][j] > res)
-                    dis[i][j] = res;
-            }
-            if (dis[i][i] < 0)
-                return 1;
-        }
-    return 0;
-}
-
-inline void solve(int Task_Id) {
-    T = read();
-    while (T--) {
-        n = read(), m = read(), W = read();
-        for (register int i = 1; i <= n; i++)
-            for (register int j = 1; j <= n; j++)
-                dis[i][j] = INF;
-        for (int i = 1; i <= m; i++) {
-            int u = read(), v = read(), w = read();
-            if (dis[u][v] > w)
-                dis[u][v] = dis[v][u] = w;
-        }
-        for (int i = 1; i <= W; i++) {
-            int u = read(), v = read(), w = read();
-            dis[u][v] = -w;
-        }
-        if (check())
-            printf("YES\n");
+int Solve() {
+    int l = 1, r = 0, res = 0;
+    while (l <= n) {
+        if (k / l)
+            r = min(n, k / (k / l));
         else
-            printf("NO\n");
+            r = n;
+        res += fun(l, r) * (k / l);
+        l = r + 1;
     }
+    return res;
+}
+inline void solve(int Task_Id) {
+    scanf("%lld%lld", &n, &k);
+    printf("%lld", n * k - Solve());
     return;
 }
 } // namespace TANGYIXIAO

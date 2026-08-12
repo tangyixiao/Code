@@ -1,3 +1,20 @@
+//  Author: Tangyixiao
+//  Time: 2026-08-12 10:09:51
+//  Problem: P6329 【模板】点分树 / 震波
+//  Contest: Luogu - 2026 省选赛前模板赛
+//  URL: https://www.luogu.com.cn/problem/P6329
+//  Memory Limit: 1024 MB
+//  Time Limit: 2000 ms
+//  Interactive: false
+//  Test Type: single
+//  Batch ID: e4a39878-d29b-4597-b6dd-61ef86eb2623
+//
+// Algorithm:
+// Complexity: O()
+// Note:
+//
+//
+// Powered by CP Editor (https://cpeditor.org)
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -14,6 +31,8 @@ Copyright (C) 2026 TangYixiao
 // #define BITS_NOT_ALLOWED
 // #define PD_DS_USED
 // #define TESTLIB
+
+// clang-format off
 #pragma region PREPROCESSOR
 #pragma region PRAGMAS
 #if PRAGMA_TYPE == 2
@@ -536,21 +555,27 @@ using namespace __gnu_pbds;
 namespace TANGYIXIAO {
 #pragma region IO
 namespace IO {
-inline void Init_IO() { cin.tie(0)->sync_with_stdio(false); }
+namespace FAST_IO {
+#ifdef __unix__
+#define ugetchar getchar_unlocked
+#else
+#define ugetchar _getchar_nolock
+#endif
+inline void IOSS_Init() { std::ios::sync_with_stdio(false); std::cin.tie(0); std::cout.tie(0); return; }
+}
+using namespace FAST_IO;
 #pragma region FILE_IO
 namespace FILE_IO {
-const string Insuffix = ".in", Outsuffix = ".out", Anssuffix = ".ans";
-inline void Judge_File(string File_Name) { freopen((File_Name + Insuffix).c_str(), "r", stdin), freopen((File_Name + Outsuffix).c_str(), "w", stdout); }
-inline void Local_File(string File_Name, int File_Idx) { freopen((File_Name + to_string(File_Idx) + Insuffix).c_str(), "r", stdin), freopen((File_Name + to_string(File_Idx) + Outsuffix).c_str(), "w", stdout); }
+const std::string Insuffix = ".in", Outsuffix = ".out", Anssuffix = ".ans";
+inline void Judge_File(std::string File_Name) { freopen((File_Name + Insuffix).c_str(), "r", stdin), freopen((File_Name + Outsuffix).c_str(), "w", stdout); return; }
+inline void Local_File(std::string File_Name, int File_Idx) { freopen((File_Name + std::to_string(File_Idx) + Insuffix).c_str(), "r", stdin), freopen((File_Name + std::to_string(File_Idx) + Outsuffix).c_str(), "w", stdout); return; }
 } // namespace FILE_IO
 using namespace FILE_IO;
 #pragma endregion FILE_IO
 #pragma region INT128_IO
 namespace INT128_IO {
-// clang-format off
-istream&operator>>(istream&is,__int128&x){string s;is>>s;bool neg=false;x=0;for(char c:s){if(c=='-')neg=true;else x=x*10+(c-'0');}if(neg)x=-x;return is;}
-ostream&operator<<(ostream&os,__int128 x){if(x==0)os<<0;else{string s,t;if(x<0)x=-x,t="-";while(x)s.push_back('0'+x%10),x/=10;reverse(s.begin(),s.end());os<<t<<s;}return os;}
-// clang-format on
+std::istream &operator>>(std::istream &is, __int128 &x) { std::string s; is >> s; bool neg = false; x = 0; for (char c : s) { if (c == '-') { neg = true; } else { x = x * 10 + (c - '0'); } } if (neg) { x = -x; } return is; }
+std::ostream &operator<<(std::ostream &os, __int128 x) { if (x == 0) { os << 0; } else { std::string s, t;if (x < 0) { x = -x, t = "-"; } for (; x;) { s.push_back('0' + x % 10), x /= 10; } std::reverse(s.begin(), s.end()); os << t << s; } return os; }
 } // namespace INT128_IO
 using namespace INT128_IO;
 #pragma endregion INT128_IO
@@ -560,31 +585,31 @@ using namespace IO;
 #pragma region TIME
 namespace TIME {
 clock_t Start_Time, End_Time;
-inline void Start_Time_Count() { Start_Time = clock(); }
-inline void End_Time_Count() { End_Time = clock(); }
+inline void Start_Time_Count() { Start_Time = clock(); return; }
+inline void End_Time_Count() { End_Time = clock(); return; }
 inline double Time_Count() { return (double)(End_Time - Start_Time) / CLOCKS_PER_SEC; }
-inline void Print_Time_Count(string Programe_Name) { cerr << fixed << setprecision(4) << "\n" + Programe_Name + " Time: " << Time_Count() << "s\n"; }
+inline void Print_Time_Count(std::string Programe_Name) { std::cerr << std::fixed << std::setprecision(4) << "\n" + Programe_Name + " Time: " << Time_Count() << "s\n"; return; }
 } // namespace TIME
 using namespace TIME;
 #pragma endregion TIME
 #pragma region DEBUGS
 namespace DEBUGS {
 #define All(x) (x).begin(), (x).end()
-#define fprint(...) cout << format(__VA_ARGS__)
-#define fprintln(...) cout << format(__VA_ARGS__) << '\n'
-#define ferr(...) cerr << format(__VA_ARGS__)
-#define ferrln(...) cerr << format(__VA_ARGS__) << '\n'
-#define funct(name, ret, ...) function<ret(__VA_ARGS__)> name = [&](__VA_ARGS__)
-inline void Debug_Print(string Debug_Message) { cerr << "\n" + Debug_Message + "\n"; }
+#define fprint(...) std::cout << std::format(__VA_ARGS__)
+#define fprintln(...) std::cout << std::format(__VA_ARGS__) << "\n"
+#define ferr(...) std::cerr << std::format(__VA_ARGS__)
+#define ferrln(...) std::cerr << std::format(__VA_ARGS__) << "\n"
+#define funct(name, ret, ...) std::function<ret(__VA_ARGS__)> name = [&](__VA_ARGS__)
+inline void Debug_Print(std::string Debug_Message) { std::cerr << "\n" << Debug_Message << "\n"; return;}
 } // namespace DEBUGS
 using namespace DEBUGS;
 #pragma endregion DEBUGS
 #pragma region BITS
 namespace BITS {
 template <class T>
-inline T lowbit(T x) { return x & (-x); }
+inline T lowbit(T x) { return ((x) & (-x)); }
 template <class T>
-inline T highbit(T x) { return (T)(log2(x) + 1); }
+inline T highbit(T x) { return (T)(std::log2(x) + 1); }
 template <class T>
 inline T Pop_Count(T x) { return __builtin_popcount(x); }
 } // namespace BITS
@@ -593,13 +618,14 @@ using namespace BITS;
 inline void solve(int Task_Id);
 } // namespace TANGYIXIAO
 using namespace TANGYIXIAO;
+// clang-format on
 #pragma endregion TANGYIXIAO
 #pragma region MAIN
 signed main(int argc, char *argv[]) {
 #ifdef TIME_COUNT
     Start_Time_Count();
 #endif
-    Init_IO();
+    IOSS_Init();
 #if JUDGE == 1
     Judge_File(FILE_NAME);
 #elif JUDGE == 2
@@ -622,184 +648,197 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-inline void solve(int Task_Id) {
-    int n, m;
-    cin >> n >> m;
-    vector<int> val(n + 1);
-    for (int i = 1; i <= n; ++i)
-        cin >> val[i];
-    vector<vector<int>> e(n + 1);
-    for (int i = 1; i < n; ++i) {
-        int u, v;
-        cin >> u >> v;
-        e[u].push_back(v);
-        e[v].push_back(u);
+const int N = 1e5 + 5;
+
+int n, m, h[N], to[N << 1], nx[N << 1], ec, va[N];
+int sz[N], fa[N], ord[N], stk[N], tf[N], td[N];
+int an[18][N], ds[18][N], id[18][N], top[N], tt[N];
+int bo[N * 40], bc[N * 40], bit[N * 40], bn, bs;
+bool ban[N];
+
+void ae(int u, int v) {
+    to[++ec] = v;
+    nx[ec] = h[u];
+    h[u] = ec;
+}
+
+int al(int s) {
+    int x = ++bn;
+    bo[x] = bs;
+    bc[x] = s + 2;
+    bs += bc[x];
+    return x;
+}
+
+void ad(int x, int d, int v) {
+    for (int i = d + 1; i < bc[x]; i += i & -i)
+        bit[bo[x] + i] += v;
+}
+
+int su(int x, int d) {
+    int z = 0;
+    d = min(d + 1, bc[x] - 1);
+    for (int i = d; i; i -= i & -i)
+        z += bit[bo[x] + i];
+    return z;
+}
+
+int gc(int st, int &cnt) {
+    int l = 0, r = 0;
+    ord[r++] = st;
+    fa[st] = 0;
+
+    while (l < r) {
+        int u = ord[l++];
+        for (int i = h[u]; i; i = nx[i]) {
+            int v = to[i];
+            if (ban[v] || v == fa[u])
+                continue;
+            fa[v] = u;
+            ord[r++] = v;
+        }
     }
-    vector<int> dep(n + 1), len(n + 1);
-    vector<vector<int>> up(n + 1, vector<int>(18, 0));
-    function<void(int, int)> dfs_lca = [&](int u, int p) {
-        up[u][0] = p;
-        for (int i = 1; i < 18; ++i)
-            up[u][i] = up[up[u][i - 1]][i - 1];
-        for (int v : e[u])
-            if (v != p) {
-                dep[v] = dep[u] + 1;
-                len[v] = len[u] + 1;
-                dfs_lca(v, u);
-            }
-    };
-    dfs_lca(1, 0);
-    auto lca = [&](int u, int v) {
-        if (dep[u] < dep[v])
-            swap(u, v);
-        int d = dep[u] - dep[v];
-        for (int i = 0; i < 18; ++i)
-            if (d >> i & 1)
-                u = up[u][i];
-        if (u == v)
+
+    cnt = r;
+
+    for (int i = r - 1; i >= 0; i--) {
+        int u = ord[i];
+        sz[u] = 1;
+        for (int j = h[u]; j; j = nx[j]) {
+            int v = to[j];
+            if (ban[v] || fa[v] != u)
+                continue;
+            sz[u] += sz[v];
+        }
+    }
+
+    for (int i = 0; i < r; i++) {
+        int u = ord[i], mx = cnt - sz[u];
+        for (int j = h[u]; j; j = nx[j]) {
+            int v = to[j];
+            if (ban[v] || fa[v] != u)
+                continue;
+            mx = max(mx, sz[v]);
+        }
+        if (mx * 2 <= cnt)
             return u;
-        for (int i = 17; i >= 0; --i)
-            if (up[u][i] != up[v][i])
-                u = up[u][i], v = up[v][i];
-        return up[u][0];
-    };
-    auto dist = [&](int u, int v) { return len[u] + len[v] - 2 * len[lca(u, v)]; };
+    }
 
-    vector<int> sz(n + 1), mx(n + 1), vis(n + 1), fa_p(n + 1);
-    vector<vector<int>> nodes(n + 1);
-    vector<int> anc_dist; // temp
-    function<void(int, int, int, vector<int> &)> dfs_collect = [&](int u, int p, int d, vector<int> &vec) {
-        vec.push_back(u);
-        anc_dist[u] = d;
-        for (int v : e[u])
-            if (v != p && !vis[v])
-                dfs_collect(v, u, d + 1, vec);
-    };
-    function<void(int, int)> build = [&](int u, int f) {
-        function<int(int, int, int)> get_size = [&](int u, int p, int) {
-            sz[u] = 1;
-            mx[u] = 0;
-            for (int v : e[u])
-                if (v != p && !vis[v]) {
-                    get_size(v, u, 0);
-                    sz[u] += sz[v];
-                    mx[u] = max(mx[u], sz[v]);
-                }
-            return 0;
-        };
-        get_size(u, 0, 0);
-        int tot = sz[u];
-        function<int(int, int)> get_rt = [&](int u, int p) {
-            mx[u] = max(mx[u], tot - sz[u]);
-            int rt = u;
-            for (int v : e[u])
-                if (v != p && !vis[v]) {
-                    int t = get_rt(v, u);
-                    if (mx[t] < mx[rt])
-                        rt = t;
-                }
-            return rt;
-        };
-        int r = get_rt(u, 0);
-        fa_p[r] = f;
-        vis[r] = 1;
-        nodes[r].clear();
-        nodes[r].push_back(r);
-        anc_dist.resize(n + 1);
-        anc_dist[r] = 0;
-        for (int v : e[r])
-            if (!vis[v]) {
-                vector<int> sub;
-                dfs_collect(v, r, 1, sub);
-                for (int x : sub)
-                    nodes[r].push_back(x);
+    return st;
+}
+
+void bd(int st, int lv) {
+    int cnt, c = gc(st, cnt);
+    ban[c] = 1;
+    top[c] = lv;
+    an[lv][c] = c;
+    ds[lv][c] = 0;
+    id[lv][c] = 0;
+    tt[c] = al(cnt);
+
+    for (int i = h[c]; i; i = nx[i]) {
+        int v = to[i];
+        if (ban[v])
+            continue;
+
+        int l = 0, r = 0, cnt2 = 0;
+        stk[r++] = v;
+        tf[v] = c;
+        td[v] = 1;
+
+        while (l < r) {
+            int u = stk[l++];
+            ord[cnt2++] = u;
+
+            for (int j = h[u]; j; j = nx[j]) {
+                int w = to[j];
+                if (ban[w] || w == tf[u])
+                    continue;
+                tf[w] = u;
+                td[w] = td[u] + 1;
+                stk[r++] = w;
             }
-        for (int v : e[r])
-            if (!vis[v])
-                build(v, r);
-    };
-    anc_dist.resize(n + 1);
-    build(1, 0);
+        }
 
-    vector<vector<pair<int, int>>> anc(n + 1);
-    for (int u = 1; u <= n; ++u) {
-        for (int x = u; x; x = fa_p[x]) {
-            anc[u].emplace_back(x, dist(u, x));
+        int b = al(cnt2);
+
+        for (int j = 0; j < cnt2; j++) {
+            int u = ord[j];
+            an[lv][u] = c;
+            ds[lv][u] = td[u];
+            id[lv][u] = b;
+        }
+
+        bd(v, lv + 1);
+    }
+}
+
+long long ask(int x, int k) {
+    long long z = 0;
+
+    for (int i = 0; i <= top[x]; i++) {
+        if (ds[i][x] > k)
+            continue;
+
+        int c = an[i][x];
+        int d = k - ds[i][x];
+
+        z += su(tt[c], d);
+
+        if (id[i][x])
+            z -= su(id[i][x], d);
+    }
+
+    return z;
+}
+
+void upd(int x, int v) {
+    for (int i = 0; i <= top[x]; i++) {
+        ad(tt[an[i][x]], ds[i][x], v);
+
+        if (id[i][x])
+            ad(id[i][x], ds[i][x], v);
+    }
+}
+
+inline void solve(int Task_Id) {
+    cin >> n >> m;
+
+    for (int i = 1; i <= n; i++)
+        cin >> va[i];
+
+    for (int i = 1, u, v; i < n; i++) {
+        cin >> u >> v;
+        ae(u, v);
+        ae(v, u);
+    }
+
+    bd(1, 0);
+
+    for (int x = 1; x <= n; x++) {
+        for (int i = 0; i <= top[x]; i++) {
+            ad(tt[an[i][x]], ds[i][x], va[x]);
+
+            if (id[i][x])
+                ad(id[i][x], ds[i][x], va[x]);
         }
     }
 
-    vector<int> bit1_sz(n + 1), bit2_sz(n + 1);
-    for (int u = 1; u <= n; ++u) {
-        int mx1 = 0, mx2 = 0;
-        for (auto [c, d] : anc[u]) {
-            mx1 = max(mx1, d);
-            if (fa_p[c])
-                mx2 = max(mx2, dist(u, fa_p[c]));
-        }
-        bit1_sz[u] = mx1 + 2;
-        if (fa_p[u])
-            bit2_sz[u] = mx2 + 2;
-    }
-    vector<vector<int>> bit1(n + 1), bit2(n + 1);
-    for (int i = 1; i <= n; ++i) {
-        bit1[i].assign(bit1_sz[i], 0);
-        if (fa_p[i])
-            bit2[i].assign(bit2_sz[i], 0);
-    }
-    auto bit_add = [&](vector<int> &a, int idx, int dx) {
-        int sz = a.size();
-        for (int i = idx; i < sz; i += i & -i)
-            a[i] += dx;
-    };
-    auto bit_sum = [&](vector<int> &a, int idx) {
-        int s = 0;
-        for (int i = min(idx, (int)a.size() - 1); i > 0; i -= i & -i)
-            s += a[i];
-        return s;
-    };
+    long long last = 0;
 
-    for (int u = 1; u <= n; ++u) {
-        for (auto [c, d] : anc[u]) {
-            bit_add(bit1[c], d + 1, val[u]);
-            if (fa_p[c])
-                bit_add(bit2[c], dist(u, fa_p[c]) + 1, val[u]);
-        }
-    }
-
-    int last = 0;
     while (m--) {
-        int op;
-        cin >> op;
-        if (op == 0) {
-            int x, k;
-            cin >> x >> k;
-            x ^= last;
-            k ^= last;
-            int ans = 0;
-            for (int u = x; u; u = fa_p[u]) {
-                int d = dist(x, u);
-                if (d <= k)
-                    ans += bit_sum(bit1[u], k - d + 1);
-                if (fa_p[u]) {
-                    int d2 = dist(x, fa_p[u]);
-                    if (d2 <= k)
-                        ans -= bit_sum(bit2[u], k - d2 + 1);
-                }
-            }
-            cout << ans << '\n';
-            last = ans;
+        int op, x, y;
+        cin >> op >> x >> y;
+
+        x ^= last;
+        y ^= last;
+
+        if (!op) {
+            last = ask(x, y);
+            cout << last << '\n';
         } else {
-            int x, y;
-            cin >> x >> y;
-            x ^= last;
-            y ^= last;
-            int delta = y - val[x];
-            val[x] = y;
-            for (auto [c, d] : anc[x]) {
-                bit_add(bit1[c], d + 1, delta);
-                if (fa_p[c])
-                    bit_add(bit2[c], dist(x, fa_p[c]) + 1, delta);
-            }
+            upd(x, y - va[x]);
+            va[x] = y;
         }
     }
     return;

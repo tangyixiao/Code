@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-12 08:28:35
-//  Problem: P2850 [USACO06DEC] Wormholes G
+//  Time: 2026-08-12 09:38:01
+//  Problem: P4777 【模板】扩展中国剩余定理（EXCRT）
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P2850
-//  Memory Limit: 128 MB
+//  URL: https://www.luogu.com.cn/problem/P4777
+//  Memory Limit: 500 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 83cc708c-258f-4ad2-a2b1-4575847e3046
+//  Batch ID: 5accbdaa-edf1-4c8c-bc37-73d3e664f733
 //
 // Algorithm:
 // Complexity: O()
@@ -648,54 +648,44 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int INF = 0x3f3f3f3f;
-int T, n, m, W, dis[505][505];
-inline int read() {
-    register int x = 0;
-    char c = getchar();
-    while (c < '0' || c > '9')
-        c = getchar();
-    while (c >= '0' && c <= '9') {
-        x = (x << 3) + (x << 1) + c - '0';
-        c = getchar();
+using ll = long long;
+using i128 = __int128_t;
+ll exgcd(ll a, ll b, ll &x, ll &y) {
+    if (!b) {
+        x = 1, y = 0;
+        return a;
     }
-    return x;
+    ll d = exgcd(b, a % b, y, x);
+    y -= a / b * x;
+    return d;
 }
-bool check() {
-    for (register int k = 1; k <= n; k++)
-        for (register int i = 1; i <= n; i++) {
-            for (register int j = 1; j <= n; j++) {
-                int res = dis[i][k] + dis[k][j];
-                if (dis[i][j] > res)
-                    dis[i][j] = res;
-            }
-            if (dis[i][i] < 0)
-                return 1;
-        }
-    return 0;
+ll quick_mul(ll a, ll b, ll mod) {
+    i128 res = (i128)a * b % mod;
+    return (ll)res;
 }
-
 inline void solve(int Task_Id) {
-    T = read();
-    while (T--) {
-        n = read(), m = read(), W = read();
-        for (register int i = 1; i <= n; i++)
-            for (register int j = 1; j <= n; j++)
-                dis[i][j] = INF;
-        for (int i = 1; i <= m; i++) {
-            int u = read(), v = read(), w = read();
-            if (dis[u][v] > w)
-                dis[u][v] = dis[v][u] = w;
+    int n;
+    cin >> n;
+    ll a1, b1;
+    cin >> a1 >> b1;
+    for (int i = 1; i < n; i++) {
+        ll a2, b2;
+        cin >> a2 >> b2;
+        ll x, y;
+        ll d = exgcd(a1, a2, x, y);
+        ll c = b2 - b1;
+        if (c % d != 0) {
+            return; // no way!!!
         }
-        for (int i = 1; i <= W; i++) {
-            int u = read(), v = read(), w = read();
-            dis[u][v] = -w;
-        }
-        if (check())
-            printf("YES\n");
-        else
-            printf("NO\n");
+        ll t = a2 / d;
+        x = quick_mul(x, c / d, t);
+        x = (x % t + t) % t;
+        ll lcm = a1 / d * a2;
+        b1 = (b1 + quick_mul(x, a1, lcm)) % lcm;
+        b1 = (b1 + lcm) % lcm;
+        a1 = lcm;
     }
+    cout << b1 << "\n";
     return;
 }
 } // namespace TANGYIXIAO

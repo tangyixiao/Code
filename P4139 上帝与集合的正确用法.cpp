@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-12 08:28:35
-//  Problem: P2850 [USACO06DEC] Wormholes G
+//  Time: 2026-08-12 09:53:42
+//  Problem: P4139 上帝与集合的正确用法
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P2850
-//  Memory Limit: 128 MB
+//  URL: https://www.luogu.com.cn/problem/P4139
+//  Memory Limit: 125 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 83cc708c-258f-4ad2-a2b1-4575847e3046
+//  Batch ID: 483feec8-0bdb-4927-8bf4-75560f076220
 //
 // Algorithm:
 // Complexity: O()
@@ -648,53 +648,56 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int INF = 0x3f3f3f3f;
-int T, n, m, W, dis[505][505];
-inline int read() {
-    register int x = 0;
-    char c = getchar();
-    while (c < '0' || c > '9')
-        c = getchar();
-    while (c >= '0' && c <= '9') {
-        x = (x << 3) + (x << 1) + c - '0';
-        c = getchar();
-    }
-    return x;
-}
-bool check() {
-    for (register int k = 1; k <= n; k++)
-        for (register int i = 1; i <= n; i++) {
-            for (register int j = 1; j <= n; j++) {
-                int res = dis[i][k] + dis[k][j];
-                if (dis[i][j] > res)
-                    dis[i][j] = res;
+const int MAXP = 1e7;
+
+int T, p, phi[MAXP + 10];
+
+void InitPhi() {
+    phi[1] = 1;
+    for (int i = 2; i <= MAXP; i++)
+        if (!phi[i]) {
+            for (int j = i; j <= MAXP; j += i) {
+                if (!phi[j])
+                    phi[j] = j;
+                phi[j] = phi[j] / i * (i - 1);
             }
-            if (dis[i][i] < 0)
-                return 1;
         }
-    return 0;
+}
+
+inline int fastmul(int a, int x, int mod) {
+    int ret = 0;
+    while (x) {
+        if (x & 1)
+            ret = ((ret % mod) + (a % mod)) % mod;
+        x >>= 1;
+        a = ((a % mod) + (a % mod)) % mod;
+    }
+    return ret;
+}
+
+inline int fastpow(int a, int x, int mod) {
+    int ret = 1;
+    while (x) {
+        if (x & 1)
+            ret = fastmul(ret, a, mod) % mod;
+        x >>= 1;
+        a = fastmul(a, a, mod) % mod;
+    }
+    return ret;
+}
+
+int Solve(int mod) {
+    if (mod == 1)
+        return 0;
+    return fastpow(2, Solve(phi[mod]) + phi[mod], mod);
 }
 
 inline void solve(int Task_Id) {
-    T = read();
+    InitPhi();
+    scanf("%d", &T);
     while (T--) {
-        n = read(), m = read(), W = read();
-        for (register int i = 1; i <= n; i++)
-            for (register int j = 1; j <= n; j++)
-                dis[i][j] = INF;
-        for (int i = 1; i <= m; i++) {
-            int u = read(), v = read(), w = read();
-            if (dis[u][v] > w)
-                dis[u][v] = dis[v][u] = w;
-        }
-        for (int i = 1; i <= W; i++) {
-            int u = read(), v = read(), w = read();
-            dis[u][v] = -w;
-        }
-        if (check())
-            printf("YES\n");
-        else
-            printf("NO\n");
+        scanf("%d", &p);
+        printf("%d\n", Solve(p));
     }
     return;
 }

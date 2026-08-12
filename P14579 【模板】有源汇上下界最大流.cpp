@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-12 08:28:35
-//  Problem: P2850 [USACO06DEC] Wormholes G
-//  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P2850
-//  Memory Limit: 128 MB
+//  Time: 2026-08-12 10:12:52
+//  Problem: P14579 【模板】有源汇上下界最大流
+//  Contest: Luogu - 2026 省选赛前模板赛
+//  URL: https://www.luogu.com.cn/problem/P14579
+//  Memory Limit: 512 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 83cc708c-258f-4ad2-a2b1-4575847e3046
+//  Batch ID: d211985a-5d5f-481d-83b6-8402485552d1
 //
 // Algorithm:
 // Complexity: O()
@@ -648,54 +648,106 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int INF = 0x3f3f3f3f;
-int T, n, m, W, dis[505][505];
-inline int read() {
-    register int x = 0;
-    char c = getchar();
-    while (c < '0' || c > '9')
-        c = getchar();
-    while (c >= '0' && c <= '9') {
-        x = (x << 3) + (x << 1) + c - '0';
-        c = getchar();
-    }
-    return x;
+const int N = 1e3 + 5, M = 5e4 + 5;
+
+int n, m, s, t, h[N], to[M], nx[M], c[M], lv[N], cur[N], q[N], e = 1;
+long long d[N], need, ans;
+
+void add(int u, int v, int w) {
+    to[++e] = v;
+    c[e] = w;
+    nx[e] = h[u];
+    h[u] = e;
+    to[++e] = u;
+    c[e] = 0;
+    nx[e] = h[v];
+    h[v] = e;
 }
-bool check() {
-    for (register int k = 1; k <= n; k++)
-        for (register int i = 1; i <= n; i++) {
-            for (register int j = 1; j <= n; j++) {
-                int res = dis[i][k] + dis[k][j];
-                if (dis[i][j] > res)
-                    dis[i][j] = res;
+
+bool bfs(int S, int T) {
+    memset(lv, 0, sizeof lv);
+    int l = 0, r = 0;
+    q[r++] = S;
+    lv[S] = 1;
+    while (l < r) {
+        int u = q[l++];
+        for (int i = h[u]; i; i = nx[i])
+            if (c[i] && !lv[to[i]])
+                lv[to[i]] = lv[u] + 1, q[r++] = to[i];
+    }
+    return lv[T];
+}
+
+int dfs(int u, int T, int f) {
+    if (u == T)
+        return f;
+    for (int &i = cur[u]; i; i = nx[i])
+        if (c[i] && lv[to[i]] == lv[u] + 1) {
+            int z = dfs(to[i], T, min(f, c[i]));
+            if (z) {
+                c[i] -= z;
+                c[i ^ 1] += z;
+                return z;
             }
-            if (dis[i][i] < 0)
-                return 1;
         }
     return 0;
 }
 
-inline void solve(int Task_Id) {
-    T = read();
-    while (T--) {
-        n = read(), m = read(), W = read();
-        for (register int i = 1; i <= n; i++)
-            for (register int j = 1; j <= n; j++)
-                dis[i][j] = INF;
-        for (int i = 1; i <= m; i++) {
-            int u = read(), v = read(), w = read();
-            if (dis[u][v] > w)
-                dis[u][v] = dis[v][u] = w;
-        }
-        for (int i = 1; i <= W; i++) {
-            int u = read(), v = read(), w = read();
-            dis[u][v] = -w;
-        }
-        if (check())
-            printf("YES\n");
-        else
-            printf("NO\n");
+long long din(int S, int T) {
+    long long z = 0;
+    while (bfs(S, T)) {
+        memcpy(cur, h, sizeof h);
+        int x;
+        while ((x = dfs(S, T, 1e9)))
+            z += x;
     }
+    return z;
+}
+
+inline void solve(int Task_Id) {
+    cin >> n >> m >> s >> t;
+
+    int S = n + 1, T = n + 2;
+
+    for (int i = 1, u, v, l, r; i <= m; i++) {
+        cin >> u >> v >> l >> r;
+        if (u == v)
+            continue;
+        add(u, v, r - l);
+        d[u] -= l;
+        d[v] += l;
+    }
+
+    add(t, s, 1e9);
+    int id = e - 1;
+
+    for (int i = 1; i <= n; i++) {
+        if (d[i] > 0) {
+            add(S, i, d[i]);
+            need += d[i];
+        } else if (d[i] < 0)
+            add(i, T, -d[i]);
+    }
+
+    if (din(S, T) != need) {
+        cout << "N\n";
+        return;
+    }
+
+    ans = 1000000000LL - c[id];
+
+    c[id] = c[id ^ 1] = 0;
+
+    for (int i = h[S]; i; i = nx[i])
+        c[i] = c[i ^ 1] = 0;
+
+    for (int i = h[T]; i; i = nx[i])
+        c[i] = c[i ^ 1] = 0;
+
+    ans += din(s, t);
+
+    cout << ans << '\n';
+
     return;
 }
 } // namespace TANGYIXIAO
