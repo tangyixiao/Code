@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-14 07:09:50
-//  Problem: P5677 [GZOI2017] 配对统计
+//  Time: 2026-08-14 07:12:59
+//  Problem: P2941 [USACO09FEB] Surround the Islands S
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P5677
-//  Memory Limit: 256 MB
+//  URL: https://www.luogu.com.cn/problem/P2941
+//  Memory Limit: 125 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 3c98d0a7-bdc4-452f-b1e3-76678f3b2651
+//  Batch ID: 4b269731-afd2-467c-93ae-74697801a068
 //
 // Algorithm:
 // Complexity: O()
@@ -648,117 +648,76 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 300005;
 
-struct Fast {
-    static const int S = 1 << 20;
-    int p = 0, n = 0;
-    char b[S];
+const int N = 505, INF = 0x3f3f3f3f;
 
-    char gc() {
-        if (p == n) {
-            n = fread(b, 1, S, stdin);
-            p = 0;
-            if (!n)
-                return 0;
-        }
-        return b[p++];
-    }
+int n, fa[N], id[N], c;
+int d[N][N], dis[N];
+bool vis[N];
 
-    int read() {
-        int x = 0;
-        char c = gc();
-        while (c < '0' || c > '9')
-            c = gc();
-        while (c >= '0' && c <= '9') {
-            x = x * 10 + c - '0';
-            c = gc();
-        }
-        return x;
-    }
-} io;
-
-struct P {
-    int v, id;
-    bool operator<(const P &x) const {
-        return v < x.v;
-    }
-} a[N];
-
-int n, m;
-
-int bit[N];
-
-int he[N], el[N << 1], en[N << 1], ec;
-int hq[N], ql[N], qn[N];
-
-void addbit(int x) {
-    for (; x <= n; x += x & -x)
-        ++bit[x];
+int find(int x) {
+    return fa[x] == x ? x : fa[x] = find(fa[x]);
 }
 
-int sum(int x) {
-    int s = 0;
-    for (; x; x -= x & -x)
-        s += bit[x];
-    return s;
+void merge(int x, int y) {
+    x = find(x), y = find(y);
+    if (x != y)
+        fa[x] = y;
 }
 
-void ae(int x, int y) {
-    int l = min(x, y), r = max(x, y);
-    el[++ec] = l;
-    en[ec] = he[r];
-    he[r] = ec;
-}
 inline void solve(int Task_Id) {
 
-    n = io.read();
-    m = io.read();
+    cin >> n;
+
+    for (int i = 1; i <= n; i++)
+        fa[i] = i;
 
     for (int i = 1; i <= n; i++) {
-        a[i].v = io.read();
-        a[i].id = i;
+        int x, y;
+        cin >> x >> y;
+        merge(x, y);
     }
 
-    sort(a + 1, a + n + 1);
+    for (int i = 1; i <= n; i++)
+        if (find(i) == i)
+            id[i] = ++c;
+
+    for (int i = 1; i <= n; i++)
+        id[i] = id[find(i)];
+
+    memset(d, 0x3f, sizeof(d));
 
     for (int i = 1; i <= n; i++) {
-        long long l = (i == 1 ? LLONG_MAX : (long long)a[i].v - a[i - 1].v);
+        for (int j = 1; j <= n; j++) {
+            int x;
+            cin >> x;
 
-        long long r = (i == n ? LLONG_MAX : (long long)a[i + 1].v - a[i].v);
-
-        if (l <= r && i > 1)
-            ae(a[i].id, a[i - 1].id);
-
-        if (r <= l && i < n)
-            ae(a[i].id, a[i + 1].id);
+            if (id[i] != id[j])
+                d[id[i]][id[j]] = min(d[id[i]][id[j]], x);
+        }
     }
 
-    for (int i = 1; i <= m; i++) {
-        int l = io.read();
-        int r = io.read();
-
-        ql[i] = l;
-        qn[i] = hq[r];
-        hq[r] = i;
-    }
+    memset(dis, 0x3f, sizeof(dis));
+    dis[1] = 0;
 
     long long ans = 0;
-    int tot = 0;
 
-    for (int r = 1; r <= n; r++) {
-        for (int i = he[r]; i; i = en[i]) {
-            addbit(el[i]);
-            ++tot;
-        }
+    for (int k = 1; k <= c; k++) {
+        int u = 0;
 
-        for (int i = hq[r]; i; i = qn[i]) {
-            long long x = tot - sum(ql[i] - 1);
-            ans += x * i;
-        }
+        for (int i = 1; i <= c; i++)
+            if (!vis[i] && (!u || dis[i] < dis[u]))
+                u = i;
+
+        vis[u] = 1;
+        ans += dis[u];
+
+        for (int v = 1; v <= c; v++)
+            if (!vis[v])
+                dis[v] = min(dis[v], d[u][v]);
     }
 
-    printf("%lld\n", ans);
+    cout << ans * 2 << '\n';
 
     return;
 }

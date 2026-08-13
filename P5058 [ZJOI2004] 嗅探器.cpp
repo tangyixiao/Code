@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-14 07:09:50
-//  Problem: P5677 [GZOI2017] 配对统计
+//  Time: 2026-08-14 07:11:17
+//  Problem: P5058 [ZJOI2004] 嗅探器
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P5677
-//  Memory Limit: 256 MB
+//  URL: https://www.luogu.com.cn/problem/P5058
+//  Memory Limit: 125 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 3c98d0a7-bdc4-452f-b1e3-76678f3b2651
+//  Batch ID: df55b37e-85c1-439e-a984-54efdd580676
 //
 // Algorithm:
 // Complexity: O()
@@ -648,117 +648,86 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 300005;
+const int N = 200005, M = 1000005;
 
-struct Fast {
-    static const int S = 1 << 20;
-    int p = 0, n = 0;
-    char b[S];
+int n, h[N], to[M], nx[M], ec = 1;
+int dfn[N], low[N], fa[N], pe[N], cur[N], tim;
+int st[N], top;
 
-    char gc() {
-        if (p == n) {
-            n = fread(b, 1, S, stdin);
-            p = 0;
-            if (!n)
-                return 0;
-        }
-        return b[p++];
-    }
-
-    int read() {
-        int x = 0;
-        char c = gc();
-        while (c < '0' || c > '9')
-            c = gc();
-        while (c >= '0' && c <= '9') {
-            x = x * 10 + c - '0';
-            c = gc();
-        }
-        return x;
-    }
-} io;
-
-struct P {
-    int v, id;
-    bool operator<(const P &x) const {
-        return v < x.v;
-    }
-} a[N];
-
-int n, m;
-
-int bit[N];
-
-int he[N], el[N << 1], en[N << 1], ec;
-int hq[N], ql[N], qn[N];
-
-void addbit(int x) {
-    for (; x <= n; x += x & -x)
-        ++bit[x];
+void add(int u, int v) {
+    to[++ec] = v;
+    nx[ec] = h[u];
+    h[u] = ec;
 }
 
-int sum(int x) {
-    int s = 0;
-    for (; x; x -= x & -x)
-        s += bit[x];
-    return s;
-}
-
-void ae(int x, int y) {
-    int l = min(x, y), r = max(x, y);
-    el[++ec] = l;
-    en[ec] = he[r];
-    he[r] = ec;
-}
 inline void solve(int Task_Id) {
+    cin >> n;
 
-    n = io.read();
-    m = io.read();
+    int u, v;
 
-    for (int i = 1; i <= n; i++) {
-        a[i].v = io.read();
-        a[i].id = i;
+    while (cin >> u >> v) {
+        if (u == 0 && v == 0)
+            break;
+        add(u, v);
+        add(v, u);
     }
 
-    sort(a + 1, a + n + 1);
+    int a, b;
+    cin >> a >> b;
 
-    for (int i = 1; i <= n; i++) {
-        long long l = (i == 1 ? LLONG_MAX : (long long)a[i].v - a[i - 1].v);
+    dfn[a] = low[a] = ++tim;
+    cur[a] = h[a];
+    st[++top] = a;
 
-        long long r = (i == n ? LLONG_MAX : (long long)a[i + 1].v - a[i].v);
+    while (top) {
+        int u = st[top];
 
-        if (l <= r && i > 1)
-            ae(a[i].id, a[i - 1].id);
+        if (!cur[u]) {
+            --top;
 
-        if (r <= l && i < n)
-            ae(a[i].id, a[i + 1].id);
-    }
+            if (fa[u])
+                low[fa[u]] = min(low[fa[u]], low[u]);
 
-    for (int i = 1; i <= m; i++) {
-        int l = io.read();
-        int r = io.read();
-
-        ql[i] = l;
-        qn[i] = hq[r];
-        hq[r] = i;
-    }
-
-    long long ans = 0;
-    int tot = 0;
-
-    for (int r = 1; r <= n; r++) {
-        for (int i = he[r]; i; i = en[i]) {
-            addbit(el[i]);
-            ++tot;
+            continue;
         }
 
-        for (int i = hq[r]; i; i = qn[i]) {
-            long long x = tot - sum(ql[i] - 1);
-            ans += x * i;
+        int e = cur[u];
+        cur[u] = nx[e];
+
+        if (pe[u] && (e == (pe[u] ^ 1)))
+            continue;
+
+        int v = to[e];
+
+        if (!dfn[v]) {
+            fa[v] = u;
+            pe[v] = e;
+            dfn[v] = low[v] = ++tim;
+            cur[v] = h[v];
+            st[++top] = v;
+        } else {
+            low[u] = min(low[u], dfn[v]);
         }
     }
 
-    printf("%lld\n", ans);
+    if (!dfn[b]) {
+        cout << "No solution\n";
+        return;
+    }
+
+    int ans = INT_MAX;
+
+    for (int v = b; fa[v]; v = fa[v]) {
+        int u = fa[v];
+
+        if (u != a && u != b && low[v] >= dfn[u])
+            ans = min(ans, u);
+    }
+
+    if (ans == INT_MAX)
+        cout << "No solution\n";
+    else
+        cout << ans << '\n';
 
     return;
 }
