@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-14 07:12:59
-//  Problem: P2941 [USACO09FEB] Surround the Islands S
+//  Time: 2026-08-14 07:27:33
+//  Problem: P5579 [PA 2015] Siano
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P2941
+//  URL: https://www.luogu.com.cn/problem/P5579
 //  Memory Limit: 125 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 4b269731-afd2-467c-93ae-74697801a068
+//  Batch ID: fb734ff6-f9f0-4003-bfdd-faa756d1eed9
 //
 // Algorithm:
 // Complexity: O()
@@ -648,71 +648,8 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 505, INF = 0x3f3f3f3f;
-
-int n, fa[N], id[N], rt[N], cnt;
-int d[N][N];
-
-int find(int x) {
-    return fa[x] == x ? x : fa[x] = find(fa[x]);
-}
-
-void merge(int x, int y) {
-    x = find(x), y = find(y);
-    if (x != y)
-        fa[x] = y;
-}
-
 inline void solve(int Task_Id) {
-    cin >> n;
-
-    for (int i = 1; i <= n; i++)
-        fa[i] = i;
-
-    for (int i = 1; i <= n; i++) {
-        int x, y;
-        cin >> x >> y;
-        merge(x, y);
-    }
-
-    for (int i = 1; i <= n; i++)
-        find(i);
-
-    for (int i = 1; i <= n; i++)
-        if (fa[i] == i)
-            id[i] = ++cnt, rt[cnt] = i;
-
-    for (int i = 1; i <= n; i++)
-        id[i] = id[find(i)];
-
-    memset(d, 0x3f, sizeof(d));
-
-    for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= n; j++) {
-            int x;
-            cin >> x;
-
-            int u = id[i], v = id[j];
-
-            if (u != v)
-                d[u][v] = min(d[u][v], x);
-        }
-    }
-
-    long long ans = LLONG_MAX;
-
-    for (int i = 1; i <= cnt; i++) {
-        long long s = 0;
-
-        for (int j = 1; j <= cnt; j++)
-            if (i != j)
-                s += d[i][j];
-
-        ans = min(ans, s);
-    }
-
-    cout << ans * 2 << '\n';
-
+    // do something here
     return;
 }
 } // namespace TANGYIXIAO

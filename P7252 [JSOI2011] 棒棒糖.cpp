@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-14 07:12:59
-//  Problem: P2941 [USACO09FEB] Surround the Islands S
+//  Time: 2026-08-14 07:25:10
+//  Problem: P7252 [JSOI2011] 棒棒糖
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P2941
-//  Memory Limit: 125 MB
-//  Time Limit: 1000 ms
+//  URL: https://www.luogu.com.cn/problem/P7252
+//  Memory Limit: 128 MB
+//  Time Limit: 2000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 4b269731-afd2-467c-93ae-74697801a068
+//  Batch ID: facfd8fa-1251-4838-857e-ea2392a3a78b
 //
 // Algorithm:
 // Complexity: O()
@@ -648,70 +648,87 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 505, INF = 0x3f3f3f3f;
+const int N = 50005;
 
-int n, fa[N], id[N], rt[N], cnt;
-int d[N][N];
+struct Q {
+    int x, c;
+} tr[N << 2];
 
-int find(int x) {
-    return fa[x] == x ? x : fa[x] = find(fa[x]);
+int n, m, a[N];
+vector<int> p[N];
+
+Q merge(Q A, Q B) {
+    if (!A.c)
+        return B;
+    if (!B.c)
+        return A;
+
+    if (A.x == B.x)
+        return {A.x, A.c + B.c};
+
+    if (A.c > B.c)
+        return {A.x, A.c - B.c};
+
+    return {B.x, B.c - A.c};
 }
 
-void merge(int x, int y) {
-    x = find(x), y = find(y);
-    if (x != y)
-        fa[x] = y;
+void build(int u, int l, int r) {
+    if (l == r) {
+        tr[u] = {a[l], 1};
+        return;
+    }
+
+    int mid = (l + r) >> 1;
+
+    build(u << 1, l, mid);
+    build(u << 1 | 1, mid + 1, r);
+
+    tr[u] = merge(tr[u << 1], tr[u << 1 | 1]);
+}
+
+Q ask(int u, int l, int r, int L, int R) {
+    if (L <= l && r <= R)
+        return tr[u];
+
+    int mid = (l + r) >> 1;
+
+    if (R <= mid)
+        return ask(u << 1, l, mid, L, R);
+
+    if (L > mid)
+        return ask(u << 1 | 1, mid + 1, r, L, R);
+
+    return merge(
+        ask(u << 1, l, mid, L, R),
+        ask(u << 1 | 1, mid + 1, r, L, R));
+}
+
+int count(int x, int l, int r) {
+    return upper_bound(p[x].begin(), p[x].end(), r) - lower_bound(p[x].begin(), p[x].end(), l);
 }
 
 inline void solve(int Task_Id) {
-    cin >> n;
-
-    for (int i = 1; i <= n; i++)
-        fa[i] = i;
+    cin >> n >> m;
 
     for (int i = 1; i <= n; i++) {
-        int x, y;
-        cin >> x >> y;
-        merge(x, y);
+        cin >> a[i];
+        p[a[i]].push_back(i);
     }
 
-    for (int i = 1; i <= n; i++)
-        find(i);
+    build(1, 1, n);
 
-    for (int i = 1; i <= n; i++)
-        if (fa[i] == i)
-            id[i] = ++cnt, rt[cnt] = i;
+    while (m--) {
+        int l, r;
+        cin >> l >> r;
 
-    for (int i = 1; i <= n; i++)
-        id[i] = id[find(i)];
+        Q q = ask(1, 1, n, l, r);
+        int x = q.x;
 
-    memset(d, 0x3f, sizeof(d));
-
-    for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= n; j++) {
-            int x;
-            cin >> x;
-
-            int u = id[i], v = id[j];
-
-            if (u != v)
-                d[u][v] = min(d[u][v], x);
-        }
+        if (count(x, l, r) * 2 > r - l + 1)
+            cout << x << '\n';
+        else
+            cout << 0 << '\n';
     }
-
-    long long ans = LLONG_MAX;
-
-    for (int i = 1; i <= cnt; i++) {
-        long long s = 0;
-
-        for (int j = 1; j <= cnt; j++)
-            if (i != j)
-                s += d[i][j];
-
-        ans = min(ans, s);
-    }
-
-    cout << ans * 2 << '\n';
 
     return;
 }
