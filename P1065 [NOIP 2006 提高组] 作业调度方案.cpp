@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-13 13:57:21
-//  Problem: P4387 【深基15.习9】验证栈序列
+//  Time: 2026-08-13 14:35:16
+//  Problem: P1065 [NOIP 2006 提高组] 作业调度方案
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P4387
-//  Memory Limit: 125 MB
+//  URL: https://www.luogu.com.cn/problem/P1065
+//  Memory Limit: 512 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 64f618f5-bc20-458a-89f9-22d25585af1a
+//  Batch ID: a2a0950f-0de3-46e7-a689-45c448b2bbac
 //
 // Algorithm:
 // Complexity: O()
@@ -24,7 +24,7 @@ Copyright (C) 2026 TangYixiao
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-#define MULTIPLE_TEST
+// #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -648,34 +648,60 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 1e5 + 5;
-int T, n, a[N], b[N], cnt;
+const int N = 25, T = 10005;
 
+int m, n;
+int a[405], mac[N][N], tim[N][N];
+int cnt[N], ed[N];
+bool use[N][T];
 inline void solve(int Task_Id) {
-    cnt = 1;
-    cin >> n;
-    for (int i = 1; i <= n; i++) {
+
+    cin >> m >> n;
+
+    for (int i = 1; i <= m * n; i++)
         cin >> a[i];
-    }
-    for (int i = 1; i <= n; i++) {
-        cin >> b[i];
-    }
-    stack<int> s;
-    for (int i = 1; i <= n; i++) {
-        s.push(a[i]);
-        for (; s.top() == b[cnt] && !s.empty();) {
-            s.pop();
-            cnt++;
-            if (s.empty()) {
+
+    for (int i = 1; i <= n; i++)
+        for (int j = 1; j <= m; j++)
+            cin >> mac[i][j];
+
+    for (int i = 1; i <= n; i++)
+        for (int j = 1; j <= m; j++)
+            cin >> tim[i][j];
+
+    int ans = 0;
+
+    for (int z = 1; z <= m * n; z++) {
+        int x = a[z];
+        int k = ++cnt[x];
+
+        int machine = mac[x][k];
+        int len = tim[x][k];
+
+        int st = ed[x] + 1;
+
+        while (1) {
+            int j;
+
+            for (j = 0; j < len; j++)
+                if (use[machine][st + j])
+                    break;
+
+            if (j == len)
                 break;
-            }
+
+            st += j + 1;
         }
+
+        for (int j = 0; j < len; j++)
+            use[machine][st + j] = 1;
+
+        ed[x] = st + len - 1;
+        ans = max(ans, ed[x]);
     }
-    if (s.empty()) {
-        cout << "Yes\n";
-    } else {
-        cout << "No\n";
-    }
+
+    cout << ans << '\n';
+
     return;
 }
 } // namespace TANGYIXIAO

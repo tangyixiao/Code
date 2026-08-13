@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-13 13:57:21
-//  Problem: P4387 【深基15.习9】验证栈序列
+//  Time: 2026-08-13 14:21:27
+//  Problem: P1540 [NOIP 2010 提高组] 机器翻译
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P4387
+//  URL: https://www.luogu.com.cn/problem/P1540
 //  Memory Limit: 125 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 64f618f5-bc20-458a-89f9-22d25585af1a
+//  Batch ID: 2b71ddbd-84f9-4206-bf0a-cbf03d247f2c
 //
 // Algorithm:
 // Complexity: O()
@@ -24,7 +24,7 @@ Copyright (C) 2026 TangYixiao
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-#define MULTIPLE_TEST
+// #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -648,34 +648,27 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 1e5 + 5;
-int T, n, a[N], b[N], cnt;
-
+int a[105], n, m, k, r;
 inline void solve(int Task_Id) {
-    cnt = 1;
-    cin >> n;
-    for (int i = 1; i <= n; i++) {
-        cin >> a[i];
-    }
-    for (int i = 1; i <= n; i++) {
-        cin >> b[i];
-    }
-    stack<int> s;
-    for (int i = 1; i <= n; i++) {
-        s.push(a[i]);
-        for (; s.top() == b[cnt] && !s.empty();) {
-            s.pop();
-            cnt++;
-            if (s.empty()) {
+    cin >> m >> n;
+    while (n--) {
+        int l, b = 0;
+        cin >> l;
+        for (int i = 0; i < m; i++) {
+            if (l == 0)
+                l = 10001;
+            if (a[i] == l) {
+                b = 1;
                 break;
             }
         }
+        if (b == 0) {
+            r = (r + 1) % m;
+            a[r] = l;
+            k++;
+        }
     }
-    if (s.empty()) {
-        cout << "Yes\n";
-    } else {
-        cout << "No\n";
-    }
+    cout << k;
     return;
 }
 } // namespace TANGYIXIAO

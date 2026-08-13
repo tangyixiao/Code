@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-13 13:57:21
-//  Problem: P4387 【深基15.习9】验证栈序列
+//  Time: 2026-08-13 14:16:59
+//  Problem: P6510 奶牛排队
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P4387
-//  Memory Limit: 125 MB
+//  URL: https://www.luogu.com.cn/problem/P6510
+//  Memory Limit: 128 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 64f618f5-bc20-458a-89f9-22d25585af1a
+//  Batch ID: 0c052b7a-d530-40c2-8926-71428a17222f
 //
 // Algorithm:
 // Complexity: O()
@@ -24,7 +24,7 @@ Copyright (C) 2026 TangYixiao
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-#define MULTIPLE_TEST
+// #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -648,34 +648,78 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 1e5 + 5;
-int T, n, a[N], b[N], cnt;
+const int N = 100005;
+
+int n, h[N], r[N], s[N], top;
+pair<int, int> tr[N << 2];
+
+pair<int, int> mx(pair<int, int> a, pair<int, int> b) {
+    if (a.first != b.first)
+        return a.first > b.first ? a : b;
+    return a.second > b.second ? a : b;
+}
+
+void build(int p, int l, int r) {
+    if (l == r) {
+        tr[p] = {h[l], l};
+        return;
+    }
+
+    int m = (l + r) >> 1;
+    build(p << 1, l, m);
+    build(p << 1 | 1, m + 1, r);
+
+    tr[p] = mx(tr[p << 1], tr[p << 1 | 1]);
+}
+
+pair<int, int> ask(int p, int l, int r, int L, int R) {
+    if (L <= l && r <= R)
+        return tr[p];
+
+    int m = (l + r) >> 1;
+    pair<int, int> z = {-1, -1};
+
+    if (L <= m)
+        z = mx(z, ask(p << 1, l, m, L, R));
+
+    if (R > m)
+        z = mx(z, ask(p << 1 | 1, m + 1, r, L, R));
+
+    return z;
+}
 
 inline void solve(int Task_Id) {
-    cnt = 1;
     cin >> n;
-    for (int i = 1; i <= n; i++) {
-        cin >> a[i];
+
+    for (int i = 1; i <= n; i++)
+        cin >> h[i];
+
+    for (int i = n; i >= 1; i--) {
+        while (top && h[s[top]] > h[i])
+            --top;
+
+        r[i] = top ? s[top] : n + 1;
+        s[++top] = i;
     }
-    for (int i = 1; i <= n; i++) {
-        cin >> b[i];
+
+    build(1, 1, n);
+
+    int ans = 0;
+
+    for (int i = 1; i < n; i++) {
+        int R = r[i] - 1;
+
+        if (i + 1 > R)
+            continue;
+
+        auto z = ask(1, 1, n, i + 1, R);
+
+        if (z.first > h[i])
+            ans = max(ans, z.second - i + 1);
     }
-    stack<int> s;
-    for (int i = 1; i <= n; i++) {
-        s.push(a[i]);
-        for (; s.top() == b[cnt] && !s.empty();) {
-            s.pop();
-            cnt++;
-            if (s.empty()) {
-                break;
-            }
-        }
-    }
-    if (s.empty()) {
-        cout << "Yes\n";
-    } else {
-        cout << "No\n";
-    }
+
+    cout << ans << '\n';
+
     return;
 }
 } // namespace TANGYIXIAO

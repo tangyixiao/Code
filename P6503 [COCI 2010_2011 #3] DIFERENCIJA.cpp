@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-13 13:57:21
-//  Problem: P4387 【深基15.习9】验证栈序列
+//  Time: 2026-08-13 13:58:54
+//  Problem: P6503 [COCI 2010/2011 #3] DIFERENCIJA
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P4387
-//  Memory Limit: 125 MB
+//  URL: https://www.luogu.com.cn/problem/P6503
+//  Memory Limit: 64 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 64f618f5-bc20-458a-89f9-22d25585af1a
+//  Batch ID: 31c28c6e-2e6d-4414-b2cd-31f517a47390
 //
 // Algorithm:
 // Complexity: O()
@@ -24,7 +24,7 @@ Copyright (C) 2026 TangYixiao
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-#define MULTIPLE_TEST
+// #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -648,34 +648,57 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 1e5 + 5;
-int T, n, a[N], b[N], cnt;
 
+const int N = 300005;
+
+int n, a[N], l[N], r[N], s[N], top;
+long long ans;
 inline void solve(int Task_Id) {
-    cnt = 1;
+
     cin >> n;
-    for (int i = 1; i <= n; i++) {
+    for (int i = 1; i <= n; i++)
         cin >> a[i];
-    }
+
+    top = 0;
     for (int i = 1; i <= n; i++) {
-        cin >> b[i];
+        while (top && a[s[top]] <= a[i])
+            --top;
+        l[i] = top ? s[top] : 0;
+        s[++top] = i;
     }
-    stack<int> s;
+
+    top = 0;
+    for (int i = n; i >= 1; i--) {
+        while (top && a[s[top]] < a[i])
+            --top;
+        r[i] = top ? s[top] : n + 1;
+        s[++top] = i;
+    }
+
+    for (int i = 1; i <= n; i++)
+        ans += 1LL * a[i] * (i - l[i]) * (r[i] - i);
+
+    top = 0;
     for (int i = 1; i <= n; i++) {
-        s.push(a[i]);
-        for (; s.top() == b[cnt] && !s.empty();) {
-            s.pop();
-            cnt++;
-            if (s.empty()) {
-                break;
-            }
-        }
+        while (top && a[s[top]] >= a[i])
+            --top;
+        l[i] = top ? s[top] : 0;
+        s[++top] = i;
     }
-    if (s.empty()) {
-        cout << "Yes\n";
-    } else {
-        cout << "No\n";
+
+    top = 0;
+    for (int i = n; i >= 1; i--) {
+        while (top && a[s[top]] > a[i])
+            --top;
+        r[i] = top ? s[top] : n + 1;
+        s[++top] = i;
     }
+
+    for (int i = 1; i <= n; i++)
+        ans -= 1LL * a[i] * (i - l[i]) * (r[i] - i);
+
+    cout << ans << '\n';
+
     return;
 }
 } // namespace TANGYIXIAO

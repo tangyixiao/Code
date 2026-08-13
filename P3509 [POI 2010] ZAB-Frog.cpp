@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-13 13:57:21
-//  Problem: P4387 【深基15.习9】验证栈序列
+//  Time: 2026-08-13 14:01:33
+//  Problem: P3509 [POI 2010] ZAB-Frog
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P4387
+//  URL: https://www.luogu.com.cn/problem/P3509
 //  Memory Limit: 125 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 64f618f5-bc20-458a-89f9-22d25585af1a
+//  Batch ID: 07f658d3-366a-4063-9954-8aeb826db3a6
 //
 // Algorithm:
 // Complexity: O()
@@ -24,7 +24,7 @@ Copyright (C) 2026 TangYixiao
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-#define MULTIPLE_TEST
+// #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -648,34 +648,88 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 1e5 + 5;
-int T, n, a[N], b[N], cnt;
+const int N = 1000005;
 
-inline void solve(int Task_Id) {
-    cnt = 1;
-    cin >> n;
-    for (int i = 1; i <= n; i++) {
-        cin >> a[i];
+int n, k, to[N], b[N], ans[N];
+unsigned long long m;
+long long p[N];
+
+int go(int i) {
+    int L = max(1, i - k), R = min(i, n - k);
+
+    int l = L, r = R;
+
+    while (l < r) {
+        int x = (l + r) >> 1;
+
+        __int128 dl = (__int128)p[i] - p[x];
+        __int128 dr = (__int128)p[x + k] - p[i];
+
+        if (dl > dr)
+            l = x + 1;
+        else
+            r = x;
     }
-    for (int i = 1; i <= n; i++) {
-        cin >> b[i];
-    }
-    stack<int> s;
-    for (int i = 1; i <= n; i++) {
-        s.push(a[i]);
-        for (; s.top() == b[cnt] && !s.empty();) {
-            s.pop();
-            cnt++;
-            if (s.empty()) {
-                break;
-            }
+
+    int q = l, best = -1;
+    __int128 bd = -1;
+
+    for (int x = max(L, q - 1); x <= min(R, q + 1); x++) {
+        __int128 dl = (__int128)p[i] - p[x];
+        __int128 dr = (__int128)p[x + k] - p[i];
+        __int128 d = max(dl, dr);
+
+        int v;
+
+        if (dl >= dr)
+            v = x;
+        else
+            v = x + k;
+
+        if (d < bd || bd == -1 || (d == bd && v < best)) {
+            bd = d;
+            best = v;
         }
     }
-    if (s.empty()) {
-        cout << "Yes\n";
-    } else {
-        cout << "No\n";
+
+    return best;
+}
+
+inline void solve(int Task_Id) {
+    cin >> n >> k >> m;
+
+    for (int i = 1; i <= n; i++)
+        cin >> p[i];
+
+    for (int i = 1; i <= n; i++) {
+        to[i] = go(i);
+        ans[i] = i;
     }
+
+    while (m) {
+        if (m & 1) {
+            for (int i = 1; i <= n; i++)
+                b[i] = to[ans[i]];
+
+            for (int i = 1; i <= n; i++)
+                ans[i] = b[i];
+        }
+
+        m >>= 1;
+
+        if (!m)
+            break;
+
+        for (int i = 1; i <= n; i++)
+            b[i] = to[to[i]];
+
+        for (int i = 1; i <= n; i++)
+            to[i] = b[i];
+    }
+
+    for (int i = 1; i <= n; i++)
+        cout << ans[i] << (i == n ? '\n' : ' ');
+
     return;
 }
 } // namespace TANGYIXIAO

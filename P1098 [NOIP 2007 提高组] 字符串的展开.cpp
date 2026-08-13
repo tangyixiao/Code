@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-13 13:57:21
-//  Problem: P4387 【深基15.习9】验证栈序列
+//  Time: 2026-08-13 14:29:34
+//  Problem: P1098 [NOIP 2007 提高组] 字符串的展开
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P4387
+//  URL: https://www.luogu.com.cn/problem/P1098
 //  Memory Limit: 125 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 64f618f5-bc20-458a-89f9-22d25585af1a
+//  Batch ID: 04c2267a-bc95-4b00-82fd-726b32e79188
 //
 // Algorithm:
 // Complexity: O()
@@ -24,7 +24,7 @@ Copyright (C) 2026 TangYixiao
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-#define MULTIPLE_TEST
+// #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -625,7 +625,6 @@ signed main(int argc, char *argv[]) {
 #ifdef TIME_COUNT
     Start_Time_Count();
 #endif
-    IOSS_Init();
 #if JUDGE == 1
     Judge_File(FILE_NAME);
 #elif JUDGE == 2
@@ -648,34 +647,62 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 1e5 + 5;
-int T, n, a[N], b[N], cnt;
-
 inline void solve(int Task_Id) {
-    cnt = 1;
-    cin >> n;
-    for (int i = 1; i <= n; i++) {
-        cin >> a[i];
-    }
-    for (int i = 1; i <= n; i++) {
-        cin >> b[i];
-    }
-    stack<int> s;
-    for (int i = 1; i <= n; i++) {
-        s.push(a[i]);
-        for (; s.top() == b[cnt] && !s.empty();) {
-            s.pop();
-            cnt++;
-            if (s.empty()) {
-                break;
+    int p1, p2, p3;
+    string s;
+
+    cin >> p1 >> p2 >> p3 >> s;
+
+    for (int i = 0; i < (int)s.size(); i++) {
+        if (s[i] != '-') {
+            cout << s[i];
+            continue;
+        }
+
+        if (i == 0 || i == (int)s.size() - 1) {
+            cout << '-';
+            continue;
+        }
+
+        char l = s[i - 1], r = s[i + 1];
+
+        bool ok = (isdigit(l) && isdigit(r)) ||
+                  (islower(l) && islower(r));
+
+        if (!ok || l >= r) {
+            cout << '-';
+            continue;
+        }
+
+        if (p3 == 1) {
+            for (char c = l + 1; c < r; c++) {
+                char x = c;
+
+                if (p1 == 3)
+                    x = '*';
+                else if (p1 == 2 && islower(c))
+                    x = toupper(c);
+
+                for (int j = 1; j <= p2; j++)
+                    cout << x;
+            }
+        } else {
+            for (char c = r - 1; c > l; c--) {
+                char x = c;
+
+                if (p1 == 3)
+                    x = '*';
+                else if (p1 == 2 && islower(c))
+                    x = toupper(c);
+
+                for (int j = 1; j <= p2; j++)
+                    cout << x;
             }
         }
     }
-    if (s.empty()) {
-        cout << "Yes\n";
-    } else {
-        cout << "No\n";
-    }
+
+    cout << '\n';
+
     return;
 }
 } // namespace TANGYIXIAO

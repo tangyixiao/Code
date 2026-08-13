@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-13 13:57:21
-//  Problem: P4387 【深基15.习9】验证栈序列
+//  Time: 2026-08-13 16:20:19
+//  Problem: P2034 选择数字
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P4387
-//  Memory Limit: 125 MB
-//  Time Limit: 1000 ms
+//  URL: https://www.luogu.com.cn/problem/P2034
+//  Memory Limit: 128 MB
+//  Time Limit: 500 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 64f618f5-bc20-458a-89f9-22d25585af1a
+//  Batch ID: 36735652-6b5b-4010-a71e-194f23f2cb8c
 //
 // Algorithm:
 // Complexity: O()
@@ -24,7 +24,7 @@ Copyright (C) 2026 TangYixiao
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-#define MULTIPLE_TEST
+// #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -648,34 +648,44 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 1e5 + 5;
-int T, n, a[N], b[N], cnt;
+const int N = 100005;
+
+int n, k, q[N];
+long long a[N], f[N], sum;
 
 inline void solve(int Task_Id) {
-    cnt = 1;
-    cin >> n;
+
+    cin >> n >> k;
+
     for (int i = 1; i <= n; i++) {
         cin >> a[i];
+        sum += a[i];
     }
+
+    int h = 1, t = 0;
+
+    q[++t] = 0;
+    f[0] = 0;
+
     for (int i = 1; i <= n; i++) {
-        cin >> b[i];
+        while (h <= t && q[h] < i - k - 1)
+            ++h;
+
+        f[i] = f[q[h]] + a[i];
+
+        while (h <= t && f[q[t]] >= f[i])
+            --t;
+
+        q[++t] = i;
     }
-    stack<int> s;
-    for (int i = 1; i <= n; i++) {
-        s.push(a[i]);
-        for (; s.top() == b[cnt] && !s.empty();) {
-            s.pop();
-            cnt++;
-            if (s.empty()) {
-                break;
-            }
-        }
-    }
-    if (s.empty()) {
-        cout << "Yes\n";
-    } else {
-        cout << "No\n";
-    }
+
+    long long mn = LLONG_MAX;
+
+    for (int i = max(0, n - k); i <= n; i++)
+        mn = min(mn, f[i]);
+
+    cout << sum - mn << '\n';
+
     return;
 }
 } // namespace TANGYIXIAO

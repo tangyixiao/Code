@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-13 13:57:21
-//  Problem: P4387 【深基15.习9】验证栈序列
+//  Time: 2026-08-13 14:24:46
+//  Problem: P1563 [NOIP 2016 提高组] 玩具谜题
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P4387
-//  Memory Limit: 125 MB
+//  URL: https://www.luogu.com.cn/problem/P1563
+//  Memory Limit: 500 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 64f618f5-bc20-458a-89f9-22d25585af1a
+//  Batch ID: 23957d0a-c70c-413c-a256-a83b2de77bd1
 //
 // Algorithm:
 // Complexity: O()
@@ -24,7 +24,7 @@ Copyright (C) 2026 TangYixiao
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-#define MULTIPLE_TEST
+// #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -648,34 +648,34 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 1e5 + 5;
-int T, n, a[N], b[N], cnt;
+const int N = 100005;
 
+struct Human {
+    int flag;
+    string jobs;
+} a[N];
 inline void solve(int Task_Id) {
-    cnt = 1;
-    cin >> n;
-    for (int i = 1; i <= n; i++) {
-        cin >> a[i];
+
+    int n, m;
+    cin >> n >> m;
+
+    for (int i = 1; i <= n; i++)
+        cin >> a[i].flag >> a[i].jobs;
+
+    int p = 1;
+
+    while (m--) {
+        int x, s;
+        cin >> x >> s;
+
+        if (a[p].flag == x)
+            p = (p - s - 1 + n) % n + 1;
+        else
+            p = (p + s - 1) % n + 1;
     }
-    for (int i = 1; i <= n; i++) {
-        cin >> b[i];
-    }
-    stack<int> s;
-    for (int i = 1; i <= n; i++) {
-        s.push(a[i]);
-        for (; s.top() == b[cnt] && !s.empty();) {
-            s.pop();
-            cnt++;
-            if (s.empty()) {
-                break;
-            }
-        }
-    }
-    if (s.empty()) {
-        cout << "Yes\n";
-    } else {
-        cout << "No\n";
-    }
+
+    cout << a[p].jobs << '\n';
+
     return;
 }
 } // namespace TANGYIXIAO

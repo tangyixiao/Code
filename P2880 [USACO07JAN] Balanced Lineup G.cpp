@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-13 13:57:21
-//  Problem: P4387 【深基15.习9】验证栈序列
+//  Time: 2026-08-13 14:06:58
+//  Problem: P2880 [USACO07JAN] Balanced Lineup G
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P4387
-//  Memory Limit: 125 MB
+//  URL: https://www.luogu.com.cn/problem/P2880
+//  Memory Limit: 512 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 64f618f5-bc20-458a-89f9-22d25585af1a
+//  Batch ID: e3d18409-b773-4873-b4a9-1cd0e6f6495e
 //
 // Algorithm:
 // Complexity: O()
@@ -24,7 +24,7 @@ Copyright (C) 2026 TangYixiao
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-#define MULTIPLE_TEST
+// #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -648,33 +648,30 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 1e5 + 5;
-int T, n, a[N], b[N], cnt;
-
+const int N = 1e5;
+int n, m, l, r, a[N + 5], lg[N + 5], maxf[N + 5][20], minf[N + 5][20];
 inline void solve(int Task_Id) {
-    cnt = 1;
-    cin >> n;
-    for (int i = 1; i <= n; i++) {
-        cin >> a[i];
+    memset(maxf, 0, sizeof maxf);
+    memset(minf, 0x3f, sizeof minf);
+    scanf("%d %d", &n, &m);
+    lg[1] = 0;
+    for (int i = 2; i <= n; i++) {
+        lg[i] = lg[i >> 1] + 1;
     }
     for (int i = 1; i <= n; i++) {
-        cin >> b[i];
+        scanf("%d", &maxf[i][0]);
+        minf[i][0] = maxf[i][0];
     }
-    stack<int> s;
-    for (int i = 1; i <= n; i++) {
-        s.push(a[i]);
-        for (; s.top() == b[cnt] && !s.empty();) {
-            s.pop();
-            cnt++;
-            if (s.empty()) {
-                break;
-            }
+    for (int j = 1; j <= lg[n]; j++) {
+        for (int i = 1; i <= n - (1 << j) + 1; i++) {
+            maxf[i][j] = max(maxf[i][j - 1], maxf[i + (1 << (j - 1))][j - 1]);
+            minf[i][j] = min(minf[i][j - 1], minf[i + (1 << (j - 1))][j - 1]);
         }
     }
-    if (s.empty()) {
-        cout << "Yes\n";
-    } else {
-        cout << "No\n";
+    for (int i = 1; i <= m; i++) {
+        scanf("%d %d", &l, &r);
+        int t = lg[r - l + 1];
+        printf("%d\n", max(maxf[l][t], maxf[r - (1 << t) + 1][t]) - min(minf[l][t], minf[r - (1 << t) + 1][t]));
     }
     return;
 }

@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-13 13:57:21
-//  Problem: P4387 【深基15.习9】验证栈序列
+//  Time: 2026-08-13 16:18:01
+//  Problem: P2629 好消息，坏消息
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P4387
+//  URL: https://www.luogu.com.cn/problem/P2629
 //  Memory Limit: 125 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 64f618f5-bc20-458a-89f9-22d25585af1a
+//  Batch ID: aa26dba2-11b1-4174-8e16-d9b311530d75
 //
 // Algorithm:
 // Complexity: O()
@@ -24,7 +24,7 @@ Copyright (C) 2026 TangYixiao
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-#define MULTIPLE_TEST
+// #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -648,34 +648,44 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 1e5 + 5;
-int T, n, a[N], b[N], cnt;
+const int N = 2000005;
+
+int n, q[N];
+long long s[N];
 
 inline void solve(int Task_Id) {
-    cnt = 1;
     cin >> n;
+
     for (int i = 1; i <= n; i++) {
-        cin >> a[i];
+        int x;
+        cin >> x;
+        s[i] = s[i - 1] + x;
     }
-    for (int i = 1; i <= n; i++) {
-        cin >> b[i];
-    }
-    stack<int> s;
-    for (int i = 1; i <= n; i++) {
-        s.push(a[i]);
-        for (; s.top() == b[cnt] && !s.empty();) {
-            s.pop();
-            cnt++;
-            if (s.empty()) {
-                break;
-            }
+
+    for (int i = n + 1; i <= 2 * n; i++)
+        s[i] = s[i - 1] + (s[i - n] - s[i - n - 1]);
+
+    int h = 1, t = 0, ans = 0;
+
+    for (int i = 1; i <= 2 * n; i++) {
+        while (h <= t && s[q[t]] >= s[i])
+            --t;
+
+        q[++t] = i;
+
+        while (h <= t && q[h] < i - n + 1)
+            ++h;
+
+        if (i >= n) {
+            int k = i - n + 1;
+
+            if (k <= n && s[q[h]] >= s[k - 1])
+                ++ans;
         }
     }
-    if (s.empty()) {
-        cout << "Yes\n";
-    } else {
-        cout << "No\n";
-    }
+
+    cout << ans << '\n';
+
     return;
 }
 } // namespace TANGYIXIAO

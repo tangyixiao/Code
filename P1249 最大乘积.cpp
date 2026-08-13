@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-13 13:57:21
-//  Problem: P4387 【深基15.习9】验证栈序列
+//  Time: 2026-08-13 14:12:09
+//  Problem: P1249 最大乘积
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P4387
-//  Memory Limit: 125 MB
+//  URL: https://www.luogu.com.cn/problem/P1249
+//  Memory Limit: 512 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 64f618f5-bc20-458a-89f9-22d25585af1a
+//  Batch ID: 918cd853-6245-463c-8475-308e6d8f3dd0
 //
 // Algorithm:
 // Complexity: O()
@@ -24,7 +24,7 @@ Copyright (C) 2026 TangYixiao
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-#define MULTIPLE_TEST
+// #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -648,34 +648,76 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 1e5 + 5;
-int T, n, a[N], b[N], cnt;
 
-inline void solve(int Task_Id) {
-    cnt = 1;
-    cin >> n;
-    for (int i = 1; i <= n; i++) {
-        cin >> a[i];
+const int N = 10005;
+
+int n, a[N], cnt;
+
+struct B {
+    int a[N], n = 1;
+
+    B() {
+        a[0] = 1;
     }
-    for (int i = 1; i <= n; i++) {
-        cin >> b[i];
-    }
-    stack<int> s;
-    for (int i = 1; i <= n; i++) {
-        s.push(a[i]);
-        for (; s.top() == b[cnt] && !s.empty();) {
-            s.pop();
-            cnt++;
-            if (s.empty()) {
-                break;
-            }
+
+    void mul(int x) {
+        int c = 0;
+        for (int i = 0; i < n; i++) {
+            int v = a[i] * x + c;
+            a[i] = v % 10000;
+            c = v / 10000;
+        }
+        while (c) {
+            a[n++] = c % 10000;
+            c /= 10000;
         }
     }
-    if (s.empty()) {
-        cout << "Yes\n";
-    } else {
-        cout << "No\n";
+
+    void out() {
+        cout << a[n - 1];
+        for (int i = n - 2; i >= 0; i--)
+            cout << setw(4) << setfill('0') << a[i];
+        cout << '\n';
     }
+};
+
+inline void solve(int Task_Id) {
+    cin >> n;
+
+    int s = 0;
+
+    for (int x = 2; s < n; x++) {
+        a[++cnt] = x;
+        s += x;
+    }
+
+    int d = s - n;
+
+    if (d == 1) {
+        for (int i = 1; i < cnt; i++)
+            a[i] = a[i + 1];
+        --cnt;
+        ++a[cnt];
+    } else if (d >= 2) {
+        int p = 0;
+        for (int i = 1; i <= cnt; i++)
+            if (a[i] != d)
+                a[++p] = a[i];
+        cnt = p;
+    }
+
+    B ans;
+
+    for (int i = 1; i <= cnt; i++) {
+        if (i > 1)
+            cout << ' ';
+        cout << a[i];
+        ans.mul(a[i]);
+    }
+
+    cout << '\n';
+    ans.out();
+
     return;
 }
 } // namespace TANGYIXIAO

@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-13 13:57:21
-//  Problem: P4387 【深基15.习9】验证栈序列
+//  Time: 2026-08-13 16:13:54
+//  Problem: P2887 [USACO07NOV] Sunscreen G
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P4387
-//  Memory Limit: 125 MB
+//  URL: https://www.luogu.com.cn/problem/P2887
+//  Memory Limit: 128 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 64f618f5-bc20-458a-89f9-22d25585af1a
+//  Batch ID: 9ddfbea6-44da-4b45-94cf-5407fdf666e7
 //
 // Algorithm:
 // Complexity: O()
@@ -24,7 +24,7 @@ Copyright (C) 2026 TangYixiao
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-#define MULTIPLE_TEST
+// #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -648,34 +648,46 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 1e5 + 5;
-int T, n, a[N], b[N], cnt;
+const int N = 2505;
+
+int C, L;
+pair<int, int> a[N], b[N];
 
 inline void solve(int Task_Id) {
-    cnt = 1;
-    cin >> n;
-    for (int i = 1; i <= n; i++) {
-        cin >> a[i];
-    }
-    for (int i = 1; i <= n; i++) {
-        cin >> b[i];
-    }
-    stack<int> s;
-    for (int i = 1; i <= n; i++) {
-        s.push(a[i]);
-        for (; s.top() == b[cnt] && !s.empty();) {
-            s.pop();
-            cnt++;
-            if (s.empty()) {
-                break;
-            }
+    cin >> C >> L;
+
+    for (int i = 1; i <= C; i++)
+        cin >> a[i].first >> a[i].second;
+
+    for (int i = 1; i <= L; i++)
+        cin >> b[i].first >> b[i].second;
+
+    sort(a + 1, a + C + 1);
+    sort(b + 1, b + L + 1);
+
+    priority_queue<int, vector<int>, greater<int>> q;
+
+    int p = 1, ans = 0;
+
+    for (int i = 1; i <= L; i++) {
+        int x = b[i].first, c = b[i].second;
+
+        while (p <= C && a[p].first <= x) {
+            q.push(a[p].second);
+            ++p;
+        }
+
+        while (!q.empty() && q.top() < x)
+            q.pop();
+
+        while (c-- && !q.empty()) {
+            q.pop();
+            ++ans;
         }
     }
-    if (s.empty()) {
-        cout << "Yes\n";
-    } else {
-        cout << "No\n";
-    }
+
+    cout << ans << '\n';
+
     return;
 }
 } // namespace TANGYIXIAO

@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-13 13:57:21
-//  Problem: P4387 【深基15.习9】验证栈序列
+//  Time: 2026-08-13 14:09:42
+//  Problem: P11601 『Fwb』狼人の杀戮
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P4387
-//  Memory Limit: 125 MB
+//  URL: https://www.luogu.com.cn/problem/P11601
+//  Memory Limit: 512 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 64f618f5-bc20-458a-89f9-22d25585af1a
+//  Batch ID: f5a6880c-4286-4bc3-b4cf-64f3c623ad0d
 //
 // Algorithm:
 // Complexity: O()
@@ -24,7 +24,7 @@ Copyright (C) 2026 TangYixiao
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-#define MULTIPLE_TEST
+// #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -648,34 +648,135 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 1e5 + 5;
-int T, n, a[N], b[N], cnt;
+const int N = 25;
 
+int t, n, a[N];
+bool live[N], poison[N], heal[N];
 inline void solve(int Task_Id) {
-    cnt = 1;
-    cin >> n;
+
+    cin >> t >> n;
+
     for (int i = 1; i <= n; i++) {
         cin >> a[i];
+        live[i] = 1;
     }
-    for (int i = 1; i <= n; i++) {
-        cin >> b[i];
-    }
-    stack<int> s;
-    for (int i = 1; i <= n; i++) {
-        s.push(a[i]);
-        for (; s.top() == b[cnt] && !s.empty();) {
-            s.pop();
-            cnt++;
-            if (s.empty()) {
-                break;
+
+    while (t--) {
+        int m;
+        cin >> m;
+
+        bool lv[N], ps[N], hl[N];
+        bool used[N] = {}, shot[N] = {}, die[N] = {};
+
+        memcpy(lv, live, sizeof(live));
+        memcpy(ps, poison, sizeof(poison));
+        memcpy(hl, heal, sizeof(heal));
+
+        bool ok = 1;
+
+        while (m--) {
+            int op, x, y;
+            cin >> op >> x >> y;
+
+            if (!ok)
+                continue;
+
+            if (x < 1 || x > n || y < 1 || y > n) {
+                ok = 0;
+                continue;
+            }
+
+            if (op == 0) {
+                if (a[x] != 1 || !lv[x] || used[x] || x == y || !lv[y]) {
+                    ok = 0;
+                    continue;
+                }
+
+                used[x] = 1;
+                lv[y] = 0;
+                die[y] = 1;
+                shot[y] = 0;
+            } else if (op == 1) {
+                if (a[x] != 4 || !lv[x] || used[x] || ps[x] || x == y || !lv[y]) {
+                    ok = 0;
+                    continue;
+                }
+
+                used[x] = 1;
+                ps[x] = 1;
+                lv[y] = 0;
+                die[y] = 1;
+                shot[y] = 0;
+            } else if (op == 2) {
+                if (a[x] != 4 || used[x] || hl[x]) {
+                    ok = 0;
+                    continue;
+                }
+
+                if (!lv[x] && x != y) {
+                    ok = 0;
+                    continue;
+                }
+
+                if (lv[y] || !die[y]) {
+                    ok = 0;
+                    continue;
+                }
+
+                used[x] = 1;
+                hl[x] = 1;
+                lv[y] = 1;
+
+                shot[y] = 0;
+            } else if (op == 3) {
+                if (a[x] != 3 || lv[x] || !die[x] || shot[x] || x == y || !lv[y]) {
+                    ok = 0;
+                    continue;
+                }
+
+                shot[x] = 1;
+                lv[y] = 0;
+                die[y] = 1;
+                shot[y] = 0;
+            } else {
+                ok = 0;
             }
         }
+
+        if (ok) {
+            for (int i = 1; i <= n; i++) {
+                if (a[i] == 3 && !lv[i] && die[i] && !shot[i]) {
+                    ok = 0;
+                    break;
+                }
+            }
+        }
+
+        if (!ok) {
+            cout << "Wrong\n";
+            continue;
+        }
+
+        memcpy(live, lv, sizeof(live));
+        memcpy(poison, ps, sizeof(poison));
+        memcpy(heal, hl, sizeof(heal));
+
+        vector<int> dead;
+
+        for (int i = 1; i <= n; i++)
+            if (!live[i] && die[i])
+                dead.push_back(i);
+
+        if (dead.empty()) {
+            cout << "Safe\n";
+        } else {
+            cout << dead.size();
+            for (int x : dead)
+                cout << ' ' << x;
+            cout << '\n';
+        }
     }
-    if (s.empty()) {
-        cout << "Yes\n";
-    } else {
-        cout << "No\n";
-    }
+
     return;
 }
 } // namespace TANGYIXIAO

@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-13 13:57:21
-//  Problem: P4387 【深基15.习9】验证栈序列
+//  Time: 2026-08-13 16:10:03
+//  Problem: P3870 [TJOI2009] 开关
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P4387
+//  URL: https://www.luogu.com.cn/problem/P3870
 //  Memory Limit: 125 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 64f618f5-bc20-458a-89f9-22d25585af1a
+//  Batch ID: 4c62a1fe-1abe-4bc1-8481-e75c0b18e3a9
 //
 // Algorithm:
 // Complexity: O()
@@ -24,7 +24,7 @@ Copyright (C) 2026 TangYixiao
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-#define MULTIPLE_TEST
+// #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -648,34 +648,78 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 1e5 + 5;
-int T, n, a[N], b[N], cnt;
+const int N = 100005;
 
+int n, m;
+int sum[N << 2];
+bool tag[N << 2];
+
+void rev(int p, int l, int r) {
+    sum[p] = r - l + 1 - sum[p];
+    tag[p] ^= 1;
+}
+
+void push(int p, int l, int r) {
+    if (!tag[p] || l == r)
+        return;
+
+    int mid = (l + r) >> 1;
+
+    rev(p << 1, l, mid);
+    rev(p << 1 | 1, mid + 1, r);
+
+    tag[p] = 0;
+}
+
+void change(int p, int l, int r, int L, int R) {
+    if (L <= l && r <= R) {
+        rev(p, l, r);
+        return;
+    }
+
+    push(p, l, r);
+
+    int mid = (l + r) >> 1;
+
+    if (L <= mid)
+        change(p << 1, l, mid, L, R);
+
+    if (R > mid)
+        change(p << 1 | 1, mid + 1, r, L, R);
+
+    sum[p] = sum[p << 1] + sum[p << 1 | 1];
+}
+
+int ask(int p, int l, int r, int L, int R) {
+    if (L <= l && r <= R)
+        return sum[p];
+
+    push(p, l, r);
+
+    int mid = (l + r) >> 1;
+    int ans = 0;
+
+    if (L <= mid)
+        ans += ask(p << 1, l, mid, L, R);
+
+    if (R > mid)
+        ans += ask(p << 1 | 1, mid + 1, r, L, R);
+
+    return ans;
+}
 inline void solve(int Task_Id) {
-    cnt = 1;
-    cin >> n;
-    for (int i = 1; i <= n; i++) {
-        cin >> a[i];
+    cin >> n >> m;
+
+    while (m--) {
+        int c, a, b;
+        cin >> c >> a >> b;
+
+        if (c == 0)
+            change(1, 1, n, a, b);
+        else
+            cout << ask(1, 1, n, a, b) << '\n';
     }
-    for (int i = 1; i <= n; i++) {
-        cin >> b[i];
-    }
-    stack<int> s;
-    for (int i = 1; i <= n; i++) {
-        s.push(a[i]);
-        for (; s.top() == b[cnt] && !s.empty();) {
-            s.pop();
-            cnt++;
-            if (s.empty()) {
-                break;
-            }
-        }
-    }
-    if (s.empty()) {
-        cout << "Yes\n";
-    } else {
-        cout << "No\n";
-    }
+
     return;
 }
 } // namespace TANGYIXIAO

@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-13 13:57:21
-//  Problem: P4387 【深基15.习9】验证栈序列
+//  Time: 2026-08-13 14:27:08
+//  Problem: P4924 [1007] 魔法少女小Scarlet
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P4387
+//  URL: https://www.luogu.com.cn/problem/P4924
 //  Memory Limit: 125 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 64f618f5-bc20-458a-89f9-22d25585af1a
+//  Batch ID: f2c90bb3-3707-4e4b-a082-670f444dd753
 //
 // Algorithm:
 // Complexity: O()
@@ -24,7 +24,7 @@ Copyright (C) 2026 TangYixiao
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-#define MULTIPLE_TEST
+// #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -648,34 +648,41 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 1e5 + 5;
-int T, n, a[N], b[N], cnt;
+
+const int N = 505;
+
+int n, m, a[N][N], b[N][N];
 
 inline void solve(int Task_Id) {
-    cnt = 1;
-    cin >> n;
-    for (int i = 1; i <= n; i++) {
-        cin >> a[i];
-    }
-    for (int i = 1; i <= n; i++) {
-        cin >> b[i];
-    }
-    stack<int> s;
-    for (int i = 1; i <= n; i++) {
-        s.push(a[i]);
-        for (; s.top() == b[cnt] && !s.empty();) {
-            s.pop();
-            cnt++;
-            if (s.empty()) {
-                break;
+
+    cin >> n >> m;
+
+    for (int i = 1; i <= n; i++)
+        for (int j = 1; j <= n; j++)
+            a[i][j] = (i - 1) * n + j;
+
+    while (m--) {
+        int x, y, r, z;
+        cin >> x >> y >> r >> z;
+
+        for (int i = x - r; i <= x + r; i++)
+            for (int j = y - r; j <= y + r; j++) {
+                if (z == 0)
+                    b[x + j - y][y - i + x] = a[i][j];
+                else
+                    b[x - j + y][y + i - x] = a[i][j];
             }
-        }
+
+        for (int i = x - r; i <= x + r; i++)
+            for (int j = y - r; j <= y + r; j++)
+                a[i][j] = b[i][j];
     }
-    if (s.empty()) {
-        cout << "Yes\n";
-    } else {
-        cout << "No\n";
+
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= n; j++)
+            cout << a[i][j] << (j == n ? '\n' : ' ');
     }
+
     return;
 }
 } // namespace TANGYIXIAO
