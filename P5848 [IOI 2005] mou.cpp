@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-14 07:27:33
-//  Problem: P5579 [PA 2015] Siano
+//  Time: 2026-08-14 07:40:41
+//  Problem: P5848 [IOI 2005] mou
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P5579
+//  URL: https://www.luogu.com.cn/problem/P5848
 //  Memory Limit: 125 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: fb734ff6-f9f0-4003-bfdd-faa756d1eed9
+//  Batch ID: 35d3713d-4c2e-4897-b897-6a72fddc1985
 //
 // Algorithm:
 // Complexity: O()
