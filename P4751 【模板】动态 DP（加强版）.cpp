@@ -1,3 +1,20 @@
+//  Author: Tangyixiao
+//  Time: 2026-08-15 07:42:10
+//  Problem: P4751 【模板】动态 DP（加强版）
+//  Contest: Luogu
+//  URL: https://www.luogu.com.cn/problem/P4751
+//  Memory Limit: 250 MB
+//  Time Limit: 3500 ms
+//  Interactive: false
+//  Test Type: single
+//  Batch ID: 03b8215e-24a5-4f0b-8ae0-2f606fb8b516
+//
+// Algorithm:
+// Complexity: O()
+// Note:
+//
+//
+// Powered by CP Editor (https://cpeditor.org)
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -14,6 +31,8 @@ Copyright (C) 2026 TangYixiao
 // #define BITS_NOT_ALLOWED
 // #define PD_DS_USED
 // #define TESTLIB
+
+// clang-format off
 #pragma region PREPROCESSOR
 #pragma region PRAGMAS
 #if PRAGMA_TYPE == 2
@@ -536,21 +555,27 @@ using namespace __gnu_pbds;
 namespace TANGYIXIAO {
 #pragma region IO
 namespace IO {
-inline void Init_IO() { cin.tie(0)->sync_with_stdio(false); }
+namespace FAST_IO {
+#ifdef __unix__
+#define ugetchar getchar_unlocked
+#else
+#define ugetchar _getchar_nolock
+#endif
+inline void IOSS_Init() { std::ios::sync_with_stdio(false); std::cin.tie(0); std::cout.tie(0); return; }
+}
+using namespace FAST_IO;
 #pragma region FILE_IO
 namespace FILE_IO {
-const string Insuffix = ".in", Outsuffix = ".out", Anssuffix = ".ans";
-inline void Judge_File(string File_Name) { freopen((File_Name + Insuffix).c_str(), "r", stdin), freopen((File_Name + Outsuffix).c_str(), "w", stdout); }
-inline void Local_File(string File_Name, int File_Idx) { freopen((File_Name + to_string(File_Idx) + Insuffix).c_str(), "r", stdin), freopen((File_Name + to_string(File_Idx) + Outsuffix).c_str(), "w", stdout); }
+const std::string Insuffix = ".in", Outsuffix = ".out", Anssuffix = ".ans";
+inline void Judge_File(std::string File_Name) { freopen((File_Name + Insuffix).c_str(), "r", stdin), freopen((File_Name + Outsuffix).c_str(), "w", stdout); return; }
+inline void Local_File(std::string File_Name, int File_Idx) { freopen((File_Name + std::to_string(File_Idx) + Insuffix).c_str(), "r", stdin), freopen((File_Name + std::to_string(File_Idx) + Outsuffix).c_str(), "w", stdout); return; }
 } // namespace FILE_IO
 using namespace FILE_IO;
 #pragma endregion FILE_IO
 #pragma region INT128_IO
 namespace INT128_IO {
-// clang-format off
-istream&operator>>(istream&is,__int128&x){string s;is>>s;bool neg=false;x=0;for(char c:s){if(c=='-')neg=true;else x=x*10+(c-'0');}if(neg)x=-x;return is;}
-ostream&operator<<(ostream&os,__int128 x){if(x==0)os<<0;else{string s,t;if(x<0)x=-x,t="-";while(x)s.push_back('0'+x%10),x/=10;reverse(s.begin(),s.end());os<<t<<s;}return os;}
-// clang-format on
+std::istream &operator>>(std::istream &is, __int128 &x) { std::string s; is >> s; bool neg = false; x = 0; for (char c : s) { if (c == '-') { neg = true; } else { x = x * 10 + (c - '0'); } } if (neg) { x = -x; } return is; }
+std::ostream &operator<<(std::ostream &os, __int128 x) { if (x == 0) { os << 0; } else { std::string s, t;if (x < 0) { x = -x, t = "-"; } for (; x;) { s.push_back('0' + x % 10), x /= 10; } std::reverse(s.begin(), s.end()); os << t << s; } return os; }
 } // namespace INT128_IO
 using namespace INT128_IO;
 #pragma endregion INT128_IO
@@ -560,31 +585,31 @@ using namespace IO;
 #pragma region TIME
 namespace TIME {
 clock_t Start_Time, End_Time;
-inline void Start_Time_Count() { Start_Time = clock(); }
-inline void End_Time_Count() { End_Time = clock(); }
+inline void Start_Time_Count() { Start_Time = clock(); return; }
+inline void End_Time_Count() { End_Time = clock(); return; }
 inline double Time_Count() { return (double)(End_Time - Start_Time) / CLOCKS_PER_SEC; }
-inline void Print_Time_Count(string Programe_Name) { cerr << fixed << setprecision(4) << "\n" + Programe_Name + " Time: " << Time_Count() << "s\n"; }
+inline void Print_Time_Count(std::string Programe_Name) { std::cerr << std::fixed << std::setprecision(4) << "\n" + Programe_Name + " Time: " << Time_Count() << "s\n"; return; }
 } // namespace TIME
 using namespace TIME;
 #pragma endregion TIME
 #pragma region DEBUGS
 namespace DEBUGS {
 #define All(x) (x).begin(), (x).end()
-#define fprint(...) cout << format(__VA_ARGS__)
-#define fprintln(...) cout << format(__VA_ARGS__) << '\n'
-#define ferr(...) cerr << format(__VA_ARGS__)
-#define ferrln(...) cerr << format(__VA_ARGS__) << '\n'
-#define funct(name, ret, ...) function<ret(__VA_ARGS__)> name = [&](__VA_ARGS__)
-inline void Debug_Print(string Debug_Message) { cerr << "\n" + Debug_Message + "\n"; }
+#define fprint(...) std::cout << std::format(__VA_ARGS__)
+#define fprintln(...) std::cout << std::format(__VA_ARGS__) << "\n"
+#define ferr(...) std::cerr << std::format(__VA_ARGS__)
+#define ferrln(...) std::cerr << std::format(__VA_ARGS__) << "\n"
+#define funct(name, ret, ...) std::function<ret(__VA_ARGS__)> name = [&](__VA_ARGS__)
+inline void Debug_Print(std::string Debug_Message) { std::cerr << "\n" << Debug_Message << "\n"; return;}
 } // namespace DEBUGS
 using namespace DEBUGS;
 #pragma endregion DEBUGS
 #pragma region BITS
 namespace BITS {
 template <class T>
-inline T lowbit(T x) { return x & (-x); }
+inline T lowbit(T x) { return ((x) & (-x)); }
 template <class T>
-inline T highbit(T x) { return (T)(log2(x) + 1); }
+inline T highbit(T x) { return (T)(std::log2(x) + 1); }
 template <class T>
 inline T Pop_Count(T x) { return __builtin_popcount(x); }
 } // namespace BITS
@@ -593,13 +618,14 @@ using namespace BITS;
 inline void solve(int Task_Id);
 } // namespace TANGYIXIAO
 using namespace TANGYIXIAO;
+// clang-format on
 #pragma endregion TANGYIXIAO
 #pragma region MAIN
 signed main(int argc, char *argv[]) {
 #ifdef TIME_COUNT
     Start_Time_Count();
 #endif
-    Init_IO();
+    IOSS_Init();
 #if JUDGE == 1
     Judge_File(FILE_NAME);
 #elif JUDGE == 2
@@ -622,260 +648,8 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int MAXN = 1000005;
-const int INF = 2000000000; // 极小负值，保证加法不溢出
-
-int n, m;
-int a[MAXN];
-
-// 原树邻接表
-int head[MAXN], to[MAXN * 2], nxt[MAXN * 2], tot;
-void add_edge(int u, int v) {
-    to[++tot] = v;
-    nxt[tot] = head[u];
-    head[u] = tot;
-}
-
-// 树剖信息
-int fa_orig[MAXN], sz[MAXN], son[MAXN];
-int g0[MAXN], g1[MAXN];   // 轻儿子贡献
-int dp0[MAXN], dp1[MAXN]; // 节点 DP 值
-
-// 全局平衡二叉树
-int ls[MAXN], rs[MAXN], bal_fa[MAXN];
-int weight[MAXN];
-
-// 转移矩阵 val 和子树乘积 prod（展开为独立变量）
-int v00[MAXN], v01[MAXN], v10[MAXN], v11[MAXN];
-int p00[MAXN], p01[MAXN], p10[MAXN], p11[MAXN];
-
-// 子树最左/最右节点的 DP
-int top0[MAXN], top1[MAXN];
-int bot0[MAXN], bot1[MAXN];
-
-// 辅助数组
-int order[MAXN], q[MAXN], chain[MAXN], stk[MAXN];
-
-// 第一次 BFS / 逆序 DP
-void bfs_pre() {
-    int h = 0, t = 0, ot = 0;
-    q[t++] = 1;
-    fa_orig[1] = 0;
-    while (h < t) {
-        int u = q[h++];
-        order[ot++] = u;
-        for (int e = head[u]; e; e = nxt[e]) {
-            int v = to[e];
-            if (v == fa_orig[u])
-                continue;
-            fa_orig[v] = u;
-            q[t++] = v;
-        }
-    }
-    // 第一遍逆序：子树大小、重儿子
-    for (int i = ot - 1; i >= 0; --i) {
-        int u = order[i];
-        sz[u] = 1;
-        son[u] = 0;
-        int maxs = 0;
-        g0[u] = 0;
-        g1[u] = a[u];
-        for (int e = head[u]; e; e = nxt[e]) {
-            int v = to[e];
-            if (v == fa_orig[u])
-                continue;
-            sz[u] += sz[v];
-            if (sz[v] > maxs)
-                maxs = sz[v], son[u] = v;
-        }
-    }
-    // 第二遍逆序：DP 与 g
-    for (int i = ot - 1; i >= 0; --i) {
-        int u = order[i];
-        for (int e = head[u]; e; e = nxt[e]) {
-            int v = to[e];
-            if (v == fa_orig[u] || v == son[u])
-                continue;
-            g0[u] += max(dp0[v], dp1[v]);
-            g1[u] += dp0[v];
-        }
-        if (son[u]) {
-            dp0[u] = g0[u] + max(dp0[son[u]], dp1[son[u]]);
-            dp1[u] = g1[u] + dp0[son[u]];
-        } else {
-            dp0[u] = g0[u];
-            dp1[u] = g1[u];
-        }
-    }
-}
-
-// 构建全局平衡二叉树
-void build_GBT() {
-    for (int i = 1; i <= n; ++i) {
-        if (fa_orig[i] == 0 || son[fa_orig[i]] != i) { // i 是重链链顶
-            int len = 0;
-            for (int u = i; u; u = son[u])
-                chain[len++] = u;
-            for (int j = 0; j < len; ++j) {
-                int u = chain[j];
-                weight[u] = sz[u] - (son[u] ? sz[son[u]] : 0);
-            }
-            int top = 0;
-            for (int j = 0; j < len; ++j) {
-                int u = chain[j];
-                int last = 0;
-                while (top && weight[stk[top - 1]] < weight[u])
-                    last = stk[--top];
-                ls[u] = last;
-                if (last)
-                    bal_fa[last] = u;
-                if (top) {
-                    rs[stk[top - 1]] = u;
-                    bal_fa[u] = stk[top - 1];
-                } else {
-                    bal_fa[u] = 0;
-                }
-                stk[top++] = u;
-            }
-        }
-    }
-}
-
-// 根据 g 重构节点矩阵
-inline void set_val(int u) {
-    v00[u] = g0[u];
-    v01[u] = g0[u];
-    v10[u] = g1[u];
-    v11[u] = -INF;
-}
-
-// 平衡树 pushup
-inline void pushup(int u) {
-    int l = ls[u], r = rs[u];
-    // 计算 u 自身的 dp
-    if (r) {
-        dp0[u] = max(v00[u] + top0[r], v01[u] + top1[r]);
-        dp1[u] = max(v10[u] + top0[r], v11[u] + top1[r]);
-    } else {
-        dp0[u] = v00[u];
-        dp1[u] = v10[u];
-    }
-    // 子树最左
-    if (l) {
-        top0[u] = top0[l];
-        top1[u] = top1[l];
-    } else {
-        top0[u] = dp0[u];
-        top1[u] = dp1[u];
-    }
-    // 子树最右
-    if (r) {
-        bot0[u] = bot0[r];
-        bot1[u] = bot1[r];
-    } else {
-        bot0[u] = dp0[u];
-        bot1[u] = dp1[u];
-    }
-    // 矩阵乘积
-    int L00, L01, L10, L11;
-    if (l) {
-        L00 = p00[l];
-        L01 = p01[l];
-        L10 = p10[l];
-        L11 = p11[l];
-    } else {
-        L00 = 0;
-        L01 = -INF;
-        L10 = -INF;
-        L11 = 0;
-    }
-
-    int R00, R01, R10, R11;
-    if (r) {
-        R00 = p00[r];
-        R01 = p01[r];
-        R10 = p10[r];
-        R11 = p11[r];
-    } else {
-        R00 = 0;
-        R01 = -INF;
-        R10 = -INF;
-        R11 = 0;
-    }
-
-    int t00 = max(L00 + v00[u], L01 + v10[u]);
-    int t01 = max(L00 + v01[u], L01 + v11[u]);
-    int t10 = max(L10 + v00[u], L11 + v10[u]);
-    int t11 = max(L10 + v01[u], L11 + v11[u]);
-
-    p00[u] = max(t00 + R00, t01 + R10);
-    p01[u] = max(t00 + R01, t01 + R11);
-    p10[u] = max(t10 + R00, t11 + R10);
-    p11[u] = max(t10 + R01, t11 + R11);
-}
-
-// 递归初始化平衡树
-void dfs_init(int u) {
-    if (ls[u])
-        dfs_init(ls[u]);
-    if (rs[u])
-        dfs_init(rs[u]);
-    set_val(u);
-    pushup(u);
-}
-
-void init_GBT() {
-    for (int i = 1; i <= n; ++i)
-        if (bal_fa[i] == 0)
-            dfs_init(i);
-}
-
 inline void solve(int Task_Id) {
-    scanf("%d%d", &n, &m);
-    for (int i = 1; i <= n; ++i)
-        scanf("%d", &a[i]);
-    for (int i = 1; i < n; ++i) {
-        int u, v;
-        scanf("%d%d", &u, &v);
-        add_edge(u, v);
-        add_edge(v, u);
-    }
-
-    bfs_pre();
-    build_GBT();
-    init_GBT();
-
-    int lastans = 0;
-    while (m--) {
-        int x, y;
-        scanf("%d%d", &x, &y);
-        x ^= lastans;
-        int delta = y - a[x];
-        a[x] = y;
-        g1[x] += delta;
-        set_val(x);
-
-        int cur = x;
-        while (cur) {
-            int rt = cur;
-            while (bal_fa[rt])
-                rt = bal_fa[rt]; // 当前重链的链顶
-            int old0 = dp0[rt], old1 = dp1[rt];
-            for (int v = cur; v; v = bal_fa[v])
-                pushup(v);
-            int new0 = dp0[rt], new1 = dp1[rt];
-            int f = fa_orig[rt];
-            if (!f) {
-                lastans = max(new0, new1);
-                break;
-            }
-            g0[f] += max(new0, new1) - max(old0, old1);
-            g1[f] += new0 - old0;
-            set_val(f);
-            cur = f;
-        }
-        printf("%d\n", lastans);
-    }
+    // do something here
     return;
 }
 } // namespace TANGYIXIAO
