@@ -631,8 +631,57 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 4e3 + 5;
+
+int n, m, k, t, h[N], y[N], v[N], ne[N], c;
+int a[N], f[N], g[N], q[N];
+
 inline void solve(int Task_Id) {
-    // do something here
+
+    cin >> n >> m >> k >> t;
+
+    for (int i = 1, x; i <= k; i++) {
+        cin >> x >> y[i] >> v[i];
+        ne[i] = h[x];
+        h[x] = i;
+    }
+
+    for (int i = 1; i <= n; i++) {
+        memset(a, 0, sizeof a);
+
+        for (int j = h[i]; j; j = ne[j])
+            a[y[j]] = v[j];
+
+        if (i == 1) {
+            for (int j = 1; j <= m; j++)
+                f[j] = a[j];
+            continue;
+        }
+
+        int l = 1, r = 0, p = 1;
+
+        for (int j = 1; j <= m; j++) {
+            while (p <= m && p <= j + t) {
+                while (l <= r && f[q[r]] <= f[p])
+                    r--;
+                q[++r] = p++;
+            }
+
+            while (l <= r && q[l] < j - t)
+                l++;
+
+            g[j] = f[q[l]] + a[j];
+        }
+
+        for (int j = 1; j <= m; j++)
+            f[j] = g[j];
+    }
+
+    int ans = 0;
+    for (int i = 1; i <= m; i++)
+        ans = max(ans, f[i]);
+
+    cout << ans;
     return;
 }
 } // namespace TANGYIXIAO
