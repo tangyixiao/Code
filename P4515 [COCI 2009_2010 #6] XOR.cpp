@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-14 12:56:10
-//  Problem: P2521 [HAOI2011] 防线修建
+//  Time: 2026-08-14 16:04:15
+//  Problem: P4515 [COCI 2009/2010 #6] XOR
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P2521
-//  Memory Limit: 512 MB
+//  URL: https://www.luogu.com.cn/problem/P4515
+//  Memory Limit: 125 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 52ce0ffd-f9ab-4c4c-8793-b789683c20c8
+//  Batch ID: 2b639da0-a4d3-4c0e-ba45-2c91d27c577d
 //
 // Algorithm:
 // Complexity: O()
@@ -648,137 +648,51 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 15;
 
-const int N = 2e5 + 5;
+long long x[N], y[N], r[N];
 
-struct P {
-    long long x, y;
-    bool operator<(const P &a) const {
-        return x < a.x;
-    }
-} p[N];
-
-struct Q {
-    int o, u;
-} q[N];
-
-int m, k, c[N];
-long double z[N], ans;
-set<P> s;
-
-long long cr(P a, P b, P c) {
-    return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
+void wt(__int128 x) {
+    if (x > 9)
+        wt(x / 10);
+    cout << char(x % 10 + '0');
 }
 
-long double ds(P a, P b) {
-    return hypotl(a.x - b.x, a.y - b.y);
-}
-
-bool del(set<P>::iterator x) {
-    if (x == s.begin())
-        return 0;
-    auto l = prev(x), r = next(x);
-    if (r == s.end())
-        return 0;
-    if (cr(*l, *x, *r) >= 0) {
-        ans += ds(*l, *r) - ds(*l, *x) - ds(*x, *r);
-        s.erase(x);
-        return 1;
-    }
-    return 0;
-}
-
-void add(P a) {
-    auto r = s.lower_bound(a);
-
-    if (r != s.end() && r->x == a.x) {
-        if (r->y >= a.y)
-            return;
-        auto x = r, l = x, rr = next(x);
-        bool hl = x != s.begin();
-        if (hl)
-            l = prev(x);
-        if (hl)
-            ans -= ds(*l, *x);
-        if (rr != s.end())
-            ans -= ds(*x, *rr);
-        if (hl && rr != s.end())
-            ans += ds(*l, *rr);
-        s.erase(x);
-    }
-
-    r = s.lower_bound(a);
-
-    if (r != s.end() && r != s.begin()) {
-        auto l = prev(r);
-        if (cr(*l, a, *r) >= 0)
-            return;
-    }
-
-    auto x = s.insert(a).first;
-
-    if (x != s.begin() && next(x) != s.end())
-        ans -= ds(*prev(x), *next(x));
-
-    if (x != s.begin())
-        ans += ds(*prev(x), *x);
-    if (next(x) != s.end())
-        ans += ds(*x, *next(x));
-
-    while (x != s.begin()) {
-        auto l = prev(x);
-        if (!del(l))
-            break;
-    }
-
-    while (next(x) != s.end()) {
-        auto r = next(x);
-        if (!del(r))
-            break;
-    }
-}
 inline void solve(int Task_Id) {
-    long long n, x, y;
-    cin >> n >> x >> y;
+    int n;
+    cin >> n;
+    for (int i = 0; i < n; i++)
+        cin >> x[i] >> y[i] >> r[i];
 
-    cin >> m;
-    for (int i = 1; i <= m; i++)
-        cin >> p[i].x >> p[i].y;
+    __int128 ans = 0;
 
-    cin >> k;
+    for (int s = 1; s < (1 << n); s++) {
+        long long a = 0, b = 0, c = 4e18;
+        int k = 0;
 
-    for (int i = 1; i <= k; i++) {
-        cin >> q[i].o;
-        if (q[i].o == 1) {
-            cin >> q[i].u;
-            c[q[i].u]++;
-        }
+        for (int i = 0; i < n; i++)
+            if (s >> i & 1) {
+                a = max(a, x[i]);
+                b = max(b, y[i]);
+                c = min(c, x[i] + y[i] + r[i]);
+                k++;
+            }
+
+        long long d = c - a - b;
+        if (d <= 0)
+            continue;
+
+        __int128 z = (__int128)d * d;
+        __int128 w = (__int128)1 << (k - 1);
+
+        if (k & 1)
+            ans += w * z;
+        else
+            ans -= w * z;
     }
 
-    add({0, 0});
-    add({n, 0});
-    add({x, y});
-
-    for (int i = 1; i <= m; i++)
-        if (!c[i])
-            add(p[i]);
-
-    for (int i = k; i; i--) {
-        if (q[i].o == 1) {
-            int u = q[i].u;
-            if (--c[u] == 0)
-                add(p[u]);
-        } else {
-            z[i] = ans;
-        }
-    }
-
-    cout << fixed << setprecision(2);
-
-    for (int i = 1; i <= k; i++)
-        if (q[i].o == 2)
-            cout << (double)z[i] << "\n";
-
+    wt(ans / 2);
+    cout << (ans & 1 ? ".5\n" : ".0\n");
     return;
 }
 } // namespace TANGYIXIAO

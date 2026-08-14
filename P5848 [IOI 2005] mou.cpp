@@ -648,154 +648,118 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-using ll = long long;
-
-const int N = 500005;
-
-int n, m;
-ll a[N];
+const int N = 1e6 + 5;
 
 struct Q {
-    ll s, sa, mx, ad, se;
-    bool hs;
-} tr[N << 2];
+    char o;
+    int l, r;
+    long long v;
+} q[N];
 
-void build(int p, int l, int r) {
-    if (l == r) {
-        tr[p].sa = a[l];
-        return;
-    }
-    int mid = (l + r) >> 1;
-    build(p << 1, l, mid);
-    build(p << 1 | 1, mid + 1, r);
-    tr[p].sa = tr[p << 1].sa + tr[p << 1 | 1].sa;
+int n, qn, c, x[N];
+long long s[N << 2], m[N << 2], v[N << 2];
+bool z[N << 2];
+
+void ap(int p, int l, int r, long long k) {
+    long long d = x[r + 1] - x[l];
+    s[p] = k * d;
+    m[p] = k > 0 ? s[p] : k;
+    v[p] = k;
+    z[p] = 1;
 }
 
-void setv(int p, int l, int r, ll x) {
-    tr[p].s = x * (r - l + 1LL);
-    tr[p].mx = x;
-    tr[p].se = x;
-    tr[p].hs = 1;
-    tr[p].ad = 0;
-}
-
-void addv(int p, int l, int r, ll x) {
-    tr[p].s += tr[p].sa * x;
-    tr[p].mx += a[r] * x;
-    tr[p].ad += x;
-}
-
-void push(int p, int l, int r) {
+void bd(int p, int l, int r) {
+    z[p] = 1;
     if (l == r)
         return;
-
-    int mid = (l + r) >> 1;
-
-    if (tr[p].hs) {
-        setv(p << 1, l, mid, tr[p].se);
-        setv(p << 1 | 1, mid + 1, r, tr[p].se);
-        tr[p].hs = 0;
-    }
-
-    if (tr[p].ad) {
-        addv(p << 1, l, mid, tr[p].ad);
-        addv(p << 1 | 1, mid + 1, r, tr[p].ad);
-        tr[p].ad = 0;
-    }
+    int m = (l + r) >> 1;
+    bd(p << 1, l, m);
+    bd(p << 1 | 1, m + 1, r);
 }
 
-void pull(int p) {
-    tr[p].s = tr[p << 1].s + tr[p << 1 | 1].s;
-    tr[p].mx = tr[p << 1 | 1].mx;
+void pd(int p, int l, int r) {
+    if (!z[p] || l == r)
+        return;
+    int m = (l + r) >> 1;
+    ap(p << 1, l, m, v[p]);
+    ap(p << 1 | 1, m + 1, r, v[p]);
+    z[p] = 0;
 }
 
-void change(int p, int l, int r, int L, int R, ll x) {
+void pu(int p) {
+    s[p] = s[p << 1] + s[p << 1 | 1];
+    m[p] = max(m[p << 1], s[p << 1] + m[p << 1 | 1]);
+}
+
+void up(int p, int l, int r, int L, int R, long long k) {
     if (L <= l && r <= R) {
-        setv(p, l, r, x);
+        ap(p, l, r, k);
         return;
     }
-
-    push(p, l, r);
-
-    int mid = (l + r) >> 1;
-
-    if (L <= mid)
-        change(p << 1, l, mid, L, R, x);
-    if (R > mid)
-        change(p << 1 | 1, mid + 1, r, L, R, x);
-
-    pull(p);
+    pd(p, l, r);
+    int m = (l + r) >> 1;
+    if (L <= m)
+        up(p << 1, l, m, L, R, k);
+    if (R > m)
+        up(p << 1 | 1, m + 1, r, L, R, k);
+    pu(p);
 }
 
-ll ask(int p, int l, int r, int L, int R) {
-    if (L <= l && r <= R)
-        return tr[p].s;
-
-    push(p, l, r);
-
-    int mid = (l + r) >> 1;
-    ll ans = 0;
-
-    if (L <= mid)
-        ans += ask(p << 1, l, mid, L, R);
-    if (R > mid)
-        ans += ask(p << 1 | 1, mid + 1, r, L, R);
-
-    return ans;
+long long ask(int p, int l, int r, long long h, long long pre) {
+    if (l == r) {
+        long long k = v[p];
+        if (k <= 0)
+            return x[r + 1] - 1;
+        long long t = (h - pre) / k;
+        long long d = x[r + 1] - x[l];
+        if (t > d)
+            t = d;
+        return x[l] - 1 + t;
+    }
+    pd(p, l, r);
+    int md = (l + r) >> 1;
+    if (pre + m[p << 1] > h)
+        return ask(p << 1, l, md, h, pre);
+    return ask(p << 1 | 1, md + 1, r, h, pre + s[p << 1]);
 }
 
-int findp(int p, int l, int r, ll x) {
-    if (tr[p].mx < x)
-        return n + 1;
-
-    if (l == r)
-        return l;
-
-    push(p, l, r);
-
-    int mid = (l + r) >> 1;
-
-    if (tr[p << 1].mx >= x)
-        return findp(p << 1, l, mid, x);
-
-    return findp(p << 1 | 1, mid + 1, r, x);
-}
 inline void solve(int Task_Id) {
-    cin >> n >> m;
+    cin >> n;
+    x[++c] = 1;
+    x[++c] = n + 1;
 
-    for (int i = 1; i <= n; i++)
-        cin >> a[i];
-
-    sort(a + 1, a + n + 1);
-
-    build(1, 1, n);
-
-    ll pre = 0;
-
-    while (m--) {
-        ll d, b;
-        cin >> d >> b;
-
-        ll dt = d - pre;
-        pre = d;
-
-        addv(1, 1, n, dt);
-
-        int p = findp(1, 1, n, b);
-
-        if (p == n + 1) {
-            cout << 0 << '\n';
-            continue;
+    char o;
+    while (cin >> o && o != 'E') {
+        ++qn;
+        q[qn].o = o;
+        if (o == 'I') {
+            cin >> q[qn].l >> q[qn].r >> q[qn].v;
+            x[++c] = q[qn].l;
+            x[++c] = q[qn].r + 1;
+        } else {
+            cin >> q[qn].v;
         }
-
-        ll s = ask(1, 1, n, p, n);
-        ll ans = s - b * (n - p + 1LL);
-
-        cout << ans << '\n';
-
-        change(1, 1, n, p, n, b);
     }
 
+    sort(x + 1, x + c + 1);
+    c = unique(x + 1, x + c + 1) - x - 1;
+
+    int k = c - 1;
+    bd(1, 1, k);
+
+    for (int i = 1; i <= qn; i++) {
+        if (q[i].o == 'I') {
+            int l = lower_bound(x + 1, x + c + 1, q[i].l) - x;
+            int r = lower_bound(x + 1, x + c + 1, q[i].r + 1) - x - 1;
+            up(1, 1, k, l, r, q[i].v);
+        } else {
+            long long h = q[i].v;
+            if (m[1] <= h)
+                cout << n << "\n";
+            else
+                cout << ask(1, 1, k, h, 0) << "\n";
+        }
+    }
     return;
 }
 } // namespace TANGYIXIAO
