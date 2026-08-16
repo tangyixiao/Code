@@ -1,3 +1,20 @@
+//  Author: Tangyixiao
+//  Time: 2026-08-15 08:05:46
+//  Problem: P9871 [NOIP2023] 天天爱打卡
+//  Contest: Luogu
+//  URL: https://www.luogu.com.cn/problem/P9871
+//  Memory Limit: 512 MB
+//  Time Limit: 2000 ms
+//  Interactive: false
+//  Test Type: single
+//  Batch ID: cdc57b38-ac9d-46f8-a430-3a5c2c9626e3
+//
+// Algorithm:
+// Complexity: O()
+// Note:
+//
+//
+// Powered by CP Editor (https://cpeditor.org)
 
 /*
 Copyright (C) 2026 TangYixiao

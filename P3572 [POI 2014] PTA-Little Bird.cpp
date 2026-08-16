@@ -1,3 +1,20 @@
+//  Author: Tangyixiao
+//  Time: 2026-08-15 13:53:20
+//  Problem: P3572 [POI 2014] PTA-Little Bird
+//  Contest: Luogu
+//  URL: https://www.luogu.com.cn/problem/P3572
+//  Memory Limit: 512 MB
+//  Time Limit: 1000 ms
+//  Interactive: false
+//  Test Type: single
+//  Batch ID: c864276f-9769-4c3f-b197-672ad1c20181
+//
+// Algorithm:
+// Complexity: O()
+// Note:
+//
+//
+// Powered by CP Editor (https://cpeditor.org)
 
 /*
 Copyright (C) 2026 TangYixiao

@@ -1,3 +1,20 @@
+//  Author: Tangyixiao
+//  Time: 2026-08-15 08:17:54
+//  Problem: P3195 [HNOI2008] 玩具装箱
+//  Contest: Luogu
+//  URL: https://www.luogu.com.cn/problem/P3195
+//  Memory Limit: 125 MB
+//  Time Limit: 1000 ms
+//  Interactive: false
+//  Test Type: single
+//  Batch ID: 4e716810-18c4-4f4e-ae0c-739b3db02f31
+//
+// Algorithm:
+// Complexity: O()
+// Note:
+//
+//
+// Powered by CP Editor (https://cpeditor.org)
 
 /*
 Copyright (C) 2026 TangYixiao

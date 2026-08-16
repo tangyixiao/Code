@@ -648,8 +648,244 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 1e6 + 5, I = 1e9, S = 1 << 20;
+
+char ib[S], ob[S];
+int ip, il, op;
+
+inline char gc() {
+    if (ip == il)
+        il = fread(ib, 1, S, stdin), ip = 0;
+    return ip < il ? ib[ip++] : 0;
+}
+
+inline int rd() {
+    int x = 0, f = 1;
+    char c = gc();
+    while (c < '0' || c > '9') {
+        if (c == '-')
+            f = -1;
+        c = gc();
+    }
+    while (c >= '0' && c <= '9') {
+        x = x * 10 + c - '0';
+        c = gc();
+    }
+    return x * f;
+}
+
+inline void pc(char c) {
+    if (op == S)
+        fwrite(ob, 1, op, stdout), op = 0;
+    ob[op++] = c;
+}
+
+inline void wt(int x) {
+    if (x < 0)
+        pc('-'), x = -x;
+    char s[16];
+    int n = 0;
+    do
+        s[n++] = x % 10 + '0', x /= 10;
+    while (x);
+    while (n)
+        pc(s[--n]);
+    pc('\n');
+}
+
+struct F {
+    ~F() { fwrite(ob, 1, op, stdout); }
+} fl;
+
+struct M {
+    int a, b, c, d;
+};
+
+inline int mx(int a, int b) {
+    return a > b ? a : b;
+}
+
+inline M mul(const M &x, const M &y) {
+    M z;
+    z.a = mx(x.a + y.a, x.b + y.c);
+    z.b = mx(x.a + y.b, x.b + y.d);
+    z.c = mx(x.c + y.a, x.d + y.c);
+    z.d = mx(x.c + y.b, x.d + y.d);
+    return z;
+}
+
+int n, m, w[N];
+int h[N], to[N << 1], ne[N << 1], ec;
+int pa[N], sz[N], sn[N], o[N], oc;
+int f0[N], f1[N], g0[N], g1[N];
+int fa[N], ls[N], rs[N], b[N], p[N];
+M a[N], t[N];
+
+inline void add(int u, int v) {
+    to[++ec] = v;
+    ne[ec] = h[u];
+    h[u] = ec;
+}
+
+void pre() {
+    o[++oc] = 1;
+    for (int i = 1; i <= oc; i++) {
+        int u = o[i];
+        for (int j = h[u]; j; j = ne[j]) {
+            int v = to[j];
+            if (v == pa[u])
+                continue;
+            pa[v] = u;
+            o[++oc] = v;
+        }
+    }
+
+    for (int i = n; i; i--) {
+        int u = o[i];
+        sz[u] = 1;
+        f1[u] = w[u];
+
+        for (int j = h[u]; j; j = ne[j]) {
+            int v = to[j];
+            if (pa[v] != u)
+                continue;
+
+            sz[u] += sz[v];
+            f0[u] += mx(f0[v], f1[v]);
+            f1[u] += f0[v];
+
+            if (sz[v] > sz[sn[u]])
+                sn[u] = v;
+        }
+
+        int v = sn[u];
+
+        if (v) {
+            g0[u] = f0[u] - mx(f0[v], f1[v]);
+            g1[u] = f1[u] - f0[v];
+        } else {
+            g0[u] = f0[u];
+            g1[u] = f1[u];
+        }
+    }
+}
+
+int cb(int L, int R) {
+    int l = L, r = R;
+
+    while (l + 1 != r) {
+        int m = (l + r) >> 1;
+        if ((p[m] - p[L]) * 2 <= p[R] - p[L])
+            l = m;
+        else
+            r = m;
+    }
+
+    int u = b[l];
+    t[u] = a[u];
+
+    if (l > L) {
+        ls[u] = cb(L, l);
+        fa[ls[u]] = u;
+        t[u] = mul(t[ls[u]], t[u]);
+    }
+
+    if (l + 1 < R) {
+        rs[u] = cb(l + 1, R);
+        fa[rs[u]] = u;
+        t[u] = mul(t[u], t[rs[u]]);
+    }
+
+    return u;
+}
+
+int bd(int x) {
+    int y = x;
+
+    do {
+        a[y] = {g0[y], g0[y], g1[y], -I};
+
+        for (int i = h[y]; i; i = ne[i]) {
+            int v = to[i];
+            if (v == pa[y] || v == sn[y])
+                continue;
+            int z = bd(v);
+            fa[z] = y;
+        }
+    } while ((y = sn[y]));
+
+    int k = 0;
+    p[0] = 0;
+
+    for (int u = x; u; u = sn[u]) {
+        b[k] = u;
+        p[k + 1] = p[k] + sz[u] - sz[sn[u]];
+        k++;
+    }
+
+    return cb(0, k);
+}
+
+inline void pu(int x) {
+    t[x] = a[x];
+    if (ls[x])
+        t[x] = mul(t[ls[x]], t[x]);
+    if (rs[x])
+        t[x] = mul(t[x], t[rs[x]]);
+}
+
+void ch(int x, int y) {
+    g1[x] += y - w[x];
+    w[x] = y;
+    a[x].c = g1[x];
+
+    while (x) {
+        M z = t[x];
+
+        pu(x);
+
+        int p = fa[x];
+
+        if (p && ls[p] != x && rs[p] != x) {
+            g0[p] += mx(t[x].a, t[x].c) - mx(z.a, z.c);
+            g1[p] += t[x].a - z.a;
+
+            a[p].a = a[p].b = g0[p];
+            a[p].c = g1[p];
+        }
+
+        x = p;
+    }
+}
 inline void solve(int Task_Id) {
-    // do something here
+    n = rd();
+    m = rd();
+
+    for (int i = 1; i <= n; i++)
+        w[i] = rd();
+
+    for (int i = 1, u, v; i < n; i++) {
+        u = rd();
+        v = rd();
+        add(u, v);
+        add(v, u);
+    }
+
+    pre();
+
+    int rt = bd(1);
+    int las = 0;
+
+    while (m--) {
+        int x = rd(), y = rd();
+        x ^= las;
+
+        ch(x, y);
+
+        las = mx(t[rt].a, t[rt].c);
+        wt(las);
+    }
+
     return;
 }
 } // namespace TANGYIXIAO

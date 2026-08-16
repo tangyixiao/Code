@@ -1,3 +1,20 @@
+//  Author: Tangyixiao
+//  Time: 2026-08-15 13:48:18
+//  Problem: P2627 [USACO11OPEN] Mowing the Lawn G
+//  Contest: Luogu
+//  URL: https://www.luogu.com.cn/problem/P2627
+//  Memory Limit: 128 MB
+//  Time Limit: 1000 ms
+//  Interactive: false
+//  Test Type: single
+//  Batch ID: f5effee4-bdee-43e3-bb78-c763f762187b
+//
+// Algorithm:
+// Complexity: O()
+// Note:
+//
+//
+// Powered by CP Editor (https://cpeditor.org)
 
 /*
 Copyright (C) 2026 TangYixiao

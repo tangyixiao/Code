@@ -1,3 +1,20 @@
+//  Author: Tangyixiao
+//  Time: 2026-08-15 11:26:20
+//  Problem: P7914 [CSP-S 2021] 括号序列
+//  Contest: Luogu
+//  URL: https://www.luogu.com.cn/problem/P7914
+//  Memory Limit: 512 MB
+//  Time Limit: 1000 ms
+//  Interactive: false
+//  Test Type: single
+//  Batch ID: ae8fda63-f95e-417a-8c62-b2916e72fc95
+//
+// Algorithm:
+// Complexity: O()
+// Note:
+//
+//
+// Powered by CP Editor (https://cpeditor.org)
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -14,6 +31,8 @@ Copyright (C) 2026 TangYixiao
 // #define BITS_NOT_ALLOWED
 // #define PD_DS_USED
 // #define TESTLIB
+
+// clang-format off
 #pragma region PREPROCESSOR
 #pragma region PRAGMAS
 #if PRAGMA_TYPE == 2
@@ -536,21 +555,27 @@ using namespace __gnu_pbds;
 namespace TANGYIXIAO {
 #pragma region IO
 namespace IO {
-inline void Init_IO() { cin.tie(0)->sync_with_stdio(false); }
+namespace FAST_IO {
+#ifdef __unix__
+#define ugetchar getchar_unlocked
+#else
+#define ugetchar _getchar_nolock
+#endif
+inline void IOSS_Init() { std::ios::sync_with_stdio(false); std::cin.tie(0); std::cout.tie(0); return; }
+}
+using namespace FAST_IO;
 #pragma region FILE_IO
 namespace FILE_IO {
-const string Insuffix = ".in", Outsuffix = ".out", Anssuffix = ".ans";
-inline void Judge_File(string File_Name) { freopen((File_Name + Insuffix).c_str(), "r", stdin), freopen((File_Name + Outsuffix).c_str(), "w", stdout); }
-inline void Local_File(string File_Name, int File_Idx) { freopen((File_Name + to_string(File_Idx) + Insuffix).c_str(), "r", stdin), freopen((File_Name + to_string(File_Idx) + Outsuffix).c_str(), "w", stdout); }
+const std::string Insuffix = ".in", Outsuffix = ".out", Anssuffix = ".ans";
+inline void Judge_File(std::string File_Name) { freopen((File_Name + Insuffix).c_str(), "r", stdin), freopen((File_Name + Outsuffix).c_str(), "w", stdout); return; }
+inline void Local_File(std::string File_Name, int File_Idx) { freopen((File_Name + std::to_string(File_Idx) + Insuffix).c_str(), "r", stdin), freopen((File_Name + std::to_string(File_Idx) + Outsuffix).c_str(), "w", stdout); return; }
 } // namespace FILE_IO
 using namespace FILE_IO;
 #pragma endregion FILE_IO
 #pragma region INT128_IO
 namespace INT128_IO {
-// clang-format off
-istream&operator>>(istream&is,__int128&x){string s;is>>s;bool neg=false;x=0;for(char c:s){if(c=='-')neg=true;else x=x*10+(c-'0');}if(neg)x=-x;return is;}
-ostream&operator<<(ostream&os,__int128 x){if(x==0)os<<0;else{string s,t;if(x<0)x=-x,t="-";while(x)s.push_back('0'+x%10),x/=10;reverse(s.begin(),s.end());os<<t<<s;}return os;}
-// clang-format on
+std::istream &operator>>(std::istream &is, __int128 &x) { std::string s; is >> s; bool neg = false; x = 0; for (char c : s) { if (c == '-') { neg = true; } else { x = x * 10 + (c - '0'); } } if (neg) { x = -x; } return is; }
+std::ostream &operator<<(std::ostream &os, __int128 x) { if (x == 0) { os << 0; } else { std::string s, t;if (x < 0) { x = -x, t = "-"; } for (; x;) { s.push_back('0' + x % 10), x /= 10; } std::reverse(s.begin(), s.end()); os << t << s; } return os; }
 } // namespace INT128_IO
 using namespace INT128_IO;
 #pragma endregion INT128_IO
@@ -560,31 +585,31 @@ using namespace IO;
 #pragma region TIME
 namespace TIME {
 clock_t Start_Time, End_Time;
-inline void Start_Time_Count() { Start_Time = clock(); }
-inline void End_Time_Count() { End_Time = clock(); }
+inline void Start_Time_Count() { Start_Time = clock(); return; }
+inline void End_Time_Count() { End_Time = clock(); return; }
 inline double Time_Count() { return (double)(End_Time - Start_Time) / CLOCKS_PER_SEC; }
-inline void Print_Time_Count(string Programe_Name) { cerr << fixed << setprecision(4) << "\n" + Programe_Name + " Time: " << Time_Count() << "s\n"; }
+inline void Print_Time_Count(std::string Programe_Name) { std::cerr << std::fixed << std::setprecision(4) << "\n" + Programe_Name + " Time: " << Time_Count() << "s\n"; return; }
 } // namespace TIME
 using namespace TIME;
 #pragma endregion TIME
 #pragma region DEBUGS
 namespace DEBUGS {
 #define All(x) (x).begin(), (x).end()
-#define fprint(...) cout << format(__VA_ARGS__)
-#define fprintln(...) cout << format(__VA_ARGS__) << '\n'
-#define ferr(...) cerr << format(__VA_ARGS__)
-#define ferrln(...) cerr << format(__VA_ARGS__) << '\n'
-#define funct(name, ret, ...) function<ret(__VA_ARGS__)> name = [&](__VA_ARGS__)
-inline void Debug_Print(string Debug_Message) { cerr << "\n" + Debug_Message + "\n"; }
+#define fprint(...) std::cout << std::format(__VA_ARGS__)
+#define fprintln(...) std::cout << std::format(__VA_ARGS__) << "\n"
+#define ferr(...) std::cerr << std::format(__VA_ARGS__)
+#define ferrln(...) std::cerr << std::format(__VA_ARGS__) << "\n"
+#define funct(name, ret, ...) std::function<ret(__VA_ARGS__)> name = [&](__VA_ARGS__)
+inline void Debug_Print(std::string Debug_Message) { std::cerr << "\n" << Debug_Message << "\n"; return;}
 } // namespace DEBUGS
 using namespace DEBUGS;
 #pragma endregion DEBUGS
 #pragma region BITS
 namespace BITS {
 template <class T>
-inline T lowbit(T x) { return x & (-x); }
+inline T lowbit(T x) { return ((x) & (-x)); }
 template <class T>
-inline T highbit(T x) { return (T)(log2(x) + 1); }
+inline T highbit(T x) { return (T)(std::log2(x) + 1); }
 template <class T>
 inline T Pop_Count(T x) { return __builtin_popcount(x); }
 } // namespace BITS
@@ -593,13 +618,14 @@ using namespace BITS;
 inline void solve(int Task_Id);
 } // namespace TANGYIXIAO
 using namespace TANGYIXIAO;
+// clang-format on
 #pragma endregion TANGYIXIAO
 #pragma region MAIN
 signed main(int argc, char *argv[]) {
 #ifdef TIME_COUNT
     Start_Time_Count();
 #endif
-    Init_IO();
+    IOSS_Init();
 #if JUDGE == 1
     Judge_File(FILE_NAME);
 #elif JUDGE == 2
@@ -622,72 +648,67 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 505, P = 1e9 + 7;
+
+int n, k;
+string s;
+int f[4][N][N];
+bool o[N][N];
 inline void solve(int Task_Id) {
-    int n, k;
-    cin >> n >> k;
-    string s;
-    cin >> s;
-    s = "0" + s;
-    const int mod = 1e9 + 7;
-    vector<vector<int>> star(n + 2, vector<int>(n + 2, 0));
-    for (int i = 1; i <= n; ++i) {
-        bool ok = true;
-        for (int j = i; j <= i + k - 1 && j <= n; ++j) {
-            if (s[j] != '*' && s[j] != '?')
-                ok = false;
-            if (ok)
-                star[i][j] = 1;
+    cin >> n >> k >> s;
+    s = " " + s;
+    for (int l = 1; l <= n; l++) {
+        bool z = 1;
+        for (int r = l; r <= n && r - l + 1 <= k; r++) {
+            z &= (s[r] == '*' || s[r] == '?');
+            o[l][r] = z;
         }
     }
-    vector<vector<int>> dp0 = star;
-    vector<vector<int>> dp1(n + 2, vector<int>(n + 2, 0));
-    vector<vector<int>> dp2(n + 2, vector<int>(n + 2, 0));
-    vector<vector<int>> G(n + 2, vector<int>(n + 2, 0));
-    vector<vector<int>> dp3(n + 2, vector<int>(n + 2, 0));
-    auto ok_char = [&](char c, int type) {
-        if (type == 0)
-            return c == '(' || c == '?';
-        else
-            return c == ')' || c == '?';
-    };
-    for (int len = 1; len <= n; ++len) {
-        for (int i = 1; i + len - 1 <= n; ++i) {
-            int j = i + len - 1;
-            if (ok_char(s[i], 0) && ok_char(s[j], 1)) {
-                int l = i + 1, r = j - 1;
-                if (l > r)
-                    dp1[i][j] = 1;
+
+    for (int len = 1; len <= n; len++) {
+        for (int l = 1; l + len - 1 <= n; l++) {
+            int r = l + len - 1;
+
+            if (len >= 2 && (s[l] == '(' || s[l] == '?') && (s[r] == ')' || s[r] == '?')) {
+                if (len == 2)
+                    f[1][l][r] = 1;
                 else {
-                    if (dp0[l][r])
-                        dp1[i][j] = (dp1[i][j] + 1) % mod;
-                    dp1[i][j] = (dp1[i][j] + dp2[l][r]) % mod;
-                    for (int t = l; t < r; ++t) {
-                        dp1[i][j] = (dp1[i][j] + (long long)dp2[l][t] * dp0[t + 1][r]) % mod;
-                        dp1[i][j] = (dp1[i][j] + (long long)dp0[l][t] * dp2[t + 1][r]) % mod;
-                    }
+                    long long z = o[l + 1][r - 1];
+                    z += f[0][l + 1][r - 1];
+                    z += f[2][l + 1][r - 1];
+                    z += f[3][l + 1][r - 1];
+                    f[1][l][r] = z % P;
                 }
             }
-            G[i][j] = 0;
-            int max_t = min(j - 1, i + k - 1);
-            for (int t = i; t <= max_t; ++t) {
-                if (dp0[i][t]) {
-                    G[i][j] = (G[i][j] + dp1[t + 1][j]) % mod;
+
+            long long z = 0;
+            for (int p = l; p < r; p++)
+                if (o[l][p]) {
+                    z += f[0][p + 1][r];
+                    if (z >= 1LL * P * P)
+                        z %= P;
                 }
-            }
-            dp3[i][j] = 0;
-            for (int m = i; m <= j; ++m) {
-                if (G[i][m]) {
-                    int rest = (m + 1 <= j) ? dp3[m + 1][j] : 1;
-                    dp3[i][j] = (dp3[i][j] + (long long)G[i][m] * rest) % mod;
+            f[2][l][r] = z % P;
+
+            z = 0;
+            for (int p = l + 1; p <= r; p++)
+                if (o[p][r]) {
+                    z += f[0][l][p - 1];
+                    if (z >= 1LL * P * P)
+                        z %= P;
                 }
+            f[3][l][r] = z % P;
+
+            z = f[1][l][r];
+            for (int p = l; p < r; p++) {
+                long long q = (f[0][p + 1][r] + f[2][p + 1][r]) % P;
+                z = (z + 1LL * f[1][l][p] * q) % P;
             }
-            dp2[i][j] = dp1[i][j];
-            for (int p = i; p < j; ++p) {
-                dp2[i][j] = (dp2[i][j] + (long long)dp1[i][p] * dp3[p + 1][j]) % mod;
-            }
+            f[0][l][r] = z;
         }
     }
-    cout << dp2[1][n] << '\n';
+
+    cout << f[0][1][n] << '\n';
     return;
 }
 } // namespace TANGYIXIAO
