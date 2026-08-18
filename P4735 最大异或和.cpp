@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-18 07:30:40
-//  Problem: P6136 【模板】普通平衡树（数据加强版）
+//  Time: 2026-08-18 07:13:53
+//  Problem: P4735 最大异或和
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P6136
+//  URL: https://www.luogu.com.cn/problem/P4735
 //  Memory Limit: 512 MB
-//  Time Limit: 3000 ms
+//  Time Limit: 1500 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: a0aeb5e7-443e-4f71-8052-bc12c24a2f5c
+//  Batch ID: 6a37248e-9083-4bb3-a4d1-5d310fa74a9c
 //
 // Algorithm:
 // Complexity: O()
@@ -20,7 +20,7 @@
 Copyright (C) 2026 TangYixiao
 */
 
-#define PRAGMA_TYPE 0 // 0 for no pragma, 1 for Real optimize, 2 for All optimize, 3 for Compiler optimize
+#define PRAGMA_TYPE 0 // 0 for no pragma, 1 for Real opimize, 2 for All opimize, 3 for Compiler opimize
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
@@ -38,146 +38,146 @@ Copyright (C) 2026 TangYixiao
 #if PRAGMA_TYPE == 2
 #if PRAGMA_GCC_or_GPlusPlus_ALLOWED == 1
 #pragma region PRAGMA_GCC
-#pragma GCC optimize(1)
-#pragma GCC optimize(2)
-#pragma GCC optimize(3)
-#pragma GCC optimize("Ofast")
-#pragma GCC optimize("inline")
-#pragma GCC optimize("-fgcse")
-#pragma GCC optimize("-fgcse-lm")
-#pragma GCC optimize("-fipa-sra")
-#pragma GCC optimize("-ftree-pre")
-#pragma GCC optimize("-ftree-vrp")
-#pragma GCC optimize("-fpeephole2")
-#pragma GCC optimize("-ffast-math")
-#pragma GCC optimize("-fsched-spec")
-#pragma GCC optimize("unroll-loops")
-#pragma GCC optimize("-falign-jumps")
-#pragma GCC optimize("-falign-loops")
-#pragma GCC optimize("-falign-labels")
-#pragma GCC optimize("-fdevirtualize")
-#pragma GCC optimize("-fcaller-saves")
-#pragma GCC optimize("-fcrossjumping")
-#pragma GCC optimize("-fthread-jumps")
-#pragma GCC optimize("-funroll-loops")
-#pragma GCC optimize("-fwhole-program")
-#pragma GCC optimize("-freorder-blocks")
-#pragma GCC optimize("-fschedule-insns")
-#pragma GCC optimize("inline-functions")
-#pragma GCC optimize("-ftree-tail-merge")
-#pragma GCC optimize("-fschedule-insns2")
-#pragma GCC optimize("-fstrict-aliasing")
-#pragma GCC optimize("-fstrict-overflow")
-#pragma GCC optimize("-falign-functions")
-#pragma GCC optimize("-fcse-skip-blocks")
-#pragma GCC optimize("-fcse-follow-jumps")
-#pragma GCC optimize("-fsched-interblock")
-#pragma GCC optimize("-fpartial-inlining")
-#pragma GCC optimize("no-stack-protector")
-#pragma GCC optimize("-freorder-functions")
-#pragma GCC optimize("-findirect-inlining")
-#pragma GCC optimize("-frerun-cse-after-loop")
-#pragma GCC optimize("inline-small-functions")
-#pragma GCC optimize("-finline-small-functions")
-#pragma GCC optimize("-ftree-switch-conversion")
-#pragma GCC optimize("-foptimize-sibling-calls")
-#pragma GCC optimize("-fexpensive-optimizations")
-#pragma GCC optimize("-funsafe-loop-optimizations")
-#pragma GCC optimize("inline-functions-called-once")
-#pragma GCC optimize("-fdelete-null-pointer-checks")
+#pragma GCC opimize(1)
+#pragma GCC opimize(2)
+#pragma GCC opimize(3)
+#pragma GCC opimize("Ofast")
+#pragma GCC opimize("inline")
+#pragma GCC opimize("-fgcse")
+#pragma GCC opimize("-fgcse-lm")
+#pragma GCC opimize("-fipa-sra")
+#pragma GCC opimize("-ftree-pre")
+#pragma GCC opimize("-ftree-vrp")
+#pragma GCC opimize("-fpeephole2")
+#pragma GCC opimize("-ffast-math")
+#pragma GCC opimize("-fsched-spec")
+#pragma GCC opimize("unroll-loops")
+#pragma GCC opimize("-falign-jumps")
+#pragma GCC opimize("-falign-loops")
+#pragma GCC opimize("-falign-labels")
+#pragma GCC opimize("-fdevirtualize")
+#pragma GCC opimize("-fcaller-saves")
+#pragma GCC opimize("-fcrossjumping")
+#pragma GCC opimize("-fthread-jumps")
+#pragma GCC opimize("-funroll-loops")
+#pragma GCC opimize("-fwhole-program")
+#pragma GCC opimize("-freorder-blocks")
+#pragma GCC opimize("-fschedule-insns")
+#pragma GCC opimize("inline-functions")
+#pragma GCC opimize("-ftree-tail-merge")
+#pragma GCC opimize("-fschedule-insns2")
+#pragma GCC opimize("-fstrict-aliasing")
+#pragma GCC opimize("-fstrict-overflow")
+#pragma GCC opimize("-falign-functions")
+#pragma GCC opimize("-fcse-skip-blocks")
+#pragma GCC opimize("-fcse-follow-jumps")
+#pragma GCC opimize("-fsched-interblock")
+#pragma GCC opimize("-fpartial-inlining")
+#pragma GCC opimize("no-stack-protector")
+#pragma GCC opimize("-freorder-functions")
+#pragma GCC opimize("-findirect-inlining")
+#pragma GCC opimize("-frerun-cse-after-loop")
+#pragma GCC opimize("inline-small-functions")
+#pragma GCC opimize("-finline-small-functions")
+#pragma GCC opimize("-ftree-switch-conversion")
+#pragma GCC opimize("-fopimize-sibling-calls")
+#pragma GCC opimize("-fexpensive-opimizations")
+#pragma GCC opimize("-funsafe-loop-opimizations")
+#pragma GCC opimize("inline-functions-called-once")
+#pragma GCC opimize("-fdelete-null-pointer-checks")
 #pragma endregion PRAGMA_GCC
 
 #elif PRAGMA_GCC_or_GPlusPlus_ALLOWED == 2
 
 #pragma region PRAGMA_GPlusPlus
-#pragma G++ optimize(1)
-#pragma G++ optimize(2)
-#pragma G++ optimize(3)
-#pragma G++ optimize("Ofast")
-#pragma G++ optimize("inline")
-#pragma G++ optimize("-fgcse")
-#pragma G++ optimize("-fgcse-lm")
-#pragma G++ optimize("-fipa-sra")
-#pragma G++ optimize("-ftree-pre")
-#pragma G++ optimize("-ftree-vrp")
-#pragma G++ optimize("-fpeephole2")
-#pragma G++ optimize("-ffast-math")
-#pragma G++ optimize("-fsched-spec")
-#pragma G++ optimize("unroll-loops")
-#pragma G++ optimize("-falign-jumps")
-#pragma G++ optimize("-falign-loops")
-#pragma G++ optimize("-falign-labels")
-#pragma G++ optimize("-fdevirtualize")
-#pragma G++ optimize("-fcaller-saves")
-#pragma G++ optimize("-fcrossjumping")
-#pragma G++ optimize("-fthread-jumps")
-#pragma G++ optimize("-funroll-loops")
-#pragma G++ optimize("-fwhole-program")
-#pragma G++ optimize("-freorder-blocks")
-#pragma G++ optimize("-fschedule-insns")
-#pragma G++ optimize("inline-functions")
-#pragma G++ optimize("-ftree-tail-merge")
-#pragma G++ optimize("-fschedule-insns2")
-#pragma G++ optimize("-fstrict-aliasing")
-#pragma G++ optimize("-fstrict-overflow")
-#pragma G++ optimize("-falign-functions")
-#pragma G++ optimize("-fcse-skip-blocks")
-#pragma G++ optimize("-fcse-follow-jumps")
-#pragma G++ optimize("-fsched-interblock")
-#pragma G++ optimize("-fpartial-inlining")
-#pragma G++ optimize("no-stack-protector")
-#pragma G++ optimize("-freorder-functions")
-#pragma G++ optimize("-findirect-inlining")
-#pragma G++ optimize("-frerun-cse-after-loop")
-#pragma G++ optimize("inline-small-functions")
-#pragma G++ optimize("-finline-small-functions")
-#pragma G++ optimize("-ftree-switch-conversion")
-#pragma G++ optimize("-foptimize-sibling-calls")
-#pragma G++ optimize("-fexpensive-optimizations")
-#pragma G++ optimize("-funsafe-loop-optimizations")
-#pragma G++ optimize("inline-functions-called-once")
-#pragma G++ optimize("-fdelete-null-pointer-checks")
+#pragma G++ opimize(1)
+#pragma G++ opimize(2)
+#pragma G++ opimize(3)
+#pragma G++ opimize("Ofast")
+#pragma G++ opimize("inline")
+#pragma G++ opimize("-fgcse")
+#pragma G++ opimize("-fgcse-lm")
+#pragma G++ opimize("-fipa-sra")
+#pragma G++ opimize("-ftree-pre")
+#pragma G++ opimize("-ftree-vrp")
+#pragma G++ opimize("-fpeephole2")
+#pragma G++ opimize("-ffast-math")
+#pragma G++ opimize("-fsched-spec")
+#pragma G++ opimize("unroll-loops")
+#pragma G++ opimize("-falign-jumps")
+#pragma G++ opimize("-falign-loops")
+#pragma G++ opimize("-falign-labels")
+#pragma G++ opimize("-fdevirtualize")
+#pragma G++ opimize("-fcaller-saves")
+#pragma G++ opimize("-fcrossjumping")
+#pragma G++ opimize("-fthread-jumps")
+#pragma G++ opimize("-funroll-loops")
+#pragma G++ opimize("-fwhole-program")
+#pragma G++ opimize("-freorder-blocks")
+#pragma G++ opimize("-fschedule-insns")
+#pragma G++ opimize("inline-functions")
+#pragma G++ opimize("-ftree-tail-merge")
+#pragma G++ opimize("-fschedule-insns2")
+#pragma G++ opimize("-fstrict-aliasing")
+#pragma G++ opimize("-fstrict-overflow")
+#pragma G++ opimize("-falign-functions")
+#pragma G++ opimize("-fcse-skip-blocks")
+#pragma G++ opimize("-fcse-follow-jumps")
+#pragma G++ opimize("-fsched-interblock")
+#pragma G++ opimize("-fpartial-inlining")
+#pragma G++ opimize("no-stack-protector")
+#pragma G++ opimize("-freorder-functions")
+#pragma G++ opimize("-findirect-inlining")
+#pragma G++ opimize("-frerun-cse-after-loop")
+#pragma G++ opimize("inline-small-functions")
+#pragma G++ opimize("-finline-small-functions")
+#pragma G++ opimize("-ftree-switch-conversion")
+#pragma G++ opimize("-fopimize-sibling-calls")
+#pragma G++ opimize("-fexpensive-opimizations")
+#pragma G++ opimize("-funsafe-loop-opimizations")
+#pragma G++ opimize("inline-functions-called-once")
+#pragma G++ opimize("-fdelete-null-pointer-checks")
 #pragma endregion PRAGMA_GPlusPlus
 #else
 #endif
 #elif PRAGMA_TYPE == 1
 
-#pragma GCC optimize("O3")
+#pragma GCC opimize("O3")
 
 /*
-#pragma GCC optimize("Ofast,no-stack-protector") // 实测最好，但注意浮点数优化可能会导致精度问题，慎用
+#pragma GCC opimize("Ofast,no-stack-protector") // 实测最好，但注意浮点数优化可能会导致精度问题，慎用
 
-#pragma GCC optimize("Ofast")
+#pragma GCC opimize("Ofast")
 #pragma GCC target("sse3","sse2","sse")
 #pragma GCC target("avx","sse4","sse4.1","sse4.2","ssse3")
 #pragma GCC target("f16c")
-#pragma GCC optimize("inline","fast-math","unroll-loops","no-stack-protector")
+#pragma GCC opimize("inline","fast-math","unroll-loops","no-stack-protector")
 #pragma GCC diagnostic error "-fwhole-program"
 #pragma GCC diagnostic error "-fcse-skip-blocks"
-#pragma GCC diagnostic error "-funsafe-loop-optimizations"
+#pragma GCC diagnostic error "-funsafe-loop-opimizations"
 #pragma GCC diagnostic error "-std=c++14" // 注意版本
 */
 #elif PRAGMA_TYPE == 3
 
 #pragma region PRAGMA_COMPILER
-#pragma region Optimization
+#pragma region opimization
 
 /*
-#pragma GCC optimize("O0")                 // 对应 -O0：关闭所有优化（默认）
-#pragma GCC optimize("O1")                 // 对应 -O1：基本优化，不显著增加编译时间
-#pragma GCC optimize("O2")                 // 对应 -O2：推荐优化级别，启用大部分非体积换速度的优化
-#pragma GCC optimize("O3")                 // 对应 -O3：激进优化，包含函数内联等，可能增大代码体积
-#pragma GCC optimize("Os")                 // 对应 -Os：优化代码体积，在 -O2 基础上进一步压缩大小
-#pragma GCC optimize("Ofast")              // 对应 -Ofast：无视严格标准，追求极致性能（含 -O3 和快速数学）
-#pragma GCC optimize("Og")                 // 对应 -Og：调试时优化，平衡调试体验和运行性能
+#pragma GCC opimize("O0")                 // 对应 -O0：关闭所有优化（默认）
+#pragma GCC opimize("O1")                 // 对应 -O1：基本优化，不显著增加编译时间
+#pragma GCC opimize("O2")                 // 对应 -O2：推荐优化级别，启用大部分非体积换速度的优化
+#pragma GCC opimize("O3")                 // 对应 -O3：激进优化，包含函数内联等，可能增大代码体积
+#pragma GCC opimize("Os")                 // 对应 -Os：优化代码体积，在 -O2 基础上进一步压缩大小
+#pragma GCC opimize("Ofast")              // 对应 -Ofast：无视严格标准，追求极致性能（含 -O3 和快速数学）
+#pragma GCC opimize("Og")                 // 对应 -Og：调试时优化，平衡调试体验和运行性能
 
 // 具体优化开关（可叠加，用空格分隔）
-#pragma GCC optimize("unroll-loops")       // 对应 -funroll-loops：展开循环
-#pragma GCC optimize("inline-functions")   // 对应 -finline-functions：内联简单函数
-#pragma GCC optimize("omit-frame-pointer") // 对应 -fomit-frame-pointer：省略栈帧指针
-#pragma GCC optimize("tree-vectorize")     // 对应 -ftree-vectorize：启用自动向量化
+#pragma GCC opimize("unroll-loops")       // 对应 -funroll-loops：展开循环
+#pragma GCC opimize("inline-functions")   // 对应 -finline-functions：内联简单函数
+#pragma GCC opimize("omit-frame-pointer") // 对应 -fomit-frame-pointer：省略栈帧指针
+#pragma GCC opimize("tree-vectorize")     // 对应 -ftree-vectorize：启用自动向量化
 */
-#pragma endregion Optimization
+#pragma endregion opimization
 #pragma region Target_Architecture
 /*
 #pragma GCC target("arch=native")  // 对应 -march=native：针对本机CPU优化指令集
@@ -246,9 +246,9 @@ Copyright (C) 2026 TangYixiao
 #pragma endregion Visibility_Linking
 #pragma region Stack Protection_Security
 /*
-// 使用 optimize pragma 控制栈保护（GCC 4.9+ 支持）
-#pragma GCC optimize("stack-protector-strong") // 对应 -fstack-protector-strong：强栈保护
-#pragma GCC optimize("no-stack-protector")     // 对应 -fno-stack-protector：禁用栈保护
+// 使用 opimize pragma 控制栈保护（GCC 4.9+ 支持）
+#pragma GCC opimize("stack-protector-strong") // 对应 -fstack-protector-strong：强栈保护
+#pragma GCC opimize("no-stack-protector")     // 对应 -fno-stack-protector：禁用栈保护
 
 // 地址消毒剂（AddressSanitizer）无法通过 #pragma 在函数级开关，需要全局 -fsanitize=address
 // 但可以在函数上使用 __attribute__((no_sanitize_address))，此处不展开
@@ -258,28 +258,28 @@ Copyright (C) 2026 TangYixiao
 /*
 
 // 位置无关代码（PIC）不支持函数级 #pragma，但可以这样尝试（效果有限）
-#pragma GCC optimize("fPIC")             // 可能无效，实际需全局 -fPIC，此处仅为示例
+#pragma GCC opimize("fPIC")             // 可能无效，实际需全局 -fPIC，此处仅为示例
 
 // 禁止异常展开（C++）
-#pragma GCC optimize("no-exceptions")    // 对应 -fno-exceptions，仅在 C++ 中生效
+#pragma GCC opimize("no-exceptions")    // 对应 -fno-exceptions，仅在 C++ 中生效
 
 // 禁止 RTTI（C++）
-#pragma GCC optimize("no-rtti")          // 对应 -fno-rtti
+#pragma GCC opimize("no-rtti")          // 对应 -fno-rtti
 
 // 函数内联阈值调整
-#pragma GCC optimize("inline-limit=100") // 对应 --param inline-min-speedup=100（近似）
+#pragma GCC opimize("inline-limit=100") // 对应 --param inline-min-speedup=100（近似）
 */
 #pragma endregion Miscellaneous_Code_Generation
-#pragma region Pushing_Popping_Options
+#pragma region Pushing_Popping_opions
 /*
 
-#pragma GCC push_options   // 保存当前所有优化和目标选项
-#pragma GCC optimize("O3") // 临时启用 O3
+#pragma GCC push_opions   // 保存当前所有优化和目标选项
+#pragma GCC opimize("O3") // 临时启用 O3
 #pragma GCC target("avx2") // 临时启用 AVX2
 // ... 需要高性能的代码段 ...
-#pragma GCC pop_options    // 恢复之前保存的选项
+#pragma GCC pop_opions    // 恢复之前保存的选项
 */
-#pragma endregion Pushing_Popping_Options
+#pragma endregion Pushing_Popping_opions
 #pragma endregion PRAGMA_COMPILER
 #else
 #endif
@@ -343,7 +343,7 @@ Copyright (C) 2026 TangYixiao
 #if __cplusplus >= 201703L
 #include <any> // 可存储任意类型的对象 (any)
 // #include <execution> // 并行算法策略 (execution policy) [需 TBB，默认不包含]
-#include <optional>    // 可能包含值的对象 (optional)
+#include <opional>    // 可能包含值的对象 (opional)
 #include <string_view> // 字符串视图 (string_view)
 #include <variant>     // 类型安全的联合 (variant)
 
@@ -470,7 +470,7 @@ Copyright (C) 2026 TangYixiao
 // #include <execution>         // 并行算法策略 [需 TBB，默认不包含]
 #include <filesystem>      // 文件系统库 (path, directory_entry)
 #include <memory_resource> // 多态内存资源 (pmr::memory_resource)
-#include <optional>        // 可能包含值的对象
+#include <opional>        // 可能包含值的对象
 #include <variant>         // 类型安全的联合
 
 #endif
@@ -648,131 +648,62 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int MAXN = 1100005;
-int n, m, root;
-struct Node {
-    int v, p, l, r, s;
-} t[MAXN];
-int nc;
+const int N = 6e5 + 5, K = 24, M = N * (K + 1);
+int n, m, a[N], s[N], rt[N], tr[M][2], cnt[M], tot;
 
-inline int newn(int x) {
-    ++nc;
-    t[nc].v = x;
-    t[nc].p = rand();
-    t[nc].l = t[nc].r = 0;
-    t[nc].s = 1;
-    return nc;
-}
-
-inline void up(int u) {
-    t[u].s = 1 + t[t[u].l].s + t[t[u].r].s;
-}
-
-void spl(int u, int x, int &a, int &b) {
-    if (!u) {
-        a = b = 0;
-        return;
+inline void modify(int x, int ind) {
+    int p = rt[ind], q = rt[ind + 1] = ++tot;
+    tr[q][0] = tr[p][0];
+    tr[q][1] = tr[p][1];
+    cnt[q] = cnt[p] + 1;
+    for (int i = K - 1; ~i; --i) {
+        int b = (x >> i) & 1;
+        p = tr[p][b];
+        tr[q][b] = ++tot;
+        q = tr[q][b];
+        tr[q][0] = tr[p][0];
+        tr[q][1] = tr[p][1];
+        cnt[q] = cnt[p] + 1;
     }
-    if (t[u].v < x) {
-        a = u;
-        spl(t[u].r, x, t[u].r, b);
-    } else {
-        b = u;
-        spl(t[u].l, x, a, t[u].l);
-    }
-    up(u);
+    return;
 }
 
-int mrg(int a, int b) {
-    if (!a || !b)
-        return a | b;
-    if (t[a].p > t[b].p) {
-        t[a].r = mrg(t[a].r, b);
-        up(a);
-        return a;
-    } else {
-        t[b].l = mrg(a, t[b].l);
-        up(b);
-        return b;
-    }
-}
-
-void ins(int x) {
-    int a, b;
-    spl(root, x, a, b);
-    root = mrg(mrg(a, newn(x)), b);
-}
-
-void del(int x) {
-    int a, b, c;
-    spl(root, x, a, b);
-    spl(b, x + 1, b, c);
-    b = mrg(t[b].l, t[b].r);
-    root = mrg(mrg(a, b), c);
-}
-
-int rnk(int x) {
-    int a, b;
-    spl(root, x, a, b);
-    int ans = t[a].s + 1;
-    root = mrg(a, b);
-    return ans;
-}
-
-int kth(int k) {
-    int u = root;
-    while (u) {
-        int lsz = t[t[u].l].s;
-        if (k <= lsz)
-            u = t[u].l;
-        else if (k == lsz + 1)
-            return t[u].v;
-        else {
-            k -= lsz + 1;
-            u = t[u].r;
+inline int query(int x, int l, int r) {
+    int u = rt[l], v = rt[r + 1], res = 0;
+    for (int i = K - 1; ~i; --i) {
+        int b = (x >> i) & 1, c = b ^ 1;
+        if (cnt[tr[v][c]] > cnt[tr[u][c]]) {
+            res |= 1 << i;
+            u = tr[u][c];
+            v = tr[v][c];
+        } else {
+            u = tr[u][b];
+            v = tr[v][b];
         }
     }
-    return -1;
-}
-
-int pre(int x) {
-    int r = rnk(x) - 1;
-    return r > 0 ? kth(r) : -1;
-}
-
-int nxt(int x) {
-    int r = rnk(x + 1);
-    return r <= t[root].s ? kth(r) : -1;
+    return res;
 }
 
 inline void solve(int Task_Id) {
-    srand(time(0));
-    scanf("%d%d", &n, &m);
-    root = 0;
-    for (int i = 1; i <= n; ++i) {
-        int x;
-        scanf("%d", &x);
-        ins(x);
+    cin >> n >> m;
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i];
     }
-    int last = 0, ans = 0;
-    for (int i = 1; i <= m; ++i) {
-        int op, xp;
-        scanf("%d%d", &op, &xp);
-        int x = xp ^ last;
-        if (op == 1)
-            ins(x);
-        else if (op == 2)
-            del(x);
-        else if (op == 3)
-            last = rnk(x), ans ^= last;
-        else if (op == 4)
-            last = kth(x), ans ^= last;
-        else if (op == 5)
-            last = pre(x), ans ^= last;
-        else if (op == 6)
-            last = nxt(x), ans ^= last;
+    modify(0, 0);
+    for (int i = 1; i <= n; i++) {
+        modify(s[i] = s[i - 1] ^ a[i], i);
     }
-    printf("%d\n", ans);
+    for (int x, y, z; m--;) {
+        char op;
+        cin >> op >> x;
+        if (op == 'A') {
+            a[++n] = x;
+            modify(s[n] = s[n - 1] ^ x, n);
+        } else {
+            cin >> y >> z;
+            cout << query(z ^ s[n], x - 1, y - 1) << '\n';
+        }
+    }
     return;
 }
 } // namespace TANGYIXIAO

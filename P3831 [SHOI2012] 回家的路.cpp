@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-18 07:30:40
-//  Problem: P6136 【模板】普通平衡树（数据加强版）
+//  Time: 2026-08-18 15:28:37
+//  Problem: P3831 [SHOI2012] 回家的路
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P6136
-//  Memory Limit: 512 MB
-//  Time Limit: 3000 ms
+//  URL: https://www.luogu.com.cn/problem/P3831
+//  Memory Limit: 125 MB
+//  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: a0aeb5e7-443e-4f71-8052-bc12c24a2f5c
+//  Batch ID: e30c2d91-7522-4a58-86e8-01d5054d1a91
 //
 // Algorithm:
 // Complexity: O()
@@ -648,131 +648,164 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int MAXN = 1100005;
-int n, m, root;
-struct Node {
-    int v, p, l, r, s;
-} t[MAXN];
-int nc;
+#define ll long long
+const int N = 2e5 + 10, M = 1e6 + 10;
+const ll INF = 4e18;
+int n, m, tot, ec, h[N], to[M], nx[M], w[M];
+int X[100005], Y[100005];
+ll d[N];
+bool vis[N];
 
-inline int newn(int x) {
-    ++nc;
-    t[nc].v = x;
-    t[nc].p = rand();
-    t[nc].l = t[nc].r = 0;
-    t[nc].s = 1;
-    return nc;
-}
+struct node {
+    int x, y, id;
+} a[100005], b[100005];
 
-inline void up(int u) {
-    t[u].s = 1 + t[t[u].l].s + t[t[u].r].s;
-}
+struct heap {
+    int sz, v[M];
+    ll d[M];
 
-void spl(int u, int x, int &a, int &b) {
-    if (!u) {
-        a = b = 0;
+    inline void push(int x, ll y) {
+        int p = ++sz;
+        while (p > 1 && d[p >> 1] > y) {
+            d[p] = d[p >> 1];
+            v[p] = v[p >> 1];
+            p >>= 1;
+        }
+        d[p] = y;
+        v[p] = x;
         return;
     }
-    if (t[u].v < x) {
-        a = u;
-        spl(t[u].r, x, t[u].r, b);
-    } else {
-        b = u;
-        spl(t[u].l, x, a, t[u].l);
+
+    inline pair<ll, int> pop() {
+        pair<ll, int> res = {d[1], v[1]};
+        ll x = d[sz];
+        int y = v[sz--], p = 1, q;
+        while ((p << 1) <= sz) {
+            q = p << 1;
+            if (q < sz && d[q + 1] < d[q]) {
+                ++q;
+            }
+            if (d[q] >= x) {
+                break;
+            }
+            d[p] = d[q];
+            v[p] = v[q];
+            p = q;
+        }
+        if (sz) {
+            d[p] = x;
+            v[p] = y;
+        }
+        return res;
     }
-    up(u);
-}
+} q;
 
-int mrg(int a, int b) {
-    if (!a || !b)
-        return a | b;
-    if (t[a].p > t[b].p) {
-        t[a].r = mrg(t[a].r, b);
-        up(a);
-        return a;
-    } else {
-        t[b].l = mrg(a, t[b].l);
-        up(b);
-        return b;
+inline int H(int x) {
+    return x * 2 - 1;
+}
+inline int V(int x) {
+    return x * 2;
+}
+inline void add(int x, int y, int z) {
+    to[++ec] = y;
+    w[ec] = z;
+    nx[ec] = h[x];
+    h[x] = ec;
+    return;
+}
+inline void link(int x, int y, int z) {
+    add(x, y, z);
+    add(y, x, z);
+    return;
+}
+inline ll dij(int s, int t) {
+    for (int i = 1; i <= tot * 2; i++) {
+        d[i] = INF;
+        vis[i] = 0;
     }
-}
+    q.sz = 0;
 
-void ins(int x) {
-    int a, b;
-    spl(root, x, a, b);
-    root = mrg(mrg(a, newn(x)), b);
-}
+    d[H(s)] = d[V(s)] = 0;
+    q.push(H(s), 0);
+    q.push(V(s), 0);
 
-void del(int x) {
-    int a, b, c;
-    spl(root, x, a, b);
-    spl(b, x + 1, b, c);
-    b = mrg(t[b].l, t[b].r);
-    root = mrg(mrg(a, b), c);
-}
-
-int rnk(int x) {
-    int a, b;
-    spl(root, x, a, b);
-    int ans = t[a].s + 1;
-    root = mrg(a, b);
-    return ans;
-}
-
-int kth(int k) {
-    int u = root;
-    while (u) {
-        int lsz = t[t[u].l].s;
-        if (k <= lsz)
-            u = t[u].l;
-        else if (k == lsz + 1)
-            return t[u].v;
-        else {
-            k -= lsz + 1;
-            u = t[u].r;
+    while (q.sz) {
+        auto [D, x] = q.pop();
+        if (vis[x]) {
+            continue;
+        }
+        vis[x] = 1;
+        for (int i = h[x]; i; i = nx[i]) {
+            int y = to[i];
+            if (d[y] > D + w[i]) {
+                d[y] = D + w[i];
+                q.push(y, d[y]);
+            }
         }
     }
-    return -1;
-}
 
-int pre(int x) {
-    int r = rnk(x) - 1;
-    return r > 0 ? kth(r) : -1;
+    return min(d[H(t)], d[V(t)]);
 }
-
-int nxt(int x) {
-    int r = rnk(x + 1);
-    return r <= t[root].s ? kth(r) : -1;
-}
-
 inline void solve(int Task_Id) {
-    srand(time(0));
-    scanf("%d%d", &n, &m);
-    root = 0;
-    for (int i = 1; i <= n; ++i) {
-        int x;
-        scanf("%d", &x);
-        ins(x);
+    cin >> n >> m;
+
+    for (int i = 1; i <= m; i++) {
+        cin >> X[i] >> Y[i];
     }
-    int last = 0, ans = 0;
-    for (int i = 1; i <= m; ++i) {
-        int op, xp;
-        scanf("%d%d", &op, &xp);
-        int x = xp ^ last;
-        if (op == 1)
-            ins(x);
-        else if (op == 2)
-            del(x);
-        else if (op == 3)
-            last = rnk(x), ans ^= last;
-        else if (op == 4)
-            last = kth(x), ans ^= last;
-        else if (op == 5)
-            last = pre(x), ans ^= last;
-        else if (op == 6)
-            last = nxt(x), ans ^= last;
+
+    int x1, y1, x2, y2;
+    cin >> x1 >> y1 >> x2 >> y2;
+
+    tot = m + 2;
+    X[m + 1] = x1;
+    Y[m + 1] = y1;
+    X[m + 2] = x2;
+    Y[m + 2] = y2;
+
+    for (int i = 1; i <= tot; i++) {
+        a[i] = {X[i], Y[i], i};
+        b[i] = {X[i], Y[i], i};
     }
-    printf("%d\n", ans);
+
+    for (int i = 1; i <= m; i++) {
+        link(H(i), V(i), 1);
+    }
+
+    sort(a + 1, a + tot + 1, [](node x, node y) {
+        if (x.x != y.x) {
+            return x.x < y.x;
+        }
+        return x.y < y.y;
+    });
+
+    for (int i = 2; i <= tot; i++) {
+        if (a[i].x == a[i - 1].x) {
+            link(H(a[i - 1].id), H(a[i].id),
+                 2 * (a[i].y - a[i - 1].y));
+        }
+    }
+
+    sort(b + 1, b + tot + 1, [](node x, node y) {
+        if (x.y != y.y) {
+            return x.y < y.y;
+        }
+        return x.x < y.x;
+    });
+
+    for (int i = 2; i <= tot; i++) {
+        if (b[i].y == b[i - 1].y) {
+            link(V(b[i - 1].id), V(b[i].id),
+                 2 * (b[i].x - b[i - 1].x));
+        }
+    }
+
+    ll ans = dij(m + 1, m + 2);
+
+    if (ans == INF) {
+        cout << -1 << '\n';
+    } else {
+        cout << ans << '\n';
+    }
     return;
 }
 } // namespace TANGYIXIAO

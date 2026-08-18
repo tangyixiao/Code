@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-18 07:30:40
-//  Problem: P6136 【模板】普通平衡树（数据加强版）
+//  Time: 2026-08-18 07:27:57
+//  Problem: P3369 【模板】普通平衡树
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P6136
-//  Memory Limit: 512 MB
-//  Time Limit: 3000 ms
+//  URL: https://www.luogu.com.cn/problem/P3369
+//  Memory Limit: 128 MB
+//  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: a0aeb5e7-443e-4f71-8052-bc12c24a2f5c
+//  Batch ID: 66f75bd4-6b66-42c2-a0ee-981db148817d
 //
 // Algorithm:
 // Complexity: O()
@@ -648,131 +648,135 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int MAXN = 1100005;
-int n, m, root;
-struct Node {
-    int v, p, l, r, s;
-} t[MAXN];
-int nc;
+const int N = 1e5 + 5;
+int n, rt, tot, ls[N], rs[N], sz[N], val[N];
+unsigned pri[N], sd = 114514;
 
-inline int newn(int x) {
-    ++nc;
-    t[nc].v = x;
-    t[nc].p = rand();
-    t[nc].l = t[nc].r = 0;
-    t[nc].s = 1;
-    return nc;
+inline unsigned rnd() {
+    sd ^= sd << 13;
+    sd ^= sd >> 17;
+    sd ^= sd << 5;
+    return sd;
 }
-
-inline void up(int u) {
-    t[u].s = 1 + t[t[u].l].s + t[t[u].r].s;
+inline void pushup(int x) {
+    sz[x] = sz[ls[x]] + sz[rs[x]] + 1;
+    return;
 }
-
-void spl(int u, int x, int &a, int &b) {
-    if (!u) {
-        a = b = 0;
+inline int newnode(int x) {
+    ++tot;
+    val[tot] = x;
+    pri[tot] = rnd();
+    sz[tot] = 1;
+    return tot;
+}
+inline void split(int p, int x, int &u, int &v) {
+    if (!p) {
+        u = v = 0;
         return;
     }
-    if (t[u].v < x) {
-        a = u;
-        spl(t[u].r, x, t[u].r, b);
+    if (val[p] <= x) {
+        u = p;
+        split(rs[p], x, rs[u], v);
+        pushup(u);
     } else {
-        b = u;
-        spl(t[u].l, x, a, t[u].l);
+        v = p;
+        split(ls[p], x, u, ls[v]);
+        pushup(v);
     }
-    up(u);
+    return;
 }
-
-int mrg(int a, int b) {
-    if (!a || !b)
-        return a | b;
-    if (t[a].p > t[b].p) {
-        t[a].r = mrg(t[a].r, b);
-        up(a);
-        return a;
+inline int merge(int u, int v) {
+    if (!u || !v) {
+        return u | v;
+    }
+    if (pri[u] < pri[v]) {
+        rs[u] = merge(rs[u], v);
+        pushup(u);
+        return u;
     } else {
-        t[b].l = mrg(a, t[b].l);
-        up(b);
-        return b;
+        ls[v] = merge(u, ls[v]);
+        pushup(v);
+        return v;
     }
 }
-
-void ins(int x) {
-    int a, b;
-    spl(root, x, a, b);
-    root = mrg(mrg(a, newn(x)), b);
+inline void insert(int x) {
+    int u, v;
+    split(rt, x, u, v);
+    rt = merge(merge(u, newnode(x)), v);
+    return;
 }
-
-void del(int x) {
-    int a, b, c;
-    spl(root, x, a, b);
-    spl(b, x + 1, b, c);
-    b = mrg(t[b].l, t[b].r);
-    root = mrg(mrg(a, b), c);
+inline void erase(int x) {
+    int u, v, w;
+    split(rt, x, u, v);
+    split(u, x - 1, u, w);
+    if (w) {
+        w = merge(ls[w], rs[w]);
+    }
+    rt = merge(merge(u, w), v);
+    return;
 }
-
-int rnk(int x) {
-    int a, b;
-    spl(root, x, a, b);
-    int ans = t[a].s + 1;
-    root = mrg(a, b);
-    return ans;
+inline int rank(int x) {
+    int u, v, res;
+    split(rt, x - 1, u, v);
+    res = sz[u] + 1;
+    rt = merge(u, v);
+    return res;
 }
-
-int kth(int k) {
-    int u = root;
-    while (u) {
-        int lsz = t[t[u].l].s;
-        if (k <= lsz)
-            u = t[u].l;
-        else if (k == lsz + 1)
-            return t[u].v;
-        else {
-            k -= lsz + 1;
-            u = t[u].r;
+inline int kth(int k) {
+    int p = rt;
+    while (p) {
+        if (sz[ls[p]] + 1 == k) {
+            return val[p];
+        }
+        if (k <= sz[ls[p]]) {
+            p = ls[p];
+        } else {
+            k -= sz[ls[p]] + 1;
+            p = rs[p];
         }
     }
-    return -1;
+    return 0;
 }
-
-int pre(int x) {
-    int r = rnk(x) - 1;
-    return r > 0 ? kth(r) : -1;
+inline int pre(int x) {
+    int u, v, p, res;
+    split(rt, x - 1, u, v);
+    p = u;
+    while (rs[p]) {
+        p = rs[p];
+    }
+    res = val[p];
+    rt = merge(u, v);
+    return res;
 }
-
-int nxt(int x) {
-    int r = rnk(x + 1);
-    return r <= t[root].s ? kth(r) : -1;
+inline int nxt(int x) {
+    int u, v, p, res;
+    split(rt, x, u, v);
+    p = v;
+    while (ls[p]) {
+        p = ls[p];
+    }
+    res = val[p];
+    rt = merge(u, v);
+    return res;
 }
-
 inline void solve(int Task_Id) {
-    srand(time(0));
-    scanf("%d%d", &n, &m);
-    root = 0;
-    for (int i = 1; i <= n; ++i) {
-        int x;
-        scanf("%d", &x);
-        ins(x);
+    cin >> n;
+    for (int op, x; n--;) {
+        cin >> op >> x;
+        if (op == 1) {
+            insert(x);
+        } else if (op == 2) {
+            erase(x);
+        } else if (op == 3) {
+            cout << rank(x) << '\n';
+        } else if (op == 4) {
+            cout << kth(x) << '\n';
+        } else if (op == 5) {
+            cout << pre(x) << '\n';
+        } else {
+            cout << nxt(x) << '\n';
+        }
     }
-    int last = 0, ans = 0;
-    for (int i = 1; i <= m; ++i) {
-        int op, xp;
-        scanf("%d%d", &op, &xp);
-        int x = xp ^ last;
-        if (op == 1)
-            ins(x);
-        else if (op == 2)
-            del(x);
-        else if (op == 3)
-            last = rnk(x), ans ^= last;
-        else if (op == 4)
-            last = kth(x), ans ^= last;
-        else if (op == 5)
-            last = pre(x), ans ^= last;
-        else if (op == 6)
-            last = nxt(x), ans ^= last;
-    }
-    printf("%d\n", ans);
     return;
 }
 } // namespace TANGYIXIAO

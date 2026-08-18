@@ -1,3 +1,20 @@
+//  Author: Tangyixiao
+//  Time: 2026-08-18 15:10:43
+//  Problem: P1772 [ZJOI2006] 物流运输
+//  Contest: Luogu
+//  URL: https://www.luogu.com.cn/problem/P1772
+//  Memory Limit: 125 MB
+//  Time Limit: 1000 ms
+//  Interactive: false
+//  Test Type: single
+//  Batch ID: 9ebe84d7-117f-4270-952c-349f7a3bf7bf
+//
+// Algorithm:
+// Complexity: O()
+// Note:
+//
+//
+// Powered by CP Editor (https://cpeditor.org)
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -14,6 +31,8 @@ Copyright (C) 2026 TangYixiao
 // #define BITS_NOT_ALLOWED
 // #define PD_DS_USED
 // #define TESTLIB
+
+// clang-format off
 #pragma region PREPROCESSOR
 #pragma region PRAGMAS
 #if PRAGMA_TYPE == 2
@@ -536,21 +555,27 @@ using namespace __gnu_pbds;
 namespace TANGYIXIAO {
 #pragma region IO
 namespace IO {
-inline void Init_IO() { cin.tie(0)->sync_with_stdio(false); }
+namespace FAST_IO {
+#ifdef __unix__
+#define ugetchar getchar_unlocked
+#else
+#define ugetchar _getchar_nolock
+#endif
+inline void IOSS_Init() { std::ios::sync_with_stdio(false); std::cin.tie(0); std::cout.tie(0); return; }
+}
+using namespace FAST_IO;
 #pragma region FILE_IO
 namespace FILE_IO {
-const string Insuffix = ".in", Outsuffix = ".out", Anssuffix = ".ans";
-inline void Judge_File(string File_Name) { freopen((File_Name + Insuffix).c_str(), "r", stdin), freopen((File_Name + Outsuffix).c_str(), "w", stdout); }
-inline void Local_File(string File_Name, int File_Idx) { freopen((File_Name + to_string(File_Idx) + Insuffix).c_str(), "r", stdin), freopen((File_Name + to_string(File_Idx) + Outsuffix).c_str(), "w", stdout); }
+const std::string Insuffix = ".in", Outsuffix = ".out", Anssuffix = ".ans";
+inline void Judge_File(std::string File_Name) { freopen((File_Name + Insuffix).c_str(), "r", stdin), freopen((File_Name + Outsuffix).c_str(), "w", stdout); return; }
+inline void Local_File(std::string File_Name, int File_Idx) { freopen((File_Name + std::to_string(File_Idx) + Insuffix).c_str(), "r", stdin), freopen((File_Name + std::to_string(File_Idx) + Outsuffix).c_str(), "w", stdout); return; }
 } // namespace FILE_IO
 using namespace FILE_IO;
 #pragma endregion FILE_IO
 #pragma region INT128_IO
 namespace INT128_IO {
-// clang-format off
-istream&operator>>(istream&is,__int128&x){string s;is>>s;bool neg=false;x=0;for(char c:s){if(c=='-')neg=true;else x=x*10+(c-'0');}if(neg)x=-x;return is;}
-ostream&operator<<(ostream&os,__int128 x){if(x==0)os<<0;else{string s,t;if(x<0)x=-x,t="-";while(x)s.push_back('0'+x%10),x/=10;reverse(s.begin(),s.end());os<<t<<s;}return os;}
-// clang-format on
+std::istream &operator>>(std::istream &is, __int128 &x) { std::string s; is >> s; bool neg = false; x = 0; for (char c : s) { if (c == '-') { neg = true; } else { x = x * 10 + (c - '0'); } } if (neg) { x = -x; } return is; }
+std::ostream &operator<<(std::ostream &os, __int128 x) { if (x == 0) { os << 0; } else { std::string s, t;if (x < 0) { x = -x, t = "-"; } for (; x;) { s.push_back('0' + x % 10), x /= 10; } std::reverse(s.begin(), s.end()); os << t << s; } return os; }
 } // namespace INT128_IO
 using namespace INT128_IO;
 #pragma endregion INT128_IO
@@ -560,109 +585,47 @@ using namespace IO;
 #pragma region TIME
 namespace TIME {
 clock_t Start_Time, End_Time;
-inline void Start_Time_Count() { Start_Time = clock(); }
-inline void End_Time_Count() { End_Time = clock(); }
+inline void Start_Time_Count() { Start_Time = clock(); return; }
+inline void End_Time_Count() { End_Time = clock(); return; }
 inline double Time_Count() { return (double)(End_Time - Start_Time) / CLOCKS_PER_SEC; }
-inline void Print_Time_Count(string Programe_Name) { cerr << fixed << setprecision(4) << "\n" + Programe_Name + " Time: " << Time_Count() << "s\n"; }
+inline void Print_Time_Count(std::string Programe_Name) { std::cerr << std::fixed << std::setprecision(4) << "\n" + Programe_Name + " Time: " << Time_Count() << "s\n"; return; }
 } // namespace TIME
 using namespace TIME;
 #pragma endregion TIME
 #pragma region DEBUGS
 namespace DEBUGS {
-#define all(x) (x).begin(), (x).end()
-#define fprint(...) cout << format(__VA_ARGS__)
-#define fprintln(...) cout << format(__VA_ARGS__) << '\n'
-#define ferr(...) cerr << format(__VA_ARGS__)
-#define ferrln(...) cerr << format(__VA_ARGS__) << '\n'
-#define funct(name, ret, ...) function<ret(__VA_ARGS__)> name = [&](__VA_ARGS__)
-inline void Debug_Print(string Debug_Message) { cerr << "\n" + Debug_Message + "\n"; }
+#define All(x) (x).begin(), (x).end()
+#define fprint(...) std::cout << std::format(__VA_ARGS__)
+#define fprintln(...) std::cout << std::format(__VA_ARGS__) << "\n"
+#define ferr(...) std::cerr << std::format(__VA_ARGS__)
+#define ferrln(...) std::cerr << std::format(__VA_ARGS__) << "\n"
+#define funct(name, ret, ...) std::function<ret(__VA_ARGS__)> name = [&](__VA_ARGS__)
+inline void Debug_Print(std::string Debug_Message) { std::cerr << "\n" << Debug_Message << "\n"; return;}
 } // namespace DEBUGS
 using namespace DEBUGS;
 #pragma endregion DEBUGS
 #pragma region BITS
 namespace BITS {
 template <class T>
-inline T lowbit(T x) { return x & (-x); }
+inline T lowbit(T x) { return ((x) & (-x)); }
 template <class T>
-inline T highbit(T x) { return (T)(log2(x) + 1); }
+inline T highbit(T x) { return (T)(std::log2(x) + 1); }
 template <class T>
 inline T Pop_Count(T x) { return __builtin_popcount(x); }
 } // namespace BITS
 using namespace BITS;
 #pragma endregion BITS
-const int inf = 0x3f3f3f3f, N = 25, M = 105;
-bool mark[N], vis[N];
-int n, m, k, e, dd, sp[M][M], dist[N]; /*, dp[N];*/
-struct edge {
-    int v, w;
-    bool operator<(const edge A) const {
-        if (w != A.w) {
-            return w > A.w;
-        }
-        return v > A.v;
-    }
-};
-
-/*
-vector<edge> g[N], noway[N];
-*/
-vector<pair<int, int>> g[N], noway[N];
-
-inline bool check(int p, int l, int r) {
-    for (auto [a, b] : noway[p]) {
-        if (b >= l && a <= r) {
-            return true;
-        }
-    }
-    return false;
-}
-
-inline int dijskra(int l, int r) {
-    memset(dist, 0x3f, sizeof(dist));
-    memset(vis, false, sizeof(vis));
-    memset(mark, false, sizeof(mark));
-    for (int i = 1; i <= m; i++) {
-        if (check(i, l, r)) {
-            mark[i] = true;
-        }
-    }
-    dist[1] = 0;
-    /*
-    priority_queue<edge> pq;
-    pq.push({1, 0});
-    */
-    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
-    pq.push({0, 1});
-    for (; !pq.empty();) {
-        auto [d, u] = pq.top();
-        pq.pop();
-        if (!vis[u]) {
-            vis[u] = true;
-            for (auto [v, w] : g[u]) {
-                if (!mark[v]) {
-                    if (dist[v] > d + w) {
-                        dist[v] = d + w;
-                        /*
-                        pq.push({v, dist[v]});
-                        */
-                        pq.push({dist[v], v});
-                    }
-                }
-            }
-        }
-    }
-    return dist[m];
-}
 inline void solve(int Task_Id);
 } // namespace TANGYIXIAO
 using namespace TANGYIXIAO;
+// clang-format on
 #pragma endregion TANGYIXIAO
 #pragma region MAIN
-signed main() {
+signed main(int argc, char *argv[]) {
 #ifdef TIME_COUNT
     Start_Time_Count();
 #endif
-    Init_IO();
+    IOSS_Init();
 #if JUDGE == 1
     Judge_File(FILE_NAME);
 #elif JUDGE == 2
@@ -685,48 +648,88 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 105, M = 25, INF = 1e9;
+int n, m, k, e;
+int g[M][M], ban[M][N], dis[N][N], f[N];
+int d[M], vis[M], bad[M];
+
+inline int dij() {
+    for (int i = 1; i <= m; i++) {
+        d[i] = INF;
+        vis[i] = 0;
+    }
+    if (bad[1] || bad[m]) {
+        return INF;
+    }
+    d[1] = 0;
+    for (int t = 1; t <= m; t++) {
+        int x = 0;
+        for (int i = 1; i <= m; i++) {
+            if (!bad[i] && !vis[i] && (!x || d[i] < d[x])) {
+                x = i;
+            }
+        }
+        if (!x || d[x] == INF) {
+            break;
+        }
+        vis[x] = 1;
+        for (int y = 1; y <= m; y++) {
+            if (!bad[y] && !vis[y] && g[x][y] < INF) {
+                d[y] = min(d[y], d[x] + g[x][y]);
+            }
+        }
+    }
+    return d[m];
+}
 
 inline void solve(int Task_Id) {
     cin >> n >> m >> k >> e;
-    for (int i = 1, u, v, w; i <= e; i++) {
-        cin >> u >> v >> w;
-        g[u].emplace_back(v, w);
-        g[v].emplace_back(u, w);
-        /*
-        g[u].push_back({v, w});
-        g[v].push_back({u, w});
-        */
+
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= m; j++) {
+            g[i][j] = i == j ? 0 : INF;
+        }
     }
-    cin >> dd;
-    for (int i = 1, p, a, b; i <= dd; i++) {
-        cin >> p >> a >> b;
-        noway[p].emplace_back(a, b);
-        /*
-        noway[p].push_back({a, b});
-        */
+
+    for (int i = 1, x, y, z; i <= e; i++) {
+        cin >> x >> y >> z;
+        g[x][y] = g[y][x] = min(g[x][y], z);
+    }
+
+    int q;
+    cin >> q;
+    for (int i = 1, p, l, r; i <= q; i++) {
+        cin >> p >> l >> r;
+        for (int j = l; j <= r; j++) {
+            ban[p][j] = 1;
+        }
     }
 
     for (int l = 1; l <= n; l++) {
+        memset(bad, 0, sizeof(bad));
         for (int r = l; r <= n; r++) {
-            int dis = dijskra(l, r);
-            if (dis < inf) {
-                sp[l][r] = dis * (r - l + 1);
-            } else {
-                sp[l][r] = inf;
+            for (int x = 1; x <= m; x++) {
+                bad[x] |= ban[x][r];
             }
+            dis[l][r] = dij();
         }
     }
-    vector<int> dp(n + 1, inf);
-    dp[0] = -k;
+
+    for (int i = 1; i <= n; i++) {
+        f[i] = INF;
+    }
+    f[0] = -k;
+
     for (int i = 1; i <= n; i++) {
         for (int j = 1; j <= i; j++) {
-            if (sp[j][i] < inf) {
-                dp[i] = min(dp[i], dp[j - 1] + sp[j][i] + k);
+            if (dis[j][i] < INF) {
+                f[i] = min(f[i],
+                           f[j - 1] + dis[j][i] * (i - j + 1) + k);
             }
         }
     }
-    cout << dp[n] << "\n";
 
+    cout << f[n] << '\n';
     return;
 }
 } // namespace TANGYIXIAO

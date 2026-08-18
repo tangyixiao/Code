@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-18 07:30:40
-//  Problem: P6136 【模板】普通平衡树（数据加强版）
+//  Time: 2026-08-18 13:39:49
+//  Problem: P2747 [USACO5.4] 周游加拿大 Canada Tour
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P6136
-//  Memory Limit: 512 MB
-//  Time Limit: 3000 ms
+//  URL: https://www.luogu.com.cn/problem/P2747
+//  Memory Limit: 125 MB
+//  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: a0aeb5e7-443e-4f71-8052-bc12c24a2f5c
+//  Batch ID: 8445fc1a-1cd1-4457-95d8-086965527fd7
 //
 // Algorithm:
 // Complexity: O()
@@ -648,131 +648,52 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int MAXN = 1100005;
-int n, m, root;
-struct Node {
-    int v, p, l, r, s;
-} t[MAXN];
-int nc;
-
-inline int newn(int x) {
-    ++nc;
-    t[nc].v = x;
-    t[nc].p = rand();
-    t[nc].l = t[nc].r = 0;
-    t[nc].s = 1;
-    return nc;
-}
-
-inline void up(int u) {
-    t[u].s = 1 + t[t[u].l].s + t[t[u].r].s;
-}
-
-void spl(int u, int x, int &a, int &b) {
-    if (!u) {
-        a = b = 0;
-        return;
-    }
-    if (t[u].v < x) {
-        a = u;
-        spl(t[u].r, x, t[u].r, b);
-    } else {
-        b = u;
-        spl(t[u].l, x, a, t[u].l);
-    }
-    up(u);
-}
-
-int mrg(int a, int b) {
-    if (!a || !b)
-        return a | b;
-    if (t[a].p > t[b].p) {
-        t[a].r = mrg(t[a].r, b);
-        up(a);
-        return a;
-    } else {
-        t[b].l = mrg(a, t[b].l);
-        up(b);
-        return b;
-    }
-}
-
-void ins(int x) {
-    int a, b;
-    spl(root, x, a, b);
-    root = mrg(mrg(a, newn(x)), b);
-}
-
-void del(int x) {
-    int a, b, c;
-    spl(root, x, a, b);
-    spl(b, x + 1, b, c);
-    b = mrg(t[b].l, t[b].r);
-    root = mrg(mrg(a, b), c);
-}
-
-int rnk(int x) {
-    int a, b;
-    spl(root, x, a, b);
-    int ans = t[a].s + 1;
-    root = mrg(a, b);
-    return ans;
-}
-
-int kth(int k) {
-    int u = root;
-    while (u) {
-        int lsz = t[t[u].l].s;
-        if (k <= lsz)
-            u = t[u].l;
-        else if (k == lsz + 1)
-            return t[u].v;
-        else {
-            k -= lsz + 1;
-            u = t[u].r;
-        }
-    }
-    return -1;
-}
-
-int pre(int x) {
-    int r = rnk(x) - 1;
-    return r > 0 ? kth(r) : -1;
-}
-
-int nxt(int x) {
-    int r = rnk(x + 1);
-    return r <= t[root].s ? kth(r) : -1;
-}
+const int N = 105;
+int n, m, f[N][N];
+bool g[N][N];
+string s[N];
+map<string, int> mp;
 
 inline void solve(int Task_Id) {
-    srand(time(0));
-    scanf("%d%d", &n, &m);
-    root = 0;
-    for (int i = 1; i <= n; ++i) {
-        int x;
-        scanf("%d", &x);
-        ins(x);
+    cin >> n >> m;
+    for (int i = 1; i <= n; i++) {
+        cin >> s[i];
+        mp[s[i]] = i;
     }
-    int last = 0, ans = 0;
-    for (int i = 1; i <= m; ++i) {
-        int op, xp;
-        scanf("%d%d", &op, &xp);
-        int x = xp ^ last;
-        if (op == 1)
-            ins(x);
-        else if (op == 2)
-            del(x);
-        else if (op == 3)
-            last = rnk(x), ans ^= last;
-        else if (op == 4)
-            last = kth(x), ans ^= last;
-        else if (op == 5)
-            last = pre(x), ans ^= last;
-        else if (op == 6)
-            last = nxt(x), ans ^= last;
+    for (int i = 1; i <= m; i++) {
+        string x, y;
+        cin >> x >> y;
+        int u = mp[x], v = mp[y];
+        g[u][v] = g[v][u] = 1;
     }
-    printf("%d\n", ans);
+
+    f[1][1] = 1;
+
+    for (int k = 2; k <= n; k++) {
+        for (int i = 1; i < k; i++) {
+            for (int j = 1; j < k; j++) {
+                if (!f[i][j]) {
+                    continue;
+                }
+                if (g[i][k]) {
+                    f[k][j] = max(f[k][j], f[i][j] + 1);
+                }
+                if (g[j][k]) {
+                    f[i][k] = max(f[i][k], f[i][j] + 1);
+                }
+            }
+        }
+    }
+
+    int ans = 1;
+    for (int i = 1; i < n; i++) {
+        if (g[i][n]) {
+            ans = max(ans, f[i][n]);
+            ans = max(ans, f[n][i]);
+        }
+    }
+
+    cout << ans << '\n';
     return;
 }
 } // namespace TANGYIXIAO

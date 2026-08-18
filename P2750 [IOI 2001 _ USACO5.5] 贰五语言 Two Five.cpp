@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-18 07:30:40
-//  Problem: P6136 【模板】普通平衡树（数据加强版）
+//  Time: 2026-08-18 13:36:56
+//  Problem: P2750 [IOI 2001 / USACO5.5] 贰五语言 Two Five
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P6136
-//  Memory Limit: 512 MB
-//  Time Limit: 3000 ms
+//  URL: https://www.luogu.com.cn/problem/P2750
+//  Memory Limit: 125 MB
+//  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: a0aeb5e7-443e-4f71-8052-bc12c24a2f5c
+//  Batch ID: 1e0e5aa5-189b-4bb2-ae25-1b2875ce15b7
 //
 // Algorithm:
 // Complexity: O()
@@ -648,131 +648,90 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int MAXN = 1100005;
-int n, m, root;
-struct Node {
-    int v, p, l, r, s;
-} t[MAXN];
-int nc;
+long long f[6][6][6][6][6];
+int p[25], vis[25];
 
-inline int newn(int x) {
-    ++nc;
-    t[nc].v = x;
-    t[nc].p = rand();
-    t[nc].l = t[nc].r = 0;
-    t[nc].s = 1;
-    return nc;
-}
-
-inline void up(int u) {
-    t[u].s = 1 + t[t[u].l].s + t[t[u].r].s;
-}
-
-void spl(int u, int x, int &a, int &b) {
-    if (!u) {
-        a = b = 0;
-        return;
+inline long long dfs(int a, int b, int c, int d, int e) {
+    long long &res = f[a][b][c][d][e];
+    if (~res) {
+        return res;
     }
-    if (t[u].v < x) {
-        a = u;
-        spl(t[u].r, x, t[u].r, b);
+    int q[5] = {a, b, c, d, e};
+    int k = a + b + c + d + e;
+    if (k == 25) {
+        return res = 1;
+    }
+    res = 0;
+    if (~p[k]) {
+        int x = p[k] / 5, y = p[k] % 5;
+        if (q[x] != y || (x && q[x] >= q[x - 1])) {
+            return res;
+        }
+        ++q[x];
+        res = dfs(q[0], q[1], q[2], q[3], q[4]);
     } else {
-        b = u;
-        spl(t[u].l, x, a, t[u].l);
-    }
-    up(u);
-}
-
-int mrg(int a, int b) {
-    if (!a || !b)
-        return a | b;
-    if (t[a].p > t[b].p) {
-        t[a].r = mrg(t[a].r, b);
-        up(a);
-        return a;
-    } else {
-        t[b].l = mrg(a, t[b].l);
-        up(b);
-        return b;
-    }
-}
-
-void ins(int x) {
-    int a, b;
-    spl(root, x, a, b);
-    root = mrg(mrg(a, newn(x)), b);
-}
-
-void del(int x) {
-    int a, b, c;
-    spl(root, x, a, b);
-    spl(b, x + 1, b, c);
-    b = mrg(t[b].l, t[b].r);
-    root = mrg(mrg(a, b), c);
-}
-
-int rnk(int x) {
-    int a, b;
-    spl(root, x, a, b);
-    int ans = t[a].s + 1;
-    root = mrg(a, b);
-    return ans;
-}
-
-int kth(int k) {
-    int u = root;
-    while (u) {
-        int lsz = t[t[u].l].s;
-        if (k <= lsz)
-            u = t[u].l;
-        else if (k == lsz + 1)
-            return t[u].v;
-        else {
-            k -= lsz + 1;
-            u = t[u].r;
+        for (int x = 0; x < 5; x++) {
+            if (q[x] == 5 || (x && q[x] >= q[x - 1])) {
+                continue;
+            }
+            ++q[x];
+            res += dfs(q[0], q[1], q[2], q[3], q[4]);
+            --q[x];
         }
     }
-    return -1;
+    return res;
 }
 
-int pre(int x) {
-    int r = rnk(x) - 1;
-    return r > 0 ? kth(r) : -1;
-}
-
-int nxt(int x) {
-    int r = rnk(x + 1);
-    return r <= t[root].s ? kth(r) : -1;
+inline long long calc() {
+    memset(f, -1, sizeof(f));
+    return dfs(0, 0, 0, 0, 0);
 }
 
 inline void solve(int Task_Id) {
-    srand(time(0));
-    scanf("%d%d", &n, &m);
-    root = 0;
-    for (int i = 1; i <= n; ++i) {
-        int x;
-        scanf("%d", &x);
-        ins(x);
+    char op;
+    cin >> op;
+    memset(p, -1, sizeof(p));
+    if (op == 'W') {
+        string s;
+        cin >> s;
+        long long ans = 1;
+        for (int i = 0; i < 25; i++) {
+            int x = s[i] - 'A';
+            for (int j = 0; j < x; j++) {
+                if (vis[j]) {
+                    continue;
+                }
+                p[j] = i;
+                ans += calc();
+                p[j] = -1;
+            }
+            p[x] = i;
+            vis[x] = 1;
+        }
+        cout << ans << '\n';
+    } else {
+        long long k;
+        cin >> k;
+        string s;
+        for (int i = 0; i < 25; i++) {
+            for (int j = 0; j < 25; j++) {
+                if (vis[j]) {
+                    continue;
+                }
+                p[j] = i;
+                long long x = calc();
+                if (k > x) {
+                    k -= x;
+                    p[j] = -1;
+                } else {
+                    vis[j] = 1;
+                    s += char('A' + j);
+                    break;
+                }
+            }
+        }
+        cout << s << '\n';
     }
-    int last = 0, ans = 0;
-    for (int i = 1; i <= m; ++i) {
-        int op, xp;
-        scanf("%d%d", &op, &xp);
-        int x = xp ^ last;
-        if (op == 1)
-            ins(x);
-        else if (op == 2)
-            del(x);
-        else if (op == 3)
-            last = rnk(x), ans ^= last;
-        else if (op == 4)
-            last = kth(x), ans ^= last;
-        else if (op == 5)
-            last = pre(x), ans ^= last;
-        else if (op == 6)
-            last = nxt(x), ans ^= last;
-    }
-    printf("%d\n", ans);
     return;
 }
 } // namespace TANGYIXIAO

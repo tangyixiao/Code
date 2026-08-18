@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-18 07:30:40
-//  Problem: P6136 【模板】普通平衡树（数据加强版）
+//  Time: 2026-08-18 14:32:15
+//  Problem: P2770 航空路线问题
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P6136
-//  Memory Limit: 512 MB
-//  Time Limit: 3000 ms
+//  URL: https://www.luogu.com.cn/problem/P2770
+//  Memory Limit: 256 MB
+//  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: a0aeb5e7-443e-4f71-8052-bc12c24a2f5c
+//  Batch ID: 3176f51b-42f5-4d32-8e8b-c8b73d9457e2
 //
 // Algorithm:
 // Complexity: O()
@@ -648,131 +648,151 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int MAXN = 1100005;
-int n, m, root;
-struct Node {
-    int v, p, l, r, s;
-} t[MAXN];
-int nc;
+const int N = 205, M = 20005, INF = 1e9;
+int n, m, S, T, ec = 1, h[N], to[M], nx[M], w[M], c[M];
+int d[N], pre[N], inq[N], q[N], fl;
+int eu[5005], ev[5005], ee[5005], use[105][105];
+string s[105];
+map<string, int> mp;
 
-inline int newn(int x) {
-    ++nc;
-    t[nc].v = x;
-    t[nc].p = rand();
-    t[nc].l = t[nc].r = 0;
-    t[nc].s = 1;
-    return nc;
+inline int in(int x) {
+    return x;
 }
-
-inline void up(int u) {
-    t[u].s = 1 + t[t[u].l].s + t[t[u].r].s;
+inline int out(int x) {
+    return x + n;
 }
-
-void spl(int u, int x, int &a, int &b) {
-    if (!u) {
-        a = b = 0;
-        return;
-    }
-    if (t[u].v < x) {
-        a = u;
-        spl(t[u].r, x, t[u].r, b);
-    } else {
-        b = u;
-        spl(t[u].l, x, a, t[u].l);
-    }
-    up(u);
+inline void add(int x, int y, int z, int v) {
+    to[++ec] = y;
+    w[ec] = z;
+    c[ec] = v;
+    nx[ec] = h[x];
+    h[x] = ec;
+    to[++ec] = x;
+    w[ec] = 0;
+    c[ec] = -v;
+    nx[ec] = h[y];
+    h[y] = ec;
+    return;
 }
-
-int mrg(int a, int b) {
-    if (!a || !b)
-        return a | b;
-    if (t[a].p > t[b].p) {
-        t[a].r = mrg(t[a].r, b);
-        up(a);
-        return a;
-    } else {
-        t[b].l = mrg(a, t[b].l);
-        up(b);
-        return b;
-    }
-}
-
-void ins(int x) {
-    int a, b;
-    spl(root, x, a, b);
-    root = mrg(mrg(a, newn(x)), b);
-}
-
-void del(int x) {
-    int a, b, c;
-    spl(root, x, a, b);
-    spl(b, x + 1, b, c);
-    b = mrg(t[b].l, t[b].r);
-    root = mrg(mrg(a, b), c);
-}
-
-int rnk(int x) {
-    int a, b;
-    spl(root, x, a, b);
-    int ans = t[a].s + 1;
-    root = mrg(a, b);
-    return ans;
-}
-
-int kth(int k) {
-    int u = root;
-    while (u) {
-        int lsz = t[t[u].l].s;
-        if (k <= lsz)
-            u = t[u].l;
-        else if (k == lsz + 1)
-            return t[u].v;
-        else {
-            k -= lsz + 1;
-            u = t[u].r;
+inline bool spfa() {
+    memset(d, 0xc0, sizeof(d));
+    memset(inq, 0, sizeof(inq));
+    int l = 0, r = 0;
+    q[r++] = S;
+    d[S] = 0;
+    inq[S] = 1;
+    while (l != r) {
+        int x = q[l++];
+        if (l == N) {
+            l = 0;
+        }
+        inq[x] = 0;
+        for (int i = h[x]; i; i = nx[i]) {
+            int y = to[i];
+            if (w[i] && d[y] < d[x] + c[i]) {
+                d[y] = d[x] + c[i];
+                pre[y] = i;
+                if (!inq[y]) {
+                    inq[y] = 1;
+                    q[r++] = y;
+                    if (r == N) {
+                        r = 0;
+                    }
+                }
+            }
         }
     }
-    return -1;
+    return d[T] > -INF;
 }
-
-int pre(int x) {
-    int r = rnk(x) - 1;
-    return r > 0 ? kth(r) : -1;
+inline int flow() {
+    int res = 0;
+    fl = 0;
+    while (fl < 2 && spfa()) {
+        int f = 2 - fl;
+        for (int x = T; x != S; x = to[pre[x] ^ 1]) {
+            f = min(f, w[pre[x]]);
+        }
+        for (int x = T; x != S; x = to[pre[x] ^ 1]) {
+            w[pre[x]] -= f;
+            w[pre[x] ^ 1] += f;
+        }
+        fl += f;
+        res += f * d[T];
+    }
+    return res;
 }
-
-int nxt(int x) {
-    int r = rnk(x + 1);
-    return r <= t[root].s ? kth(r) : -1;
+inline int getpath(int *p) {
+    int x = 1, k = 1;
+    p[1] = 1;
+    while (x != n) {
+        for (int y = x + 1; y <= n; y++) {
+            if (use[x][y]) {
+                use[x][y]--;
+                p[++k] = y;
+                x = y;
+                break;
+            }
+        }
+    }
+    return k;
 }
-
 inline void solve(int Task_Id) {
-    srand(time(0));
-    scanf("%d%d", &n, &m);
-    root = 0;
-    for (int i = 1; i <= n; ++i) {
-        int x;
-        scanf("%d", &x);
-        ins(x);
+    cin >> n >> m;
+    for (int i = 1; i <= n; i++) {
+        cin >> s[i];
+        mp[s[i]] = i;
     }
-    int last = 0, ans = 0;
-    for (int i = 1; i <= m; ++i) {
-        int op, xp;
-        scanf("%d%d", &op, &xp);
-        int x = xp ^ last;
-        if (op == 1)
-            ins(x);
-        else if (op == 2)
-            del(x);
-        else if (op == 3)
-            last = rnk(x), ans ^= last;
-        else if (op == 4)
-            last = kth(x), ans ^= last;
-        else if (op == 5)
-            last = pre(x), ans ^= last;
-        else if (op == 6)
-            last = nxt(x), ans ^= last;
+
+    for (int i = 1; i <= n; i++) {
+        add(in(i), out(i), i == 1 || i == n ? 2 : 1, i == 1 || i == n ? 0 : 1);
     }
-    printf("%d\n", ans);
+
+    for (int i = 1; i <= m; i++) {
+        string x, y;
+        cin >> x >> y;
+        int u = mp[x], v = mp[y];
+        if (u > v) {
+            swap(u, v);
+        }
+        eu[i] = u;
+        ev[i] = v;
+        ee[i] = ec + 1;
+        add(out(u), in(v), 2, 0);
+    }
+
+    if (n == 1) {
+        cout << 1 << '\n';
+        cout << s[1] << '\n'
+             << s[1] << '\n';
+        return;
+    }
+
+    S = in(1);
+    T = out(n);
+
+    int ans = flow();
+
+    if (fl < 2) {
+        cout << "No Solution!\n";
+        return;
+    }
+
+    for (int i = 1; i <= m; i++) {
+        use[eu[i]][ev[i]] += w[ee[i] ^ 1];
+    }
+
+    int p1[105], p2[105];
+    int l1 = getpath(p1);
+    int l2 = getpath(p2);
+
+    cout << ans + 2 << '\n';
+
+    for (int i = 1; i <= l1; i++) {
+        cout << s[p1[i]] << '\n';
+    }
+    for (int i = l2 - 1; i >= 1; i--) {
+        cout << s[p2[i]] << '\n';
+    }
     return;
 }
 } // namespace TANGYIXIAO

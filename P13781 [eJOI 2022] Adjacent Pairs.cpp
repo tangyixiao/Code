@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-18 07:30:40
-//  Problem: P6136 【模板】普通平衡树（数据加强版）
+//  Time: 2026-08-18 07:11:20
+//  Problem: P13781 [eJOI 2022] Adjacent Pairs
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P6136
-//  Memory Limit: 512 MB
-//  Time Limit: 3000 ms
+//  URL: https://www.luogu.com.cn/problem/P13781
+//  Memory Limit: 2048 MB
+//  Time Limit: 2000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: a0aeb5e7-443e-4f71-8052-bc12c24a2f5c
+//  Batch ID: 97b32e94-ba09-43ba-80e8-99f885df4909
 //
 // Algorithm:
 // Complexity: O()
@@ -648,131 +648,79 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int MAXN = 1100005;
-int n, m, root;
-struct Node {
-    int v, p, l, r, s;
-} t[MAXN];
-int nc;
-
-inline int newn(int x) {
-    ++nc;
-    t[nc].v = x;
-    t[nc].p = rand();
-    t[nc].l = t[nc].r = 0;
-    t[nc].s = 1;
-    return nc;
-}
-
-inline void up(int u) {
-    t[u].s = 1 + t[t[u].l].s + t[t[u].r].s;
-}
-
-void spl(int u, int x, int &a, int &b) {
-    if (!u) {
-        a = b = 0;
-        return;
-    }
-    if (t[u].v < x) {
-        a = u;
-        spl(t[u].r, x, t[u].r, b);
-    } else {
-        b = u;
-        spl(t[u].l, x, a, t[u].l);
-    }
-    up(u);
-}
-
-int mrg(int a, int b) {
-    if (!a || !b)
-        return a | b;
-    if (t[a].p > t[b].p) {
-        t[a].r = mrg(t[a].r, b);
-        up(a);
-        return a;
-    } else {
-        t[b].l = mrg(a, t[b].l);
-        up(b);
-        return b;
-    }
-}
-
-void ins(int x) {
-    int a, b;
-    spl(root, x, a, b);
-    root = mrg(mrg(a, newn(x)), b);
-}
-
-void del(int x) {
-    int a, b, c;
-    spl(root, x, a, b);
-    spl(b, x + 1, b, c);
-    b = mrg(t[b].l, t[b].r);
-    root = mrg(mrg(a, b), c);
-}
-
-int rnk(int x) {
-    int a, b;
-    spl(root, x, a, b);
-    int ans = t[a].s + 1;
-    root = mrg(a, b);
-    return ans;
-}
-
-int kth(int k) {
-    int u = root;
-    while (u) {
-        int lsz = t[t[u].l].s;
-        if (k <= lsz)
-            u = t[u].l;
-        else if (k == lsz + 1)
-            return t[u].v;
-        else {
-            k -= lsz + 1;
-            u = t[u].r;
-        }
-    }
-    return -1;
-}
-
-int pre(int x) {
-    int r = rnk(x) - 1;
-    return r > 0 ? kth(r) : -1;
-}
-
-int nxt(int x) {
-    int r = rnk(x + 1);
-    return r <= t[root].s ? kth(r) : -1;
-}
-
+const int N = 200005;
+int a[N], o[N], e[N], p[N];
 inline void solve(int Task_Id) {
-    srand(time(0));
-    scanf("%d%d", &n, &m);
-    root = 0;
-    for (int i = 1; i <= n; ++i) {
-        int x;
-        scanf("%d", &x);
-        ins(x);
+    int T;
+    cin >> T;
+
+    while (T--) {
+        int n;
+        cin >> n;
+
+        fill(o + 1, o + n + 2, 0);
+        fill(e + 1, e + n + 2, 0);
+
+        for (int i = 1; i <= n; i++) {
+            cin >> a[i];
+            if (i & 1)
+                o[a[i]]++;
+            else
+                e[a[i]]++;
+        }
+
+        map<pair<int, int>, int> mp;
+
+        for (int l = 1; l < n;) {
+            int r = l + 1;
+
+            while (r < n && a[r + 1] == a[r - 1])
+                ++r;
+
+            int c, d;
+
+            if (l & 1)
+                d = a[l], c = a[l + 1];
+            else
+                c = a[l], d = a[l + 1];
+
+            mp[{c, d}] += (r - l + 1) / 2;
+
+            l = r;
+        }
+
+        for (int i = 1; i <= n + 1; i++)
+            p[i] = i;
+
+        sort(p + 1, p + n + 2, [&](int x, int y) {
+            return e[x] > e[y];
+        });
+
+        int ans = n;
+
+        for (int c = 1; c <= n + 1; c++) {
+            for (int j = 1; j <= n + 1; j++) {
+                int d = p[j];
+
+                if (c == d)
+                    continue;
+
+                auto it = mp.find({c, d});
+
+                int v = n - o[c] - e[d];
+
+                if (it != mp.end())
+                    v += it->second;
+
+                ans = min(ans, v);
+
+                if (it == mp.end())
+                    break;
+            }
+        }
+
+        cout << ans << '\n';
     }
-    int last = 0, ans = 0;
-    for (int i = 1; i <= m; ++i) {
-        int op, xp;
-        scanf("%d%d", &op, &xp);
-        int x = xp ^ last;
-        if (op == 1)
-            ins(x);
-        else if (op == 2)
-            del(x);
-        else if (op == 3)
-            last = rnk(x), ans ^= last;
-        else if (op == 4)
-            last = kth(x), ans ^= last;
-        else if (op == 5)
-            last = pre(x), ans ^= last;
-        else if (op == 6)
-            last = nxt(x), ans ^= last;
-    }
-    printf("%d\n", ans);
     return;
 }
 } // namespace TANGYIXIAO

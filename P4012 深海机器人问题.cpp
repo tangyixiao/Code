@@ -1,11 +1,28 @@
+//  Author: Tangyixiao
+//  Time: 2026-08-18 14:31:15
+//  Problem: P4012 深海机器人问题
+//  Contest: Luogu
+//  URL: https://www.luogu.com.cn/problem/P4012
+//  Memory Limit: 250 MB
+//  Time Limit: 1000 ms
+//  Interactive: false
+//  Test Type: single
+//  Batch ID: 9e686c3f-d4d2-4db3-a50f-dc13a203b4e4
+//
+// Algorithm:
+// Complexity: O()
+// Note:
+//
+//
+// Powered by CP Editor (https://cpeditor.org)
 
 /*
 Copyright (C) 2026 TangYixiao
 */
 
-#define PRAGMA_TYPE 0 // 0 for no pragma, 1 for Real optimize, 2 for All optimize
-//#define PRAGMA_GPlusPlus_ALLOWED
-#define JUDGE_TYPE 0    // 0 for online judge, 1 for judge file , 2 for local file
+#define PRAGMA_TYPE 0 // 0 for no pragma, 1 for Real optimize, 2 for All optimize, 3 for Compiler optimize
+// #define PRAGMA_GPlusPlus_ALLOWED
+#define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
 // #define MULTIPLE_TEST
 // #define DEBUG
@@ -14,6 +31,8 @@ Copyright (C) 2026 TangYixiao
 // #define BITS_NOT_ALLOWED
 // #define PD_DS_USED
 // #define TESTLIB
+
+// clang-format off
 #pragma region PREPROCESSOR
 #pragma region PRAGMAS
 #if PRAGMA_TYPE == 2
@@ -138,6 +157,130 @@ Copyright (C) 2026 TangYixiao
 #pragma GCC diagnostic error "-funsafe-loop-optimizations"
 #pragma GCC diagnostic error "-std=c++14" // 注意版本
 */
+#elif PRAGMA_TYPE == 3
+
+#pragma region PRAGMA_COMPILER
+#pragma region Optimization
+
+/*
+#pragma GCC optimize("O0")                 // 对应 -O0：关闭所有优化（默认）
+#pragma GCC optimize("O1")                 // 对应 -O1：基本优化，不显著增加编译时间
+#pragma GCC optimize("O2")                 // 对应 -O2：推荐优化级别，启用大部分非体积换速度的优化
+#pragma GCC optimize("O3")                 // 对应 -O3：激进优化，包含函数内联等，可能增大代码体积
+#pragma GCC optimize("Os")                 // 对应 -Os：优化代码体积，在 -O2 基础上进一步压缩大小
+#pragma GCC optimize("Ofast")              // 对应 -Ofast：无视严格标准，追求极致性能（含 -O3 和快速数学）
+#pragma GCC optimize("Og")                 // 对应 -Og：调试时优化，平衡调试体验和运行性能
+
+// 具体优化开关（可叠加，用空格分隔）
+#pragma GCC optimize("unroll-loops")       // 对应 -funroll-loops：展开循环
+#pragma GCC optimize("inline-functions")   // 对应 -finline-functions：内联简单函数
+#pragma GCC optimize("omit-frame-pointer") // 对应 -fomit-frame-pointer：省略栈帧指针
+#pragma GCC optimize("tree-vectorize")     // 对应 -ftree-vectorize：启用自动向量化
+*/
+#pragma endregion Optimization
+#pragma region Target_Architecture
+/*
+#pragma GCC target("arch=native")  // 对应 -march=native：针对本机CPU优化指令集
+#pragma GCC target("arch=core2")   // 对应 -march=core2：针对 Core2 架构
+#pragma GCC target("tune=generic") // 对应 -mtune=generic：通用调度优化
+#pragma GCC target("tune=intel")   // 对应 -mtune=intel：为 Intel CPU 优化调度
+#pragma GCC target("sse2")         // 对应 -msse2：启用 SSE2 指令集
+#pragma GCC target("sse4.2")       // 对应 -msse4.2：启用 SSE4.2
+#pragma GCC target("avx")          // 对应 -mavx：启用 AVX 指令集
+#pragma GCC target("avx2")         // 对应 -mavx2：启用 AVX2
+#pragma GCC target("fma")          // 对应 -mfma：启用 FMA（融合乘加）指令
+#pragma GCC target("bmi2")         // 对应 -mbmi2：启用 BMI2 指令集
+#pragma GCC target("popcnt")       // 对应 -mpopcnt：启用 POPCNT 指令
+#pragma GCC target("crc32")        // 对应 -mcrc32：启用 CRC32 指令
+#pragma GCC target("no-sse")       // 对应 -mno-sse：禁用 SSE 指令集
+
+// 嵌入式 / ARM 相关
+#pragma GCC target("thumb")           // 对应 -mthumb：生成 Thumb 指令集代码
+#pragma GCC target("arm")             // 对应 -marm：生成 ARM 指令集代码
+#pragma GCC target("arch=armv7-a")    // 对应 -march=armv7-a
+#pragma GCC target("mfpu=neon")       // 对应 -mfpu=neon：使用 NEON 向量单元
+#pragma GCC target("mfloat-abi=hard") // 对应 -mfloat-abi=hard：硬件浮点 ABI
+*/
+#pragma endregion Target_Architecture
+#pragma region Diagnostic_Warnings
+/*
+// 基本警告控制：忽略、警告、错误
+#pragma GCC diagnostic ignored "-Wunused-variable"  // 忽略未使用变量警告
+#pragma GCC diagnostic warning "-Wunused-parameter" // 将“未使用参数”作为警告（默认级别）
+#pragma GCC diagnostic error "-Wformat-security"    // 将格式字符串安全问题提升为错误
+
+// 常用警告组（部分组名可作为整体控制，但更推荐单独控制具体警告）
+#pragma GCC diagnostic ignored "-Wall" // 忽略绝大部分常见警告（不推荐）
+#pragma GCC diagnostic error "-Wextra" // 将 -Wextra 中的警告视为错误
+
+// 其他常见警告
+#pragma GCC diagnostic ignored "-Wconversion"        // 忽略隐式类型转换警告
+#pragma GCC diagnostic ignored "-Wsign-compare"      // 忽略有符号/无符号比较警告
+#pragma GCC diagnostic warning "-Wshadow"            // 变量遮蔽警告（警告级别）
+#pragma GCC diagnostic error "-Wnull-dereference"    // 空指针解引用错误
+#pragma GCC diagnostic error "-Wmaybe-uninitialized" // 可能未初始化变量错误
+
+// 严格标准警告
+#pragma GCC diagnostic error "-Wpedantic"   // 对应 -pedantic-errors：严格遵循标准
+#pragma GCC diagnostic warning "-Wpedantic" // 对应 -pedantic：发出严格标准警告
+
+// 保存/恢复诊断状态（用于局部临时修改）
+#pragma GCC diagnostic push                        // 保存当前诊断设置
+#pragma GCC diagnostic ignored "-Wunused-variable" // 临时忽略
+// ... 代码 ...
+#pragma GCC diagnostic pop // 恢复之前设置
+*/
+#pragma endregion Diagnostic_Warnings
+#pragma region Visibility_Linking
+/*
+#pragma GCC visibility push(hidden) // 对应 -fvisibility=hidden：隐藏后续所有符号
+// ... 代码（例如不希望导出的内部函数） ...
+#pragma GCC visibility pop // 恢复之前的可见性设置
+
+#pragma GCC visibility push(default) // 对应默认可见性（外部可见）
+// ... 代码（需要导出的 API） ...
+#pragma GCC visibility pop
+
+// 注意：无法通过 #pragma 直接控制 -static, -shared, -l 等链接器选项
+*/
+#pragma endregion Visibility_Linking
+#pragma region Stack Protection_Security
+/*
+// 使用 optimize pragma 控制栈保护（GCC 4.9+ 支持）
+#pragma GCC optimize("stack-protector-strong") // 对应 -fstack-protector-strong：强栈保护
+#pragma GCC optimize("no-stack-protector")     // 对应 -fno-stack-protector：禁用栈保护
+
+// 地址消毒剂（AddressSanitizer）无法通过 #pragma 在函数级开关，需要全局 -fsanitize=address
+// 但可以在函数上使用 __attribute__((no_sanitize_address))，此处不展开
+*/
+#pragma endregion Stack Protection_Security
+#pragma region Miscellaneous_Code_Generation
+/*
+
+// 位置无关代码（PIC）不支持函数级 #pragma，但可以这样尝试（效果有限）
+#pragma GCC optimize("fPIC")             // 可能无效，实际需全局 -fPIC，此处仅为示例
+
+// 禁止异常展开（C++）
+#pragma GCC optimize("no-exceptions")    // 对应 -fno-exceptions，仅在 C++ 中生效
+
+// 禁止 RTTI（C++）
+#pragma GCC optimize("no-rtti")          // 对应 -fno-rtti
+
+// 函数内联阈值调整
+#pragma GCC optimize("inline-limit=100") // 对应 --param inline-min-speedup=100（近似）
+*/
+#pragma endregion Miscellaneous_Code_Generation
+#pragma region Pushing_Popping_Options
+/*
+
+#pragma GCC push_options   // 保存当前所有优化和目标选项
+#pragma GCC optimize("O3") // 临时启用 O3
+#pragma GCC target("avx2") // 临时启用 AVX2
+// ... 需要高性能的代码段 ...
+#pragma GCC pop_options    // 恢复之前保存的选项
+*/
+#pragma endregion Pushing_Popping_Options
+#pragma endregion PRAGMA_COMPILER
 #else
 #endif
 #pragma endregion PRAGMAS
@@ -412,21 +555,27 @@ using namespace __gnu_pbds;
 namespace TANGYIXIAO {
 #pragma region IO
 namespace IO {
-inline void Init_IO() { cin.tie(0)->sync_with_stdio(false); }
+namespace FAST_IO {
+#ifdef __unix__
+#define ugetchar getchar_unlocked
+#else
+#define ugetchar _getchar_nolock
+#endif
+inline void IOSS_Init() { std::ios::sync_with_stdio(false); std::cin.tie(0); std::cout.tie(0); return; }
+}
+using namespace FAST_IO;
 #pragma region FILE_IO
 namespace FILE_IO {
-const string Insuffix = ".in", Outsuffix = ".out", Anssuffix = ".ans";
-inline void Judge_File(string File_Name) { freopen((File_Name + Insuffix).c_str(), "r", stdin), freopen((File_Name + Outsuffix).c_str(), "w", stdout); }
-inline void Local_File(string File_Name, int File_Idx) { freopen((File_Name + to_string(File_Idx) + Insuffix).c_str(), "r", stdin), freopen((File_Name + to_string(File_Idx) + Outsuffix).c_str(), "w", stdout); }
+const std::string Insuffix = ".in", Outsuffix = ".out", Anssuffix = ".ans";
+inline void Judge_File(std::string File_Name) { freopen((File_Name + Insuffix).c_str(), "r", stdin), freopen((File_Name + Outsuffix).c_str(), "w", stdout); return; }
+inline void Local_File(std::string File_Name, int File_Idx) { freopen((File_Name + std::to_string(File_Idx) + Insuffix).c_str(), "r", stdin), freopen((File_Name + std::to_string(File_Idx) + Outsuffix).c_str(), "w", stdout); return; }
 } // namespace FILE_IO
 using namespace FILE_IO;
 #pragma endregion FILE_IO
 #pragma region INT128_IO
-namespace INT128_IO{
-// clang-format off
-istream&operator>>(istream&is,__int128&x){string s;is>>s;bool neg=false;x=0;for(char c:s){if(c=='-')neg=true;else x=x*10+(c-'0');}if(neg)x=-x;return is;}
-ostream&operator<<(ostream&os,__int128 x){if(x==0)os<<0;else{string s,t;if(x<0)x=-x,t="-";while(x)s.push_back('0'+x%10),x/=10;reverse(s.begin(),s.end());os<<t<<s;}return os;}
-// clang-format on
+namespace INT128_IO {
+std::istream &operator>>(std::istream &is, __int128 &x) { std::string s; is >> s; bool neg = false; x = 0; for (char c : s) { if (c == '-') { neg = true; } else { x = x * 10 + (c - '0'); } } if (neg) { x = -x; } return is; }
+std::ostream &operator<<(std::ostream &os, __int128 x) { if (x == 0) { os << 0; } else { std::string s, t;if (x < 0) { x = -x, t = "-"; } for (; x;) { s.push_back('0' + x % 10), x /= 10; } std::reverse(s.begin(), s.end()); os << t << s; } return os; }
 } // namespace INT128_IO
 using namespace INT128_IO;
 #pragma endregion INT128_IO
@@ -436,31 +585,31 @@ using namespace IO;
 #pragma region TIME
 namespace TIME {
 clock_t Start_Time, End_Time;
-inline void Start_Time_Count() { Start_Time = clock(); }
-inline void End_Time_Count() { End_Time = clock(); }
+inline void Start_Time_Count() { Start_Time = clock(); return; }
+inline void End_Time_Count() { End_Time = clock(); return; }
 inline double Time_Count() { return (double)(End_Time - Start_Time) / CLOCKS_PER_SEC; }
-inline void Print_Time_Count(string Programe_Name) { cerr << fixed << setprecision(4) << "\n" + Programe_Name + " Time: " << Time_Count() << "s\n"; }
+inline void Print_Time_Count(std::string Programe_Name) { std::cerr << std::fixed << std::setprecision(4) << "\n" + Programe_Name + " Time: " << Time_Count() << "s\n"; return; }
 } // namespace TIME
 using namespace TIME;
 #pragma endregion TIME
 #pragma region DEBUGS
 namespace DEBUGS {
-#define all(x) (x).begin(), (x).end()
-#define fprint(...) cout << format(__VA_ARGS__)
-#define fprintln(...) cout << format(__VA_ARGS__) << '\n'
-#define ferr(...) cerr << format(__VA_ARGS__)
-#define ferrln(...) cerr << format(__VA_ARGS__) << '\n'
-#define funct(name, ret, ...) function<ret(__VA_ARGS__)> name = [&](__VA_ARGS__)
-inline void Debug_Print(string Debug_Message) { cerr << "\n" + Debug_Message + "\n"; }
+#define All(x) (x).begin(), (x).end()
+#define fprint(...) std::cout << std::format(__VA_ARGS__)
+#define fprintln(...) std::cout << std::format(__VA_ARGS__) << "\n"
+#define ferr(...) std::cerr << std::format(__VA_ARGS__)
+#define ferrln(...) std::cerr << std::format(__VA_ARGS__) << "\n"
+#define funct(name, ret, ...) std::function<ret(__VA_ARGS__)> name = [&](__VA_ARGS__)
+inline void Debug_Print(std::string Debug_Message) { std::cerr << "\n" << Debug_Message << "\n"; return;}
 } // namespace DEBUGS
 using namespace DEBUGS;
 #pragma endregion DEBUGS
 #pragma region BITS
 namespace BITS {
 template <class T>
-inline T lowbit(T x) { return x & (-x); }
+inline T lowbit(T x) { return ((x) & (-x)); }
 template <class T>
-inline T highbit(T x) { return (T)(log2(x) + 1); }
+inline T highbit(T x) { return (T)(std::log2(x) + 1); }
 template <class T>
 inline T Pop_Count(T x) { return __builtin_popcount(x); }
 } // namespace BITS
@@ -469,13 +618,14 @@ using namespace BITS;
 inline void solve(int Task_Id);
 } // namespace TANGYIXIAO
 using namespace TANGYIXIAO;
+// clang-format on
 #pragma endregion TANGYIXIAO
 #pragma region MAIN
 signed main(int argc, char *argv[]) {
 #ifdef TIME_COUNT
     Start_Time_Count();
 #endif
-    Init_IO();
+    IOSS_Init();
 #if JUDGE == 1
     Judge_File(FILE_NAME);
 #elif JUDGE == 2
@@ -498,103 +648,111 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-inline void solve(int Task_Id) {
-    using namespace std;
-    int a, b, P, Q;
-    cin >> a >> b >> P >> Q;
-    vector<vector<int>> h(P + 1, vector<int>(Q));
-    for (int i = 0; i <= P; ++i)
-        for (int j = 0; j < Q; ++j)
-            cin >> h[i][j];
-    vector<vector<int>> v(P, vector<int>(Q + 1));
-    for (int i = 0; i <= Q; ++i)
-        for (int j = 0; j < P; ++j)
-            cin >> v[j][i];
-    int N = (P + 1) * (Q + 1);
-    int S = N, T = N + 1;
-    struct Edge {
-        int to, cap, cost, rev;
-    };
-    vector<Edge> edges;
-    vector<vector<int>> G(N + 2);
-    auto add_edge = [&](int from, int to, int cap, int cost) {
-        edges.push_back({to, cap, cost, (int)edges.size() + 1});
-        edges.push_back({from, 0, -cost, (int)edges.size() - 1});
-        G[from].push_back(edges.size() - 2);
-        G[to].push_back(edges.size() - 1);
-    };
-    const int INF = 1e9;
-    for (int i = 0; i <= P; ++i) {
-        for (int j = 0; j <= Q; ++j) {
-            int u = i * (Q + 1) + j;
-            if (j < Q) {
-                int vv = i * (Q + 1) + j + 1;
-                add_edge(u, vv, 1, h[i][j]);
-                add_edge(u, vv, INF, 0);
-            }
-            if (i < P) {
-                int vv = (i + 1) * (Q + 1) + j;
-                add_edge(u, vv, 1, v[i][j]);
-                add_edge(u, vv, INF, 0);
-            }
+const int N = 305, M = 10005, INF = 1e9;
+const long long LINF = 4e18;
+int a, b, p, q, S, T, ec = 1, h[N], to[M], nx[M], w[M];
+int pre[N], inq[N], que[N];
+long long c[M], d[N];
+
+inline int id(int x, int y) {
+    return x * (q + 1) + y + 1;
+}
+inline void add(int x, int y, int z, long long v) {
+    to[++ec] = y;
+    w[ec] = z;
+    c[ec] = v;
+    nx[ec] = h[x];
+    h[x] = ec;
+    to[++ec] = x;
+    w[ec] = 0;
+    c[ec] = -v;
+    nx[ec] = h[y];
+    h[y] = ec;
+    return;
+}
+inline bool spfa() {
+    for (int i = 0; i <= T; i++) {
+        d[i] = -LINF;
+        inq[i] = 0;
+    }
+    int l = 0, r = 0;
+    que[r++] = S;
+    d[S] = 0;
+    inq[S] = 1;
+    while (l != r) {
+        int x = que[l++];
+        if (l == N) {
+            l = 0;
         }
-    }
-    int total_robot = 0;
-    for (int i = 0; i < a; ++i) {
-        int k, x, y;
-        cin >> k >> x >> y;
-        total_robot += k;
-        add_edge(S, x * (Q + 1) + y, k, 0);
-    }
-    for (int i = 0; i < b; ++i) {
-        int r, x, y;
-        cin >> r >> x >> y;
-        add_edge(x * (Q + 1) + y, T, r, 0);
-    }
-    long long max_cost = 0;
-    int flow = 0;
-    vector<int> dist(N + 2), prevv(N + 2), preve(N + 2);
-    vector<bool> inq(N + 2);
-    while (flow < total_robot) {
-        fill(dist.begin(), dist.end(), -1e18);
-        dist[S] = 0;
-        queue<int> q;
-        q.push(S);
-        inq[S] = true;
-        while (!q.empty()) {
-            int u = q.front();
-            q.pop();
-            inq[u] = false;
-            for (int idx : G[u]) {
-                Edge &e = edges[idx];
-                if (e.cap > 0 && dist[e.to] < dist[u] + e.cost) {
-                    dist[e.to] = dist[u] + e.cost;
-                    prevv[e.to] = u;
-                    preve[e.to] = idx;
-                    if (!inq[e.to]) {
-                        q.push(e.to);
-                        inq[e.to] = true;
+        inq[x] = 0;
+        for (int i = h[x]; i; i = nx[i]) {
+            int y = to[i];
+            if (w[i] && d[y] < d[x] + c[i]) {
+                d[y] = d[x] + c[i];
+                pre[y] = i;
+                if (!inq[y]) {
+                    inq[y] = 1;
+                    que[r++] = y;
+                    if (r == N) {
+                        r = 0;
                     }
                 }
             }
         }
-        if (dist[T] == -1e18)
-            break;
-        int d = total_robot - flow;
-        for (int v = T; v != S; v = prevv[v]) {
-            int u = prevv[v];
-            Edge &e = edges[preve[v]];
-            d = min(d, e.cap);
+    }
+    return d[T] != -LINF;
+}
+inline long long flow() {
+    long long res = 0;
+    while (spfa()) {
+        int f = INF;
+        for (int x = T; x != S; x = to[pre[x] ^ 1]) {
+            f = min(f, w[pre[x]]);
         }
-        flow += d;
-        max_cost += 1LL * d * dist[T];
-        for (int v = T; v != S; v = prevv[v]) {
-            int u = prevv[v];
-            Edge &e = edges[preve[v]];
-            e.cap -= d;
-            edges[e.rev].cap += d;
+        for (int x = T; x != S; x = to[pre[x] ^ 1]) {
+            w[pre[x]] -= f;
+            w[pre[x] ^ 1] += f;
+        }
+        res += 1LL * f * d[T];
+    }
+    return res;
+}
+inline void solve(int Task_Id) {
+    cin >> a >> b;
+    cin >> p >> q;
+
+    S = (p + 1) * (q + 1) + 1;
+    T = S + 1;
+
+    for (int i = 0, v; i <= p; i++) {
+        for (int j = 0; j < q; j++) {
+            cin >> v;
+            int x = id(i, j), y = id(i, j + 1);
+            add(x, y, 1, v);
+            add(x, y, INF, 0);
         }
     }
-    cout << max_cost << '\n';
+
+    for (int i = 0, v; i <= q; i++) {
+        for (int j = 0; j < p; j++) {
+            cin >> v;
+            int x = id(j, i), y = id(j + 1, i);
+            add(x, y, 1, v);
+            add(x, y, INF, 0);
+        }
+    }
+
+    for (int i = 1, k, x, y; i <= a; i++) {
+        cin >> k >> x >> y;
+        add(S, id(x, y), k, 0);
+    }
+
+    for (int i = 1, k, x, y; i <= b; i++) {
+        cin >> k >> x >> y;
+        add(id(x, y), T, k, 0);
+    }
+
+    cout << flow() << '\n';
+    return;
 }
 } // namespace TANGYIXIAO

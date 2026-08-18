@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-18 07:30:40
-//  Problem: P6136 【模板】普通平衡树（数据加强版）
+//  Time: 2026-08-18 15:45:28
+//  Problem: P2939 [USACO09FEB] Revamping Trails G
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P6136
-//  Memory Limit: 512 MB
-//  Time Limit: 3000 ms
+//  URL: https://www.luogu.com.cn/problem/P2939
+//  Memory Limit: 125 MB
+//  Time Limit: 2000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: a0aeb5e7-443e-4f71-8052-bc12c24a2f5c
+//  Batch ID: eb7420b6-6f17-4ff6-a089-81bfb2f11ac3
 //
 // Algorithm:
 // Complexity: O()
@@ -648,131 +648,74 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int MAXN = 1100005;
-int n, m, root;
-struct Node {
-    int v, p, l, r, s;
-} t[MAXN];
-int nc;
+#define ll long long
+const int N = 1e4 + 5, M = 1e5 + 5, K = 22;
+const ll INF = 4e18;
+int n, m, k, h[N], to[M], nx[M], w[M], ec;
+ll d[N][K];
 
-inline int newn(int x) {
-    ++nc;
-    t[nc].v = x;
-    t[nc].p = rand();
-    t[nc].l = t[nc].r = 0;
-    t[nc].s = 1;
-    return nc;
+inline void add(int x, int y, int z) {
+    to[++ec] = y;
+    w[ec] = z;
+    nx[ec] = h[x];
+    h[x] = ec;
+    return;
 }
-
-inline void up(int u) {
-    t[u].s = 1 + t[t[u].l].s + t[t[u].r].s;
-}
-
-void spl(int u, int x, int &a, int &b) {
-    if (!u) {
-        a = b = 0;
-        return;
+inline void solve(int Task_Id) {
+    cin >> n >> m >> k;
+    for (int i = 1, x, y, z; i <= m; i++) {
+        cin >> x >> y >> z;
+        add(x, y, z);
+        add(y, x, z);
     }
-    if (t[u].v < x) {
-        a = u;
-        spl(t[u].r, x, t[u].r, b);
-    } else {
-        b = u;
-        spl(t[u].l, x, a, t[u].l);
-    }
-    up(u);
-}
 
-int mrg(int a, int b) {
-    if (!a || !b)
-        return a | b;
-    if (t[a].p > t[b].p) {
-        t[a].r = mrg(t[a].r, b);
-        up(a);
-        return a;
-    } else {
-        t[b].l = mrg(a, t[b].l);
-        up(b);
-        return b;
-    }
-}
-
-void ins(int x) {
-    int a, b;
-    spl(root, x, a, b);
-    root = mrg(mrg(a, newn(x)), b);
-}
-
-void del(int x) {
-    int a, b, c;
-    spl(root, x, a, b);
-    spl(b, x + 1, b, c);
-    b = mrg(t[b].l, t[b].r);
-    root = mrg(mrg(a, b), c);
-}
-
-int rnk(int x) {
-    int a, b;
-    spl(root, x, a, b);
-    int ans = t[a].s + 1;
-    root = mrg(a, b);
-    return ans;
-}
-
-int kth(int k) {
-    int u = root;
-    while (u) {
-        int lsz = t[t[u].l].s;
-        if (k <= lsz)
-            u = t[u].l;
-        else if (k == lsz + 1)
-            return t[u].v;
-        else {
-            k -= lsz + 1;
-            u = t[u].r;
+    for (int i = 1; i <= n; i++) {
+        for (int j = 0; j <= k; j++) {
+            d[i][j] = INF;
         }
     }
-    return -1;
-}
 
-int pre(int x) {
-    int r = rnk(x) - 1;
-    return r > 0 ? kth(r) : -1;
-}
+    priority_queue<pair<ll, pair<int, int>>,
+                   vector<pair<ll, pair<int, int>>>,
+                   greater<pair<ll, pair<int, int>>>>
+        q;
 
-int nxt(int x) {
-    int r = rnk(x + 1);
-    return r <= t[root].s ? kth(r) : -1;
-}
+    d[1][0] = 0;
+    q.push({0, {1, 0}});
 
-inline void solve(int Task_Id) {
-    srand(time(0));
-    scanf("%d%d", &n, &m);
-    root = 0;
-    for (int i = 1; i <= n; ++i) {
-        int x;
-        scanf("%d", &x);
-        ins(x);
+    while (!q.empty()) {
+        auto t = q.top();
+        q.pop();
+
+        ll D = t.first;
+        int x = t.second.first;
+        int c = t.second.second;
+
+        if (D != d[x][c]) {
+            continue;
+        }
+
+        for (int i = h[x]; i; i = nx[i]) {
+            int y = to[i];
+
+            if (d[y][c] > D + w[i]) {
+                d[y][c] = D + w[i];
+                q.push({d[y][c], {y, c}});
+            }
+
+            if (c < k && d[y][c + 1] > D) {
+                d[y][c + 1] = D;
+                q.push({d[y][c + 1], {y, c + 1}});
+            }
+        }
     }
-    int last = 0, ans = 0;
-    for (int i = 1; i <= m; ++i) {
-        int op, xp;
-        scanf("%d%d", &op, &xp);
-        int x = xp ^ last;
-        if (op == 1)
-            ins(x);
-        else if (op == 2)
-            del(x);
-        else if (op == 3)
-            last = rnk(x), ans ^= last;
-        else if (op == 4)
-            last = kth(x), ans ^= last;
-        else if (op == 5)
-            last = pre(x), ans ^= last;
-        else if (op == 6)
-            last = nxt(x), ans ^= last;
+
+    ll ans = INF;
+    for (int i = 0; i <= k; i++) {
+        ans = min(ans, d[n][i]);
     }
-    printf("%d\n", ans);
+
+    cout << ans << '\n';
     return;
 }
 } // namespace TANGYIXIAO

@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-18 07:30:40
-//  Problem: P6136 【模板】普通平衡树（数据加强版）
+//  Time: 2026-08-18 15:15:06
+//  Problem: P4400 [JSOI2008] Blue Mary的旅行
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P6136
-//  Memory Limit: 512 MB
-//  Time Limit: 3000 ms
+//  URL: https://www.luogu.com.cn/problem/P4400
+//  Memory Limit: 125 MB
+//  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: a0aeb5e7-443e-4f71-8052-bc12c24a2f5c
+//  Batch ID: c6b0bef9-5f0c-472c-8c46-0370fe1b376c
 //
 // Algorithm:
 // Complexity: O()
@@ -648,131 +648,98 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int MAXN = 1100005;
-int n, m, root;
-struct Node {
-    int v, p, l, r, s;
-} t[MAXN];
-int nc;
+const int N = 6005, M = 600005, INF = 1e9;
+int n, m, k, S, T, ec = 1, h[N], to[M], nx[M], w[M];
+int d[N], cur[N], q[N];
+int x[2505], y[2505], z[2505];
 
-inline int newn(int x) {
-    ++nc;
-    t[nc].v = x;
-    t[nc].p = rand();
-    t[nc].l = t[nc].r = 0;
-    t[nc].s = 1;
-    return nc;
+inline int id(int t, int x) {
+    return t * n + x;
 }
-
-inline void up(int u) {
-    t[u].s = 1 + t[t[u].l].s + t[t[u].r].s;
+inline void add(int x, int y, int z) {
+    to[++ec] = y;
+    w[ec] = z;
+    nx[ec] = h[x];
+    h[x] = ec;
+    to[++ec] = x;
+    w[ec] = 0;
+    nx[ec] = h[y];
+    h[y] = ec;
+    return;
 }
-
-void spl(int u, int x, int &a, int &b) {
-    if (!u) {
-        a = b = 0;
-        return;
-    }
-    if (t[u].v < x) {
-        a = u;
-        spl(t[u].r, x, t[u].r, b);
-    } else {
-        b = u;
-        spl(t[u].l, x, a, t[u].l);
-    }
-    up(u);
-}
-
-int mrg(int a, int b) {
-    if (!a || !b)
-        return a | b;
-    if (t[a].p > t[b].p) {
-        t[a].r = mrg(t[a].r, b);
-        up(a);
-        return a;
-    } else {
-        t[b].l = mrg(a, t[b].l);
-        up(b);
-        return b;
-    }
-}
-
-void ins(int x) {
-    int a, b;
-    spl(root, x, a, b);
-    root = mrg(mrg(a, newn(x)), b);
-}
-
-void del(int x) {
-    int a, b, c;
-    spl(root, x, a, b);
-    spl(b, x + 1, b, c);
-    b = mrg(t[b].l, t[b].r);
-    root = mrg(mrg(a, b), c);
-}
-
-int rnk(int x) {
-    int a, b;
-    spl(root, x, a, b);
-    int ans = t[a].s + 1;
-    root = mrg(a, b);
-    return ans;
-}
-
-int kth(int k) {
-    int u = root;
-    while (u) {
-        int lsz = t[t[u].l].s;
-        if (k <= lsz)
-            u = t[u].l;
-        else if (k == lsz + 1)
-            return t[u].v;
-        else {
-            k -= lsz + 1;
-            u = t[u].r;
+inline bool bfs() {
+    memset(d, -1, sizeof(d));
+    int l = 1, r = 1;
+    q[1] = S;
+    d[S] = 0;
+    while (l <= r) {
+        int x = q[l++];
+        for (int i = h[x]; i; i = nx[i]) {
+            int y = to[i];
+            if (w[i] && d[y] == -1) {
+                d[y] = d[x] + 1;
+                q[++r] = y;
+            }
         }
     }
-    return -1;
+    return d[T] != -1;
 }
-
-int pre(int x) {
-    int r = rnk(x) - 1;
-    return r > 0 ? kth(r) : -1;
+inline int dfs(int x, int f) {
+    if (x == T) {
+        return f;
+    }
+    int res = 0;
+    for (int &i = cur[x]; i && f; i = nx[i]) {
+        int y = to[i];
+        if (w[i] && d[y] == d[x] + 1) {
+            int v = dfs(y, min(f, w[i]));
+            if (v) {
+                w[i] -= v;
+                w[i ^ 1] += v;
+                f -= v;
+                res += v;
+            }
+        }
+    }
+    return res;
 }
-
-int nxt(int x) {
-    int r = rnk(x + 1);
-    return r <= t[root].s ? kth(r) : -1;
+inline int dinic() {
+    int res = 0;
+    while (bfs()) {
+        memcpy(cur, h, sizeof(h));
+        res += dfs(S, INF);
+    }
+    return res;
 }
-
 inline void solve(int Task_Id) {
-    srand(time(0));
-    scanf("%d%d", &n, &m);
-    root = 0;
-    for (int i = 1; i <= n; ++i) {
-        int x;
-        scanf("%d", &x);
-        ins(x);
+    cin >> n >> m >> k;
+    for (int i = 1; i <= m; i++) {
+        cin >> x[i] >> y[i] >> z[i];
     }
-    int last = 0, ans = 0;
-    for (int i = 1; i <= m; ++i) {
-        int op, xp;
-        scanf("%d%d", &op, &xp);
-        int x = xp ^ last;
-        if (op == 1)
-            ins(x);
-        else if (op == 2)
-            del(x);
-        else if (op == 3)
-            last = rnk(x), ans ^= last;
-        else if (op == 4)
-            last = kth(x), ans ^= last;
-        else if (op == 5)
-            last = pre(x), ans ^= last;
-        else if (op == 6)
-            last = nxt(x), ans ^= last;
+
+    S = (n + k + 5) * n + 1;
+    T = S + 1;
+
+    add(S, id(0, 1), k);
+
+    int ans = 0, fl = 0;
+
+    for (int t = 1; fl < k; t++) {
+        for (int i = 1; i <= n; i++) {
+            add(id(t - 1, i), id(t, i), INF);
+        }
+
+        for (int i = 1; i <= m; i++) {
+            add(id(t - 1, x[i]), id(t, y[i]), z[i]);
+        }
+
+        add(id(t, n), T, INF);
+
+        fl += dinic();
+        ans = t;
     }
-    printf("%d\n", ans);
+
+    cout << ans << '\n';
     return;
 }
 } // namespace TANGYIXIAO

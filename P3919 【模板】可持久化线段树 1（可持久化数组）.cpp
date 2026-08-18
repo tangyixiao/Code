@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-08-18 07:30:40
-//  Problem: P6136 【模板】普通平衡树（数据加强版）
+//  Time: 2026-08-18 14:36:41
+//  Problem: P3919 【模板】可持久化线段树 1（可持久化数组）
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P6136
-//  Memory Limit: 512 MB
-//  Time Limit: 3000 ms
+//  URL: https://www.luogu.com.cn/problem/P3919
+//  Memory Limit: 1024 MB
+//  Time Limit: 1500 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: a0aeb5e7-443e-4f71-8052-bc12c24a2f5c
+//  Batch ID: d2a48221-0f0e-4244-80c2-b4e740334d38
 //
 // Algorithm:
 // Complexity: O()
@@ -648,131 +648,66 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int MAXN = 1100005;
-int n, m, root;
-struct Node {
-    int v, p, l, r, s;
-} t[MAXN];
-int nc;
+const int N = 1e6 + 5, M = N * 23;
+int n, m, a[N], rt[N], ls[M], rs[M], val[M], tot;
 
-inline int newn(int x) {
-    ++nc;
-    t[nc].v = x;
-    t[nc].p = rand();
-    t[nc].l = t[nc].r = 0;
-    t[nc].s = 1;
-    return nc;
-}
-
-inline void up(int u) {
-    t[u].s = 1 + t[t[u].l].s + t[t[u].r].s;
-}
-
-void spl(int u, int x, int &a, int &b) {
-    if (!u) {
-        a = b = 0;
-        return;
+inline int build(int l, int r) {
+    int p = ++tot;
+    if (l == r) {
+        val[p] = a[l];
+        return p;
     }
-    if (t[u].v < x) {
-        a = u;
-        spl(t[u].r, x, t[u].r, b);
+    int mid = (l + r) >> 1;
+    ls[p] = build(l, mid);
+    rs[p] = build(mid + 1, r);
+    return p;
+}
+inline int modify(int q, int l, int r, int x, int v) {
+    int p = ++tot;
+    ls[p] = ls[q];
+    rs[p] = rs[q];
+    val[p] = val[q];
+    if (l == r) {
+        val[p] = v;
+        return p;
+    }
+    int mid = (l + r) >> 1;
+    if (x <= mid) {
+        ls[p] = modify(ls[q], l, mid, x, v);
     } else {
-        b = u;
-        spl(t[u].l, x, a, t[u].l);
+        rs[p] = modify(rs[q], mid + 1, r, x, v);
     }
-    up(u);
+    return p;
 }
-
-int mrg(int a, int b) {
-    if (!a || !b)
-        return a | b;
-    if (t[a].p > t[b].p) {
-        t[a].r = mrg(t[a].r, b);
-        up(a);
-        return a;
+inline int query(int p, int l, int r, int x) {
+    if (l == r) {
+        return val[p];
+    }
+    int mid = (l + r) >> 1;
+    if (x <= mid) {
+        return query(ls[p], l, mid, x);
     } else {
-        t[b].l = mrg(a, t[b].l);
-        up(b);
-        return b;
+        return query(rs[p], mid + 1, r, x);
     }
 }
+inline void solve(int Task_Id) {
+    cin >> n >> m;
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i];
+    }
 
-void ins(int x) {
-    int a, b;
-    spl(root, x, a, b);
-    root = mrg(mrg(a, newn(x)), b);
-}
+    rt[0] = build(1, n);
 
-void del(int x) {
-    int a, b, c;
-    spl(root, x, a, b);
-    spl(b, x + 1, b, c);
-    b = mrg(t[b].l, t[b].r);
-    root = mrg(mrg(a, b), c);
-}
-
-int rnk(int x) {
-    int a, b;
-    spl(root, x, a, b);
-    int ans = t[a].s + 1;
-    root = mrg(a, b);
-    return ans;
-}
-
-int kth(int k) {
-    int u = root;
-    while (u) {
-        int lsz = t[t[u].l].s;
-        if (k <= lsz)
-            u = t[u].l;
-        else if (k == lsz + 1)
-            return t[u].v;
-        else {
-            k -= lsz + 1;
-            u = t[u].r;
+    for (int i = 1, v, op, p, x; i <= m; i++) {
+        cin >> v >> op >> p;
+        if (op == 1) {
+            cin >> x;
+            rt[i] = modify(rt[v], 1, n, p, x);
+        } else {
+            rt[i] = rt[v];
+            cout << query(rt[v], 1, n, p) << '\n';
         }
     }
-    return -1;
-}
-
-int pre(int x) {
-    int r = rnk(x) - 1;
-    return r > 0 ? kth(r) : -1;
-}
-
-int nxt(int x) {
-    int r = rnk(x + 1);
-    return r <= t[root].s ? kth(r) : -1;
-}
-
-inline void solve(int Task_Id) {
-    srand(time(0));
-    scanf("%d%d", &n, &m);
-    root = 0;
-    for (int i = 1; i <= n; ++i) {
-        int x;
-        scanf("%d", &x);
-        ins(x);
-    }
-    int last = 0, ans = 0;
-    for (int i = 1; i <= m; ++i) {
-        int op, xp;
-        scanf("%d%d", &op, &xp);
-        int x = xp ^ last;
-        if (op == 1)
-            ins(x);
-        else if (op == 2)
-            del(x);
-        else if (op == 3)
-            last = rnk(x), ans ^= last;
-        else if (op == 4)
-            last = kth(x), ans ^= last;
-        else if (op == 5)
-            last = pre(x), ans ^= last;
-        else if (op == 6)
-            last = nxt(x), ans ^= last;
-    }
-    printf("%d\n", ans);
     return;
 }
 } // namespace TANGYIXIAO
