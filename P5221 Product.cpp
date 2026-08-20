@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;const int N=1000005;const long long P=104857601;int p[N],v[N];long long q(long long a,long long b){long long r=1;for(;b;b>>=1,a=a*a%P)if(b&1)r=r*a%P;return r;}int main(){ios::sync_with_stdio(0);cin.tie(0);int n,k=0;long long r=1;cin>>n;for(int i=2;i<=n;i++){if(!v[i])p[k++]=i;for(int j=0;j<k&&i*p[j]<=n;j++){v[i*p[j]]=1;if(i%p[j]==0)break;}}for(int i=0;i<k;i++){long long e=0;for(long long x=p[i],y=n/x;y;x*=p[i],y=n/x)e+=2*y*(n-y);r=r*q(p[i],e)%P;}cout<<r<<'\n';}

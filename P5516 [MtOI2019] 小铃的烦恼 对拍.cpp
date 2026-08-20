@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;const int N=55;double f[N];int main(int c,char**v){ios::sync_with_stdio(0);cin.tie(0);int R=c>1?stoi(v[1]):1000;unsigned long long s=c>2?stoull(v[2]):1;mt19937_64 g(s);while(R--){int n=g()%50+1;double d=1.0*(n-1)*(n-1)/n;f[0]=0;for(int i=1;i<=n;i++){f[i]=f[i-1]+d;if(i<n)d-=1.0*(n-1)/(n-i);}for(int k=1;k<n;k++){double p=1.0*k*(n-k)/(n*(n-1)),z=p*(f[k+1]+f[n-k-1]-f[k]-f[n-k])+p*(f[k-1]+f[n-k+1]-f[k]-f[n-k]);if(abs(z+1)>1e-8)return cout<<"WA\n",1;}}cout<<"OK\n";}

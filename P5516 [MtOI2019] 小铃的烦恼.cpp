@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;const int N=2005;double f[N];int c[26];char s[N];int main(){ios::sync_with_stdio(0);cin.tie(0);cin>>s;int n=strlen(s);for(int i=0;i<n;i++)c[s[i]-'A']++;double x;for(int i=0;i<n*n;i++)cin>>x;double d=1.0*(n-1)*(n-1)/n;for(int i=1;i<=n;i++){f[i]=f[i-1]+d;if(i<n)d-=1.0*(n-1)/(n-i);}double r=0;for(int i=0;i<26;i++)r+=f[c[i]];cout<<fixed<<setprecision(1)<<r<<'\n';}

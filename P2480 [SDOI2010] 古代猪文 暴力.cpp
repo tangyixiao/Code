@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;const long long P=999911659,M=999911658;long long c[1005][1005];long long pw(long long a,long long b){long long r=1;for(;b;b>>=1,a=a*a%P)if(b&1)r=r*a%P;return r;}int main(){ios::sync_with_stdio(0);cin.tie(0);int n;long long g,s=0;cin>>n>>g;c[0][0]=1;for(int i=1;i<=n;i++){c[i][0]=1;for(int j=1;j<=i;j++)c[i][j]=(c[i-1][j-1]+c[i-1][j])%M;}for(int i=1;i<=n;i++)if(n%i==0)s=(s+c[n][i])%M;cout<<(g%P?pw(g,s):0)<<'\n';}

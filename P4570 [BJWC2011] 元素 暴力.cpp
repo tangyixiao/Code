@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;const int N=25;unsigned long long a[N],b[64];int w[N];int main(){ios::sync_with_stdio(0);cin.tie(0);int n;cin>>n;for(int i=0;i<n;i++)cin>>a[i]>>w[i];long long z=0;for(int s=0;s<(1<<n);s++){memset(b,0,sizeof b);long long q=0;bool f=1;for(int j=0;j<n&&f;j++)if(s>>j&1){auto x=a[j];bool k=0;q+=w[j];for(int i=63;i>=0;i--)if(x>>i&1){if(b[i])x^=b[i];else{b[i]=x;k=1;break;}}if(!k)f=0;}if(f)z=max(z,q);}cout<<z<<'\n';}

@@ -1,3 +1,20 @@
+//  Author: Tangyixiao
+//  Time: 2026-08-18 07:30:40
+//  Problem: P6136 【模板】普通平衡树（数据加强版）
+//  Contest: Luogu
+//  URL: https://www.luogu.com.cn/problem/P6136
+//  Memory Limit: 512 MB
+//  Time Limit: 3000 ms
+//  Interactive: false
+//  Test Type: single
+//  Batch ID: a0aeb5e7-443e-4f71-8052-bc12c24a2f5c
+//
+// Algorithm:
+// Complexity: O()
+// Note:
+//
+//
+// Powered by CP Editor (https://cpeditor.org)
 
 /*
 Copyright (C) 2026 TangYixiao

@@ -1,0 +1,15 @@
+from build_lib import add
+
+A=r'''#include <bits/stdc++.h>
+using namespace std;const unsigned long long P=9223372036854775783ULL,K=P-1;unsigned long long a[4][4],b[4][4],c[4][4],v[4],w[4];char s[10005];void q(unsigned long long x[4][4],unsigned long long y[4][4]){memset(c,0,sizeof c);for(int i=0;i<4;i++)for(int k=0;k<4;k++)for(int j=0;j<4;j++)c[i][j]=(c[i][j]+(__uint128_t)x[i][k]*y[k][j])%P;memcpy(x,c,sizeof c);}int main(){ios::sync_with_stdio(0);cin.tie(0);cin>>s;if(s[0]=='1'&&!s[1])return cout<<1<<'\n',0;unsigned long long n=0,u=0;bool z=0;for(int i=0;s[i];i++){int d=s[i]-48;n=((__uint128_t)n*10+d)%K;if(!z){__uint128_t x=(__uint128_t)u*10+d;if(x>K)z=1;else u=x;}}if(z)n+=K;a[0][0]=2;a[0][1]=2;a[1][0]=1;a[1][1]=2;a[2][0]=1;a[2][1]=3;a[2][2]=2;a[3][0]=P-1;a[3][1]=P-2;a[3][3]=1;for(int i=0;i<4;i++)b[i][i]=1;for(;n;n>>=1,q(a,a))if(n&1)q(b,a);v[2]=v[3]=1;for(int i=0;i<4;i++)for(int j=0;j<4;j++)w[j]=(w[j]+(__uint128_t)v[i]*b[i][j])%P;cout<<w[1]<<'\n';}
+'''
+AB=r'''#include <bits/stdc++.h>
+using namespace std;const unsigned long long P=9223372036854775783ULL;unsigned long long a[4][4],v[4],w[4];int main(){ios::sync_with_stdio(0);cin.tie(0);int n;cin>>n;if(n==1)return cout<<1<<'\n',0;a[0][0]=2;a[0][1]=2;a[1][0]=1;a[1][1]=2;a[2][0]=1;a[2][1]=3;a[2][2]=2;a[3][0]=P-1;a[3][1]=P-2;a[3][3]=1;v[2]=v[3]=1;while(n--){memset(w,0,sizeof w);for(int i=0;i<4;i++)for(int j=0;j<4;j++)w[j]=(w[j]+(__uint128_t)v[i]*a[i][j])%P;memcpy(v,w,sizeof w);}cout<<v[1]<<'\n';}
+'''
+AG=r'''#include <bits/stdc++.h>
+using namespace std;char s[10005];int main(int c,char**v){ios::sync_with_stdio(0);cin.tie(0);unsigned long long z=c>1?stoull(v[1]):1,w=c>2?stoull(v[2]):20;mt19937_64 g(z);int n=min(10000ULL,max(1ULL,w));s[0]=g()%9+49;for(int i=1;i<n;i++)s[i]=g()%10+48;cout<<s<<'\n';}
+'''
+AS=r'''#include <bits/stdc++.h>
+using namespace std;const unsigned long long P=9223372036854775783ULL;unsigned long long a[4][4],b[4][4],c[4][4],d[4][4],v[4],w[4],x[4];void q(unsigned long long u[4][4],unsigned long long z[4][4]){memset(d,0,sizeof d);for(int i=0;i<4;i++)for(int k=0;k<4;k++)for(int j=0;j<4;j++)d[i][j]=(d[i][j]+(__uint128_t)u[i][k]*z[k][j])%P;memcpy(u,d,sizeof d);}int main(int c0,char**v0){ios::sync_with_stdio(0);cin.tie(0);a[0][0]=2;a[0][1]=2;a[1][0]=1;a[1][1]=2;a[2][0]=1;a[2][1]=3;a[2][2]=2;a[3][0]=P-1;a[3][1]=P-2;a[3][3]=1;int R=c0>1?stoi(v0[1]):1000;unsigned long long s=c0>2?stoull(v0[2]):1;mt19937_64 g(s);while(R--){int n=g()%100+2;memcpy(b,a,sizeof a);memset(c,0,sizeof c);for(int i=0;i<4;i++)c[i][i]=1;for(int z=n;z;z>>=1,q(b,b))if(z&1)q(c,b);memset(v,0,sizeof v);memset(w,0,sizeof w);memset(x,0,sizeof x);v[2]=v[3]=1;for(int i=0;i<4;i++)for(int j=0;j<4;j++)x[j]=(x[j]+(__uint128_t)v[i]*c[i][j])%P;while(n--){memset(w,0,sizeof w);for(int i=0;i<4;i++)for(int j=0;j<4;j++)w[j]=(w[j]+(__uint128_t)v[i]*a[i][j])%P;memcpy(v,w,sizeof w);}if(v[1]!=x[1])return cout<<"WA\n",1;}cout<<"OK\n";}
+'''
+add('P4967','P4967 黑暗打击','按四个方向与区域类型记录 Hilbert 曲线递归拼接后的淹没状态，可得到固定四维线性转移。初始行向量为 $(0,0,1,1)$。指数最多一万位，按题目模数的循环节扩展取模后做矩阵快速幂。乘法使用 `__int128`。',{'.cpp':A,' 数据生成.cpp':AG,' 暴力.cpp':AB,' 对拍.cpp':AS},extra=[('1\n','1\n'),('2\n','6\n'),('5\n','364\n')])

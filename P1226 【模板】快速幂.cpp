@@ -1,15 +1,4 @@
 #include <bits/stdc++.h>
-#define int long long
 using namespace std;
-int n,m,p,ans=1,kln,klm;
-signed main() {
-	scanf("%lld%lld%lld",&n,&m,&p);
-	kln=n,klm=m;
-	while(m){
-		if(m%2==1)ans=ans*n%p;
-		n=n*n%p;
-		m>>=1;
-	}
-	printf("%lld^%lld mod %lld=%lld\n",kln,klm,p,ans);
-	return 0;
-}
+long long q(long long a,long long b,long long p){long long r=1%p;for(;b;b>>=1,a=(__int128)a*a%p)if(b&1)r=(__int128)r*a%p;return r;}
+int main(){ios::sync_with_stdio(0);cin.tie(0);long long a,b,p;cin>>a>>b>>p;cout<<a<<'^'<<b<<" mod "<<p<<'='<<q(a,b,p)<<'\n';}

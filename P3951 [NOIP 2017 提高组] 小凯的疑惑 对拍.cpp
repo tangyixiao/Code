@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;bool v[10000];int main(int C,char**V){ios::sync_with_stdio(0);cin.tie(0);int R=C>1?stoi(V[1]):1000;unsigned long long s=C>2?stoull(V[2]):1;mt19937_64 g(s);while(R--){int a=g()%50+1,b=g()%50+1;if(__gcd(a,b)>1){R++;continue;}memset(v,0,sizeof v);for(int i=0;i*a<10000;i++)for(int j=0;i*a+j*b<10000;j++)v[i*a+j*b]=1;int x=9999;while(v[x])x--;if(x!=a*b-a-b)return cout<<"WA\n",1;}cout<<"OK\n";}

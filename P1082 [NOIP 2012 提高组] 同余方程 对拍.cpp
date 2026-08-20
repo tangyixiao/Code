@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;long long E(long long a,long long b,long long&x,long long&y){if(!b)return x=1,y=0,a;long long d=E(b,a%b,y,x);y-=a/b*x;return d;}int main(int C,char**v){ios::sync_with_stdio(0);cin.tie(0);int R=C>1?stoi(v[1]):1000;unsigned long long s=C>2?stoull(v[2]):1;mt19937_64 g(s);while(R--){long long b=g()%1000+2,a=g()%(b-1)+1;if(__gcd(a,b)>1){R++;continue;}long long x,y;E(a,b,x,y);x=(x%b+b)%b;if(a*x%b!=1)return cout<<"WA\n",1;}cout<<"OK\n";}

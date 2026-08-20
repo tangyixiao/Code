@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;const int N=19,M=1<<18;double a[N][N],b[N][N],f[M];int main(){ios::sync_with_stdio(0);cin.tie(0);int n;cin>>n;for(int i=0;i<n;i++)for(int j=0;j<n;j++)cin>>a[i][j];for(int i=0;i<n;i++)for(int j=0;j<n;j++)cin>>b[i][j];double l=0,r=10000;for(int z=0;z<55;z++){double x=(l+r)/2;fill(f,f+(1<<n),-1e100);f[0]=0;for(int s=0;s<(1<<n);s++){int i=__builtin_popcount((unsigned)s);for(int j=0;j<n;j++)if(!(s>>j&1))f[s|1<<j]=max(f[s|1<<j],f[s]+a[i][j]-x*b[i][j]);}if(f[(1<<n)-1]>=0)l=x;else r=x;}cout<<fixed<<setprecision(6)<<l<<'\n';}

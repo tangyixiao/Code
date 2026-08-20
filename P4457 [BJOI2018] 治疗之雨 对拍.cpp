@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;const long long P=1e9+7;long long q(long long x,long long n){long long r=1;for(;n;n>>=1,x=x*x%P)if(n&1)r=r*x%P;return r;}int main(int c,char**v){ios::sync_with_stdio(0);cin.tie(0);int R=c>1?stoi(v[1]):1000;unsigned long long s=c>2?stoull(v[2]):1;mt19937_64 g(s);while(R--){int n=g()%8+1,m=g()%5+1,k=g()%8+1;long long iv=q(m+1,P-2),z=1;for(int i=0;i<k;i++)z=z*m%P*iv%P;long long sum=z;for(int d=1;d<=k;d++){z=z*(k-d+1)%P*q(d,P-2)%P*q(m,P-2)%P;sum=(sum+z)%P;}if(sum!=1)return cout<<"WA\n",1;}cout<<"OK\n";}

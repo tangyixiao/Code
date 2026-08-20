@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;const int N=12;double w[N][N],r=1e100;bool v[N];int n;void D(int s,int x,int k,double z){v[x]=1;for(int y=1;y<=n;y++)if(w[x][y]<1e90){if(y==s)r=min(r,(z+w[x][y])/(k+1));else if(!v[y])D(s,y,k+1,z+w[x][y]);}v[x]=0;}int main(){ios::sync_with_stdio(0);cin.tie(0);int m;cin>>n>>m;for(int i=1;i<=n;i++)for(int j=1;j<=n;j++)w[i][j]=1e100;while(m--){int x,y;double z;cin>>x>>y>>z;w[x][y]=min(w[x][y],z);}for(int i=1;i<=n;i++)D(i,i,0,0);cout<<fixed<<setprecision(8)<<r<<'\n';}

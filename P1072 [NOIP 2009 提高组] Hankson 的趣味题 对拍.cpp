@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;long long x[1000];int main(int C,char**v){ios::sync_with_stdio(0);cin.tie(0);int R=C>1?stoi(v[1]):1000;unsigned long long s=C>2?stoull(v[2]):1;mt19937_64 g(s);while(R--){long long a=g()%100+1,b=g()%100+1,c=g()%100+1,d=g()%100+1,k=0,A=0,B=0;for(long long i=1;i*i<=d;i++)if(d%i==0){x[k++]=i;if(i*i<d)x[k++]=d/i;}for(int i=0;i<k;i++)if(__gcd(x[i],a)==b&&x[i]/__gcd(x[i],c)*c==d)A++;for(long long i=1;i<=d;i++)if(__gcd(i,a)==b&&i/__gcd(i,c)*c==d)B++;if(A!=B)return cout<<"WA\n",1;}cout<<"OK\n";}

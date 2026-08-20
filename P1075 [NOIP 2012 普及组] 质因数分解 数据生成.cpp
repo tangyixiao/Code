@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;const int N=78498;int p[N],v[1000005];int main(int c,char**x){ios::sync_with_stdio(0);cin.tie(0);unsigned long long s=c>1?stoull(x[1]):1,z=c>2?stoull(x[2]):1000000;mt19937_64 g(s);int k=0;for(int i=2;i<=1000000;i++){if(!v[i])p[k++]=i;for(int j=0;j<k&&1LL*i*p[j]<=1000000;j++){v[i*p[j]]=1;if(i%p[j]==0)break;}}unsigned long long m=min(2000000000ULL,max(6ULL,z));int t=upper_bound(p,p+k,(int)sqrt(m))-p,a=p[g()%t],u=upper_bound(p,p+k,(int)min(1000000ULL,m/a))-p,b=p[g()%u];while(a==b)b=p[g()%u];cout<<1LL*a*b<<'\n';}

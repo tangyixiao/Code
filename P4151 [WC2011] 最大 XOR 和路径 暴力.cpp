@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;const int N=105,M=2005,K=16384;int h[N],to[M],nx[M],w[M],x[N*K],y[N*K],e;bool v[N][K];int main(){ios::sync_with_stdio(0);cin.tie(0);int n,m;cin>>n>>m;while(m--){int a,b,c;cin>>a>>b>>c;to[++e]=b;w[e]=c;nx[e]=h[a];h[a]=e;to[++e]=a;w[e]=c;nx[e]=h[b];h[b]=e;}int l=0,r=1;v[1][0]=1;while(l<r){int a=x[l],b=y[l++];for(int i=h[a];i;i=nx[i])if(!v[to[i]][b^w[i]])v[to[i]][b^w[i]]=1,x[r]=to[i],y[r++]=b^w[i];}for(int i=K-1;i>=0;i--)if(v[n][i])return cout<<i<<'\n',0;}

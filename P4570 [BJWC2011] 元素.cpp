@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;const int N=1005;struct Q{unsigned long long x;int w;}a[N];unsigned long long b[64];int main(){ios::sync_with_stdio(0);cin.tie(0);int n;cin>>n;for(int i=0;i<n;i++)cin>>a[i].x>>a[i].w;sort(a,a+n,[](Q x,Q y){return x.w>y.w;});long long r=0;for(int j=0;j<n;j++){auto x=a[j].x;for(int i=63;i>=0;i--)if(x>>i&1){if(b[i])x^=b[i];else{b[i]=x;r+=a[j].w;break;}}}cout<<r<<'\n';}
