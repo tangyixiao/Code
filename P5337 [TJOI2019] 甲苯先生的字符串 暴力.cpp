@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;const long long P=1e9+7;long long a[2][26];bool f[26][26];char s[100005];int main(){ios::sync_with_stdio(0);cin.tie(0);int n;cin>>n>>s;for(int i=1;s[i];i++)f[s[i-1]-97][s[i]-97]=1;for(int i=0;i<26;i++)a[1][i]=1;for(int k=2;k<=n;k++){memset(a[k&1],0,sizeof a[0]);for(int i=0;i<26;i++)for(int j=0;j<26;j++)if(!f[i][j])a[k&1][j]=(a[k&1][j]+a[k-1&1][i])%P;}long long r=0;for(int i=0;i<26;i++)r=(r+a[n&1][i])%P;cout<<r<<'\n';}

@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;const unsigned long long P=9223372036854775783ULL;unsigned long long a[4][4],v[4],w[4];int main(){ios::sync_with_stdio(0);cin.tie(0);int n;cin>>n;if(n==1)return cout<<1<<'\n',0;a[0][0]=2;a[0][1]=2;a[1][0]=1;a[1][1]=2;a[2][0]=1;a[2][1]=3;a[2][2]=2;a[3][0]=P-1;a[3][1]=P-2;a[3][3]=1;v[2]=v[3]=1;while(n--){memset(w,0,sizeof w);for(int i=0;i<4;i++)for(int j=0;j<4;j++)w[j]=(w[j]+(__uint128_t)v[i]*a[i][j])%P;memcpy(v,w,sizeof w);}cout<<v[1]<<'\n';}

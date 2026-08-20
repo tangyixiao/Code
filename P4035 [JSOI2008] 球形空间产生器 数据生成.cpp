@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;const int N=15;double c[N];int main(int z,char**v){ios::sync_with_stdio(0);cin.tie(0);unsigned long long s=z>1?stoull(v[1]):1,w=z>2?stoull(v[2]):5;mt19937_64 g(s);int n=g()%min(10ULL,max(1ULL,w))+1;for(int i=0;i<n;i++)c[i]=(int)(g()%21)-10;cout<<n<<'\n';double r=g()%10+1;for(int i=0;i<n;i++)cout<<c[i]+(i?0:r)<<' ';cout<<'\n';for(int i=1;i<=n;i++){for(int j=0;j<n;j++)cout<<c[j]+(j==i-1?-r:0)<<' ';cout<<'\n';}}

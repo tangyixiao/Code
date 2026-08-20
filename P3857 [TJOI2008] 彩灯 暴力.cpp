@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;const int N=16;const int P=2008;unsigned long long a[N],b[1<<N];bool v[1<<N];char s[55];int main(){ios::sync_with_stdio(0);cin.tie(0);int n,m;cin>>n>>m;for(int i=0;i<m;i++){cin>>s;for(int j=0;j<n;j++)if(s[j]=='O')a[i]|=1ULL<<j;}int k=1;b[0]=0;v[0]=1;for(int i=0;i<m;i++){int z=k;for(int j=0;j<z;j++){unsigned long long x=b[j]^a[i];if(!v[x])v[x]=1,b[k++]=x;}}cout<<k%P<<'\n';}

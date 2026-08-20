@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;const int N=22;unsigned long long a[N];bool b[N],x[N];char s[N];int main(){ios::sync_with_stdio(0);cin.tie(0);int n,m;cin>>n>>m;for(int i=0;i<m;i++){cin>>s>>b[i];for(int j=0;j<n;j++)if(s[j]=='1')a[i]|=1ULL<<j;}for(int k=1;k<=m;k++){int c=0;unsigned long long z=0;for(unsigned long long q=0;q<(1ULL<<n)&&c<2;q++){bool f=1;for(int i=0;i<k;i++)f&=__builtin_parityll(q&a[i])==b[i];if(f)c++,z=q;}if(c==1){cout<<k<<'\n';for(int i=0;i<n;i++)cout<<(z>>i&1?"?y7M#":"Earth")<<'\n';return 0;}}cout<<"Cannot Determine\n";}
