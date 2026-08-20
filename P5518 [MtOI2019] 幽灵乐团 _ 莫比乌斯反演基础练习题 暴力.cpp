@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;long long r[3],e[3];long long f(long long a,long long b,long long p){long long r=1;for(;b;b>>=1,a=a*a%p)if(b&1)r=r*a%p;return r;}int main(){ios::sync_with_stdio(0);cin.tie(0);int T;long long p;cin>>T>>p;while(T--){int A,B,C;cin>>A>>B>>C;for(int t=0;t<3;t++)r[t]=1;for(int i=1;i<=A;i++)for(int j=1;j<=B;j++)for(int k=1;k<=C;k++){long long x=1LL*i/__gcd(i,j)*j/__gcd(i,k);e[0]=1;e[1]=1LL*i*j*k;e[2]=__gcd(__gcd(i,j),k);for(int t=0;t<3;t++)r[t]=r[t]*f(x%p,e[t],p)%p;}cout<<r[0]<<' '<<r[1]<<' '<<r[2]<<'\n';}}

@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;const int N=1000005;int p[N],u[N],s[N],q[1005];bool v[N];long long f[N];int main(){ios::sync_with_stdio(0);cin.tie(0);int T,m=0,z=0;cin>>T;for(int i=0;i<T;i++)cin>>q[i],m=max(m,q[i]);u[1]=1;f[1]=1;for(int i=2;i<=m;i++){if(!v[i])p[z++]=i,u[i]=-1,f[i]=i-1;for(int j=0;j<z&&i*p[j]<=m;j++){v[i*p[j]]=1;if(i%p[j]==0){u[i*p[j]]=0;f[i*p[j]]=f[i]*p[j];break;}u[i*p[j]]=-u[i];f[i*p[j]]=f[i]*(p[j]-1);}}for(int i=1;i<=m;i++)s[i]=s[i-1]+u[i],f[i]+=f[i-1];for(int i=0;i<T;i++)cout<<f[q[i]]<<' '<<s[q[i]]<<'\n';}

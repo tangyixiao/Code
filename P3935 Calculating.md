@@ -1,32 +1,30 @@
 # P3935 Calculating
 
-## 题目描述
+## 中文题面
+
+### 题目描述
 
 若 $x$ 分解质因数结果为 $x=p_1^{k_1}p_2^{k_2}\cdots p_n^{k_n}$，令 $f(x)=(k_1+1)(k_2+1)\cdots (k_n+1)$，求 $\sum_{i=l}^rf(i)$ 对 $998\,244\,353$ 取模的结果。
 
-## 输入格式
+### 输入格式
 
 输入只有一行两个整数，分别表示 $l$ 和 $r$。
 
-## 输出格式
+### 输出格式
 
 输出一行一个整数表示答案。
 
-## 输入输出样例 #1
+### 样例 1
 
-### 输入 #1
-
-```
+```text
 2 4
 ```
 
-### 输出 #1
-
-```
+```text
 7
 ```
 
-## 说明/提示
+### 说明与限制
 
 #### 数据规模与约定
 
@@ -47,55 +45,18 @@
 | $98\sim 99$ | $1\le l \le 10^{13}$ | $1\le r \le 10^{14}$ | $r-l>9\times 10^{13}$ |
 | $100$ | $1\le l \le 10^{14}$ | $1\le r \le 1.6\times 10^{14}$ | $r-l>10^{14}$ |
 
----
+## English Statement
 
-# P3935 Calculating
+### Description
 
-## 题目描述
 
-If the prime factorization of $x$ is $x=p_1^{k_1}p_2^{k_2}\cdots p_n^{k_n}$, define $f(x)=(k_1+1)(k_2+1)\cdots (k_n+1)$. Compute $\sum_{i=l}^r f(i)$ modulo $998\,244\,353$.
 
-## 输入格式
+### Input
 
-The input contains a single line with two integers, representing $l$ and $r$.
 
-## 输出格式
 
-Output a single integer on one line representing the answer.
+### Output
 
-## 输入输出样例 #1
 
-### 输入 #1
 
-```
-2 4
-```
-
-### 输出 #1
-
-```
-7
-```
-
-## 说明/提示
-
-#### Constraints and Conventions
-
-| Test point ID | $l$ | $r$ | $r-l$ |
-| :----------: | :----------: | :----------: | :----------: |
-| $1\sim 3$ | $1\le l\le 10$ | $1\le r\le 10$ | $r-l=0$ |
-| $4\sim 7$ | $1\le l\le 50$ | $1\le r\le 50$ | $r-l=0$ |
-| $8\sim 10$ | $1\le l\le 100$ | $1\le r\le 100$ | $r-l<50$ |
-| $11\sim 16$ | $1\le l\le 500$ | $1\le r\le 500$ | No special restriction |
-| $17\sim 25$ | $1\le l \le 10^3$ | $1\le r \le 10^3$ | No special restriction |
-| $26\sim 30$ | $1\le l \le 5\times 10^3$ | $1\le r \le 5\times 10^3$ | $r-l<100$ |
-| $31\sim 40$ | $1\le l \le 10^4$ | $1\le r \le 10^4$ | No special restriction |
-| $41\sim 60$ | $1\le l \le 10^7$ | $1\le r \le 10^7$ | No special restriction |
-| $61\sim 70$ | $1\le l \le 10^9$ | $1\le r \le 10^9$ | No special restriction |
-| $71\sim 90$ | $1\le l \le 10^{12}$ | $1\le r \le 10^{12}$ | No special restriction |
-| $91\sim 95$ | $1\le l \le 10^{13}$ | $1\le r \le 10^{13}$ | No special restriction |
-| $96\sim 97$ | $1\le l \le 2\times 10^{13}$ | $1\le r \le 2\times 10^{13}$ | $r-l<10^{13}$ |
-| $98\sim 99$ | $1\le l \le 10^{13}$ | $1\le r \le 10^{14}$ | $r-l>9\times 10^{13}$ |
-| $100$ | $1\le l \le 10^{14}$ | $1\le r \le 1.6\times 10^{14}$ | $r-l>10^{14}$ |
-
-Translated by ChatGPT 5
+### Constraints
