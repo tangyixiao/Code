@@ -72,11 +72,27 @@ async function main() {
 
     await page.goto(`http://127.0.0.1:${port}/Code/#file=${encodeURIComponent('题目 #1.md')}`);
     await page.locator('.count').waitFor({ state: 'attached' });
+    assert.equal(await page.title(), 'Paradox Praxis Clinamen — 算法档案');
+    assert.equal(await page.getByText('Paradox Praxis Clinamen', { exact: true }).count(), 1);
+    assert.equal(await page.getByText('佯谬·践履·偏斜', { exact: true }).count(), 1);
     assert.equal(await page.locator('#meta-name').textContent(), '题目 #1.md');
     assert.equal(await page.locator('body').getAttribute('data-xss'), null);
     assert.match(await page.locator('#viewer').textContent(), /题目/);
     assert.equal(await page.locator('.file-row').count(), 3);
     assert.equal(await page.locator('.file-row').first().evaluate((element) => element.tagName), 'BUTTON');
+    const desktopLayout = await page.evaluate(() => ({
+      viewportHeight: innerHeight,
+      documentHeight: document.documentElement.scrollHeight,
+      shellHeight: document.querySelector('.app-shell').getBoundingClientRect().height,
+      listOverflow: getComputedStyle(document.querySelector('.file-list')).overflowY,
+      readerOverflow: getComputedStyle(document.querySelector('.reader-body')).overflowY,
+      markdownHeadingSize: parseFloat(getComputedStyle(document.querySelector('.markdown-body h1')).fontSize),
+    }));
+    assert.ok(desktopLayout.documentHeight <= desktopLayout.viewportHeight + 1, 'desktop page must not scroll as one long document');
+    assert.ok(Math.abs(desktopLayout.shellHeight - desktopLayout.viewportHeight) <= 1, 'workbench must fill the viewport');
+    assert.equal(desktopLayout.listOverflow, 'auto');
+    assert.equal(desktopLayout.readerOverflow, 'auto');
+    assert.ok(desktopLayout.markdownHeadingSize >= 36 && desktopLayout.markdownHeadingSize <= 40, 'markdown h1 should be about 2.4rem');
 
     await page.getByRole('button', { name: 'Markdown', exact: true }).click();
     await page.getByText('显示 2 / 3 个文件').waitFor();
@@ -91,8 +107,12 @@ async function main() {
     await mobile.route('https://raw.githubusercontent.com/**', (route) =>
       route.fulfill({ status: 200, contentType: 'text/plain; charset=utf-8', body: 'int main(){}\n' })
     );
-    await mobile.goto(`http://127.0.0.1:${port}/Code/`);
-    await mobile.getByText('显示 3 / 3 个文件').waitFor();
+    await mobile.goto(`http://127.0.0.1:${port}/Code/#file=${encodeURIComponent('题目 #1.md')}`);
+    await mobile.locator('.count').waitFor({ state: 'attached' });
+    assert.equal(await mobile.locator('body').getAttribute('data-mobile-view'), 'viewer');
+    assert.equal(await mobile.locator('#meta-name').textContent(), '题目 #1.md');
+    await mobile.getByRole('button', { name: '返回文件列表' }).click();
+    assert.equal(await mobile.locator('body').getAttribute('data-mobile-view'), 'list');
     await mobile.getByRole('button', { name: /A\.cpp/ }).click();
     assert.equal(await mobile.locator('body').getAttribute('data-mobile-view'), 'viewer');
     await mobile.getByRole('button', { name: '返回文件列表' }).click();
