@@ -15,6 +15,10 @@ class BuildPagesTests(unittest.TestCase):
         subprocess.run(["git", "init", "-q", directory], check=True)
         subprocess.run(["git", "-C", directory, "config", "core.autocrlf", "false"], check=True)
         (directory / "index.html").write_text("<h1>CodeHub</h1>\n", encoding="utf-8")
+        dist = directory / "dist"
+        (dist / "assets").mkdir(parents=True)
+        (dist / "index.html").write_text("<div id=\"root\"></div>\n", encoding="utf-8")
+        (dist / "assets" / "app.js").write_text("console.log('vite')\n", encoding="utf-8")
         (directory / "A.cpp").write_bytes(b"int main(){}\n")
         (directory / "题目 #1.md").write_bytes("# 题目\n".encode("utf-8"))
         (directory / "skip.exe").write_bytes(b"MZ")
@@ -63,7 +67,8 @@ class BuildPagesTests(unittest.TestCase):
                     {"name": "题目 #1.md", "path": "题目 #1.md", "type": "md", "size": 9},
                 ],
             )
-            self.assertEqual((repo / "_site" / "index.html").read_text(encoding="utf-8"), "<h1>CodeHub</h1>\n")
+            self.assertEqual((repo / "_site" / "index.html").read_text(encoding="utf-8"), "<div id=\"root\"></div>\n")
+            self.assertEqual((repo / "_site" / "assets" / "app.js").read_text(encoding="utf-8"), "console.log('vite')\n")
             self.assertTrue((repo / "_site" / ".nojekyll").is_file())
 
     def test_rejects_non_sha_commit(self) -> None:

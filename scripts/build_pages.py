@@ -44,16 +44,17 @@ def tracked_root_files(root: Path) -> list[dict[str, object]]:
 def build(root: Path, output: Path, commit: str) -> None:
     if not re.fullmatch(r"[0-9a-fA-F]{40}", commit):
         raise ValueError("commit must be a 40-character hexadecimal SHA")
-    index = root / "index.html"
-    if not index.is_file():
-        raise FileNotFoundError(f"missing site entrypoint: {index}")
+    dist = root / "dist"
+    if not (dist / "index.html").is_file():
+        raise FileNotFoundError(f"missing Vite build output: {dist / 'index.html'}")
 
     files = tracked_root_files(root)
     if not files:
         raise ValueError("no tracked root .cpp or .md files found")
 
-    output.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(index, output / "index.html")
+    if output.exists():
+        shutil.rmtree(output)
+    shutil.copytree(dist, output)
     (output / ".nojekyll").write_text("", encoding="utf-8")
     manifest = {
         "schemaVersion": 1,

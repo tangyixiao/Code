@@ -8,7 +8,7 @@ if (!modules) throw new Error('CODEX_NODE_MODULES is required');
 const { chromium } = require(path.join(modules, 'playwright'));
 
 const root = path.resolve(__dirname, '..');
-const index = fs.readFileSync(path.join(root, 'index.html'));
+const dist = path.join(root, 'dist');
 const commit = 'a'.repeat(40);
 const manifest = JSON.stringify({
   schemaVersion: 1,
@@ -23,21 +23,31 @@ const manifest = JSON.stringify({
 });
 
 function listen(server) {
-  return new Promise((resolve) => server.listen(0, '127.0.0.1', () => resolve(server.address().port)));
+  return new Promise((resolve) => server.listen(18765, '127.0.0.1', () => resolve(server.address().port)));
 }
 
 async function main() {
   const server = http.createServer((request, response) => {
     const pathname = new URL(request.url, 'http://127.0.0.1').pathname;
-    if (pathname === '/' || pathname === '/index.html') {
+    if (pathname === '/Code/' || pathname === '/Code/index.html') {
       response.setHeader('content-type', 'text/html; charset=utf-8');
-      response.end(index);
+      response.end(fs.readFileSync(path.join(dist, 'index.html')));
       return;
     }
-    if (pathname === '/files.json') {
+    if (pathname === '/Code/files.json') {
       response.setHeader('content-type', 'application/json; charset=utf-8');
       response.end(manifest);
       return;
+    }
+    if (pathname.startsWith('/Code/assets/')) {
+      const asset = path.join(dist, pathname.slice('/Code/'.length));
+      if (fs.existsSync(asset)) {
+        if (asset.endsWith('.js')) response.setHeader('content-type', 'text/javascript; charset=utf-8');
+        if (asset.endsWith('.css')) response.setHeader('content-type', 'text/css; charset=utf-8');
+        if (asset.endsWith('.woff') || asset.endsWith('.woff2')) response.setHeader('content-type', 'font/woff2');
+        response.end(fs.readFileSync(asset));
+        return;
+      }
     }
     response.statusCode = 404;
     response.end('not found');
@@ -60,8 +70,8 @@ async function main() {
       await route.fulfill({ status: 200, contentType: 'text/plain; charset=utf-8', body });
     });
 
-    await page.goto(`http://127.0.0.1:${port}/#file=${encodeURIComponent('题目 #1.md')}`);
-    await page.getByText('显示 3 / 3 个文件').waitFor();
+    await page.goto(`http://127.0.0.1:${port}/Code/#file=${encodeURIComponent('题目 #1.md')}`);
+    await page.locator('.count').waitFor({ state: 'attached' });
     assert.equal(await page.locator('#meta-name').textContent(), '题目 #1.md');
     assert.equal(await page.locator('body').getAttribute('data-xss'), null);
     assert.match(await page.locator('#viewer').textContent(), /题目/);
@@ -81,7 +91,7 @@ async function main() {
     await mobile.route('https://raw.githubusercontent.com/**', (route) =>
       route.fulfill({ status: 200, contentType: 'text/plain; charset=utf-8', body: 'int main(){}\n' })
     );
-    await mobile.goto(`http://127.0.0.1:${port}/`);
+    await mobile.goto(`http://127.0.0.1:${port}/Code/`);
     await mobile.getByText('显示 3 / 3 个文件').waitFor();
     await mobile.getByRole('button', { name: /A\.cpp/ }).click();
     assert.equal(await mobile.locator('body').getAttribute('data-mobile-view'), 'viewer');
