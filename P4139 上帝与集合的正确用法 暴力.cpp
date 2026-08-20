@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;int f(int n){int r=n,x=n;for(int p=2;p*p<=x;p++)if(x%p==0){r=r/p*(p-1);while(x%p==0)x/=p;}if(x>1)r=r/x*(x-1);return r;}long long q(long long a,long long b,int m){long long r=1;for(;b;b>>=1,a=a*a%m)if(b&1)r=r*a%m;return r;}int s(int x){return x==1?0:q(2,s(f(x))+f(x),x);}int main(){ios::sync_with_stdio(0);cin.tie(0);int T;cin>>T;while(T--){int p;cin>>p;cout<<s(p)<<'\n';}}

@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;bool q(long long n){if(n<2)return 0;for(long long i=2;i*i<=n;i++)if(n%i==0)return 0;return 1;}int main(int C,char**v){ios::sync_with_stdio(0);cin.tie(0);int R=C>1?stoi(v[1]):1000;unsigned long long s=C>2?stoull(v[2]):1;mt19937_64 g(s);while(R--){int n=g()%500+2,k=g()%n+1,x=k+1,a=q(x)&&2*x>n+1?1:2,b=0;for(int y=2;y<=n+1;y++)if(y!=x&&__gcd(x,y)>1)b=2;if(!b)b=1;if(a!=b)return cout<<"WA\n",1;}cout<<"OK\n";}

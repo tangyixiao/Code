@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;const int N=10000;int p[N],v[100005];int main(int C,char**x){ios::sync_with_stdio(0);cin.tie(0);int R=C>1?stoi(x[1]):1000;unsigned long long s=C>2?stoull(x[2]):1;mt19937_64 g(s);int k=0;for(int i=2;i<=100000;i++){if(!v[i])p[k++]=i;for(int j=0;j<k&&1LL*i*p[j]<=100000;j++){v[i*p[j]]=1;if(i%p[j]==0)break;}}while(R--){int a=p[g()%k],b=p[g()%k];if(a==b){R++;continue;}long long n=1LL*a*b,r=0;for(int i=2;i*i<=n;i++)if(n%i==0){r=n/i;break;}if(r!=max(a,b))return cout<<"WA\n",1;}cout<<"OK\n";}
