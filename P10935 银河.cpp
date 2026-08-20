@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-// Time: 2026-08-19 22:14:08
-//  Problem: P3275 [SCOI2011] 糖果
+// Time: 2026-08-19 22:15:27
+//  Problem: P10935 银河
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P3275
-//  Memory Limit: 128 MB
+//  URL: https://www.luogu.com.cn/problem/P10935
+//  Memory Limit: 512 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: edc751ae-cbf6-4aab-9ac3-2189ddf25a10
+//  Batch ID: d51218d1-565c-45e9-8c54-de12d70b7b37
 //
 // Algorithm:
 // Complexity: O()
