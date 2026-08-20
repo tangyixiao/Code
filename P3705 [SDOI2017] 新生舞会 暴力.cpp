@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;const int N=11;long long a[N][N],b[N][N];int p[N];int main(){ios::sync_with_stdio(0);cin.tie(0);int n;cin>>n;for(int i=0;i<n;i++)for(int j=0;j<n;j++)cin>>a[i][j];for(int i=0;i<n;i++)for(int j=0;j<n;j++)cin>>b[i][j];iota(p,p+n,0);long long A=0,B=1;do{long long x=0,y=0;for(int i=0;i<n;i++)x+=a[i][p[i]],y+=b[i][p[i]];if(x*B>A*y)A=x,B=y;}while(next_permutation(p,p+n));cout<<fixed<<setprecision(6)<<(double)A/B<<'\n';}

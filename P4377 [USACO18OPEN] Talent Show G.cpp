@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;const int N=1005;int w[255],t[255],f[N];int main(){ios::sync_with_stdio(0);cin.tie(0);int n,W;cin>>n>>W;for(int i=0;i<n;i++)cin>>w[i]>>t[i];int l=0,r=1000001;while(l+1<r){int m=(l+r)/2;memset(f,0xc0,sizeof f);f[0]=0;for(int i=0;i<n;i++)for(int j=W;j>=0;j--)if(f[j]>-1e9)f[min(W,j+w[i])]=max(f[min(W,j+w[i])],f[j]+t[i]*1000-m*w[i]);if(f[W]>=0)l=m;else r=m;}cout<<l<<'\n';}

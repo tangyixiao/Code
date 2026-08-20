@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;unsigned long long G(unsigned long long a,unsigned long long b){int k=0;while(!(a&1)&&!(b&1))a>>=1,b>>=1,k++;while(!(a&1))a>>=1;while(b){while(!(b&1))b>>=1;if(a>b)swap(a,b);b-=a;}return a<<k;}int main(int C,char**v){ios::sync_with_stdio(0);cin.tie(0);int R=C>1?stoi(v[1]):1000;unsigned long long s=C>2?stoull(v[2]):1;mt19937_64 g(s);while(R--){unsigned long long a=g()|1,b=g()|1;if(G(a,b)!=__gcd(a,b))return cout<<"WA\n",1;}cout<<"OK\n";}

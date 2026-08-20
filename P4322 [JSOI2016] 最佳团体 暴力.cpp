@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;const int N=24;int s[N],p[N],r[N];int main(){ios::sync_with_stdio(0);cin.tie(0);int k,n;cin>>k>>n;for(int i=0;i<n;i++)cin>>s[i]>>p[i]>>r[i];long long A=0,B=1;for(int z=0;z<(1<<n);z++)if(__builtin_popcount((unsigned)z)==k){bool f=1;long long a=0,b=0;for(int i=0;i<n;i++)if(z>>i&1){if(r[i]&&!(z>>(r[i]-1)&1))f=0;a+=p[i];b+=s[i];}if(f&&a*B>A*b)A=a,B=b;}cout<<fixed<<setprecision(3)<<(double)A/B<<'\n';}
