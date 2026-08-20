@@ -1,0 +1,3 @@
+#include <bits/stdc++.h>
+using namespace std;const long long P=1e9+7;const int N=405;long long a[N][N*2];long long q(long long a,long long n){long long r=1;for(;n;n>>=1,a=a*a%P)if(n&1)r=r*a%P;return r;}
+int main(){ios::sync_with_stdio(0);cin.tie(0);int n;cin>>n;for(int i=0;i<n;i++){for(int j=0;j<n;j++)cin>>a[i][j];a[i][i+n]=1;}for(int i=0;i<n;i++){int k=i;while(k<n&&!a[k][i])k++;if(k==n)return cout<<"No Solution\n",0;for(int j=0;j<2*n;j++)swap(a[i][j],a[k][j]);long long z=q(a[i][i],P-2);for(int j=0;j<2*n;j++)a[i][j]=a[i][j]*z%P;for(int r=0;r<n;r++)if(r!=i&&a[r][i]){z=a[r][i];for(int j=0;j<2*n;j++)a[r][j]=(a[r][j]-z*a[i][j]%P+P)%P;}}for(int i=0;i<n;i++){for(int j=0;j<n;j++)cout<<(j?" ":"")<<a[i][j+n];cout<<'\n';}}

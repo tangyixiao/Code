@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;const long long P=1e9+7;void f(unsigned long long n,long long&a,long long&b){if(!n){a=0;b=1;return;}long long c,d;f(n>>1,c,d);a=c*(2*d-c+P)%P;b=(c*c+d*d)%P;if(n&1){c=a;a=b;b=(c+b)%P;}}int main(int c,char**v){ios::sync_with_stdio(0);cin.tie(0);int r=c>1?stoi(v[1]):1000;unsigned long long s=c>2?stoull(v[2]):1;mt19937_64 g(s);while(r--){unsigned long long n=g()%1000+1;long long a,b,x=0,y=1;f(n,a,b);while(n--){long long z=(x+y)%P;x=y;y=z;}if(a!=x)return cout<<"WA\n",1;}cout<<"OK\n";}

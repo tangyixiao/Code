@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;const int N=35;const long long P=2017;long long a[N][N],f[N],g[N];int main(){ios::sync_with_stdio(0);cin.tie(0);int n,m,t;cin>>n>>m;while(m--){int u,v;cin>>u>>v;u--;v--;a[u][v]=a[v][u]=1;}cin>>t;for(int i=0;i<=n;i++)a[i][i]=1;for(int i=0;i<n;i++)a[i][n]=1;f[0]=1;while(t--){memset(g,0,sizeof g);for(int i=0;i<=n;i++)for(int j=0;j<=n;j++)g[j]=(g[j]+f[i]*a[i][j])%P;memcpy(f,g,sizeof g);}long long r=0;for(int i=0;i<=n;i++)r=(r+f[i])%P;cout<<r<<'\n';}

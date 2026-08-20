@@ -32,10 +32,12 @@ def load_manifest(path):
         return list(csv.DictReader(f, delimiter='\t'))
 
 
-def check(root, manifest, phase=None):
+def check(root, manifest, phase=None, batch=None):
     rows = load_manifest(manifest)
     if phase:
         rows = [x for x in rows if x['phase'] == phase]
+    if batch:
+        rows = [x for x in rows if x['batch'] == batch]
     errors = []
     seen = set()
     for x in rows:
@@ -60,8 +62,9 @@ def main():
     p.add_argument('--root', type=Path, default=Path(__file__).resolve().parent.parent)
     p.add_argument('--manifest', type=Path, default=Path(__file__).resolve().parent / 'manifest.tsv')
     p.add_argument('--phase')
+    p.add_argument('--batch')
     a = p.parse_args()
-    e = check(a.root, a.manifest, a.phase)
+    e = check(a.root, a.manifest, a.phase, a.batch)
     if e:
         print('\n'.join(e))
         raise SystemExit(1)
