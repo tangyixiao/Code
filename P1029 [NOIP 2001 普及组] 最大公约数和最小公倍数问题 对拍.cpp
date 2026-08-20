@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;int main(int C,char**v){ios::sync_with_stdio(0);cin.tie(0);int R=C>1?stoi(v[1]):1000;unsigned long long s=C>2?stoull(v[2]):1;mt19937_64 g(s);while(R--){int x=g()%50+1,y=x*(g()%50+1),n=y/x,a=1,b=0;for(int p=2;p*p<=n;p++)if(n%p==0){a*=2;while(n%p==0)n/=p;}if(n>1)a*=2;for(int i=x;i<=y;i+=x)for(int j=x;j<=y;j+=x)if(__gcd(i,j)==x&&1LL*i/__gcd(i,j)*j==y)b++;if(a!=b)return cout<<"WA\n",1;}cout<<"OK\n";}

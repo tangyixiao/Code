@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;const int N=10010,P=10007;long long a[N];long long F(long long x,int n=P-2){long long r=1;for(;n;n>>=1,x=x*x%P)if(n&1)r=r*x%P;return r;}int main(int C,char**v){ios::sync_with_stdio(0);cin.tie(0);int R=C>1?stoi(v[1]):1000;unsigned long long s=C>2?stoull(v[2]):1;mt19937_64 g(s);while(R--){int n=g()%(P-1)+1;a[1]=1;for(int i=2;i<=n;i++)a[i]=1LL*(P-P/i)*a[P%i]%P;for(int i=1;i<=n;i++)if(a[i]!=F(i))return cout<<"WA\n",1;}cout<<"OK\n";}

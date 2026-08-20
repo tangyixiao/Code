@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;const int p[4]={2,3,5,7};long long E(long long a,long long b,long long&x,long long&y){if(!b)return x=1,y=0,a;long long d=E(b,a%b,y,x);y-=a/b*x;return d;}int main(int C,char**v){ios::sync_with_stdio(0);cin.tie(0);int R=C>1?stoi(v[1]):1000;unsigned long long S=C>2?stoull(v[2]):1;mt19937_64 g(S);while(R--){int n=g()%4+1;long long m=1,r=0,z=g()%210;for(int i=0;i<n;i++){long long a=z%p[i],x,y;E(m,p[i],x,y);long long t=(a-r)*x%p[i];r=(r+m*t)%(m*p[i]);m*=p[i];if(r<0)r+=m;}if(r!=z%m)return cout<<"WA\n",1;}cout<<"OK\n";}
