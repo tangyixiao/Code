@@ -647,62 +647,34 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+int n, a, b, c;
+string s;
 inline void solve(int Task_Id) {
-    int p1, p2, p3;
-    string s;
-
-    cin >> p1 >> p2 >> p3 >> s;
-
-    for (int i = 0; i < (int)s.size(); i++) {
-        if (s[i] != '-') {
+    cin >> a >> b >> c >> s;
+    n = s.size() - 1, c = c - 1 ? 1 : -1;
+    for (int i = 0; i <= n; i++) {
+        if (s[i] - '-') {
             cout << s[i];
-            continue;
-        }
-
-        if (i == 0 || i == (int)s.size() - 1) {
-            cout << '-';
-            continue;
-        }
-
-        char l = s[i - 1], r = s[i + 1];
-
-        bool ok = (isdigit(l) && isdigit(r)) ||
-                  (islower(l) && islower(r));
-
-        if (!ok || l >= r) {
-            cout << '-';
-            continue;
-        }
-
-        if (p3 == 1) {
-            for (char c = l + 1; c < r; c++) {
-                char x = c;
-
-                if (p1 == 3)
-                    x = '*';
-                else if (p1 == 2 && islower(c))
-                    x = toupper(c);
-
-                for (int j = 1; j <= p2; j++)
-                    cout << x;
-            }
         } else {
-            for (char c = r - 1; c > l; c--) {
-                char x = c;
-
-                if (p1 == 3)
-                    x = '*';
-                else if (p1 == 2 && islower(c))
-                    x = toupper(c);
-
-                for (int j = 1; j <= p2; j++)
-                    cout << x;
+            if (i >= 1 && i <= n - 1 && ((isdigit(s[i - 1]) && isdigit(s[i + 1])) || (islower(s[i - 1]) && islower(s[i + 1]))) && s[i - 1] < s[i + 1]) {
+                for (char ch = s[i + c] - c, x; c < 0 ? ch < s[i - c] : ch > s[i - c]; ch -= c) {
+                    x = ch;
+                    if (a == 3) {
+                        x = '*';
+                    } else {
+                        if (a == 2 && islower(ch)) {
+                            x = toupper(ch);
+                        }
+                    }
+                    for (int j = 1; j <= b; j++) {
+                        cout << x;
+                    }
+                }
+            } else {
+                cout << '-';
             }
         }
     }
-
-    cout << '\n';
-
     return;
 }
 } // namespace TANGYIXIAO

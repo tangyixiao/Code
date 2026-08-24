@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;const int N=131072,P=998244353;int a[N],b[N],c[N];int main(){ios::sync_with_stdio(0);cin.tie(0);int n;cin>>n;n=1<<n;for(int i=0;i<n;i++)cin>>a[i];for(int i=0;i<n;i++)cin>>b[i];for(int o=0;o<3;o++){memset(c,0,n*sizeof(int));for(int i=0;i<n;i++)for(int j=0;j<n;j++){int k=o==0?i|j:o==1?i&j:i^j;c[k]=(c[k]+1LL*a[i]*b[j])%P;}for(int i=0;i<n;i++)cout<<c[i]<<' ';cout<<'\n';}}

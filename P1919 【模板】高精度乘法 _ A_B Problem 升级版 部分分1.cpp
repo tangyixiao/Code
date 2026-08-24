@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;const int N=2000005;int a[N],b[N],c[N];char s[1000005],t[1000005];int main(){ios::sync_with_stdio(0);cin.tie(0);cin>>s>>t;int n=strlen(s),m=strlen(t);for(int i=0;i<n;i++)a[i]=s[n-1-i]-48;for(int i=0;i<m;i++)b[i]=t[m-1-i]-48;for(int i=0;i<n;i++)for(int j=0;j<m;j++)c[i+j]+=a[i]*b[j];for(int i=0;i<n+m;i++)c[i+1]+=c[i]/10,c[i]%=10;int l=n+m;while(l>1&&!c[l-1])l--;while(l--)cout<<c[l];cout<<'\n';}

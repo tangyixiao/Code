@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;const int N=100005,P=998244353;int a[N],b[N];int q(int a,int b=P-2){int s=1;for(;b;b>>=1,a=1LL*a*a%P)if(b&1)s=1LL*s*a%P;return s;}int main(){ios::sync_with_stdio(0);cin.tie(0);int n;cin>>n;for(int i=0;i<n;i++)cin>>a[i];for(int k=1;k<n;k++){long long s=1LL*k*a[k]%P;for(int i=1;i<k;i++)s-=1LL*i*b[i]%P*a[k-i]%P;b[k]=(s%P+P)%P*q(k)%P;}for(int i=0;i<n;i++)cout<<b[i]<<' ';cout<<'\n';}

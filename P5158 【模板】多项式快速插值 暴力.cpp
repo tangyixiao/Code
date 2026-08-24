@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;const int N=100005,P=998244353;static int x[N],a[N],c[N];int pw(int a,int b=P-2){int s=1;for(;b;b>>=1,a=1LL*a*a%P)if(b&1)s=1LL*s*a%P;return s;}int main(){ios::sync_with_stdio(0);cin.tie(0);int n;cin>>n;for(int i=0;i<n;i++)cin>>x[i]>>c[i];for(int l=1;l<n;l++)for(int i=n-1;i>=l;i--)c[i]=1LL*(c[i]-c[i-1]+P)*pw((x[i]-x[i-l]+P)%P)%P;a[0]=c[n-1];int m=1;for(int i=n-2;i>=0;i--){for(int j=m;j;j--)a[j]=(a[j-1]-1LL*x[i]*a[j]%P+P)%P;a[0]=(c[i]-1LL*x[i]*a[0]%P+P)%P;m++;}for(int i=0;i<n;i++)cout<<a[i]<<' ';cout<<'\n';}

@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;const int N=131072,P=998244353;int a[N],b[N];int main(int c,char**v){ios::sync_with_stdio(0);cin.tie(0);unsigned long long s=c>1?stoull(v[1]):1,z=c>2?stoull(v[2]):17;mt19937_64 g(s);int n=g()%min(17ULL,max(1ULL,z))+1,m=1<<n;cout<<n<<'\n';for(int i=0;i<m;i++)a[i]=g()%P,b[i]=g()%P;for(int i=0;i<m;i++)cout<<a[i]<<' ';cout<<'\n';for(int i=0;i<m;i++)cout<<b[i]<<' ';cout<<'\n';}

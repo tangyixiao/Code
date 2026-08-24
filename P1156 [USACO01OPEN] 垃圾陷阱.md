@@ -1,0 +1,107 @@
+# P1156 [USACO01OPEN] 垃圾陷阱
+
+## 题目描述
+
+卡门――农夫约翰极其珍视的一头 `Holsteins` 奶牛――已经落到了 “垃圾井” 中。“垃圾井” 是农夫们扔垃圾的地方，它的深度为 $D$（$2 \le D \le 100$）英尺。
+
+卡门想把垃圾堆起来，等到堆得与井深同样高或比井深更高（即，垃圾高度总和 $\geq D$）时，她就能逃出井外了。另外，卡门可以通过吃一些垃圾来维持自己的生命。
+
+每个垃圾都可以用来吃或堆放，并且堆放垃圾不用花费卡门的时间。
+
+假设卡门预先知道了每个垃圾扔下的时间 $t$（$1 \le t \le 1000$），以及每个垃圾堆放的高度 $h$（$1 \le h \le 25$）和吃进该垃圾能增加维持生命的时间 $f$（$1 \le f \le 30$），要求出卡门最早能逃出井外的时间，已知卡门当前体内有足够持续 $10$ 小时的能量，如果卡门 $10$ 小时内（不含 $10$ 小时，维持生命的时间同）没有进食，卡门就将饿死。特别地，若体力值为 $0$ 时吃下垃圾或逃出井外也不会饿死。
+
+## 输入格式
+
+第一行为两个整数，$D$ 和 $G$（$1 \le G \le 100$），$G$ 为被投入井的垃圾的数量。
+
+第二到第 $G+1$ 行每行包括三个整数：$t$（$1 \le t \le 1000$），表示垃圾被投进井中的时间；$f$（$1 \le f \le 30$），表示该垃圾能维持卡门生命的时间；和 $h$（$1 \le h \le 25$），该垃圾能垫高的高度。
+
+## 输出格式
+
+如果卡门可以爬出陷阱，输出一个整数，表示最早什么时候可以爬出；否则输出卡门最长可以存活多长时间。
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+20 4
+5 4 9
+9 3 2
+12 6 10
+13 1 1
+```
+
+### 输出 #1
+
+```
+13
+```
+
+## 说明/提示
+
+**【样例说明】**
+
+卡门堆放她收到的第一个垃圾：$\mathrm{height}=9$；
+
+卡门吃掉她收到的第 $2$ 个垃圾，使她的生命从 $10$ 小时延伸到 $13$ 小时；
+
+卡门堆放第 $3$ 个垃圾，$\mathrm{height}=19$；
+
+卡门堆放第 $4$ 个垃圾，$\mathrm{height}=20$。
+
+---
+
+# P1156 [USACO01OPEN] Trapped in the Well
+
+## 题目描述
+
+Carmen — a `Holsteins` cow dearly valued by Farmer John — has fallen into a “trash well,” a place where farmers dump garbage. The well has a depth of $D$ ($2 \le D \le 100$) feet.
+
+Carmen plans to stack trash. When the stacked trash reaches or exceeds the well’s depth (that is, the total trash height $\geq D$), she can escape. She can also eat some trash to extend her survival.
+
+Each piece of trash can be either eaten or stacked, and stacking takes no time for Carmen.
+
+Assume Carmen knows in advance the time $t$ ($1 \le t \le 1000$) when each piece of trash is thrown in, as well as each piece’s stacking height $h$ ($1 \le h \le 25$) and the survival time increase $f$ ($1 \le f \le 30$) if eaten. Find the earliest time when Carmen can escape. Initially, Carmen has enough energy to last 10 hours. If Carmen goes 10 hours without eating (10 hours excluded; the same applies to added survival time), she will starve. In particular, if her energy is 0 and she eats a piece of trash or escapes at that instant, she will not starve.
+
+## 输入格式
+
+The first line contains two integers, $D$ and $G$ ($1 \le G \le 100$), where $G$ is the number of pieces of trash thrown into the well.
+
+Each of the next $G$ lines contains three integers: $t$ ($1 \le t \le 1000$), the time when the trash is thrown in; $f$ ($1 \le f \le 30$), the survival time this trash can provide if eaten; and $h$ ($1 \le h \le 25$), the height this trash can add if stacked.
+
+## 输出格式
+
+If Carmen can climb out of the trap, output a single integer, the earliest time when she can climb out. Otherwise, output how long she can survive at most.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+20 4
+5 4 9
+9 3 2
+12 6 10
+13 1 1
+```
+
+### 输出 #1
+
+```
+13
+```
+
+## 说明/提示
+
+【Sample Explanation】
+
+Carmen stacks the first piece of trash she receives: $\mathrm{height}=9$.
+
+Carmen eats the second piece of trash, extending her survival from 10 hours to 13 hours.
+
+Carmen stacks the third piece of trash, $\mathrm{height}=19$.
+
+Carmen stacks the fourth piece of trash, $\mathrm{height}=20$.
+
+Translated by ChatGPT 5

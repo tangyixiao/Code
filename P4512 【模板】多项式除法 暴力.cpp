@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;const int N=100005,P=998244353;int f[N],g[N],q[N];int z(int a,int n=P-2){int r=1;for(;n;n>>=1,a=1LL*a*a%P)if(n&1)r=1LL*r*a%P;return r;}int main(){ios::sync_with_stdio(0);cin.tie(0);int n,m;cin>>n>>m;for(int i=0;i<=n;i++)cin>>f[i];for(int i=0;i<=m;i++)cin>>g[i];int v=z(g[m]);for(int i=n-m;i>=0;i--){q[i]=1LL*f[i+m]*v%P;for(int j=0;j<=m;j++)f[i+j]=(f[i+j]-1LL*q[i]*g[j]%P+P)%P;}for(int i=0;i<=n-m;i++)cout<<q[i]<<' ';cout<<'\n';for(int i=0;i<m;i++)cout<<f[i]<<' ';cout<<'\n';}

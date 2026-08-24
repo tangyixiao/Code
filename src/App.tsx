@@ -100,6 +100,12 @@ function AuroraField() {
     <span className="aurora-band aurora-band-a" />
     <span className="aurora-band aurora-band-b" />
     <span className="star-dust" />
+    <pre className="ascii-atom" aria-hidden="true">{`       ·   .   ·
+    .    /\\ /\\    .
+  ·    <  ◉  >    ·
+    .    \\/ \\/    .
+       ·   |   ·
+           ·`}</pre>
   </div>
 }
 
