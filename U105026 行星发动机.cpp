@@ -649,49 +649,48 @@ signed main(int argc, char *argv[]) {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 const int N = 2e3 + 5;
-int n;
-bool vis[N][N];
-double x[N], y[N], r[N];
-inline double dis(double ax, double ay, double bx, double by) {
-    return sqrt((ax - bx) * (ax - bx) + (ay - by) * (ay - by));
+int n, x[N], y[N], r[N], d[N], fa[N];
+bool vis[N];
+
+inline bool chk(int a, int b) {
+    long long dx = x[a] - x[b];
+    long long dy = y[a] - y[b];
+    long long sr = r[a] + r[b];
+    return dx * dx + dy * dy == sr * sr;
 }
-inline void dfs(int id, int la, int cnt) {
-    if (cnt == n) {
-        cout << (int)(x[id]) << " " << (int)(y[id]);
-        return;
-    }
-    for (int i = 1; i <= n; i++) {
-        if ((vis[i][id] || vis[id][i]) && la != i) {
-            dfs(i, id, cnt + 1);
-        }
-    }
-    return;
-}
+
 inline void solve(int Task_Id) {
     cin >> n;
+    int s = 0;
     for (int i = 1; i <= n; i++) {
         cin >> x[i] >> y[i] >> r[i];
+        if (x[i] == 0 && y[i] == 0)
+            s = i;
     }
-    if (n == 1) {
-        cout << (int)(x[1]) << " " << (int)(y[1]);
-        return;
-    }
+
     queue<int> q;
-    for (int i = 2; i <= n; i++) {
-        q.push(i);
-    }
-    for (; !q.empty();) {
-        for (int i = 1; i <= n; i++) {
-            int k = q.front();
-            if (dis(x[i], y[i], x[k], y[k]) <= r[i] + r[k]) {
-                vis[i][k] = true;
-                vis[k][i] = true;
-                q.pop();
-                break;
+    q.push(s);
+    vis[s] = true;
+
+    int ans = s;
+
+    while (!q.empty()) {
+        int u = q.front();
+        q.pop();
+
+        if (d[u] > d[ans])
+            ans = u;
+
+        for (int v = 1; v <= n; v++) {
+            if (!vis[v] && chk(u, v)) {
+                vis[v] = true;
+                d[v] = d[u] + 1;
+                fa[v] = u;
+                q.push(v);
             }
         }
     }
-    dfs(1, 0, 1);
-    return;
+
+    cout << x[ans] << " " << y[ans];
 }
 } // namespace TANGYIXIAO
