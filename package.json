@@ -3,7 +3,11 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "scripts": { "build": "vite build" },
+  "scripts": {
+    "build": "vite build && node scripts/verify_lazy_chunks.cjs",
+    "test:unit": "node --experimental-strip-types --test tests/visual-lifecycle.test.mjs",
+    "test:browser": "node tests/site.test.cjs && python3 scripts/build_pages.py --root . --output _site --commit \"$(git rev-parse HEAD)\" && node tests/site_smoke.cjs"
+  },
   "dependencies": {
     "@types/react": "^19.2.8",
     "@types/react-dom": "^19.2.3",
@@ -13,11 +17,14 @@
     "marked": "^17.0.1",
     "motion": "^13.1.1",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "react-dom": "^19.2.8",
+    "three": "^0.185.1"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",
+    "@types/three": "^0.185.4",
     "@vitejs/plugin-react": "^5.1.1",
+    "playwright": "^1.62.1",
     "tailwindcss": "^4.3.3",
     "typescript": "^5.9.3",
     "vite": "^8.2.2"
