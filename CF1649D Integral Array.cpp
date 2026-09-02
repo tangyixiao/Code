@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-09-01 08:33:42
-//  Problem: C. Weird Sum
+//  Time: 2026-09-01 08:50:31
+//  Problem: D. Integral Array
 //  Contest: Codeforces - Codeforces Round 775 (Div. 2, based on Moscow Open Olympiad in Informatics)
-//  URL: https://codeforces.com/contest/1649/problem/C
-//  Memory Limit: 256 MB
+//  URL: https://codeforces.com/contest/1649/problem/D
+//  Memory Limit: 512 MB
 //  Time Limit: 2000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 8545096f-cd20-4fab-886b-e3090852cdf1
+//  Batch ID: b2927bc3-89ec-4b75-b396-21c67a36b512
 //
 // Algorithm:
 // Complexity: O()
@@ -24,7 +24,7 @@ Copyright (C) 2026 TangYixiao
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -46,7 +46,7 @@ Copyright (C) 2026 TangYixiao
 #pragma GCC optimize("-fgcse")
 #pragma GCC optimize("-fgcse-lm")
 #pragma GCC optimize("-fipa-sra")
-#pragma GCC optimize("-ftree-pre")
+#pragma GCC optimize("-ftree-p")
 #pragma GCC optimize("-ftree-vrp")
 #pragma GCC optimize("-fpeephole2")
 #pragma GCC optimize("-ffast-math")
@@ -98,7 +98,7 @@ Copyright (C) 2026 TangYixiao
 #pragma G++ optimize("-fgcse")
 #pragma G++ optimize("-fgcse-lm")
 #pragma G++ optimize("-fipa-sra")
-#pragma G++ optimize("-ftree-pre")
+#pragma G++ optimize("-ftree-p")
 #pragma G++ optimize("-ftree-vrp")
 #pragma G++ optimize("-fpeephole2")
 #pragma G++ optimize("-ffast-math")
@@ -648,27 +648,38 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
-const int N = 1e5 + 5;
-int n, m, ans, cnt[N], s[N];
-vector<int> v[N];
+const int N = 1e6 + 5;
+bool flag;
+int n, m, c[N], s[N];
 inline void solve(int Task_Id) {
     cin >> n >> m;
-    for (int i = 1; i <= n; i++) {
-        for (int j = 1, x; j <= m; j++) {
-            cin >> x;
-            ans += (i * (cnt[x]++) - s[x]), s[x] += i, v[x].push_back(j);
-        }
+    for (int i = 1; i <= m; i++) {
+        c[i] = s[i] = flag = 0;
     }
-    for (int j = 1; j <= N - 5; j++) {
-        if (!v[j].empty()) {
-            sort(v[j].begin(), v[j].end());
-            for (int i = 0, sum = 0; i < v[j].size(); i++) {
-                ans += (v[j][i] * i - sum), sum += v[j][i];
+    for (int i = 1, x; i <= n; i++) {
+        cin >> x, c[x]++;
+    }
+    for (int i = 1; i <= m; i++) {
+        s[i] = s[i - 1] + c[i];
+    }
+    if (!c[1]) {
+        cout << "No\n";
+    } else {
+        for (int y = 1; y <= m && !flag; y++) {
+            if (c[y]) {
+                for (int k = 1; k * y <= m; k++) {
+                    if (!c[k] && s[min(m, (k + 1) * y - 1)] - s[k * y - 1]) {
+                        flag = true;
+                        break;
+                    }
+                }
             }
         }
+        cout << (!flag ? "Yes" : "No") << "\n";
     }
-    cout << ans << "\n";
     return;
 }
+
 } // namespace TANGYIXIAO

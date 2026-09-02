@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-09-01 08:33:42
-//  Problem: C. Weird Sum
-//  Contest: Codeforces - Codeforces Round 775 (Div. 2, based on Moscow Open Olympiad in Informatics)
-//  URL: https://codeforces.com/contest/1649/problem/C
-//  Memory Limit: 256 MB
+//  Time: 2026-09-02 08:37:22
+//  Problem: P11813 [PA 2015] 机器人 / Roboty
+//  Contest: Luogu
+//  URL: https://www.luogu.com.cn/problem/P11813
+//  Memory Limit: 512 MB
 //  Time Limit: 2000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 8545096f-cd20-4fab-886b-e3090852cdf1
+//  Batch ID: d4eb245e-10c1-4942-b9dc-5694d35b24b4
 //
 // Algorithm:
 // Complexity: O()
@@ -552,7 +552,6 @@ using namespace __gnu_pbds;
 #pragma endregion INCLUDES
 
 #pragma region TANGYIXIAO
-#define int long long
 namespace TANGYIXIAO {
 #pragma region IO
 namespace IO {
@@ -622,7 +621,7 @@ using namespace TANGYIXIAO;
 // clang-format on
 #pragma endregion TANGYIXIAO
 #pragma region MAIN
-signed main() {
+signed main(int argc, char *argv[]) {
 #ifdef TIME_COUNT
     Start_Time_Count();
 #endif
@@ -648,27 +647,671 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+#include <bits/stdc++.h>
+using namespace std;
+
 namespace TANGYIXIAO {
-const int N = 1e5 + 5;
-int n, m, ans, cnt[N], s[N];
-vector<int> v[N];
-inline void solve(int Task_Id) {
-    cin >> n >> m;
-    for (int i = 1; i <= n; i++) {
-        for (int j = 1, x; j <= m; j++) {
-            cin >> x;
-            ans += (i * (cnt[x]++) - s[x]), s[x] += i, v[x].push_back(j);
+const int N = 2e2 + 5, INF = 1e9;
+
+struct Big {
+    static const int B = 1e9;
+    vector<int> a;
+
+    Big(long long x = 0) {
+        *this = x;
+    }
+
+    Big &operator=(long long x) {
+        a.clear();
+        for (; x; x /= B) {
+            a.push_back(x % B);
+        }
+        if (a.empty()) {
+            a.push_back(0);
+        }
+        return *this;
+    }
+
+    void clr() {
+        for (; a.size() > 1 && a.back() == 0;) {
+            a.pop_back();
         }
     }
-    for (int j = 1; j <= N - 5; j++) {
-        if (!v[j].empty()) {
-            sort(v[j].begin(), v[j].end());
-            for (int i = 0, sum = 0; i < v[j].size(); i++) {
-                ans += (v[j][i] * i - sum), sum += v[j][i];
+
+    Big &operator+=(const Big &x) {
+        int n = max(a.size(), x.a.size());
+        a.resize(n, 0);
+        long long c = 0;
+
+        for (int i = 0; i < n; i++) {
+            long long s = 1ll * a[i] + (i < (int)x.a.size() ? x.a[i] : 0) + c;
+            a[i] = s % B;
+            c = s / B;
+        }
+
+        if (c) {
+            a.push_back(c);
+        }
+        return *this;
+    }
+
+    Big &operator*=(int x) {
+        long long c = 0;
+
+        for (int i = 0; i < (int)a.size(); i++) {
+            long long s = 1ll * a[i] * x + c;
+            a[i] = s % B;
+            c = s / B;
+        }
+
+        for (; c; c /= B) {
+            a.push_back(c % B);
+        }
+
+        clr();
+        return *this;
+    }
+
+    int operator%(int x) const {
+        long long r = 0;
+        for (int i = (int)a.size() - 1; i >= 0; i--) {
+            r = (r * B + a[i]) % x;
+        }
+        return r;
+    }
+
+    bool operator<(int x) const {
+        if (a.size() > 1) {
+            return 0;
+        }
+        return a[0] < x;
+    }
+
+    friend ostream &operator<<(ostream &out, const Big &x) {
+        out << x.a.back();
+        for (int i = (int)x.a.size() - 2; i >= 0; i--) {
+            out << setw(9) << setfill('0') << x.a[i];
+        }
+        return out;
+    }
+};
+
+int n, b, r, s[N], dfn[N], low[N], stk[N], top, tot, sc, bel[N], dep[N];
+int idp[N], qv[N], val[N], B;
+bool ins[N], usev[N];
+vector<int> e[N], nd[N];
+bitset<N> to[N], bad;
+
+struct Con {
+    int a;
+    vector<pair<int, int>> f;
+};
+
+vector<pair<int, int>> raw;
+vector<Con> con;
+
+void tarjan(int u) {
+    dfn[u] = low[u] = ++tot;
+    stk[++top] = u;
+    ins[u] = 1;
+
+    for (int v : e[u]) {
+        if (!dfn[v]) {
+            tarjan(v);
+            low[u] = min(low[u], low[v]);
+        } else if (ins[v]) {
+            low[u] = min(low[u], dfn[v]);
+        }
+    }
+
+    if (dfn[u] == low[u]) {
+        ++sc;
+
+        for (;;) {
+            int v = stk[top--];
+            ins[v] = 0;
+            bel[v] = sc;
+            nd[sc].push_back(v);
+
+            if (v == u) {
+                break;
             }
         }
     }
-    cout << ans << "\n";
-    return;
+}
+
+int getd(int id) {
+    int rt = nd[id][0], d = 0;
+    fill(dep + 1, dep + n + 1, -1);
+    dep[rt] = 0;
+
+    queue<int> q;
+    q.push(rt);
+
+    for (; !q.empty(); q.pop()) {
+        int u = q.front();
+
+        for (int v : e[u]) {
+            if (bel[v] == id && dep[v] == -1) {
+                dep[v] = dep[u] + 1;
+                q.push(v);
+            }
+        }
+    }
+
+    for (int u : nd[id]) {
+        for (int v : e[u]) {
+            if (bel[v] == id) {
+                d = gcd(d, abs(dep[u] + 1 - dep[v]));
+            }
+        }
+    }
+
+    return d;
+}
+
+int getcyc(int id) {
+    int rt = nd[id][0];
+    fill(dep + 1, dep + n + 1, -1);
+    dep[rt] = 0;
+
+    queue<int> q;
+    q.push(rt);
+
+    for (; !q.empty(); q.pop()) {
+        int u = q.front();
+
+        for (int v : e[u]) {
+            if (bel[v] == id && dep[v] == -1) {
+                dep[v] = dep[u] + 1;
+                q.push(v);
+            }
+        }
+    }
+
+    int c = INF;
+
+    for (int u : nd[id]) {
+        for (int v : e[u]) {
+            if (v == rt) {
+                c = min(c, dep[u] + 1);
+            }
+        }
+    }
+
+    return c;
+}
+
+vector<int> bfsall(int mod, const vector<int> &st) {
+    vector<int> dis(n * mod, -1);
+    queue<int> q;
+
+    for (int u : st) {
+        int z = (u - 1) * mod;
+
+        if (dis[z] == -1) {
+            dis[z] = 0;
+            q.push(z);
+        }
+    }
+
+    for (; !q.empty(); q.pop()) {
+        int z = q.front();
+        int u = z / mod + 1, x = z % mod, y = (x + 1) % mod;
+
+        for (int v : e[u]) {
+            int nz = (v - 1) * mod + y;
+
+            if (dis[nz] == -1) {
+                dis[nz] = dis[z] + 1;
+                q.push(nz);
+            }
+        }
+    }
+
+    return dis;
+}
+
+int getT(int id, int d, int c) {
+    int rt = nd[id][0];
+    vector<int> dis(n * c, -1);
+    queue<int> q;
+
+    dis[(rt - 1) * c] = 0;
+    q.push((rt - 1) * c);
+
+    for (; !q.empty(); q.pop()) {
+        int z = q.front();
+        int u = z / c + 1, x = z % c, y = (x + 1) % c;
+
+        for (int v : e[u]) {
+            if (bel[v] != id) {
+                continue;
+            }
+
+            int nz = (v - 1) * c + y;
+
+            if (dis[nz] == -1) {
+                dis[nz] = dis[z] + 1;
+                q.push(nz);
+            }
+        }
+    }
+
+    int T = 0;
+
+    for (int x = 0; x < c; x += d) {
+        T = max(T, dis[(rt - 1) * c + x]);
+    }
+
+    return T;
+}
+
+void build() {
+    vector<int> st;
+
+    for (int i = 1; i <= r; i++) {
+        st.push_back(s[i]);
+    }
+
+    B = n;
+
+    for (int id = 1; id <= sc; id++) {
+        int rt = nd[id][0];
+        bool cyc = nd[id].size() > 1;
+
+        if (!cyc) {
+            for (int v : e[rt]) {
+                if (v == rt) {
+                    cyc = 1;
+                }
+            }
+        }
+
+        if (!cyc) {
+            continue;
+        }
+
+        int d = getd(id), c = getcyc(id), T = getT(id, d, c);
+
+        vector<int> pre = bfsall(d, st);
+        vector<int> one(1, rt);
+        vector<int> suf = bfsall(d, one);
+
+        vector<int> p(d, INF), q(d, INF), base(d, INF);
+
+        for (int x = 0; x < d; x++) {
+            int z = pre[(rt - 1) * d + x];
+
+            if (z != -1) {
+                p[x] = z;
+            }
+        }
+
+        for (int v = b + 1; v <= n; v++) {
+            for (int x = 0; x < d; x++) {
+                int z = suf[(v - 1) * d + x];
+
+                if (z != -1) {
+                    q[x] = min(q[x], z);
+                }
+            }
+        }
+
+        for (int x = 0; x < d; x++) {
+            if (p[x] == INF) {
+                continue;
+            }
+
+            for (int y = 0; y < d; y++) {
+                if (q[y] == INF) {
+                    continue;
+                }
+
+                int z = (x + y) % d;
+                base[z] = min(base[z], p[x] + q[y]);
+            }
+        }
+
+        for (int x = 0; x < d; x++) {
+            if (base[x] != INF) {
+                raw.push_back({x, d});
+                B = max(B, base[x] + T);
+            }
+        }
+    }
+}
+
+void simplify() {
+    sort(raw.begin(), raw.end(), [](pair<int, int> x, pair<int, int> y) {
+        if (x.second != y.second) {
+            return x.second < y.second;
+        }
+        return x.first < y.first;
+    });
+
+    raw.erase(unique(raw.begin(), raw.end()), raw.end());
+
+    vector<pair<int, int>> a;
+
+    for (auto x : raw) {
+        bool ok = 1;
+
+        for (auto y : a) {
+            if (x.second % y.second == 0 && x.first % y.second == y.first) {
+                ok = 0;
+                break;
+            }
+        }
+
+        if (ok) {
+            a.push_back(x);
+        }
+    }
+
+    raw = a;
+}
+
+bool dfs(const vector<int> &act) {
+    if (act.empty()) {
+        for (int i = 0; i < N; i++) {
+            if (qv[i] && !usev[i]) {
+                val[i] = 0;
+            }
+        }
+
+        return 1;
+    }
+
+    int x = -1, bl = -1, bc = 0, bq = 1;
+
+    for (int v = 0; v < N; v++) {
+        if (!qv[v] || usev[v]) {
+            continue;
+        }
+
+        int last = 0, cnt = 0;
+
+        for (int ci : act) {
+            bool has = 0;
+            int rem = 0;
+
+            for (auto [u, pe] : con[ci].f) {
+                if (!usev[u]) {
+                    rem++;
+                }
+
+                if (u == v) {
+                    has = 1;
+                }
+            }
+
+            if (has) {
+                cnt++;
+
+                if (rem == 1) {
+                    last++;
+                }
+            }
+        }
+
+        if (!cnt) {
+            continue;
+        }
+
+        if (x == -1 || last > bl ||
+            (last == bl && 1ll * cnt * bq > 1ll * bc * qv[v]) ||
+            (last == bl && 1ll * cnt * bq == 1ll * bc * qv[v] && qv[v] < bq)) {
+            x = v;
+            bl = last;
+            bc = cnt;
+            bq = qv[v];
+        }
+    }
+
+    if (x == -1) {
+        return 0;
+    }
+
+    vector<pair<int, int>> ord;
+
+    for (int z = 0; z < qv[x]; z++) {
+        int keep = 0;
+        bool fail = 0;
+
+        for (int ci : act) {
+            int pe = 0, rem = 0;
+
+            for (auto [u, w] : con[ci].f) {
+                if (u == x) {
+                    pe = w;
+                }
+
+                if (!usev[u]) {
+                    rem++;
+                }
+            }
+
+            if (!pe) {
+                keep++;
+                continue;
+            }
+
+            if (z % pe != con[ci].a % pe) {
+                continue;
+            }
+
+            if (rem == 1) {
+                fail = 1;
+                break;
+            }
+
+            keep++;
+        }
+
+        if (!fail) {
+            ord.push_back({keep, z});
+        }
+    }
+
+    sort(ord.begin(), ord.end());
+    usev[x] = 1;
+
+    for (auto [cnt, z] : ord) {
+        val[x] = z;
+        vector<int> nxt;
+        bool fail = 0;
+
+        for (int ci : act) {
+            int pe = 0;
+
+            for (auto [u, w] : con[ci].f) {
+                if (u == x) {
+                    pe = w;
+                    break;
+                }
+            }
+
+            if (pe && z % pe != con[ci].a % pe) {
+                continue;
+            }
+
+            bool full = 1;
+
+            for (auto [u, w] : con[ci].f) {
+                if (!usev[u]) {
+                    full = 0;
+                    break;
+                }
+            }
+
+            if (full) {
+                fail = 1;
+                break;
+            }
+
+            nxt.push_back(ci);
+        }
+
+        if (!fail && dfs(nxt)) {
+            return 1;
+        }
+    }
+
+    usev[x] = 0;
+    return 0;
+}
+
+bool solve_mod(Big &ans, Big &M) {
+    simplify();
+    fill(idp, idp + N, -1);
+
+    int pc = 0;
+
+    for (auto [a, m] : raw) {
+        Con c;
+        c.a = a;
+
+        int x = m;
+
+        for (int p = 2; p * p <= x; p++) {
+            if (x % p) {
+                continue;
+            }
+
+            int pe = 1;
+
+            for (; x % p == 0; x /= p) {
+                pe *= p;
+            }
+
+            if (idp[p] == -1) {
+                idp[p] = pc++;
+            }
+
+            int id = idp[p];
+            qv[id] = max(qv[id], pe);
+            c.f.push_back({id, pe});
+        }
+
+        if (x > 1) {
+            if (idp[x] == -1) {
+                idp[x] = pc++;
+            }
+
+            int id = idp[x];
+            qv[id] = max(qv[id], x);
+            c.f.push_back({id, x});
+        }
+
+        if (c.f.empty()) {
+            return 0;
+        }
+
+        con.push_back(c);
+    }
+
+    vector<int> act(con.size());
+    iota(act.begin(), act.end(), 0);
+
+    if (!dfs(act)) {
+        return 0;
+    }
+
+    ans = 0;
+    M = 1;
+
+    for (int i = 0; i < pc; i++) {
+        int q = qv[i];
+        int xm = ans % q, mm = M % q, iv = 0;
+
+        for (int j = 1; j < q; j++) {
+            if (1ll * mm * j % q == 1) {
+                iv = j;
+                break;
+            }
+        }
+
+        int t = (val[i] - xm) % q;
+
+        if (t < 0) {
+            t += q;
+        }
+
+        t = 1ll * t * iv % q;
+
+        Big z = M;
+        z *= t;
+        ans += z;
+        M *= q;
+    }
+
+    return 1;
+}
+inline void solve(int Task_Id) {
+    cin >> n >> b >> r;
+
+    string str;
+
+    for (int i = 1; i <= n; i++) {
+        cin >> str;
+
+        for (int j = 1; j <= n; j++) {
+            if (str[j - 1] == '1') {
+                e[i].push_back(j);
+                to[i][j] = 1;
+            }
+        }
+    }
+
+    for (int i = 1; i <= r; i++) {
+        cin >> s[i];
+    }
+
+    for (int i = b + 1; i <= n; i++) {
+        bad[i] = 1;
+    }
+
+    for (int i = 1; i <= n; i++) {
+        if (!dfn[i]) {
+            tarjan(i);
+        }
+    }
+
+    build();
+
+    Big ans, M;
+
+    if (solve_mod(ans, M)) {
+        for (; ans < n; ans += M) {
+        }
+        cout << ans << '\n';
+        return;
+    }
+
+    bitset<N> cur;
+
+    for (int i = 1; i <= r; i++) {
+        cur[s[i]] = 1;
+    }
+
+    for (int k = 0; k <= B; k++) {
+        if ((cur & bad).none()) {
+            cout << k << '\n';
+            return;
+        }
+
+        bitset<N> nxt;
+
+        for (int i = 1; i <= n; i++) {
+            if (cur[i]) {
+                nxt |= to[i];
+            }
+        }
+
+        cur = nxt;
+    }
+
+    cout << -1 << '\n';
 }
 } // namespace TANGYIXIAO
