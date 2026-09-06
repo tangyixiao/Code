@@ -648,17 +648,20 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-int n, r, x[30];
+int n, k, x[30];
 inline void solve(int Task_Id) {
-    scanf("%d%d", &n, &r);
-    for (int i = r + 1; i <= n; ++i)
+    cin >> k >> n;
+    for (int i = k + 1; i <= n; ++i) {
         x[i] = 1;
+    }
     do {
-        for (int i = 1; i <= n; ++i)
-            if (x[i] == 0)
-                printf("%3d", i);
-        printf("\n");
-    } while (next_permutation(x + 1, x + n + 1));
+        for (int i = 1; i <= n; ++i) {
+            if (x[i] == 0) {
+                cout << i << " ";
+            }
+        }
+        cout << "\n";
+    } while (next_permutation(x + 1, x + k + 1));
     return;
 }
 } // namespace TANGYIXIAO

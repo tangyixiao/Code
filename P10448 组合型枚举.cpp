@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-09-07 07:15:46
-//  Problem: P1157 组合的输出
+//  Time: 2026-09-07 07:18:52
+//  Problem: P10448 组合型枚举
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/P1157
-//  Memory Limit: 125 MB
+//  URL: https://www.luogu.com.cn/problem/P10448
+//  Memory Limit: 512 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: af4a9c22-28ea-417a-aba8-3aaf10c670c9
+//  Batch ID: 7062392f-d29e-4f22-b264-b6ba9b3a650d
 //
 // Algorithm:
 // Complexity: O()
@@ -656,7 +656,7 @@ inline void solve(int Task_Id) {
     do {
         for (int i = 1; i <= n; ++i)
             if (x[i] == 0)
-                printf("%3d", i);
+                printf("%d ", i);
         printf("\n");
     } while (next_permutation(x + 1, x + n + 1));
     return;
