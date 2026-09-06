@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-09-07 07:29:55
-//  Problem: B3621 枚举元组
+//  Time: 2026-09-07 07:33:19
+//  Problem: B3623 枚举排列（递归实现排列型枚举）
 //  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/B3621
+//  URL: https://www.luogu.com.cn/problem/B3623
 //  Memory Limit: 128 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: fa6dbd7e-f910-4a9b-8bef-e44d2e15a80f
+//  Batch ID: a3e9db60-45bf-4acd-8a18-aaf9e7781986
 //
 // Algorithm:
 // Complexity: O()
@@ -649,6 +649,7 @@ signed main(int argc, char *argv[]) {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 int n, k;
+bool vis[45];
 inline void dfs(int id, vector<int> v) {
     if (id == k + 1) {
         for (auto it : v) {
@@ -658,14 +659,18 @@ inline void dfs(int id, vector<int> v) {
         return;
     }
     for (int i = 1; i <= n; i++) {
-        vector<int> w = v;
-        w.push_back(i);
-        dfs(id + 1, w);
+        if (!vis[i]) {
+            vector<int> w = v;
+            w.push_back(i);
+            vis[i] = true;
+            dfs(id + 1, w);
+            vis[i] = false;
+        }
     }
     return;
 }
 inline void solve(int Task_Id) {
-    cin >> k >> n;
+    cin >> n >> k;
     vector<int> g;
     dfs(1, g);
     return;

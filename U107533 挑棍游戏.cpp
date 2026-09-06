@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-09-07 07:29:55
-//  Problem: B3621 枚举元组
-//  Contest: Luogu
-//  URL: https://www.luogu.com.cn/problem/B3621
-//  Memory Limit: 128 MB
+//  Time: 2026-09-07 07:51:12
+//  Problem: U107533 挑棍游戏
+//  Contest: Luogu - SXYZ 训练赛③
+//  URL: https://www.luogu.com.cn/problem/U107533?contestId=354865
+//  Memory Limit: 125 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: fa6dbd7e-f910-4a9b-8bef-e44d2e15a80f
+//  Batch ID: ad454bfc-bccc-4d01-92fa-17aaf9ab167b
 //
 // Algorithm:
 // Complexity: O()
@@ -648,26 +648,8 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-int n, k;
-inline void dfs(int id, vector<int> v) {
-    if (id == k + 1) {
-        for (auto it : v) {
-            cout << it << " ";
-        }
-        cout << "\n";
-        return;
-    }
-    for (int i = 1; i <= n; i++) {
-        vector<int> w = v;
-        w.push_back(i);
-        dfs(id + 1, w);
-    }
-    return;
-}
 inline void solve(int Task_Id) {
-    cin >> k >> n;
-    vector<int> g;
-    dfs(1, g);
+    // do something here
     return;
 }
 } // namespace TANGYIXIAO
