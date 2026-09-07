@@ -46,7 +46,7 @@ Copyright (C) 2026 TangYixiao
 #pragma GCC optimize("-fgcse")
 #pragma GCC optimize("-fgcse-lm")
 #pragma GCC optimize("-fipa-sra")
-#pragma GCC optimize("-ftree-pre")
+#pragma GCC optimize("-ftree-s")
 #pragma GCC optimize("-ftree-vrp")
 #pragma GCC optimize("-fpeephole2")
 #pragma GCC optimize("-ffast-math")
@@ -98,7 +98,7 @@ Copyright (C) 2026 TangYixiao
 #pragma G++ optimize("-fgcse")
 #pragma G++ optimize("-fgcse-lm")
 #pragma G++ optimize("-fipa-sra")
-#pragma G++ optimize("-ftree-pre")
+#pragma G++ optimize("-ftree-s")
 #pragma G++ optimize("-ftree-vrp")
 #pragma G++ optimize("-fpeephole2")
 #pragma G++ optimize("-ffast-math")
@@ -648,8 +648,34 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 1e3 + 5;
+struct node {
+    int h, l;
+};
+int n, m, a[N][N], h[N], ans, s[N][N];
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> m;
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= m; j++) {
+            cin >> a[i][j];
+            s[i][j] = a[i][j] + s[i - 1][j] + s[i][j - 1] - s[i - 1][j - 1];
+        }
+    }
+    for (int i = 1; i <= n; i++) {
+        stack<node> st;
+        for (int j = 1, l = 1; j <= m + 1; j++, l = j) {
+            h[j] = j <= m && a[i][j] ? h[j] + 1 : 0;
+            for (; !st.empty() && st.top().h > h[j];) {
+                auto [hh, ll] = st.top();
+                st.pop(), ans = max(ans, s[i][j - 1] - s[i - hh][j - 1] - s[i][ll - 1] + s[i - hh][ll - 1]), l = ll;
+            }
+
+            if (h[j] && (st.empty() || st.top().h < h[j])) {
+                st.push({h[j], l});
+            }
+        }
+    }
+    cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO
