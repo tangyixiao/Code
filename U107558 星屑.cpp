@@ -46,7 +46,7 @@ Copyright (C) 2026 TangYixiao
 #pragma GCC optimize("-fgcse")
 #pragma GCC optimize("-fgcse-lm")
 #pragma GCC optimize("-fipa-sra")
-#pragma GCC optimize("-ftree-pre")
+#pragma GCC optimize("-ftree-p")
 #pragma GCC optimize("-ftree-vrp")
 #pragma GCC optimize("-fpeephole2")
 #pragma GCC optimize("-ffast-math")
@@ -98,7 +98,7 @@ Copyright (C) 2026 TangYixiao
 #pragma G++ optimize("-fgcse")
 #pragma G++ optimize("-fgcse-lm")
 #pragma G++ optimize("-fipa-sra")
-#pragma G++ optimize("-ftree-pre")
+#pragma G++ optimize("-ftree-p")
 #pragma G++ optimize("-ftree-vrp")
 #pragma G++ optimize("-fpeephole2")
 #pragma G++ optimize("-ffast-math")
@@ -550,8 +550,8 @@ using namespace __gnu_pbds;
 
 #endif
 #pragma endregion INCLUDES
-
 #pragma region TANGYIXIAO
+#define int long long
 namespace TANGYIXIAO {
 #pragma region IO
 namespace IO {
@@ -621,7 +621,7 @@ using namespace TANGYIXIAO;
 // clang-format on
 #pragma endregion TANGYIXIAO
 #pragma region MAIN
-signed main(int argc, char *argv[]) {
+signed main() {
 #ifdef TIME_COUNT
     Start_Time_Count();
 #endif
@@ -648,77 +648,48 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 1005;
-const long long INF = 1LL << 60;
-
-struct Node {
-    long long v;
-    int p;
+const int N = 1e3 + 5, inf = 1LL << 60;
+struct node {
+    int v, p;
 };
-
-int n, m, now, a[N];
-long long pre[N], f[N], g[N];
-
-inline long long get(int l, int r) {
-    int mid = (l + r) >> 1;
-    return 1LL * a[mid] * (mid - l + 1) - (pre[mid] - pre[l - 1]) +
-           (pre[r] - pre[mid]) - 1LL * a[mid] * (r - mid);
+int n, m, w, a[N], p[N], f[N], g[N];
+inline int get(int l, int r) {
+    return a[((l + r) >> 1)] * (((l + r) >> 1) - l + 1) - (p[((l + r) >> 1)] - p[l - 1]) + (p[r] - p[((l + r) >> 1)]) - a[((l + r) >> 1)] * (r - ((l + r) >> 1));
 }
-
-inline void calc(int l, int r, int ql, int qr) {
+inline void c(int l, int r, int ql, int qr) {
     if (l > r) {
         return;
     }
-
-    int mid = (l + r) >> 1;
-    Node u = {INF, -1};
-
-    for (int i = max(ql, now - 1); i <= min(qr, mid - 1); i++) {
-        if (f[i] == INF) {
-            continue;
-        }
-
-        long long v = f[i] + get(i + 1, mid);
-        if (v < u.v) {
-            u = {v, i};
+    node u = {inf, -1};
+    for (int i = max(ql, w - 1); i <= min(qr, ((l + r) >> 1) - 1); i++) {
+        if (f[i] != inf && f[i] + get(i + 1, ((l + r) >> 1)) < u.v) {
+            u = {f[i] + get(i + 1, ((l + r) >> 1)), i};
         }
     }
-
-    g[mid] = u.v;
-    calc(l, mid - 1, ql, u.p);
-    calc(mid + 1, r, u.p, qr);
+    g[((l + r) >> 1)] = u.v, c(l, ((l + r) >> 1) - 1, ql, u.p), c(((l + r) >> 1) + 1, r, u.p, qr);
+    return;
 }
-
 inline void solve(int Task_Id) {
     cin >> n >> m;
-
     for (int i = 1; i <= n; i++) {
-        cin >> a[i];
-        pre[i] = pre[i - 1] + a[i];
+        cin >> a[i], p[i] = p[i - 1] + a[i];
     }
-
     if (m >= n) {
-        cout << 0 << "\n";
+        cout << "0\n";
         return;
     }
-
-    for (int i = 0; i <= n; i++) {
-        f[i] = INF;
+    for (int i = 1; i <= n; i++) {
+        f[i] = inf;
     }
-    f[0] = 0;
-
-    for (now = 1; now <= m; now++) {
+    for (w = 1; w <= m; w++) {
         for (int i = 0; i <= n; i++) {
-            g[i] = INF;
+            g[i] = inf;
         }
-
-        calc(now, n, now - 1, n - 1);
-
+        c(w, n, w - 1, n - 1);
         for (int i = 0; i <= n; i++) {
             f[i] = g[i];
         }
     }
-
     cout << f[n] << "\n";
     return;
 }
