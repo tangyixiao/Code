@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-09-07 07:51:12
-//  Problem: U107533 挑棍游戏
+//  Time: 2026-09-07 07:59:28
+//  Problem: U107545 多项式展开
 //  Contest: Luogu - SXYZ 训练赛③
-//  URL: https://www.luogu.com.cn/problem/U107533?contestId=354865
+//  URL: https://www.luogu.com.cn/problem/U107545?contestId=354865
 //  Memory Limit: 125 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: ad454bfc-bccc-4d01-92fa-17aaf9ab167b
+//  Batch ID: 68001669-9390-446c-a97a-8f2d46b02b40
 //
 // Algorithm:
 // Complexity: O()
@@ -615,6 +615,8 @@ inline T Pop_Count(T x) { return __builtin_popcount(x); }
 } // namespace BITS
 using namespace BITS;
 #pragma endregion BITS
+int n;
+__int128 c[68];
 inline void solve(int Task_Id);
 } // namespace TANGYIXIAO
 using namespace TANGYIXIAO;
@@ -632,13 +634,12 @@ signed main(int argc, char *argv[]) {
     Local_File(FILE_NAME, FILE_IDX);
 #else
 #endif
-    int T = 1;
-#ifdef MULTIPLE_TEST
-    cin >> T;
-#endif
-    for (int Tasks_Id = 1; Tasks_Id <= T; Tasks_Id++) {
-        solve(Tasks_Id);
+    cin >> n;
+    c[0] = 1;
+    for (int k = 1; k <= n; k++) {
+        c[k] = c[k - 1] * (n - k + 1) / k;
     }
+    solve(1);
 #ifdef TIME_COUNT
     End_Time_Count();
     Print_Time_Count("TOTAL");
@@ -648,16 +649,32 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 55;
-int n;
-long long dp[N];
 inline void solve(int Task_Id) {
-    cin >> n;
-    dp[0] = 1, dp[1] = 2;
-    for (int i = 2; i <= n; i++) {
-        dp[i] = dp[i - 1] + dp[i - 2];
+    cout << "(a+b)^" << n << "=";
+    if (n == 0) {
+        cout << 1;
+        return;
     }
-    cout << dp[n];
+    for (int k = 0, a, b; k <= n; k++) {
+        if (k) {
+            cout << "+";
+        }
+        if (c[k] != 1) {
+            cout << c[k];
+        }
+        if (n - k) {
+            cout << "a";
+            if (n - k > 1) {
+                cout << "^" << n - k;
+            }
+        }
+        if (k) {
+            cout << "b";
+            if (k > 1) {
+                cout << "^" << k;
+            }
+        }
+    }
     return;
 }
 } // namespace TANGYIXIAO

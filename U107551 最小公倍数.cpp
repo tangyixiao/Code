@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-09-07 07:51:12
-//  Problem: U107533 挑棍游戏
+//  Time: 2026-09-07 08:34:05
+//  Problem: U107551 最小公倍数
 //  Contest: Luogu - SXYZ 训练赛③
-//  URL: https://www.luogu.com.cn/problem/U107533?contestId=354865
+//  URL: https://www.luogu.com.cn/problem/U107551?contestId=354865
 //  Memory Limit: 125 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: ad454bfc-bccc-4d01-92fa-17aaf9ab167b
+//  Batch ID: b7fc1ce2-0d6d-4466-9153-f927bffc124f
 //
 // Algorithm:
 // Complexity: O()
@@ -648,16 +648,8 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 55;
-int n;
-long long dp[N];
 inline void solve(int Task_Id) {
-    cin >> n;
-    dp[0] = 1, dp[1] = 2;
-    for (int i = 2; i <= n; i++) {
-        dp[i] = dp[i - 1] + dp[i - 2];
-    }
-    cout << dp[n];
+    // do something here
     return;
 }
 } // namespace TANGYIXIAO

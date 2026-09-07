@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-09-07 07:51:12
-//  Problem: U107533 挑棍游戏
+//  Time: 2026-09-07 08:13:30
+//  Problem: U107549 函数求和
 //  Contest: Luogu - SXYZ 训练赛③
-//  URL: https://www.luogu.com.cn/problem/U107533?contestId=354865
+//  URL: https://www.luogu.com.cn/problem/U107549?contestId=354865
 //  Memory Limit: 125 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: ad454bfc-bccc-4d01-92fa-17aaf9ab167b
+//  Batch ID: bbe81940-dc96-4a04-8588-0bad387895d1
 //
 // Algorithm:
 // Complexity: O()
@@ -552,6 +552,7 @@ using namespace __gnu_pbds;
 #pragma endregion INCLUDES
 
 #pragma region TANGYIXIAO
+#define int long long
 namespace TANGYIXIAO {
 #pragma region IO
 namespace IO {
@@ -621,7 +622,7 @@ using namespace TANGYIXIAO;
 // clang-format on
 #pragma endregion TANGYIXIAO
 #pragma region MAIN
-signed main(int argc, char *argv[]) {
+signed main() {
 #ifdef TIME_COUNT
     Start_Time_Count();
 #endif
@@ -648,16 +649,17 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 55;
-int n;
-long long dp[N];
-inline void solve(int Task_Id) {
-    cin >> n;
-    dp[0] = 1, dp[1] = 2;
-    for (int i = 2; i <= n; i++) {
-        dp[i] = dp[i - 1] + dp[i - 2];
+int x, y, res;
+inline int sum(int n) {
+    res = 0;
+    for (int p = 1; p <= n; p <<= 1) {
+        res += p * (n / p - n / (p << 1));
     }
-    cout << dp[n];
+    return res;
+}
+inline void solve(int Task_Id) {
+    cin >> x >> y;
+    cout << sum(y) - sum(x - 1);
     return;
 }
 } // namespace TANGYIXIAO

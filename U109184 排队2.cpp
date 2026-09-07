@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-09-07 07:51:12
-//  Problem: U107533 挑棍游戏
+//  Time: 2026-09-07 08:36:15
+//  Problem: U109184 排队2
 //  Contest: Luogu - SXYZ 训练赛③
-//  URL: https://www.luogu.com.cn/problem/U107533?contestId=354865
+//  URL: https://www.luogu.com.cn/problem/U109184?contestId=354865
 //  Memory Limit: 125 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: ad454bfc-bccc-4d01-92fa-17aaf9ab167b
+//  Batch ID: 22ff7886-bfd5-4a53-b234-45cb1f6ff08c
 //
 // Algorithm:
 // Complexity: O()
@@ -648,16 +648,10 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 55;
-int n;
-long long dp[N];
+int x, y, a, b, n, m, ans;
 inline void solve(int Task_Id) {
-    cin >> n;
-    dp[0] = 1, dp[1] = 2;
-    for (int i = 2; i <= n; i++) {
-        dp[i] = dp[i - 1] + dp[i - 2];
+    for (; cin >> x >> y >> a >> b;) {
     }
-    cout << dp[n];
     return;
 }
 } // namespace TANGYIXIAO
