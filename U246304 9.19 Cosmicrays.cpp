@@ -649,7 +649,6 @@ signed main(int argc, char *argv[]) {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 const int N = 1e2 + 5, K = 1e4 + 5, inf = 1e9;
-
 struct edge {
     int v, w, t;
 };
@@ -659,34 +658,22 @@ struct node {
         return t > x.t;
     }
 };
-
-int n, m, x, y, lim, dis[N][K];
+int n, m, x, y, k, ans, mn = inf, dis[N][K];
 vector<edge> e[N];
-
-inline void add(int u, int v, int w, int t) {
-    e[u].push_back({v, w, t});
-    return;
-}
-
+priority_queue<node> q;
 inline void dij() {
-    priority_queue<node> q;
     dis[x][0] = 0;
     q.push({x, 0, 0});
-
     for (; !q.empty();) {
-        auto u = q.top();
+        auto [v, w, t] = q.top();
         q.pop();
-        if (u.t != dis[u.v][u.w]) {
-            continue;
-        }
-
-        for (auto v : e[u.v]) {
-            if (u.w + v.w > lim || dis[v.v][u.w + v.w] <= u.t + v.t) {
-                continue;
+        if (t == dis[v][w]) {
+            for (auto [vv, ww, tt] : e[v]) {
+                if (w + ww <= k && dis[vv][w + ww] > t + tt) {
+                    dis[vv][w + ww] = t + tt;
+                    q.push({vv, w + ww, t + tt});
+                }
             }
-
-            dis[v.v][u.w + v.w] = u.t + v.t;
-            q.push({v.v, u.w + v.w, u.t + v.t});
         }
     }
     return;
@@ -694,26 +681,21 @@ inline void dij() {
 
 inline void solve(int Task_Id) {
     cin >> n >> m >> x >> y;
-    lim = (n - 1) * 100;
-
+    k = (n - 1) * 100;
     for (int i = 1, u, v, w, t; i <= m; i++) {
-        cin >> u >> v >> w >> t;
-        add(u, v, w, t), add(v, u, w, t);
+        cin >> u >> v >> w >> t, e[u].push_back({v, w, t}), e[v].push_back({u, w, t});
     }
-
     for (int i = 1; i <= n; i++) {
-        fill(dis[i], dis[i] + lim + 1, inf);
+        for (int j = 0; j <= k; j++) {
+            dis[i][j] = inf;
+        }
     }
-
     dij();
-
-    int ans = 0, mn = inf;
-    for (int i = 0; i <= lim; i++) {
+    for (int i = 0; i <= k; i++) {
         if (dis[y][i] < mn) {
             ans++, mn = dis[y][i];
         }
     }
-
     cout << ans << "\n";
     return;
 }
