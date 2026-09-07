@@ -648,8 +648,55 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 1e2 + 5, K = 1e4 + 5, inf = 1e9;
+struct edge {
+    int v, w, t;
+};
+struct node {
+    int v, w, t;
+    inline bool operator<(const node &x) const {
+        return t > x.t;
+    }
+};
+int n, m, x, y, k, ans, mn = inf, dis[N][K];
+vector<edge> e[N];
+priority_queue<node> q;
+inline void dij() {
+    dis[x][0] = 0;
+    q.push({x, 0, 0});
+    for (; !q.empty();) {
+        auto [v, w, t] = q.top();
+        q.pop();
+        if (t == dis[v][w]) {
+            for (auto [vv, ww, tt] : e[v]) {
+                if (w + ww <= k && dis[vv][w + ww] > t + tt) {
+                    dis[vv][w + ww] = t + tt;
+                    q.push({vv, w + ww, t + tt});
+                }
+            }
+        }
+    }
+    return;
+}
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> m >> x >> y;
+    k = (n - 1) * 100;
+    for (int i = 1, u, v, w, t; i <= m; i++) {
+        cin >> u >> v >> w >> t, e[u].push_back({v, w, t}), e[v].push_back({u, w, t});
+    }
+    for (int i = 1; i <= n; i++) {
+        for (int j = 0; j <= k; j++) {
+            dis[i][j] = inf;
+        }
+    }
+    dij();
+    for (int i = 0; i <= k; i++) {
+        if (dis[y][i] < mn) {
+            ans++, mn = dis[y][i];
+        }
+    }
+    cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO
