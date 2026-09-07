@@ -648,8 +648,34 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 1e2 + 5, K = 2e5 + 5, D = 1e5, inf = -1e9;
+int n, f[K], g[K], ans;
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n;
+    for (int i = 0; i < K; i++) {
+        f[i] = inf;
+    }
+    f[D] = 0;
+    for (int i = 1, a, b; i <= n; i++) {
+        cin >> a >> b;
+        for (int j = 0; j < K; j++) {
+            g[j] = f[j];
+        }
+        for (int j = 0; j < K; j++) {
+            if (f[j] != inf && j + a >= 0 && j + a < K) {
+                g[j + a] = max(g[j + a], f[j] + b);
+            }
+        }
+        for (int j = 0; j < K; j++) {
+            f[j] = g[j];
+        }
+    }
+    for (int i = D; i < K; i++) {
+        if (f[i] >= 0) {
+            ans = max(ans, i - D + f[i]);
+        }
+    }
+    cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO
