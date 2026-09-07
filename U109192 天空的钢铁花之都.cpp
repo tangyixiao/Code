@@ -1,16 +1,16 @@
 //  Author: Tangyixiao
-//  Time: 2026-09-07 08:36:15
-//  Problem: U109184 排队2
+//  Time: 2026-09-07 10:17:28
+//  Problem: U109192 天空的钢铁花之都
 //  Contest: Luogu - SXYZ 训练赛③
-//  URL: https://www.luogu.com.cn/problem/U109184?contestId=354865
-//  Memory Limit: 125 MB
-//  Time Limit: 1000 ms
+//  URL: https://www.luogu.com.cn/problem/U109192?contestId=354865
+//  Memory Limit: 512 MB
+//  Time Limit: 200 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 22ff7886-bfd5-4a53-b234-45cb1f6ff08c
+//  Batch ID: 85f3d7a0-d9dd-4d67-95e3-b32a0e499da1
 //
 // Algorithm:
-// Complexity: O(1) per data set
+// Complexity: O()
 // Note:
 //
 //
@@ -552,7 +552,6 @@ using namespace __gnu_pbds;
 #pragma endregion INCLUDES
 
 #pragma region TANGYIXIAO
-#define int long long
 namespace TANGYIXIAO {
 #pragma region IO
 namespace IO {
@@ -622,7 +621,7 @@ using namespace TANGYIXIAO;
 // clang-format on
 #pragma endregion TANGYIXIAO
 #pragma region MAIN
-signed main() {
+signed main(int argc, char *argv[]) {
 #ifdef TIME_COUNT
     Start_Time_Count();
 #endif
@@ -649,30 +648,8 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-int x, y, a, b;
 inline void solve(int Task_Id) {
-    for (; cin >> x >> y >> a >> b;) {
-        if (!a) {
-            cout << min(y, b) << "\n";
-        } else {
-
-            if (!b) {
-                cout << min(x, a) << "\n";
-
-            } else {
-
-                if (x > a * (y + 1)) {
-                    cout << a * (y + 1) + y << "\n";
-                } else {
-                    if (y > b * (x + 1)) {
-                        cout << b * (x + 1) + x << "\n";
-                    } else {
-                        cout << x + y << "\n";
-                    }
-                }
-            }
-        }
-    }
+    // do something here
     return;
 }
 } // namespace TANGYIXIAO

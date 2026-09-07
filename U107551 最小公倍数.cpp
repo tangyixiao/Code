@@ -1,5 +1,5 @@
 //  Author: Tangyixiao
-//  Time: 2026-09-07 08:34:05
+//  Time: 2026-09-07 09:47:06
 //  Problem: U107551 最小公倍数
 //  Contest: Luogu - SXYZ 训练赛③
 //  URL: https://www.luogu.com.cn/problem/U107551?contestId=354865
@@ -7,7 +7,7 @@
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: b7fc1ce2-0d6d-4466-9153-f927bffc124f
+//  Batch ID: 481f0718-a9fd-44da-b904-51ff1b5d2366
 //
 // Algorithm:
 // Complexity: O()
@@ -648,8 +648,95 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 2e2 + 5;
+int v[N];
+
+string z(string x) {
+    int i = 0;
+    for (; i + 1 < (int)x.size() && x[i] == '0';) {
+        i++;
+    }
+    return x.substr(i);
+}
+
+int c(string x, string y) {
+    if (x.size() != y.size()) {
+        return x.size() < y.size() ? -1 : 1;
+    }
+    return x == y ? 0 : (x < y ? -1 : 1);
+}
+
+string s(string x, string y) {
+    int i = x.size() - 1, j = y.size() - 1, k = 0;
+    for (; i >= 0;) {
+        int d = x[i] - '0' - k;
+        if (j >= 0) {
+            d -= y[j--] - '0';
+        }
+        if (d < 0) {
+            d += 10, k = 1;
+        } else {
+            k = 0;
+        }
+        x[i--] = d + '0';
+    }
+    return z(x);
+}
+
+pair<string, string> q(string x, string y) {
+    string a, r = "0";
+    for (char d : x) {
+        if (r == "0") {
+            r = string(1, d);
+        } else {
+            r += d;
+        }
+        r = z(r);
+        int k = 0;
+        for (; c(r, y) >= 0;) {
+            r = s(r, y), k++;
+        }
+        a += k + '0';
+    }
+    return {z(a), r};
+}
+
+string g(string x, string y) {
+    for (; y != "0";) {
+        string r = q(x, y).second;
+        x = y, y = r;
+    }
+    return x;
+}
+
+string m(string x, string y) {
+    memset(v, 0, sizeof(v));
+    for (int i = x.size() - 1; i >= 0; i--) {
+        for (int j = y.size() - 1; j >= 0; j--) {
+            v[i + j + 1] += (x[i] - '0') * (y[j] - '0');
+        }
+    }
+    int n = x.size() + y.size();
+    for (int i = n - 1; i; i--) {
+        v[i - 1] += v[i] / 10, v[i] %= 10;
+    }
+    string r;
+    int i = 0;
+    for (; i + 1 < n && !v[i];) {
+        i++;
+    }
+    for (; i < n; i++) {
+        r += v[i] + '0';
+    }
+    return r;
+}
+
 inline void solve(int Task_Id) {
-    // do something here
+    string x, y;
+    cin >> x >> y;
+    x = z(x), y = z(y);
+    string h = g(x, y);
+    cout << m(q(x, h).first, y) << '\n';
     return;
 }
 } // namespace TANGYIXIAO

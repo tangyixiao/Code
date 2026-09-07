@@ -1,17 +1,17 @@
 //  Author: Tangyixiao
-//  Time: 2026-09-07 08:36:15
-//  Problem: U109184 排队2
+//  Time: 2026-09-07 09:55:51
+//  Problem: U107553 最短路径
 //  Contest: Luogu - SXYZ 训练赛③
-//  URL: https://www.luogu.com.cn/problem/U109184?contestId=354865
+//  URL: https://www.luogcom.cn/problem/U107553?contestId=354865
 //  Memory Limit: 125 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 22ff7886-bfd5-4a53-b234-45cb1f6ff08c
+//  Batch ID: 4f0bf51c-2bcf-4be9-8e88-e3298dfa14ee
 //
 // Algorithm:
-// Complexity: O(1) per data set
-// Note:
+// Complexity: O()
+// Note: dfs -> 2^n bfs -> n^2
 //
 //
 // Powered by CP Editor (https://cpeditor.org)
@@ -550,9 +550,8 @@ using namespace __gnu_pbds;
 
 #endif
 #pragma endregion INCLUDES
-
-#pragma region TANGYIXIAO
 #define int long long
+#pragma region TANGYIXIAO
 namespace TANGYIXIAO {
 #pragma region IO
 namespace IO {
@@ -649,30 +648,58 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-int x, y, a, b;
-inline void solve(int Task_Id) {
-    for (; cin >> x >> y >> a >> b;) {
-        if (!a) {
-            cout << min(y, b) << "\n";
-        } else {
+const int N = 35, dx[] = {0, 1, 0, -1}, dy[] = {1, 0, -1, 0};
+struct node {
+    int x, y;
+};
 
-            if (!b) {
-                cout << min(x, a) << "\n";
-
-            } else {
-
-                if (x > a * (y + 1)) {
-                    cout << a * (y + 1) + y << "\n";
+int n, ans, sx, sy, ex, ey, dis[N][N], cnt[N][N];
+string s[N];
+queue<node> q;
+inline void bfs() {
+    dis[sx][sy] = 0, cnt[sx][sy] = 1;
+    q.push({sx, sy});
+    for (; !q.empty();) {
+        auto [x, y] = q.front();
+        q.pop();
+        for (int i = 0, nx, ny; i < 4; i++) {
+            nx = x + dx[i], ny = y + dy[i];
+            if (nx >= 1 && nx <= n && ny >= 1 && ny <= n && s[nx][ny] != 'X') {
+                if (dis[nx][ny] == -1) {
+                    dis[nx][ny] = dis[x][y] + 1;
+                    cnt[nx][ny] = cnt[x][y];
+                    q.push({nx, ny});
                 } else {
-                    if (y > b * (x + 1)) {
-                        cout << b * (x + 1) + x << "\n";
-                    } else {
-                        cout << x + y << "\n";
+                    if (dis[nx][ny] == dis[x][y] + 1) {
+                        cnt[nx][ny] += cnt[x][y];
                     }
                 }
             }
         }
     }
+    return;
+}
+inline void solve(int Task_Id) {
+    cin >> n;
+    for (int i = 1; i <= n; i++) {
+        cin >> s[i];
+        s[i] = " " + s[i];
+        for (int j = 1; j <= n; j++) {
+            dis[i][j] = -1;
+            if (s[i][j] == 'S') {
+                sx = i, sy = j;
+            } else {
+                if (s[i][j] == 'E') {
+                    ex = i, ey = j;
+                }
+            }
+        }
+    }
+
+    bfs();
+
+    cout << dis[ex][ey] << "\n"
+         << cnt[ex][ey] << "\n";
     return;
 }
 } // namespace TANGYIXIAO
