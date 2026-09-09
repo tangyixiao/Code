@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-09-08 08:14:33
-//  Problem: U107557 马儿你为什么不说话了
-//  Contest: Luogu - SXYZ 训练赛③
-//  URL: https://www.luogu.com.cn/problem/U107557?contestId=354865
-//  Memory Limit: 125 MB
-//  Time Limit: 500 ms
+//  Time: 2026-09-09 08:07:09
+//  Problem: B. Fun with Even Subarrays
+//  Contest: Codeforces - Codeforces Round 768 (Div. 2)
+//  URL: https://codeforces.com/contest/1631/problem/B
+//  Memory Limit: 256 MB
+//  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: bf748ecf-09cf-4e09-9a24-89b0fce24d11
+//  Batch ID: 36f34281-4038-450e-b57e-8408ed7250d1
 //
 // Algorithm:
 // Complexity: O()
@@ -24,7 +24,7 @@ Copyright (C) 2026 TangYixiao
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -187,7 +187,7 @@ Copyright (C) 2026 TangYixiao
 #pragma GCC target("sse2")         // 对应 -msse2：启用 SSE2 指令集
 #pragma GCC target("sse4.2")       // 对应 -msse4.2：启用 SSE4.2
 #pragma GCC target("avx")          // 对应 -mavx：启用 AVX 指令集
-#pragma GCC target("avyx")         // 对应 -mavyx：启用 AVyx
+#pragma GCC target("avx2")         // 对应 -mavx2：启用 AVX2
 #pragma GCC target("fma")          // 对应 -mfma：启用 FMA（融合乘加）指令
 #pragma GCC target("bmi2")         // 对应 -mbmi2：启用 BMI2 指令集
 #pragma GCC target("popcnt")       // 对应 -mpopcnt：启用 POPCNT 指令
@@ -275,7 +275,7 @@ Copyright (C) 2026 TangYixiao
 
 #pragma GCC push_options   // 保存当前所有优化和目标选项
 #pragma GCC optimize("O3") // 临时启用 O3
-#pragma GCC target("avyx") // 临时启用 AVyx
+#pragma GCC target("avx2") // 临时启用 AVX2
 // ... 需要高性能的代码段 ...
 #pragma GCC pop_options    // 恢复之前保存的选项
 */
@@ -552,7 +552,6 @@ using namespace __gnu_pbds;
 #pragma endregion INCLUDES
 
 #pragma region TANGYIXIAO
-#define int long long
 namespace TANGYIXIAO {
 #pragma region IO
 namespace IO {
@@ -622,7 +621,7 @@ using namespace TANGYIXIAO;
 // clang-format on
 #pragma endregion TANGYIXIAO
 #pragma region MAIN
-signed main() {
+signed main(int argc, char *argv[]) {
 #ifdef TIME_COUNT
     Start_Time_Count();
 #endif
@@ -649,50 +648,21 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int mod = 9901, N = 45, M = 1 << 20, E = 25;
-int n, m, k, a, b, c0, c1, x[N], y[N], p[N], q[N], c[N][N], e[E], h[M], ans;
-bool chk(int xx, int yy, int yx, int xy) {
-    return (abs(xx - yx) == 1 && abs(yy - xy) == 2) || (abs(xx - yx) == 2 && abs(yy - xy) == 1);
-}
+const int N = 2e5 + 5;
+int n, a[N], ans;
 inline void solve(int Task_Id) {
-    cin >> n >> m >> k;
-    for (int i = 1; i <= m; i++) {
-        cin >> x[i] >> y[i];
-        if ((x[i] + y[i]) & 1) {
-            q[++c1] = i;
+    cin >> n, ans = 0;
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i];
+    }
+    for (int i = 1; i < n;) {
+        if (a[n - i] == a[n]) {
+            i++;
         } else {
-            p[++c0] = i;
+            ans++, i <<= 1;
         }
     }
-    a = c0, b = c1;
-    if (c0 > c1) {
-        swap(p, q), swap(a, b);
-    }
-    c[0][0] = 1;
-    for (int i = 1; i <= m; i++) {
-        c[i][0] = c[i][i] = 1;
-        for (int j = 1; j < i; j++) {
-            c[i][j] = (c[i - 1][j - 1] + c[i - 1][j]) % mod;
-        }
-    }
-    for (int i = 1; i <= a; i++) {
-        for (int j = 1; j <= b; j++) {
-            if (chk(x[p[i]], y[p[i]], x[q[j]], y[q[j]])) {
-                e[i] |= 1LL << (j - 1);
-            }
-        }
-    }
-    for (int s = 0; s < (1LL << a); s++) {
-        if (s) {
-            h[s] = h[s ^ (1LL << __builtin_ctzll(s))] | e[__builtin_ctzll(s) + 1];
-        }
-        if (__builtin_popcountll(s) <= k) {
-            if (k - __builtin_popcountll(s) <= b - __builtin_popcountll(h[s])) {
-                ans = (ans + c[b - __builtin_popcountll(h[s])][k - __builtin_popcountll(s)]) % mod;
-            }
-        }
-    }
-    cout << ans % mod << '\n';
+    cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO
