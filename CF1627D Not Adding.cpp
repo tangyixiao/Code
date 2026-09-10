@@ -648,8 +648,33 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 1e6 + 5, M = 1e6;
+bool vis[N];
+int n, a[N], ans;
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n;
+    for (int i = 1, x; i <= n; i++) {
+        cin >> x, vis[x] = true;
+    }
+    for (int i = 1; i <= M; i++) {
+        if (!vis[i]) {
+            for (int j = i; j <= M; j += i) {
+                if (vis[j]) {
+                    a[i] = gcd(a[i], j);
+                }
+            }
+            ans += (a[i] == i);
+        }
+    }
+    cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO
+
+/*
+   OOO       (nnnnn    l         ooo    ggg     nnnnn)
+  O   O      (n   n    l        o   o  g  g     n   n)
+  O   O      (n   n    l        o   o   ggg     n   n)
+  O   O      (n   n    l        o   o     g     n   n)
+   OOO       (n   n    llllll    ooo    ggg     n   n)
+*/

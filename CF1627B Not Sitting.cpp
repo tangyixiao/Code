@@ -574,8 +574,8 @@ using namespace FILE_IO;
 #pragma endregion FILE_IO
 #pragma region INT128_IO
 namespace INT128_IO {
-std::istream &operator>>(std::istream &is, __int128 &x) { std::string s; is >> s; bool neg = false; x = 0; for (char c : s) { if (c == '-') { neg = true; } else { x = x * 10 + (c - '0'); } } if (neg) { x = -x; } return is; }
-std::ostream &operator<<(std::ostream &os, __int128 x) { if (x == 0) { os << 0; } else { std::string s, t;if (x < 0) { x = -x, t = "-"; } for (; x;) { s.push_back('0' + x % 10), x /= 10; } std::reverse(s.begin(), s.end()); os << t << s; } return os; }
+std::istream &operator>>(std::istream &is, __int128 &x) { std::string k; is >> k; bool neg = false; x = 0; for (char c : k) { if (c == '-') { neg = true; } else { x = x * 10 + (c - '0'); } } if (neg) { x = -x; } return is; }
+std::ostream &operator<<(std::ostream &os, __int128 x) { if (x == 0) { os << 0; } else { std::string k, t;if (x < 0) { x = -x, t = "-"; } for (; x;) { k.push_back('0' + x % 10), x /= 10; } std::reverse(k.begin(), k.end()); os << t << k; } return os; }
 } // namespace INT128_IO
 using namespace INT128_IO;
 #pragma endregion INT128_IO
@@ -588,7 +588,7 @@ clock_t Start_Time, End_Time;
 inline void Start_Time_Count() { Start_Time = clock(); return; }
 inline void End_Time_Count() { End_Time = clock(); return; }
 inline double Time_Count() { return (double)(End_Time - Start_Time) / CLOCKS_PER_SEC; }
-inline void Print_Time_Count(std::string Programe_Name) { std::cerr << std::fixed << std::setprecision(4) << "\n" + Programe_Name + " Time: " << Time_Count() << "s\n"; return; }
+inline void Print_Time_Count(std::string Programe_Name) { std::cerr << std::fixed << std::setprecision(4) << "\n" + Programe_Name + " Time: " << Time_Count() << "k\n"; return; }
 } // namespace TIME
 using namespace TIME;
 #pragma endregion TIME
@@ -649,17 +649,17 @@ signed main(int argc, char *argv[]) {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 const int N = 1e5 + 5;
-int n, m, a[N], s;
+int n, m, a[N], k;
 inline void solve(int Task_Id) {
-    cin >> n >> m, s = 0;
+    cin >> n >> m, k = 0;
     for (int i = 1; i <= n; i++) {
         for (int j = 1; j <= m; j++) {
-            a[++s] = max({i - 1 + j - 1, i - 1 + m - j, n - i + j - 1, n - i + m - j});
+            a[++k] = max({i + j - 2, i - 1 + m - j, n - i + j - 1, n - i + m - j});
         }
     }
-    sort(a + 1, a + 1 + s);
-    for (int i = 1; i <= s; i++) {
-        cout << a[i] << " \n"[i == s];
+    sort(a + 1, a + 1 + k);
+    for (int i = 1; i <= k; i++) {
+        cout << a[i] << " \n"[i == k];
     }
     return;
 }

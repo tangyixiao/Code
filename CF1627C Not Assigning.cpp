@@ -24,7 +24,7 @@ Copyright (C) 2026 TangYixiao
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -648,8 +648,39 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 1e5 + 5;
+struct node {
+    int id, v;
+};
+int n, d[N], a[N], p, x;
+vector<node> g[N];
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n;
+    for (int i = 1; i <= n; i++) {
+        g[i].clear(), d[i] = a[i] = 0;
+    }
+    for (int i = 1, u, v; i < n; i++) {
+        cin >> u >> v, g[u].push_back({i, v}), g[v].push_back({i, u}), d[u]++, d[v]++;
+    }
+    for (int i = 1; i <= n; i++) {
+        if (d[i] > 2) {
+            cout << "-1\n";
+            return;
+        }
+    }
+    for (x = 1, p = 2; d[x] != 1; x++)
+        ;
+    for (int i = 1; i < n; i++) {
+        for (auto [id, v] : g[x]) {
+            if (!a[id]) {
+                a[id] = p, p = 7 - p, x = v;
+                break;
+            }
+        }
+    }
+    for (int i = 1; i < n; i++) {
+        cout << a[i] << " \n"[i == n - 1];
+    }
     return;
 }
 } // namespace TANGYIXIAO
