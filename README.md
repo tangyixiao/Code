@@ -66,11 +66,6 @@
 2026.6.22 AC 2000 祭
 
 
----
-
-![](https://atrating.baoshuo.dev/rating?username=tangyixiao)
-
-![](https://cfrating.baoshuo.dev/rating?username=TangyixiaoQAQ)
 
 
 ---
