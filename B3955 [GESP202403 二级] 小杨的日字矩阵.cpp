@@ -575,7 +575,7 @@ using namespace FILE_IO;
 #pragma region INT128_IO
 namespace INT128_IO {
 std::istream &operator>>(std::istream &is, __int128 &x) { std::string s; is >> s; bool neg = false; x = 0; for (char c : s) { if (c == '-') { neg = true; } else { x = x * 10 + (c - '0'); } } if (neg) { x = -x; } return is; }
-std::ostream &operator<<(std::ostream &os, __int128 x) { if (x == 0) { os << 0; } else { std::string s, t;if (x < 0) { x = -x, t = "-"; } for (; x;) { s.push_back('0' + x % 10), x /= 10; } std::reverse(s.begin(), s.end()); os << t << s; } return os; }
+std::ostream &operator<<(std::ostream &os, __int128 x) { if (x == 0) { os << 0; } else { std::string s, t;if (x < 0) { x = -x, t = '-'; } for (; x;) { s.push_back('0' + x % 10), x /= 10; } std::reverse(s.begin(), s.end()); os << t << s; } return os; }
 } // namespace INT128_IO
 using namespace INT128_IO;
 #pragma endregion INT128_IO
@@ -648,8 +648,20 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+int n;
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n;
+    for (int i = 1; i <= n; i++) {
+        cout << "|";
+        for (int j = 2; j < n; j++) {
+            if (i == 1 || i == n || i == (n + 1) / 2) {
+                cout << "-";
+            } else {
+                cout << "x";
+            }
+        }
+        cout << "|\n";
+    }
     return;
 }
 } // namespace TANGYIXIAO
