@@ -756,5 +756,6 @@ inline void solve(int Task_Id) {
 
     cout << x.x << " " << x.y << "\n";
     cout << y.x << " " << y.y << "\n";
+    return;
 }
 } // namespace TANGYIXIAO
