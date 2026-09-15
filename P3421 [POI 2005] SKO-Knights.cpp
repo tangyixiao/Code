@@ -648,8 +648,113 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+
+const int N = 105;
+
+int n;
+long long a[N], b[N];
+
+inline long long exgcd(long long a, long long b, long long &x, long long &y) {
+    if (!b) {
+        x = 1;
+        y = 0;
+        return a;
+    }
+    long long x1, y1, g = exgcd(b, a % b, x1, y1);
+    x = y1;
+    y = x1 - a / b * y1;
+    return g;
+}
+
+struct Node {
+    long long x, y;
+};
+
+inline long long len(Node a) {
+    return a.x * a.x + a.y * a.y;
+}
+
+inline long long dot(Node a, Node b) {
+    return a.x * b.x + a.y * b.y;
+}
+
+inline long long rnd(long long a, long long b) {
+    if (a >= 0) {
+        return (a + b / 2) / b;
+    }
+    return -((-a + b / 2) / b);
+}
+
+inline void reduce(Node &x, Node &y) {
+    for (;;) {
+        if (len(y) < len(x)) {
+            swap(x, y);
+            continue;
+        }
+
+        long long q = rnd(dot(x, y), len(x));
+
+        if (!q) {
+            break;
+        }
+
+        y.x -= q * x.x;
+        y.y -= q * x.y;
+    }
+}
+
 inline void solve(int Task_Id) {
-    // do something here
-    return;
+    cin >> n;
+
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i] >> b[i];
+    }
+
+    long long D = 0;
+
+    for (int i = 1; i <= n; i++) {
+        for (int j = i + 1; j <= n; j++) {
+            D = gcd(D, llabs(a[i] * b[j] - a[j] * b[i]));
+        }
+    }
+
+    long long m = 0;
+
+    for (int i = 1; i <= n; i++) {
+        m = gcd(m, llabs(b[i]));
+    }
+
+    long long d = D / m;
+
+    long long g = 0, r = 0;
+
+    for (int i = 1; i <= n; i++) {
+        long long x, y;
+        long long ng = exgcd(g, llabs(b[i]), x, y);
+
+        if (b[i] < 0) {
+            y = -y;
+        }
+
+        r = x * r + y * a[i];
+        g = ng;
+    }
+
+    r %= d;
+
+    if (r < 0) {
+        r += d;
+    }
+
+    if (r * 2 > d) {
+        r -= d;
+    }
+
+    Node x = {d, 0}, y = {r, m};
+
+    reduce(x, y);
+
+    cout << x.x << " " << x.y << "\n";
+    cout << y.x << " " << y.y << "\n";
 }
 } // namespace TANGYIXIAO
