@@ -1,13 +1,13 @@
 //  Author: Tangyixiao
-//  Time: 2026-09-20 09:49:04
-//  Problem: U110073 简单的规律
+//  Time: 2026-09-20 10:31:43
+//  Problem: U110076 Chocolavie
 //  Contest: Luogu - SXYZ 训练赛④
-//  URL: https://www.luogu.com.cn/problem/U110073?contestId=357226
+//  URL: https://www.luogu.com.cn/problem/U110076?contestId=357226
 //  Memory Limit: 125 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 1ddfcdfe-8313-4e14-9e6c-3801f40d01c6
+//  Batch ID: 8500b86f-c219-4a4b-8868-b28ffe43f3ba
 //
 // Algorithm:
 // Complexity: O()
@@ -23,7 +23,7 @@ Copyright (C) 2026 TangYixiao
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
 #define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
 #define FILE_INDEX 1                      // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -116,7 +116,6 @@ using namespace std;
 namespace TANGYIXIAO {
 using ll = long long;
 using ull = unsigned long long;
-using ld = long double;
 #ifdef __SIZEOF_INT128__
 using i128 = __int128_t;
 using u128 = __uint128_t;
@@ -287,142 +286,95 @@ inline void factor(ull n, vector<ull> &v) { if (n == 1) { return; } if (Miller_R
 } // namespace MATH
 using MATH::qpow; using MATH::qmul; using MATH::exgcd; using MATH::inv;
 #pragma endregion
-#pragma region BIG_INTEGER
-namespace BIG_INTEGER_DETAIL {
-template<int MOD, int ROOT>
-struct NTT {
-    static inline int mod_pow(long long a, long long b) { long long r = 1; for (; b; b >>= 1, a = a * a % MOD) { if (b & 1) { r = r * a % MOD; } } return (int)r; }
-    static inline void transform(vector<int> &a, bool invert) { int n = (int)a.size();
-        for (int i = 1, j = 0; i < n; i++) { int bit = n >> 1; for (; j & bit; bit >>= 1) { j ^= bit; } j ^= bit; if (i < j) { swap(a[i], a[j]); } }
-        for (int len = 2; len <= n; len <<= 1) { int wlen = mod_pow(ROOT, (MOD - 1) / len); if (invert) { wlen = mod_pow(wlen, MOD - 2); } for (int i = 0; i < n; i += len) { ll w = 1; for (int j = 0; j < len / 2; j++) { int u = a[i + j], v = (int)(a[i + j + len / 2] * w % MOD), x = u + v, y = u - v; if (x >= MOD) { x -= MOD; } if (y < 0) { y += MOD; } a[i + j] = x, a[i + j + len / 2] = y, w = w * wlen % MOD; } } }
-        if (invert) { int inv_n = mod_pow(n, MOD - 2); for (int &x : a) { x = (int)((ll)x * inv_n % MOD); } } return;
-    }
-    static inline vector<int> convolution(const vector<int> &a, const vector<int> &b) { if (a.empty() || b.empty()) { return {}; } int n = 1; for (; n < (int)a.size() + (int)b.size() - 1; n <<= 1) {} vector<int> x(n), y(n); for (int i = 0; i < (int)a.size(); i++) { x[i] = a[i] % MOD; } for (int i = 0; i < (int)b.size(); i++) { y[i] = b[i] % MOD; }
-        transform(x, false), transform(y, false); for (int i = 0; i < n; i++) { x[i] = (int)((ll)x[i] * y[i] % MOD); } transform(x, true), x.resize(a.size() + b.size() - 1); return x;
-    }
-};
-inline vector<ll> convolution_ntt_crt(const vector<int> &a, const vector<int> &b) { static const ll P1 = 998244353LL, P2 = 1004535809LL, INV = []() -> ll { ll x, y; MATH::exgcd(P1, P2, x, y), x %= P2; if (x < 0) { x += P2; } return x; }(); vector<int> x = NTT<998244353, 3>::convolution(a, b), y = NTT<1004535809, 3>::convolution(a, b); vector<ll> r(x.size());
-    for (int i = 0; i < (int)x.size(); i++) { ll t = (y[i] - (ll)x[i]) % P2; if (t < 0) { t += P2; } t = t * INV % P2, r[i] = x[i] + P1 * t; } return r;
-}
-inline vector<ll> karatsuba_rec(const vector<ll> &a, const vector<ll> &b) { int n = (int)a.size(); vector<ll> r(n + n); if (n <= 32) { for (int i = 0; i < n; i++) { for (int j = 0; j < n; j++) { r[i + j] += a[i] * b[j]; } } return r; } int k = n >> 1; vector<ll> a1(a.begin(), a.begin() + k), a2(a.begin() + k, a.end()), b1(b.begin(), b.begin() + k), b2(b.begin() + k, b.end()), a12(k), b12(k);
-    for (int i = 0; i < k; i++) { a12[i] = a1[i] + a2[i], b12[i] = b1[i] + b2[i]; } vector<ll> x = karatsuba_rec(a1, b1), y = karatsuba_rec(a2, b2), z = karatsuba_rec(a12, b12); for (int i = 0; i < (int)x.size(); i++) { z[i] -= x[i] + y[i], r[i] += x[i]; } for (int i = 0; i < (int)z.size(); i++) { r[i + k] += z[i]; } for (int i = 0; i < (int)y.size(); i++) { r[i + k + k] += y[i]; } return r;
-}
-inline vector<long long> convolution_karatsuba(vector<int> a, vector<int> b) { int need = (int)a.size() + (int)b.size() - 1; int n = 1; for (; n < (int)max(a.size(), b.size()); n <<= 1) {} a.resize(n); b.resize(n); vector<long long> x(n), y(n); for (int i = 0; i < n; i++) { x[i] = a[i]; y[i] = b[i]; } vector<long long> r = karatsuba_rec(x, y); r.resize(need); return r; }
-} // namespace BIG_INTEGER_DETAIL
-struct lnt {
-    static const int base = 1000000000;
-    static const int base_digits = 9;
-    vector<int> a;
-    int sign = 1;
-    lnt() {}
-    lnt(long long v) { *this = v; }
-    lnt(const string &s) { read(s); }
-    inline lnt &operator=(long long v) { sign = v < 0 ? -1 : 1; unsigned long long x = v < 0 ? (unsigned long long)(-(v + 1)) + 1 : (unsigned long long)v; a.clear(); for (; x; x /= base) { a.push_back((int)(x % base)); } if (a.empty()) { sign = 1; } return *this; }
-    inline lnt &read(const string &s) { sign = 1, a.clear(); int p = 0; for (; p < (int)s.size() && isspace((unsigned char)s[p]); p++) {} if (p < (int)s.size() && (s[p] == '-' || s[p] == '+')) { if (s[p] == '-') { sign = -1; } p++; } int e = (int)s.size(); for (; e > p && isspace((unsigned char)s[e - 1]); e--) {}
-        for (int i = e; i > p; i -= base_digits) { int x = 0, l = max(p, i - base_digits); for (int j = l; j < i; j++) { x = x * 10 + s[j] - '0'; } a.push_back(x); } trim(); return *this;
-    }
-    friend inline istream &operator>>(istream &is, lnt &v) { string s; is >> s; v.read(s); return is; }
-    friend inline ostream &operator<<(ostream &os, const lnt &v) { if (v.sign == -1 && !v.is_zero()) { os << '-'; } if (v.a.empty()) { os << '0'; return os; } os << v.a.back(); for (int i = (int)v.a.size() - 2; i >= 0; i--) { os << setw(base_digits) << setfill('0') << v.a[i]; } os << setfill(' '); return os; }
-    inline bool is_zero() const { return a.empty(); }
-    inline lnt abs() const { lnt r = *this; r.sign = 1; return r; }
-    inline void trim() { for (; !a.empty() && a.back() == 0; a.pop_back()) {} if (a.empty()) { sign = 1; } return; }
-    static inline int abs_compare(const lnt &x, const lnt &y) { if (x.a.size() != y.a.size()) { return x.a.size() < y.a.size() ? -1 : 1; } for (int i = (int)x.a.size() - 1; i >= 0; i--) { if (x.a[i] != y.a[i]) { return x.a[i] < y.a[i] ? -1 : 1; } } return 0; }
-    friend inline bool operator==(const lnt &x, const lnt &y) { return x.sign == y.sign && x.a == y.a; }
-    friend inline bool operator!=(const lnt &x, const lnt &y) { return !(x == y); }
-    friend inline bool operator<(const lnt &x, const lnt &y) { if (x.sign != y.sign) { return x.sign < y.sign; } int c = abs_compare(x, y); return x.sign == 1 ? c < 0 : c > 0; }
-    friend inline bool operator>(const lnt &x, const lnt &y) { return y < x; }
-    friend inline bool operator<=(const lnt &x, const lnt &y) { return !(y < x); }
-    friend inline bool operator>=(const lnt &x, const lnt &y) { return !(x < y); }
-    inline lnt operator-() const { lnt r = *this; if (!r.is_zero()) { r.sign = -r.sign; } return r; }
-    static inline void add_abs(lnt &x, const lnt &y) { int carry = 0; if (x.a.size() < y.a.size()) { x.a.resize(y.a.size()); } for (int i = 0; i < (int)x.a.size(); i++) { long long cur = carry + x.a[i] + (i < (int)y.a.size() ? y.a[i] : 0LL); carry = cur >= base; if (carry) { cur -= base; } x.a[i] = (int)cur; } if (carry) { x.a.push_back(carry); } return; }
-    // Requires |x| >= |y|.
-    static inline void sub_abs(lnt &x, const lnt &y) { int carry = 0; for (int i = 0; i < (int)y.a.size() || carry; i++) { long long cur = x.a[i] - (i < (int)y.a.size() ? y.a[i] : 0LL) - carry; carry = cur < 0; if (carry) { cur += base; } x.a[i] = (int)cur; } x.trim(); return; }
-    inline lnt &operator+=(const lnt &v) { if (sign == v.sign) { add_abs(*this, v); } else { int c = abs_compare(*this, v); if (c >= 0) { sub_abs(*this, v); } else { lnt t = v; sub_abs(t, *this); *this = t; } } return *this; }
-    inline lnt &operator-=(const lnt &v) { return *this += -v; }
-    friend inline lnt operator+(lnt a, const lnt &b) { return a += b; }
-    friend inline lnt operator-(lnt a, const lnt &b) { return a -= b; }
-    inline lnt &operator*=(int v) { ll m = v; if (m < 0) { sign = -sign, m = -m; } ll carry = 0; for (int i = 0; i < (int)a.size() || carry; i++) { if (i == (int)a.size()) { a.push_back(0); } ll cur = carry + (ll)a[i] * m; a[i] = (int)(cur % base), carry = cur / base; } trim(); return *this; }
-    inline lnt &operator/=(int v) { if (!v) { throw runtime_error("lnt division by zero"); } ll d = v; if (d < 0) { sign = -sign, d = -d; } ll rem = 0; for (int i = (int)a.size() - 1; i >= 0; i--) { ll cur = a[i] + rem * base; a[i] = (int)(cur / d), rem = cur % d; } trim(); return *this; }
-    inline int operator%(int v) const { if (!v) { throw runtime_error("lnt modulo by zero"); } ll d = v, m = 0; if (d < 0) { d = -d; } for (int i = (int)a.size() - 1; i >= 0; i--) { m = (a[i] + m * base) % d; } return (int)(m * sign); }
-    friend inline lnt operator*(lnt a, int v) { return a *= v; }
-    friend inline lnt operator*(int v, lnt a) { return a *= v; }
-    friend inline lnt operator/(lnt a, int v) { return a /= v; }
-    static inline vector<int> to_base1000(const lnt &x) { vector<int> d; d.reserve(x.a.size() * 3); for (int v : x.a) { d.push_back(v % 1000); v /= 1000; d.push_back(v % 1000); v /= 1000; d.push_back(v); } for (; !d.empty() && d.back() == 0; d.pop_back()) {} return d; }
-    static inline lnt from_base1000(vector<ll> c, int sgn) { const ll B = 1000; ll carry = 0; for (int i = 0; i < (int)c.size() || carry; i++) { if (i == (int)c.size()) { c.push_back(0); } ll cur = c[i] + carry; c[i] = cur % B, carry = cur / B; } for (; !c.empty() && c.back() == 0; c.pop_back()) {} lnt r; r.sign = sgn;
-        for (int i = 0; i < (int)c.size(); i += 3) { ll v = c[i]; if (i + 1 < (int)c.size()) { v += c[i + 1] * 1000LL; } if (i + 2 < (int)c.size()) { v += c[i + 2] * 1000000LL; } r.a.push_back((int)v); } r.trim(); return r;
-    }
-    static inline lnt multiply_schoolbook(const lnt &x, const lnt &y) {
-        lnt r;
-        r.sign = x.sign * y.sign;
-        r.a.assign(x.a.size() + y.a.size(), 0);
-#ifdef __SIZEOF_INT128__
-        for (int i = 0; i < (int)x.a.size(); i++) {
-            u128 carry = 0;
-            for (int j = 0; j < (int)y.a.size() || carry; j++) {
-                u128 cur = r.a[i + j] + carry;
-                if (j < (int)y.a.size()) { cur += (u128)x.a[i] * y.a[j]; }
-                r.a[i + j] = (int)(cur % base);
-                carry = cur / base;
-            }
-        }
-#else
-        vector<int> dx = to_base1000(x), dy = to_base1000(y);
-        vector<long long> c(dx.size() + dy.size());
-        for (int i = 0; i < (int)dx.size(); i++) {
-            for (int j = 0; j < (int)dy.size(); j++) { c[i + j] += (long long)dx[i] * dy[j]; }
-        }
-        r = from_base1000(c, x.sign * y.sign);
-#endif
-        r.trim();
-        return r;
-    }
-    static inline lnt multiply_fast(const lnt &x, const lnt &y, bool use_ntt) { vector<int> dx = to_base1000(x), dy = to_base1000(y); vector<long long> c; if (use_ntt) { c = BIG_INTEGER_DETAIL::convolution_ntt_crt(dx, dy); } else { c = BIG_INTEGER_DETAIL::convolution_karatsuba(dx, dy); } return from_base1000(c, x.sign * y.sign); }
-    inline lnt &operator*=(const lnt &v) { if (is_zero() || v.is_zero()) { *this = 0; return *this; } int n = (int)min(a.size(), v.a.size()); if (n < 16) { *this = multiply_schoolbook(*this, v); } else if (n < 96) { *this = multiply_fast(*this, v, false); } else { *this = multiply_fast(*this, v, true); } return *this; }
-    friend inline lnt operator*(lnt a, const lnt &b) { return a *= b; }
-    static inline pair<lnt, lnt> divmod(const lnt &a1, const lnt &b1) { if (b1.is_zero()) { throw runtime_error("lnt division by zero"); } int norm = (int)(base / ((ll)b1.a.back() + 1)); lnt a = a1.abs() * norm, b = b1.abs() * norm, q, r; q.a.assign(a.a.size(), 0);
-        for (int i = (int)a.a.size() - 1; i >= 0; i--) { r.a.insert(r.a.begin(), a.a[i]), r.trim(); ll s1 = r.a.size() <= b.a.size() ? 0 : r.a[b.a.size()], s2 = r.a.size() <= b.a.size() - 1 ? 0 : r.a[b.a.size() - 1], d = ((ll)base * s1 + s2) / b.a.back(); if (d >= base) { d = base - 1; } r -= b * (int)d; for (; r.sign == -1; d--) { r += b; } q.a[i] = (int)d; }
-        q.sign = a1.sign * b1.sign, r.sign = a1.sign, q.trim(), r.trim(), r /= norm; return {q, r};
-    }
-    inline lnt &operator/=(const lnt &v) { *this = divmod(*this, v).first; return *this; }
-    inline lnt &operator%=(const lnt &v) { *this = divmod(*this, v).second; return *this; }
-    friend inline lnt operator/(lnt a, const lnt &b) { return a /= b; }
-    friend inline lnt operator%(lnt a, const lnt &b) { return a %= b; }
-    inline lnt &operator++() { return *this += 1; }
-    inline lnt operator++(int) { lnt t = *this; ++*this; return t; }
-    inline lnt &operator--() { return *this -= 1; }
-    inline lnt operator--(int) { lnt t = *this; --*this; return t; }
-};
-inline lnt gcd(lnt a, lnt b) { a.sign = b.sign = 1; for (; !b.is_zero();) { lnt r = a % b; a = b; b = r; } return a; }
-template<class T>
-inline lnt pow(lnt a, T b) { lnt r = 1; for (; b; b >>= 1, a *= a) { if (b & 1) { r *= a; } } return r; }
-inline lnt pm(lnt a, lnt b, const lnt &mod) { lnt r = lnt(1) % mod; a %= mod; for (; !b.is_zero(); b /= 2, a = a * a % mod) { if (b % 2 != 0) { r = r * a % mod; } } return r; }
-#pragma endregion
 #pragma region DATA_STRUCTURE
 namespace DATA_STRUCTURE {
-struct Default_Hash {
-    static inline ull splitmix64(ull x) { x += 0x9e3779b97f4a7c15ULL; x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9ULL; x = (x ^ (x >> 27)) * 0x94d049bb133111ebULL; return x ^ (x >> 31); }
-    template<class T>
-    inline size_t operator()(const T &x) const { static const ull seed = chrono::steady_clock::now().time_since_epoch().count(); return splitmix64((ull)std::hash<T>()(x) + seed); }
-};
-template<class K, class V, int N, class Hash = Default_Hash>
-struct Hash_Map {
-    static const int M = N * 2 + 3;
-    K key[M];
-    V val[M];
-    unsigned char state[M]{}; // 0 empty, 1 used, 2 deleted
+template<class T, int N>
+struct Stack {
+    T a[N + 5];
     int n = 0;
-    Hash hs;
-    inline int locate(const K &k) const { size_t h = hs(k) % M; for (int t = 0; t < M; t++, h = (h + 1) % M) { if (state[h] == 0) { return -1; } if (state[h] == 1 && key[h] == k) { return (int)h; } } return -1; }
-    inline int slot(const K &k) { size_t h = hs(k) % M; int del = -1; for (int t = 0; t < M; t++, h = (h + 1) % M) { if (state[h] == 1 && key[h] == k) { return (int)h; } if (state[h] == 2 && del == -1) { del = (int)h; } if (state[h] == 0) { return del == -1 ? (int)h : del; } } return del; }
     inline bool empty() const { return n == 0; }
     inline int size() const { return n; }
-    inline bool count(const K &k) const { return locate(k) != -1; }
-    inline V *find(const K &k) { int p = locate(k); return p == -1 ? nullptr : &val[p]; }
-    inline const V *find(const K &k) const { int p = locate(k); return p == -1 ? nullptr : &val[p]; }
-    inline V &operator[](const K &k) { int p = slot(k); if (state[p] != 1) { state[p] = 1, key[p] = k, val[p] = V(), n++; } return val[p]; }
-    inline V &at(const K &k) { int p = locate(k); if (p == -1) { throw out_of_range("Hash_Map::at"); } return val[p]; }
-    inline bool erase(const K &k) { int p = locate(k); if (p == -1) { return false; } state[p] = 2; n--; return true; }
-    inline void clear() { memset(state, 0, sizeof(state)); n = 0; return; }
+    inline void clear() { n = 0; return; }
+    inline T &top() { return a[n - 1]; }
+    inline const T &top() const { return a[n - 1]; }
+    inline void push(const T &x) { a[n++] = x; return; }
+    inline void pop() { n--; return; }
+};
+template<class T, int N>
+struct Queue {
+    T a[N + 5];
+    int l = 0, r = 0;
+    inline bool empty() const { return l == r; }
+    inline int size() const { return r - l; }
+    inline void clear() { l = r = 0; return; }
+    inline T &front() { return a[l]; }
+    inline const T &front() const { return a[l]; }
+    inline T &back() { return a[r - 1]; }
+    inline const T &back() const { return a[r - 1]; }
+    inline void push(const T &x) { a[r++] = x; return; }
+    inline void pop() { l++; return; }
+};
+template<class T, int N>
+struct Circular_Queue {
+    T a[N + 1];
+    int l = 0, r = 0, n = 0;
+    inline bool empty() const { return n == 0; }
+    inline bool full() const { return n == N; }
+    inline int size() const { return n; }
+    inline void clear() { l = r = n = 0; return; }
+    inline T &front() { return a[l]; }
+    inline const T &front() const { return a[l]; }
+    inline T &back() { return a[(r + N) % (N + 1)]; }
+    inline const T &back() const { return a[(r + N) % (N + 1)]; }
+    inline void push(const T &x) { a[r] = x, r = (r + 1) % (N + 1), n++; return; }
+    inline void pop() { l = (l + 1) % (N + 1); n--; return; }
+};
+template<class T, int N>
+struct Deque {
+    T a[N + 1];
+    int l = 0, r = 0, n = 0;
+    inline bool empty() const { return n == 0; }
+    inline bool full() const { return n == N; }
+    inline int size() const { return n; }
+    inline void clear() { l = r = n = 0; return; }
+    inline T &front() { return a[l]; }
+    inline const T &front() const { return a[l]; }
+    inline T &back() { return a[(r + N) % (N + 1)]; }
+    inline const T &back() const { return a[(r + N) % (N + 1)]; }
+    inline void push_back(const T &x) { a[r] = x, r = (r + 1) % (N + 1), n++; return; }
+    inline void push_front(const T &x) { l = (l + N) % (N + 1), a[l] = x, n++; return; }
+    inline void pop_front() { l = (l + 1) % (N + 1); n--; return; }
+    inline void pop_back() { r = (r + N) % (N + 1); n--; return; }
+};
+template<class T, int N>
+struct List {
+    struct Node {
+        T val;
+        int pre = 0, nxt = 0;
+        bool used = false;
+    } tr[N + 1];
+    int free_stack[N + 1], free_top = 0, tot = 0, n = 0;
+    inline List() { tr[0].pre = tr[0].nxt = 0; tr[0].used = true; }
+    inline int new_node(const T &x) { int p; if (free_top) { p = free_stack[--free_top]; } else { p = ++tot; } tr[p].val = x; tr[p].used = true; tr[p].pre = tr[p].nxt = 0; return p; }
+    inline void recycle(int p) { tr[p].used = false; free_stack[free_top++] = p; return; }
+    inline bool empty() const { return n == 0; }
+    inline int size() const { return n; }
+    inline int begin() const { return tr[0].nxt; }
+    inline int end() const { return 0; }
+    inline int next(int p) const { return tr[p].nxt; }
+    inline int prev(int p) const { return tr[p].pre; }
+    inline T &operator[](int p) { return tr[p].val; }
+    inline const T &operator[](int p) const { return tr[p].val; }
+    inline T &front() { return tr[tr[0].nxt].val; }
+    inline T &back() { return tr[tr[0].pre].val; }
+    inline int insert_after(int p, const T &x) { int q = new_node(x), r = tr[p].nxt; tr[q].pre = p, tr[q].nxt = r, tr[p].nxt = q, tr[r].pre = q, n++; return q; }
+    inline int insert_before(int p, const T &x) { return insert_after(tr[p].pre, x); }
+    inline int push_front(const T &x) { return insert_after(0, x); }
+    inline int push_back(const T &x) { return insert_before(0, x); }
+    inline int erase(int p) { int q = tr[p].nxt; tr[tr[p].pre].nxt = tr[p].nxt; tr[tr[p].nxt].pre = tr[p].pre; recycle(p); n--; return q; }
+    inline void pop_front() { erase(tr[0].nxt); return; }
+    inline void pop_back() { erase(tr[0].pre); return; }
+    inline void clear() { for (int p = tr[0].nxt, q; p; p = q) { q = tr[p].nxt; recycle(p); } tr[0].pre = tr[0].nxt = 0; n = 0; return; }
 };
 template<class T, int N, class Compare = less<T>>
 struct Heap {
@@ -648,33 +600,15 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-lnt n, ans = 1, m2, m5;
-bool z2, z5;
-int k;
-inline lnt ch(lnt n, const lnt &mod, lnt q, int p) {
-    for (; q % 2 == 0;) {
-        if (pm(n, q / 2, mod) != 1) {
-            break;
-        }
-        q = q / 2;
-    }
-    if (p == 5) {
-        for (; q % 5 == 0;) {
-            if (pm(n, q / 5, mod) != 1) {
-                break;
-            }
-            q = q / 5;
-        }
-    }
-    return q;
+long long a, b, c, d;
+inline long long f(long long x) {
+    for (d = 0; ((1 << d) < x); d++)
+        ;
+    return d;
 }
 inline void solve(int Task_Id) {
-    cin >> n >> k;
-    m2 = pow(lnt(2), k), m5 = pow(lnt(5), k), z2 = n % m2 == 0, z5 = n % m5 == 0;
-    ans = !z2 ? ans / gcd(ans, ch(n % m2, m2, pow(lnt(2), k - 1), 2)) * ch(n % m2, m2, pow(lnt(2), k - 1), 2) : ans;
-    ans = !z5 ? ans / gcd(ans, ch(n % m5, m5, lnt(4) * pow(lnt(5), k - 1), 5)) * ch(n % m5, m5, lnt(4) * pow(lnt(5), k - 1), 5) : ans;
-    ans = ((z2 || n % 2) && (z5 || n % 5)) ? ans : -1;
-    cout << ans << "\n";
+    cin >> a >> b >> c;
+    cout << a * b * c - 1LL << " " << f(a) + f(b) + f(c) << "\n";
     return;
 }
 } // namespace TANGYIXIAO
