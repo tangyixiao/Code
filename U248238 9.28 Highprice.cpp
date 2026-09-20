@@ -600,7 +600,31 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 1e3 + 5;
+const long long inf = (1LL << 60);
+int n, a[N], b[N];
+long long f[N][N], ans = inf;
 inline void solve(int Task_Id) {
+    cin >> n;
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i];
+    }
+    memset(f, 0x3f, sizeof(f)), f[1][1] = 0, sort(a + 1, a + n + 1);
+    for (int i = 1; i <= n; i++) {
+        b[i] = 1000 / a[i];
+    }
+    for (int k = 2; k < n; k++) {
+        for (int j = 1; j < k; j++) {
+            f[k][j] = f[k - 1][j] < inf ? min(f[k][j], f[k - 1][j] + 1LL * b[k - 1] * a[k]) : f[k][j], f[k - 1][k] = f[k - 1][j] < inf ? min(f[k - 1][k], f[k - 1][j] + 1LL * b[k] * a[j]) : f[k - 1][k];
+            f[k][k - 1] = f[j][k - 1] < inf ? min(f[k][k - 1], f[j][k - 1] + 1LL * b[j] * a[k]) : f[k][k - 1], f[j][k] = f[j][k - 1] < inf ? min(f[j][k], f[j][k - 1] + 1LL * b[k] * a[k - 1]) : f[j][k];
+        }
+    }
+    for (int j = 1; j < n; j++) {
+        ans = f[n - 1][j] < inf ? min(ans, f[n - 1][j] + 1LL * b[n - 1] * a[n] + 1LL * b[n] * a[j]) : ans;
+        ans = f[j][n - 1] < inf ? min(ans, f[j][n - 1] + 1LL * b[j] * a[n] + 1LL * b[n] * a[n - 1]) : ans;
+    }
+    cout << ans << "\n";
     return;
 }
+
 } // namespace TANGYIXIAO
