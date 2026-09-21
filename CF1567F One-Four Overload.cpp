@@ -579,3 +579,82 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+namespace TANGYIXIAO {
+const int N = 5e2+5, M = N * N;
+int n, m, c[M], q[M], v[N][N];
+char a[N][N];
+vector<int> g[M];
+const int dx[4] = {-1, 0, 1, 0}, dy[4] = {0, -1, 0, 1};
+inline int id(int x, int y) {
+    return (x - 1) * m + y;
+}
+inline bool bfs(int s) {
+    int l = 1, r = 1;
+    q[1] = s, c[s] = 0;
+    for (; l <= r; l++) {
+        int u = q[l];
+        for (int v : g[u]) {
+            if (!~c[v]) {
+                c[v] = c[u] ^ 1, q[++r] = v;
+            } else {
+                if (c[v] == c[u]) {
+                return false;
+            }
+            }
+        }
+    }
+    return true;
+}
+inline void solve(int Task_Id) {
+    cin >> n >> m;
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i] + 1;
+    }
+
+    for (int i = 1; i <= n * m; i++) {
+        g[i].clear();
+    }
+    memset(c, -1, sizeof(c)), memset(v, 0, sizeof(v));
+
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= m; j++) {
+            if (a[i][j] == 'X') {
+            int p[4], cnt = 0;
+            for (int k = 0; k < 4; k++) {
+                int x = i + dx[k], y = j + dy[k];
+                if (a[x][y] == '.') {
+                    p[cnt++] = id(x, y);
+                }
+            }
+
+            if (cnt & 1) {
+                cout << "NO\n";
+                return;
+            }
+
+            v[i][j] = cnt / 2 * 5;
+            for (int k = 0; k < cnt; k += 2) {
+                g[p[k]].push_back(p[k + 1]), g[p[k + 1]].push_back(p[k]);
+            }
+            }
+
+        }
+    }
+
+    for (int i = 1; i <= n * m; i++) {
+        if (!~c[i] && !bfs(i)) {
+            cout << "NO\n";
+            return;
+        }
+    }
+
+    cout << "YES\n";
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= m; j++) {
+            cout << (a[i][j] == 'X' ? v[i][j] : c[id(i, j)] ? 4 : 1) << (j == m ? "\n" : " ");
+        }
+    }
+    return;
+}
+
+} // namespace TANGYIXIAO
