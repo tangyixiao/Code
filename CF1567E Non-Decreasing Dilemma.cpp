@@ -581,6 +581,7 @@ signed main() {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 inline void solve(int Task_Id) {
+    
     return;
 }
 } // namespace TANGYIXIAO
