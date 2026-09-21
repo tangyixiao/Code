@@ -9,17 +9,17 @@
 //  Test Type: single
 //  Batch ID: 412bcb13-0cbb-4f2e-b412-59cf582d1301
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
 */
-#define PRAGMA_TYPE 0 // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
+#define PRAGMA_TYPE 0                     // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
-#define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file, 2 for local file
-#define FILE_INDEX 1 // the index of the file in the local file system
+#define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
+#define FILE_INDEX 1                      // the index of the file in the local file system
 // #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
@@ -585,7 +585,9 @@ signed main() {
 #ifdef MULTIPLE_TEST
     cin >> T;
 #endif
-    for (int Task_Id = 1; Task_Id <= T; Task_Id++) { solve(Task_Id); }
+    for (int Task_Id = 1; Task_Id <= T; Task_Id++) {
+        solve(Task_Id);
+    }
 #ifdef TIME_COUNT
     End_Time_Count();
     Print_Time_Count("TOTAL");
@@ -596,6 +598,69 @@ signed main() {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 inline void solve(int Task_Id) {
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> a(n);
+        for (int i = 0; i < n; i++) {
+            cin >> a[i];
+        }
+
+        int M1 = -1, M2 = -1;
+        for (int x : a) {
+            if (x > M1) {
+                M2 = M1;
+                M1 = x;
+            } else if (x < M1 && x > M2) {
+                M2 = x;
+            }
+        }
+
+        int cntM1 = 0;
+        for (int x : a) {
+            if (x == M1) {
+                cntM1++;
+            }
+        }
+
+        vector<int> cand;
+        cand.push_back(M1);
+        if (cntM1 == 1 && M2 != -1)
+            cand.push_back(M2);
+
+        vector<int> good_vals;
+        for (int v : cand) {
+            int bad = 0;
+            for (int x : a) {
+                if (v % x != 0) {
+                    bad++;
+                }
+            }
+            if (bad <= 1) {
+                good_vals.push_back(v);
+            }
+        }
+
+        vector<int> ans;
+        for (int i = 0; i < n; i++) {
+            for (int v : good_vals) {
+                if (a[i] == v) {
+                    ans.push_back(i + 1);
+                    break;
+                }
+            }
+        }
+
+        cout << ans.size() << '\n';
+        for (int i = 0; i < (int)ans.size(); i++) {
+            cout << ans[i] << (i + 1 == (int)ans.size() ? '\n' : ' ');
+        }
+        if (ans.empty()) {
+            cout << '\n';
+        }
+    }
     return;
 }
 } // namespace TANGYIXIAO
