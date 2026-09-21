@@ -621,7 +621,7 @@ inline void sieve(int n) {
 inline void solve(int Task_Id) {
     sieve(N);
     cin >> n;
-    for (int i = 2; i * i <= n; i++) {
+    for (int i = 2; i << 1 <= n; i++) {
         if (isprime[i] && isprime[n - i]) {
             ans++;
         }
