@@ -1,0 +1,35 @@
+{
+  "timeLimit": 1000, 
+  "group": "Luogu", 
+  "languages": {
+    "java": {
+      "taskClass": "P17456GESP202609", 
+      "mainClass": "Main"
+    }
+  }, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "interactive": false, 
+  "name": "P17456 [GESP202609 五级] 饮品调制", 
+  "url": "https://www.luogu.com.cn/problem/P17456", 
+  "memoryLimit": 512, 
+  "tests": [
+    {
+      "output": "14.667\n", 
+      "input": "4 2\n6 1\n5 2\n8 5\n1 0\n"
+    }, 
+    {
+      "output": "0.000\n", 
+      "input": "2 5\n3 4\n5 3\n"
+    }
+  ], 
+  "input": {
+    "type": "stdin"
+  }, 
+  "testType": "single", 
+  "batch": {
+    "size": 1, 
+    "id": "f0ecb9b9-fc28-4cc0-b820-3add97a19684"
+  }
+}
