@@ -584,7 +584,7 @@ signed main() {
 namespace TANGYIXIAO {
 const int N = 5e2 + 5, M = N * N;
 int n, m, c[M], q[M], v[N][N];
-char a[N][N];
+string a[N];
 vector<int> g[M];
 const int dx[4] = {-1, 0, 1, 0}, dy[4] = {0, -1, 0, 1};
 inline int id(int x, int y) {
@@ -610,7 +610,8 @@ inline bool bfs(int s) {
 inline void solve(int Task_Id) {
     cin >> n >> m;
     for (int i = 1; i <= n; i++) {
-        cin >> a[i] + 1;
+        cin >> a[i];
+        a[i] = " " + a[i];
     }
     memset(c, -1, sizeof(c)), memset(v, 0, sizeof(v));
 
@@ -648,7 +649,9 @@ inline void solve(int Task_Id) {
     cout << "YES\n";
     for (int i = 1; i <= n; i++) {
         for (int j = 1; j <= m; j++) {
-            cout << (a[i][j] == 'X' ? v[i][j] : c[id(i, j)] ? 4 : 1)<< (j == m ? "\n" : " ");
+            cout << (a[i][j] == 'X' ? v[i][j] : c[id(i, j)] ? 4
+                                                            : 1)
+                 << (j == m ? "\n" : " ");
         }
     }
     return;
