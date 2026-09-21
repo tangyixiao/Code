@@ -1,10 +1,10 @@
 /*
 Copyright (C) 2026 TangYixiao
 */
-#define PRAGMA_TYPE 0 // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
+#define PRAGMA_TYPE 0                     // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
-#define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file, 2 for local file
-#define FILE_INDEX 1 // the index of the file in the local file system
+#define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
+#define FILE_INDEX 1                      // the index of the file in the local file system
 // #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
@@ -570,7 +570,9 @@ signed main() {
 #ifdef MULTIPLE_TEST
     cin >> T;
 #endif
-    for (int Task_Id = 1; Task_Id <= T; Task_Id++) { solve(Task_Id); }
+    for (int Task_Id = 1; Task_Id <= T; Task_Id++) {
+        solve(Task_Id);
+    }
 #ifdef TIME_COUNT
     End_Time_Count();
     Print_Time_Count("TOTAL");
@@ -580,8 +582,93 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-inline void solve(int Task_Id) {
-    
+
+const int N = 2e5 + 5;
+
+struct Node {
+    int len, pre, suf, lv, rv;
+    long long ans;
+} tr[N << 2];
+
+int n, q, a[N];
+
+inline Node merge(Node x, Node y) {
+    if (!x.len) {
+        return y;
+    }
+    if (!y.len) {
+        return x;
+    }
+    Node z;
+    z.len = x.len + y.len, z.lv = x.lv, z.rv = y.rv;
+    z.pre = x.pre, z.suf = y.suf, z.ans = x.ans + y.ans;
+    if (x.rv <= y.lv) {
+        z.ans += 1LL * x.suf * y.pre;
+        if (x.pre == x.len) {
+            z.pre += y.pre;
+        }
+        if (y.suf == y.len) {
+            z.suf += x.suf;
+        }
+    }
+    return z;
+}
+
+inline void build(int p, int l, int r) {
+    if (l == r) {
+        tr[p] = {1, 1, 1, a[l], a[l], 1};
+        return;
+    }
+    int mid = (l + r) >> 1;
+    build(p << 1, l, mid), build(p << 1 | 1, mid + 1, r);
+    tr[p] = merge(tr[p << 1], tr[p << 1 | 1]);
     return;
 }
+
+inline void modify(int p, int l, int r, int x, int v) {
+    if (l == r) {
+        tr[p] = {1, 1, 1, v, v, 1};
+        return;
+    }
+    int mid = (l + r) >> 1;
+    if (x <= mid) {
+        modify(p << 1, l, mid, x, v);
+    } else {
+        modify(p << 1 | 1, mid + 1, r, x, v);
+    }
+    tr[p] = merge(tr[p << 1], tr[p << 1 | 1]);
+    return;
+}
+
+inline Node query(int p, int l, int r, int x, int y) {
+    if (x <= l && r <= y) {
+        return tr[p];
+    }
+    int mid = (l + r) >> 1;
+    if (y <= mid) {
+        return query(p << 1, l, mid, x, y);
+    }
+    if (x > mid) {
+        return query(p << 1 | 1, mid + 1, r, x, y);
+    }
+    return merge(query(p << 1, l, mid, x, y), query(p << 1 | 1, mid + 1, r, x, y));
+}
+
+inline void solve(int Task_Id) {
+    cin >> n >> q;
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i];
+    }
+    build(1, 1, n);
+    for (int t, x, y; q; q--) {
+        cin >> t >> x >> y;
+        if (t == 1) {
+            modify(1, 1, n, x, y);
+        } else {
+            cout << query(1, 1, n, x, y).ans << "\n";
+        }
+    }
+    return;
+}
+
 } // namespace TANGYIXIAO
