@@ -598,7 +598,7 @@ signed main() {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 
-const int N = 1e5 + 5;
+const int N = 1e5 + 5, inf = 0x3f3f3f3f;
 
 int n, c[N], a[N], v[4][N], cnt[4], sum[4][N];
 
@@ -620,7 +620,7 @@ inline void solve(int Task_Id) {
         }
     }
 
-    int s = 0, ans = -1;
+    int s = 0, ans = -inf;
 
     for (int i = 1, x; i <= 8; i++) {
         cin >> x, s += x;
@@ -636,7 +636,7 @@ inline void solve(int Task_Id) {
         }
     }
 
-    cout << (ans >= s - 16 ? "Yes\n" : "No\n");
+    cout << (ans != inf && ans >= s - 16 ? "Yes\n" : "No\n");
     return;
 }
 
