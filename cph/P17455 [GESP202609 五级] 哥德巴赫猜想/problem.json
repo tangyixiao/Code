@@ -1,0 +1,35 @@
+{
+  "timeLimit": 1000, 
+  "group": "Luogu", 
+  "languages": {
+    "java": {
+      "taskClass": "P17455GESP202609", 
+      "mainClass": "Main"
+    }
+  }, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "interactive": false, 
+  "name": "P17455 [GESP202609 五级] 哥德巴赫猜想", 
+  "url": "https://www.luogu.com.cn/problem/P17455", 
+  "memoryLimit": 512, 
+  "tests": [
+    {
+      "output": "1\n", 
+      "input": "4\n"
+    }, 
+    {
+      "output": "2\n", 
+      "input": "10\n"
+    }
+  ], 
+  "input": {
+    "type": "stdin"
+  }, 
+  "testType": "single", 
+  "batch": {
+    "size": 1, 
+    "id": "fdcee1d9-e497-477b-9794-7ded62badcf3"
+  }
+}
