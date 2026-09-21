@@ -9,17 +9,17 @@
 //  Test Type: single
 //  Batch ID: fdcee1d9-e497-477b-9794-7ded62badcf3
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
 */
-#define PRAGMA_TYPE 0 // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
+#define PRAGMA_TYPE 0                     // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
-#define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file, 2 for local file
-#define FILE_INDEX 1 // the index of the file in the local file system
+#define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
+#define FILE_INDEX 1                      // the index of the file in the local file system
 // #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
@@ -585,7 +585,9 @@ signed main() {
 #ifdef MULTIPLE_TEST
     cin >> T;
 #endif
-    for (int Task_Id = 1; Task_Id <= T; Task_Id++) { solve(Task_Id); }
+    for (int Task_Id = 1; Task_Id <= T; Task_Id++) {
+        solve(Task_Id);
+    }
 #ifdef TIME_COUNT
     End_Time_Count();
     Print_Time_Count("TOTAL");
@@ -595,7 +597,36 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+int n, ans;
+const int N = 1e6 + 5;
+bitset<N> isprime;
+vector<int> primes;
+inline void sieve(int n) {
+    isprime.set();
+    isprime[0] = isprime[1] = 0;
+    for (int i = 2; i * i <= n; i++) {
+        if (isprime[i]) {
+            for (int j = i * i; j <= n; j += i) {
+                isprime[j] = 0;
+            }
+        }
+    }
+    for (int i = 2; i <= n; i++) {
+        if (isprime[i]) {
+            primes.push_back(i);
+        }
+    }
+    return;
+}
 inline void solve(int Task_Id) {
+    sieve(N);
+    cin >> n;
+    for (int i = 2; i * i <= n; i++) {
+        if (isprime[i] && isprime[n - i]) {
+            ans++;
+        }
+    }
+    cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO
