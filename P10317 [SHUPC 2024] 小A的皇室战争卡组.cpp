@@ -9,17 +9,17 @@
 //  Test Type: single
 //  Batch ID: 10c6537a-3e56-4542-97c1-4c7312ada9a6
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
 */
-#define PRAGMA_TYPE 0 // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
+#define PRAGMA_TYPE 0                     // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
-#define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file, 2 for local file
-#define FILE_INDEX 1 // the index of the file in the local file system
+#define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
+#define FILE_INDEX 1                      // the index of the file in the local file system
 // #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
@@ -585,7 +585,9 @@ signed main() {
 #ifdef MULTIPLE_TEST
     cin >> T;
 #endif
-    for (int Task_Id = 1; Task_Id <= T; Task_Id++) { solve(Task_Id); }
+    for (int Task_Id = 1; Task_Id <= T; Task_Id++) {
+        solve(Task_Id);
+    }
 #ifdef TIME_COUNT
     End_Time_Count();
     Print_Time_Count("TOTAL");
@@ -595,7 +597,42 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 1e5 + 5;
+int n, c[N], a[N], v[4][N], cnt[4], sum[4][N];
 inline void solve(int Task_Id) {
+    cin >> n;
+    for (int i = 1; i <= n; i++) {
+        cin >> c[i];
+    }
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i], v[c[i]][++cnt[c[i]]] = a[i];
+    }
+
+    for (int i = 1; i <= 3; i++) {
+        sort(v[i] + 1, v[i] + cnt[i] + 1, greater<int>());
+        sum[i][0] = 0;
+        for (int j = 1; j <= cnt[i]; j++) {
+            sum[i][j] = sum[i][j - 1] + v[i][j];
+        }
+    }
+
+    int s = 0, ans = -1;
+    for (int i = 1, x; i <= 8; i++) {
+        cin >> x, s += x;
+    }
+
+    for (int b = 0; b <= 1; b++) {
+        for (int sp = 1; sp <= 3; sp++) {
+            int t = 8 - b - sp;
+            if (cnt[1] < t || cnt[2] < b || cnt[3] < sp) {
+                continue;
+            }
+            ans = max(ans, sum[1][t] + sum[2][b] + sum[3][sp]);
+        }
+    }
+
+    cout << (ans >= s - 16 ? "Yes\n" : "No\n");
     return;
 }
+
 } // namespace TANGYIXIAO
