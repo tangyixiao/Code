@@ -595,7 +595,67 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+
+int n, t;
+
 inline void solve(int Task_Id) {
+    cin >> n >> t;
+
+    vector<pair<int, int>> l, r;
+    long long L = 0, R = 0;
+    long double ans = 0;
+
+    for (int i = 1, v, s; i <= n; i++) {
+        cin >> v >> s;
+
+        if (s < t) {
+            l.push_back({t - s, v}), L += 1LL * (t - s) * v;
+        } else if (s > t) {
+            r.push_back({s - t, v}), R += 1LL * (s - t) * v;
+        } else {
+            ans += v;
+        }
+    }
+
+    if (L <= R) {
+        for (auto [d, v] : l) {
+            ans += v;
+        }
+
+        sort(r.begin(), r.end());
+
+        long double x = L;
+
+        for (auto [d, v] : r) {
+            if (x >= 1LL * d * v) {
+                ans += v, x -= 1LL * d * v;
+            } else {
+                ans += x / d;
+                break;
+            }
+        }
+    } else {
+        for (auto [d, v] : r) {
+            ans += v;
+        }
+
+        sort(l.begin(), l.end());
+
+        long double x = R;
+
+        for (auto [d, v] : l) {
+            if (x >= 1LL * d * v) {
+                ans += v, x -= 1LL * d * v;
+            } else {
+                ans += x / d;
+                break;
+            }
+        }
+    }
+
+    cout << fixed << setprecision(3) << ans << "\n";
+
     return;
 }
+
 } // namespace TANGYIXIAO
