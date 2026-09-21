@@ -603,11 +603,7 @@ const int N = 1e5 + 5;
 int n, c[N], a[N], v[4][N], cnt[4], sum[4][N];
 
 inline void solve(int Task_Id) {
-    cin >> n;
-
-    for (int i = 1; i <= 3; i++) {
-        cnt[i] = 0;
-    }
+    cin >> n, cnt[1] = cnt[2] = cnt[3] = 0;
 
     for (int i = 1; i <= n; i++) {
         cin >> c[i];
@@ -618,8 +614,7 @@ inline void solve(int Task_Id) {
     }
 
     for (int i = 1; i <= 3; i++) {
-        sort(v[i] + 1, v[i] + cnt[i] + 1, greater<int>());
-        sum[i][0] = 0;
+        sort(v[i] + 1, v[i] + cnt[i] + 1, greater<int>()), sum[i][0] = 0;
         for (int j = 1; j <= cnt[i]; j++) {
             sum[i][j] = sum[i][j - 1] + v[i][j];
         }
@@ -634,17 +629,14 @@ inline void solve(int Task_Id) {
     for (int b = 0; b <= 1; b++) {
         for (int sp = 1; sp <= 3; sp++) {
             int t = 8 - b - sp;
-
             if (cnt[1] < t || cnt[2] < b || cnt[3] < sp) {
                 continue;
             }
-
             ans = max(ans, sum[1][t] + sum[2][b] + sum[3][sp]);
         }
     }
 
     cout << (ans >= s - 16 ? "Yes\n" : "No\n");
-
     return;
 }
 
