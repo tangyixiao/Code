@@ -9,17 +9,17 @@
 //  Test Type: single
 //  Batch ID: f0cdcb75-f37a-4118-914c-ed3c6c2da327
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
 */
-#define PRAGMA_TYPE 0 // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
+#define PRAGMA_TYPE 0                     // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
-#define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file, 2 for local file
-#define FILE_INDEX 1 // the index of the file in the local file system
+#define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
+#define FILE_INDEX 1                      // the index of the file in the local file system
 // #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
@@ -585,7 +585,9 @@ signed main() {
 #ifdef MULTIPLE_TEST
     cin >> T;
 #endif
-    for (int Task_Id = 1; Task_Id <= T; Task_Id++) { solve(Task_Id); }
+    for (int Task_Id = 1; Task_Id <= T; Task_Id++) {
+        solve(Task_Id);
+    }
 #ifdef TIME_COUNT
     End_Time_Count();
     Print_Time_Count("TOTAL");
@@ -595,7 +597,134 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+
+const int N = 5e5 + 5;
+const ll inf = (1LL << 62);
+
+int n, m, tot, a[N], bel[N], p[N], to[N], deg[N], q[N], c[N];
+ll v[N], b[N], w[N], e[N], f[N][2];
+bool vis[N];
+
 inline void solve(int Task_Id) {
+    cin >> n >> m;
+
+    for (int i = 1; i <= n; i++) {
+        cin >> v[i] >> a[i] >> b[i];
+    }
+
+    for (int i = 1, k, x; i <= m; i++) {
+        cin >> x >> k, p[++tot] = x;
+        for (int j = 1; j <= k; j++) {
+            cin >> x, bel[x] = tot;
+        }
+    }
+
+    for (int i = 1; i <= n; i++) {
+        if (!bel[i]) {
+            bel[i] = ++tot, p[tot] = i;
+        }
+    }
+
+    for (int i = 1; i <= n; i++) {
+        w[bel[i]] += v[i];
+    }
+
+    for (int i = 1; i <= tot; i++) {
+        int x = bel[a[p[i]]];
+        if (x != i) {
+            to[i] = x;
+        }
+    }
+
+    for (int i = 1; i <= n; i++) {
+        int x = bel[i], y = bel[a[i]];
+
+        if (x == y) {
+            w[x] -= b[i];
+        } else if (to[x] == y) {
+            e[x] += b[i];
+        }
+    }
+
+    for (int i = 1; i <= tot; i++) {
+        f[i][1] = w[i];
+        if (to[i]) {
+            deg[to[i]]++;
+        }
+    }
+
+    int l = 1, r = 0;
+
+    for (int i = 1; i <= tot; i++) {
+        if (!deg[i]) {
+            q[++r] = i;
+        }
+    }
+
+    ll ans = 0;
+
+    for (; l <= r; l++) {
+        int x = q[l];
+
+        if (!to[x]) {
+            ans += max(f[x][0], f[x][1]);
+            continue;
+        }
+
+        int y = to[x];
+
+        f[y][0] += max(f[x][0], f[x][1]);
+        f[y][1] += max(f[x][0], f[x][1] - e[x]);
+
+        if (!--deg[y]) {
+            q[++r] = y;
+        }
+    }
+
+    for (int s = 1; s <= tot; s++) {
+        if (!deg[s] || vis[s]) {
+            continue;
+        }
+
+        int k = 0, x = s;
+
+        for (; !vis[x]; x = to[x]) {
+            vis[x] = true, c[++k] = x;
+        }
+
+        ll res = -inf;
+
+        for (int st = 0; st <= 1; st++) {
+            ll d0 = -inf, d1 = -inf;
+
+            if (!st) {
+                d0 = f[c[1]][0];
+            } else {
+                d1 = f[c[1]][1];
+            }
+
+            for (int i = 2; i <= k; i++) {
+                int x = c[i], y = c[i - 1];
+
+                ll g0 = max(d0, d1) + f[x][0];
+                ll g1 = max(d0, d1 - e[y]) + f[x][1];
+
+                d0 = g0, d1 = g1;
+            }
+
+            if (!st) {
+                res = max(res, max(d0, d1));
+            } else {
+                res = max(res, max(d0, d1 - e[c[k]]));
+            }
+        }
+
+        ans += res;
+    }
+
+    cout << ans << "\n";
+
     return;
 }
+
 } // namespace TANGYIXIAO
