@@ -1,10 +1,10 @@
 /*
 Copyright (C) 2026 TangYixiao
 */
-#define PRAGMA_TYPE 0 // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
+#define PRAGMA_TYPE 0                     // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
-#define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file, 2 for local file
-#define FILE_INDEX 1 // the index of the file in the local file system
+#define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
+#define FILE_INDEX 1                      // the index of the file in the local file system
 // #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
@@ -570,7 +570,9 @@ signed main() {
 #ifdef MULTIPLE_TEST
     cin >> T;
 #endif
-    for (int Task_Id = 1; Task_Id <= T; Task_Id++) { solve(Task_Id); }
+    for (int Task_Id = 1; Task_Id <= T; Task_Id++) {
+        solve(Task_Id);
+    }
 #ifdef TIME_COUNT
     End_Time_Count();
     Print_Time_Count("TOTAL");
@@ -580,7 +582,7 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 5e2+5, M = N * N;
+const int N = 5e2 + 5, M = N * N;
 int n, m, c[M], q[M], v[N][N];
 char a[N][N];
 vector<int> g[M];
@@ -598,8 +600,8 @@ inline bool bfs(int s) {
                 c[v] = c[u] ^ 1, q[++r] = v;
             } else {
                 if (c[v] == c[u]) {
-                return false;
-            }
+                    return false;
+                }
             }
         }
     }
@@ -610,34 +612,29 @@ inline void solve(int Task_Id) {
     for (int i = 1; i <= n; i++) {
         cin >> a[i] + 1;
     }
-
-    for (int i = 1; i <= n * m; i++) {
-        g[i].clear();
-    }
     memset(c, -1, sizeof(c)), memset(v, 0, sizeof(v));
 
     for (int i = 1; i <= n; i++) {
         for (int j = 1; j <= m; j++) {
             if (a[i][j] == 'X') {
-            int p[4], cnt = 0;
-            for (int k = 0; k < 4; k++) {
-                int x = i + dx[k], y = j + dy[k];
-                if (a[x][y] == '.') {
-                    p[cnt++] = id(x, y);
+                int p[4], cnt = 0;
+                for (int k = 0; k < 4; k++) {
+                    int x = i + dx[k], y = j + dy[k];
+                    if (a[x][y] == '.') {
+                        p[cnt++] = id(x, y);
+                    }
+                }
+
+                if (cnt & 1) {
+                    cout << "NO\n";
+                    return;
+                }
+
+                v[i][j] = (cnt >> 1) * 5;
+                for (int k = 0; k < cnt; k += 2) {
+                    g[p[k]].push_back(p[k + 1]), g[p[k + 1]].push_back(p[k]);
                 }
             }
-
-            if (cnt & 1) {
-                cout << "NO\n";
-                return;
-            }
-
-            v[i][j] = cnt / 2 * 5;
-            for (int k = 0; k < cnt; k += 2) {
-                g[p[k]].push_back(p[k + 1]), g[p[k + 1]].push_back(p[k]);
-            }
-            }
-
         }
     }
 
@@ -651,7 +648,7 @@ inline void solve(int Task_Id) {
     cout << "YES\n";
     for (int i = 1; i <= n; i++) {
         for (int j = 1; j <= m; j++) {
-            cout << (a[i][j] == 'X' ? v[i][j] : c[id(i, j)] ? 4 : 1) << (j == m ? "\n" : " ");
+            cout << (a[i][j] == 'X' ? v[i][j] : c[id(i, j)] ? 4 : 1)<< (j == m ? "\n" : " ");
         }
     }
     return;

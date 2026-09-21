@@ -9,6 +9,10 @@
             {
                 "caption": "Stop Listener",
                 "command": "stop_cph_listener"
+            },
+            {
+                "caption": "Format with clang-format",
+                "command": "format_cph_file"
             }
         ]
     }
