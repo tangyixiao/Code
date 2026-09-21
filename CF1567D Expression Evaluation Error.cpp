@@ -8,22 +8,22 @@
 //  Interactive: false
 //  Test Type: single
 //  Batch ID: 1c2412b3-8472-417e-865b-faff8a1cf2b4
-// 
-// Algorithm: 
+//
+// Algorithm:
 // Complexity: O()
-// Note: 
-// 
-// 
+// Note:
+//
+//
 // Powered by CP Editor (https://cpeditor.org)
 
 /*
 Copyright (C) 2026 TangYixiao
 */
-#define PRAGMA_TYPE 0 // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
+#define PRAGMA_TYPE 0                     // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
-#define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file, 2 for local file
-#define FILE_INDEX 1 // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
+#define FILE_INDEX 1                      // the index of the file in the local file system
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -588,7 +588,9 @@ signed main() {
 #ifdef MULTIPLE_TEST
     cin >> T;
 #endif
-    for (int Task_Id = 1; Task_Id <= T; Task_Id++) { solve(Task_Id); }
+    for (int Task_Id = 1; Task_Id <= T; Task_Id++) {
+        solve(Task_Id);
+    }
 #ifdef TIME_COUNT
     End_Time_Count();
     Print_Time_Count("TOTAL");
@@ -598,7 +600,15 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+int s, n, x;
 inline void solve(int Task_Id) {
+    for (cin >> s >> n, x = 1; x <= s / 10; x *= 10)
+        ;
+    for (int i = 1; i < n; cout << x << " ", s -= x, i++) {
+        for (; s - x < n - i; x /= 10)
+            ;
+    }
+    cout << s << "\n";
     return;
 }
 } // namespace TANGYIXIAO
