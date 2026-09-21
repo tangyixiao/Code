@@ -1,0 +1,31 @@
+{
+  "timeLimit": 2000, 
+  "group": "Luogu", 
+  "languages": {
+    "java": {
+      "taskClass": "P14444ICPC2025XianPracticeGreatIndices", 
+      "mainClass": "Main"
+    }
+  }, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "interactive": false, 
+  "name": "P14444 [ICPC 2025 Xi'an Practice] Great Indices", 
+  "url": "https://www.luogu.com.cn/problem/P14444", 
+  "memoryLimit": 512, 
+  "tests": [
+    {
+      "output": "1\n4\n2\n3 6\n3\n2 4 5\n", 
+      "input": "3\n4\n1 2 3 6\n6\n1 1 4 5 1 4\n5\n1 9 1 9 810\n"
+    }
+  ], 
+  "input": {
+    "type": "stdin"
+  }, 
+  "testType": "single", 
+  "batch": {
+    "size": 1, 
+    "id": "412bcb13-0cbb-4f2e-b412-59cf582d1301"
+  }
+}
