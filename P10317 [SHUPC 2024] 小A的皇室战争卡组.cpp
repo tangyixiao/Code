@@ -597,13 +597,22 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+
 const int N = 1e5 + 5;
+
 int n, c[N], a[N], v[4][N], cnt[4], sum[4][N];
+
 inline void solve(int Task_Id) {
     cin >> n;
+
+    for (int i = 1; i <= 3; i++) {
+        cnt[i] = 0;
+    }
+
     for (int i = 1; i <= n; i++) {
         cin >> c[i];
     }
+
     for (int i = 1; i <= n; i++) {
         cin >> a[i], v[c[i]][++cnt[c[i]]] = a[i];
     }
@@ -617,6 +626,7 @@ inline void solve(int Task_Id) {
     }
 
     int s = 0, ans = -1;
+
     for (int i = 1, x; i <= 8; i++) {
         cin >> x, s += x;
     }
@@ -624,14 +634,17 @@ inline void solve(int Task_Id) {
     for (int b = 0; b <= 1; b++) {
         for (int sp = 1; sp <= 3; sp++) {
             int t = 8 - b - sp;
+
             if (cnt[1] < t || cnt[2] < b || cnt[3] < sp) {
                 continue;
             }
+
             ans = max(ans, sum[1][t] + sum[2][b] + sum[3][sp]);
         }
     }
 
     cout << (ans >= s - 16 ? "Yes\n" : "No\n");
+
     return;
 }
 
