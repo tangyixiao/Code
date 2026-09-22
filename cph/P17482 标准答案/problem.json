@@ -1,0 +1,35 @@
+{
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "testType": "single", 
+  "batch": {
+    "id": "670cfc5b-b249-4432-83c9-2fe7640b5727", 
+    "size": 1
+  }, 
+  "interactive": false, 
+  "url": "https://www.luogu.com.cn/problem/P17482", 
+  "memoryLimit": 512, 
+  "languages": {
+    "java": {
+      "taskClass": "P17482", 
+      "mainClass": "Main"
+    }
+  }, 
+  "timeLimit": 1000, 
+  "tests": [
+    {
+      "input": "2 3\n0 3\nAAA\nBBB\n", 
+      "output": "AAA\n"
+    }, 
+    {
+      "input": "2 2\n1 1\nAA\nAB\n", 
+      "output": "BB\n"
+    }
+  ], 
+  "name": "P17482 标准答案"
+}
