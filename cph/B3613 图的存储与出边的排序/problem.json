@@ -1,0 +1,31 @@
+{
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "testType": "single", 
+  "batch": {
+    "id": "08404107-628e-4cea-b772-2b08a58ac0a9", 
+    "size": 1
+  }, 
+  "interactive": false, 
+  "url": "https://www.luogu.com.cn/problem/B3613", 
+  "memoryLimit": 512, 
+  "languages": {
+    "java": {
+      "taskClass": "B3613", 
+      "mainClass": "Main"
+    }
+  }, 
+  "timeLimit": 1000, 
+  "tests": [
+    {
+      "input": "2\n3 4\n1 3\n1 2\n3 2\n3 1\n3 9\n1 3\n2 3\n3 3\n1 2\n2 2\n3 2\n1 1\n2 1\n3 1\n", 
+      "output": "2 3\n\n1 2\n1 2 3\n1 2 3\n1 2 3\n"
+    }
+  ], 
+  "name": "B3613 图的存储与出边的排序"
+}
