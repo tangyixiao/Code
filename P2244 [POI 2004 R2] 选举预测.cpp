@@ -596,8 +596,6 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
-#include <bits/stdc++.h>
-using namespace std;
 
 namespace TANGYIXIAO {
 
@@ -740,7 +738,6 @@ inline void solve(int Task_Id) {
             int x;
             cin >> x;
 
-            // 原图：i 赢 x
             g[i].push_back(x);
             rg[x].push_back(i);
         }
