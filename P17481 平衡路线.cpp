@@ -9,17 +9,17 @@
 //  Test Type: single
 //  Batch ID: 22dfd29e-aa90-484d-a5db-a8d7e7ff9ee4
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
 */
-#define PRAGMA_TYPE 0 // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
+#define PRAGMA_TYPE 0                     // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
-#define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file, 2 for local file
-#define FILE_INDEX 1 // the index of the file in the local file system
+#define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
+#define FILE_INDEX 1                      // the index of the file in the local file system
 // #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
@@ -585,7 +585,9 @@ signed main() {
 #ifdef MULTIPLE_TEST
     cin >> T;
 #endif
-    for (int Task_Id = 1; Task_Id <= T; Task_Id++) { solve(Task_Id); }
+    for (int Task_Id = 1; Task_Id <= T; Task_Id++) {
+        solve(Task_Id);
+    }
 #ifdef TIME_COUNT
     End_Time_Count();
     Print_Time_Count("TOTAL");
@@ -595,7 +597,54 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 2e5 + 5;
+struct Edge {
+    int v, w, id;
+};
+int n, m, s, t;
+vector<Edge> g[N];
+vector<pair<int, int>> e1,e2;
+long long dis[N];
+bool vis[N];
 inline void solve(int Task_Id) {
-    return;
+    cin >> n >> m >> s >> t;
+    for (int i = 1,a,b; i <= m; i++) {
+        char c;
+        cin >> a >> b >> c;
+        g[a].push_back({b, (c == '+') ? 1 : -1, i});
+        g[b].push_back({a, (c == '+') ? 1 : -1, i});
+    }
+
+    queue<int> q;
+    q.push(s);
+    vis[s] = true;
+    for (; !q.empty();) {
+        int u = q.front();
+        q.pop();
+        for (auto [v, w, id] : g[u]) {
+            if (!vis[v]) {
+                vis[v] = true;
+                dis[v] = dis[u] + w;
+                q.push(v);
+            }
+        }
+    }
+    if (!vis[t]) {
+        cout << -1 << "\n";
+        return;
+    }
+    long long d = 0;
+    for (int u = 1; u <= n; u++) {
+        for (auto [v, w, id] : g[u]) {
+            d = gcd(d, llabs(dis[u] + w - dis[v]));
+        }
+    }
+
+    if (d == 0) {
+        cout << llabs(dis[t]) << "\n";
+    } else {
+        cout << min(llabs(dis[t] % d), d - llabs(dis[t] % d)) << "\n";
+    }
 }
+
 } // namespace TANGYIXIAO
