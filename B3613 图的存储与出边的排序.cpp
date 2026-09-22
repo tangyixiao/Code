@@ -9,18 +9,18 @@
 //  Test Type: single
 //  Batch ID: 08404107-628e-4cea-b772-2b08a58ac0a9
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
 */
-#define PRAGMA_TYPE 0 // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
+#define PRAGMA_TYPE 0                     // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
-#define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file, 2 for local file
-#define FILE_INDEX 1 // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
+#define FILE_INDEX 1                      // the index of the file in the local file system
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -585,7 +585,9 @@ signed main() {
 #ifdef MULTIPLE_TEST
     cin >> T;
 #endif
-    for (int Task_Id = 1; Task_Id <= T; Task_Id++) { solve(Task_Id); }
+    for (int Task_Id = 1; Task_Id <= T; Task_Id++) {
+        solve(Task_Id);
+    }
 #ifdef TIME_COUNT
     End_Time_Count();
     Print_Time_Count("TOTAL");
@@ -595,21 +597,25 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 5e5 + 5;
+vector<int> g[N];
 inline void solve(int Task_Id) {
     int n, m;
     cin >> n >> m;
-    vector<vector<int>> g(n + 1);
     for (int i = 1, u, v; i <= m; i++) {
         cin >> u >> v;
         g[u].push_back(v);
     }
     for (int u = 1; u <= n; u++) {
         sort(g[u].begin(), g[u].end());
-        for (size_t i = 0; i < g[u].size(); i++) {
-            if (i) { cout << ' '; }
+        for (int i = 0; i < g[u].size(); i++) {
+            if (i) {
+                cout << ' ';
+            }
             cout << g[u][i];
         }
         cout << '\n';
+        g[u].clear();
     }
     return;
 }
