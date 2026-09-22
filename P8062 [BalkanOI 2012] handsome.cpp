@@ -595,7 +595,99 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const long long MOD = 1e9 + 7;
+const int MAXN = 400005;
+int n;
+int p[MAXN];
+int allow_[3][3];
+string Bstr;
+vector<array<array<long long, 3>, 3>> Mp;
+int segSize;
+vector<long long> seg;
+int val_[MAXN];
+
+inline void segUpdate(int i, long long v) {
+    int pos = i + segSize;
+    seg[pos] = v;
+    for (pos >>= 1; pos; pos >>= 1) { seg[pos] = seg[2 * pos] * seg[2 * pos + 1] % MOD; }
+    return;
+}
+
+inline long long contrib(int Lpos, int Rpos, int Ldig, int Rdig) {
+    int L = Rpos - Lpos - 1;
+    bool leftReal = (Lpos != 0);
+    bool rightReal = (Rpos != n + 1);
+    int numReal = (leftReal ? 1 : 0) + (rightReal ? 1 : 0);
+    int e = L + numReal - 1;
+    auto &Mat = Mp[e];
+    if (leftReal && rightReal) { return Mat[Ldig - 1][Rdig - 1]; }
+    if (leftReal) { long long s = 0; for (int b = 0; b < 3; b++) { s += Mat[Ldig - 1][b]; } return s % MOD; }
+    if (rightReal) { long long s = 0; for (int a = 0; a < 3; a++) { s += Mat[a][Rdig - 1]; } return s % MOD; }
+    long long s = 0; for (int a = 0; a < 3; a++) { for (int b = 0; b < 3; b++) { s += Mat[a][b]; } } return s % MOD;
+}
+
 inline void solve(int Task_Id) {
+    cin >> n;
+    for (int i = 1; i <= n; i++) { cin >> p[i]; }
+    int cntPairs;
+    cin >> cntPairs;
+    for (int a = 0; a < 3; a++) { for (int b = 0; b < 3; b++) { allow_[a][b] = 1; } }
+    for (int i = 0; i < cntPairs; i++) {
+        int num;
+        cin >> num;
+        int a = num / 10, b = num % 10;
+        allow_[a - 1][b - 1] = 0;
+    }
+    cin >> Bstr;
+    Mp.assign(n, {});
+    for (int a = 0; a < 3; a++) { for (int b = 0; b < 3; b++) { Mp[0][a][b] = (a == b) ? 1 : 0; } }
+    for (int e = 1; e < n; e++) {
+        for (int a = 0; a < 3; a++) {
+            for (int b = 0; b < 3; b++) {
+                long long s = 0;
+                for (int k = 0; k < 3; k++) { s += Mp[e - 1][a][k] * allow_[k][b]; }
+                Mp[e][a][b] = s % MOD;
+            }
+        }
+    }
+    segSize = 1;
+    while (segSize < n + 1) { segSize <<= 1; }
+    seg.assign(2 * segSize, 1);
+    long long initContrib = contrib(0, n + 1, 0, 0);
+    seg[segSize] = initContrib;
+    for (int i = segSize - 1; i >= 1; i--) { seg[i] = seg[2 * i] * seg[2 * i + 1] % MOD; }
+    set<int> fixedSet;
+    fixedSet.insert(0);
+    fixedSet.insert(n + 1);
+    for (int i = 1; i <= n; i++) { val_[i] = 0; }
+    long long ans = 0;
+    for (int k = 1; k <= n; k++) {
+        int pos = p[k];
+        int db = Bstr[pos - 1] - '0';
+        auto it = fixedSet.lower_bound(pos);
+        int Rpos = *it;
+        int Lpos = *prev(it);
+        int Ldig = (Lpos != 0) ? val_[Lpos] : 0;
+        int Rdig = (Rpos != n + 1) ? val_[Rpos] : 0;
+        long long oldContribution = contrib(Lpos, Rpos, Ldig, Rdig);
+        for (int d = 1; d < db; d++) {
+            long long leftSub = contrib(Lpos, pos, Ldig, d);
+            long long rightSub = contrib(pos, Rpos, d, Rdig);
+            segUpdate(Lpos, leftSub);
+            segUpdate(pos, rightSub);
+            ans = (ans + seg[1]) % MOD;
+            segUpdate(Lpos, oldContribution);
+            segUpdate(pos, 1);
+        }
+        long long leftSub = contrib(Lpos, pos, Ldig, db);
+        long long rightSub = contrib(pos, Rpos, db, Rdig);
+        segUpdate(Lpos, leftSub);
+        segUpdate(pos, rightSub);
+        val_[pos] = db;
+        fixedSet.insert(pos);
+    }
+    ans = (ans + 1) % MOD;
+    cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO
