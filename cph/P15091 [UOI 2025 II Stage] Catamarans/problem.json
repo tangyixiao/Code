@@ -1,0 +1,35 @@
+{
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "testType": "single", 
+  "batch": {
+    "id": "41321c71-1158-441b-ae2d-ce4998cdf094", 
+    "size": 1
+  }, 
+  "interactive": false, 
+  "url": "https://www.luogu.com.cn/problem/P15091", 
+  "memoryLimit": 512, 
+  "languages": {
+    "java": {
+      "taskClass": "P15091UOI2025IIStageCatamarans", 
+      "mainClass": "Main"
+    }
+  }, 
+  "timeLimit": 1000, 
+  "tests": [
+    {
+      "input": "4\n20 40 80 80\n", 
+      "output": "3\n"
+    }, 
+    {
+      "input": "4\n20 40 20 20\n", 
+      "output": "1\n"
+    }
+  ], 
+  "name": "P15091 [UOI 2025 II Stage] Catamarans"
+}
