@@ -9,17 +9,17 @@
 //  Test Type: single
 //  Batch ID: 0490b19a-7634-44b0-a8e3-55f76960c7e0
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
 */
-#define PRAGMA_TYPE 0 // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
+#define PRAGMA_TYPE 0                     // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
-#define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file, 2 for local file
-#define FILE_INDEX 1 // the index of the file in the local file system
+#define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
+#define FILE_INDEX 1                      // the index of the file in the local file system
 // #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
@@ -585,7 +585,9 @@ signed main() {
 #ifdef MULTIPLE_TEST
     cin >> T;
 #endif
-    for (int Task_Id = 1; Task_Id <= T; Task_Id++) { solve(Task_Id); }
+    for (int Task_Id = 1; Task_Id <= T; Task_Id++) {
+        solve(Task_Id);
+    }
 #ifdef TIME_COUNT
     End_Time_Count();
     Print_Time_Count("TOTAL");
@@ -595,7 +597,29 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 100005;
+int cur[N], tot[N], pos[N];
 inline void solve(int Task_Id) {
+    int n, m;
+    cin >> n >> m;
+    int landed = 0;
+    for (int i = 1, op, x; i <= m; i++) {
+        cin >> op >> x;
+        if (op == 2) {
+            landed++;
+            pos[landed] = x;
+            cur[x]++;
+            tot[x]++;
+        } else {
+            cur[pos[x]]--;
+        }
+    }
+    for (int i = 1; i <= n; i++) {
+        cout << cur[i] << " \n"[i == n];
+    }
+    for (int i = 1; i <= n; i++) {
+        cout << tot[i] << " \n"[i == n];
+    }
     return;
 }
 } // namespace TANGYIXIAO
