@@ -650,3 +650,96 @@ inline void solve(int Task_Id) {
 }
 
 } // namespace TANGYIXIAO
+/*
+#include <iostream>
+
+constexpr int N = 200005;
+constexpr int M = 400005;
+
+int n, m, s, t;
+int h[N], e[M << 1], ne[M << 1], w[M << 1], idx;
+int q[N], d[N], c[N];
+
+void add(int a, int b, int z) {
+    e[idx] = b;
+    w[idx] = z;
+    ne[idx] = h[a];
+    h[a] = idx++;
+}
+
+int main() {
+
+    std::cin >> n >> m >> s >> t;
+
+    for (int i = 1; i <= n; i++)
+        h[i] = d[i] = c[i] = -1;
+
+    for (int i = 0; i < m; i++) {
+
+        int a, b;
+        char op[2];
+
+        std::cin >> a >> b >> op;
+
+        int z = op[0] == '+' ? 1 : -1;
+
+        add(a, b, z);
+        add(b, a, z);
+    }
+
+    int hh = 0, tt = 0;
+
+    int p = 0, ng = 0, ok = 1;
+
+    q[tt++] = s;
+    d[s] = c[s] = 0;
+
+    while (hh < tt) {
+
+        int x = q[hh++];
+
+        for (int i = h[x]; i != -1; i = ne[i]) {
+
+            int y = e[i];
+
+            if (w[i] > 0)
+                p = 1;
+
+            if (w[i] < 0)
+                ng = 1;
+
+            if (d[y] == -1) {
+
+                d[y] = d[x] + 1;
+                c[y] = c[x] ^ 1;
+
+                q[tt++] = y;
+
+            } else if (c[y] == c[x])
+
+                ok = 0;
+        }
+    }
+
+    if (d[t] == -1) {
+
+        std::cout << -1;
+
+        return 0;
+    }
+
+    if (!p || !ng) {
+
+        std::cout << d[t];
+
+        return 0;
+    }
+
+    if (!ok || c[s] == c[t])
+        std::cout << 0;
+    else
+        std::cout << 1;
+
+    return 0;
+}
+*/
