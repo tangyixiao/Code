@@ -596,229 +596,89 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
-
 namespace TANGYIXIAO {
 
 const int N = 1000005;
 const int M = 1000005;
 
-int n;
-
-int h[N], rh[N];
-int to[M], nxt[M];
-int rto[M], rnxt[M];
-int tot, rtot;
-
-int vis[N], id[N];
-
-int pre[N], nxt_[N];
-int head;
-
-int mark_[N];
-
-int stk[N], top;
-
-int ord[N], cnt;
-
-int ans[N], acnt;
+int n, h[N], to[M], ne[M], tot;
+int tag[N], tim, nx[N], q[N];
+bool vis[N];
 
 inline void add(int u, int v) {
-
-    to[++tot] = v;
-    nxt[tot] = h[u];
-    h[u] = tot;
-
-    rto[++rtot] = u;
-    rnxt[rtot] = rh[v];
-    rh[v] = rtot;
+    to[++tot] = v, ne[tot] = h[u], h[u] = tot;
 }
 
-inline void init_list() {
-
-    head = 1;
-
-    for (int i = 1; i <= n; i++) {
-
-        pre[i] = i - 1;
-        nxt_[i] = i + 1;
-    }
-
-    nxt_[n] = 0;
-    pre[1] = 0;
-}
-
-inline void del(int x) {
-
-    if (pre[x]) {
-
-        nxt_[pre[x]] = nxt_[x];
-
-    } else {
-
-        head = nxt_[x];
-    }
-
-    if (nxt_[x]) {
-
-        pre[nxt_[x]] = pre[x];
-    }
-}
-
-inline void dfs1(int s) {
-
-    int x;
-
-    vis[s] = 1;
-    del(s);
-
-    for (int i = rh[s]; i; i = rnxt[i]) {
-
-        mark_[rto[i]] = s;
-    }
-
-    stk[++top] = s;
-
-    while (top) {
-
-        x = stk[top];
-
-        int &p = nxt_[x];
-
-        while (p && mark_[p] == x) {
-
-            p = nxt_[p];
-        }
-
-        if (!p) {
-
-            ord[++cnt] = x;
-            top--;
-            continue;
-        }
-
-        int y = p;
-
-        del(y);
-
-        vis[y] = 1;
-
-        for (int i = rh[y]; i; i = rnxt[i]) {
-
-            mark_[rto[i]] = y;
-        }
-
-        stk[++top] = y;
-    }
-}
-
-inline void dfs2(int s, int c) {
-
-    int x;
-
-    id[s] = c;
-    del(s);
-
-    for (int i = h[s]; i; i = nxt[i]) {
-
-        mark_[to[i]] = s;
-    }
-
-    stk[++top] = s;
-
-    while (top) {
-
-        x = stk[top];
-
-        int &p = nxt_[x];
-
-        while (p && mark_[p] == x) {
-
-            p = nxt_[p];
-        }
-
-        if (!p) {
-
-            top--;
-            continue;
-        }
-
-        int y = p;
-
-        del(y);
-
-        id[y] = c;
-
-        for (int i = h[y]; i; i = nxt[i]) {
-
-            mark_[to[i]] = y;
-        }
-
-        stk[++top] = y;
+inline void cover(int u) {
+    tim++;
+    for (int i = h[u]; i; i = ne[i]) {
+        tag[to[i]] = tim;
     }
 }
 
 inline void solve(int Task_Id) {
+    static Fread_Input in;
+    static Fwrite_Output out;
 
-    cin >> n;
+    in.read_int(n);
 
     for (int i = 1; i <= n; i++) {
-
         int k;
-
-        cin >> k;
-
+        in.read_int(k);
         while (k--) {
-
             int x;
-
-            cin >> x;
-
+            in.read_int(x);
             add(i, x);
         }
     }
 
-    init_list();
+    int rt = 1;
+    cover(rt);
 
+    for (int i = 2; i <= n; i++) {
+        if (tag[i] != tim) {
+            rt = i;
+            cover(rt);
+        }
+    }
+
+    int lst = 0;
     for (int i = 1; i <= n; i++) {
+        if (i != rt) {
+            nx[lst] = i, lst = i;
+        }
+    }
+    nx[lst] = 0;
 
-        if (!vis[i]) {
+    int l = 1, r = 1, cnt = 1;
+    q[1] = rt, vis[rt] = true;
 
-            dfs1(i);
+    while (l <= r) {
+        int u = q[l++];
+        cover(u);
+
+        int p = 0;
+        while (nx[p]) {
+            int v = nx[p];
+            if (tag[v] == tim) {
+                p = v;
+            } else {
+                nx[p] = nx[v];
+                vis[v] = true;
+                q[++r] = v;
+                cnt++;
+            }
         }
     }
 
-    init_list();
-
-    int c = 0;
-
-    for (int i = n; i >= 1; i--) {
-
-        int x = ord[i];
-
-        if (!id[x]) {
-
-            c++;
-
-            dfs2(x, c);
-        }
-    }
-
+    out.write_int(cnt);
     for (int i = 1; i <= n; i++) {
-
-        if (id[i] == 1) {
-
-            ans[++acnt] = i;
+        if (vis[i]) {
+            out.write_cstr(" ");
+            out.write_int(i);
         }
     }
-
-    cout << acnt;
-
-    for (int i = 1; i <= acnt; i++) {
-
-        cout << " " << ans[i];
-    }
-
-    cout << "\n";
+    out.write_cstr("\n");
 }
 
 } // namespace TANGYIXIAO
