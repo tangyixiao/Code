@@ -9,17 +9,17 @@
 //  Test Type: single
 //  Batch ID: 01704c36-6625-439c-914c-f1bf90f1ee47
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
 */
-#define PRAGMA_TYPE 0 // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
+#define PRAGMA_TYPE 0                     // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
-#define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file, 2 for local file
-#define FILE_INDEX 1 // the index of the file in the local file system
+#define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
+#define FILE_INDEX 1                      // the index of the file in the local file system
 // #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
@@ -585,7 +585,9 @@ signed main() {
 #ifdef MULTIPLE_TEST
     cin >> T;
 #endif
-    for (int Task_Id = 1; Task_Id <= T; Task_Id++) { solve(Task_Id); }
+    for (int Task_Id = 1; Task_Id <= T; Task_Id++) {
+        solve(Task_Id);
+    }
 #ifdef TIME_COUNT
     End_Time_Count();
     Print_Time_Count("TOTAL");
@@ -595,7 +597,60 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+
+struct BIT {
+    int n;
+    vector<int> tree;
+    inline void init(int n_) {
+        n = n_;
+        tree.assign(n + 1, 0);
+    }
+    inline void update(int pos, int val = 1) {
+        for (; pos <= n; pos += pos & (-pos))
+            tree[pos] += val;
+    }
+    inline int query(int pos) {
+        int s = 0;
+        for (; pos > 0; pos -= pos & (-pos))
+            s += tree[pos];
+        return s;
+    }
+};
+
 inline void solve(int Task_Id) {
+    int n;
+    cin >> n;
+    vector<int> y(n + 1);
+    for (int i = 1; i <= n; i++)
+        cin >> y[i];
+
+    vector<ll> gl(n + 1), ls(n + 1), gr(n + 1), lr(n + 1);
+
+    BIT bit;
+    bit.init(n);
+    for (int j = 1; j <= n; j++) {
+        int cnt_le = bit.query(y[j]);
+        gl[j] = (j - 1) - cnt_le;
+        ls[j] = bit.query(y[j] - 1);
+        bit.update(y[j]);
+    }
+
+    bit.init(n);
+    for (int j = n; j >= 1; j--) {
+        int cnt_le = bit.query(y[j]);
+        gr[j] = (n - j) - cnt_le;
+        lr[j] = bit.query(y[j] - 1);
+        bit.update(y[j]);
+    }
+
+    ll V = 0, A = 0;
+    for (int j = 1; j <= n; j++) {
+        V += gl[j] * gr[j];
+        A += ls[j] * lr[j];
+    }
+
+    cout << V << " " << A << "\n";
     return;
 }
+
 } // namespace TANGYIXIAO
