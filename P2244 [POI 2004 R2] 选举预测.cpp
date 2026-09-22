@@ -594,9 +594,199 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+#include <bits/stdc++.h>
+using namespace std;
+
 namespace TANGYIXIAO {
-inline void solve(int Task_Id) {
-    
-    return;
+
+const int N = 1000005;
+
+int n;
+vector<int> g[N], rg[N];
+
+int vis[N], comp[N];
+int mark_[N];
+
+int head, tot;
+int nxt[N], pre[N];
+int alive[N];
+
+vector<int> order;
+
+void init_list() {
+    head = 1;
+    for (int i = 1; i <= n; i++) {
+        nxt[i] = i + 1;
+        pre[i] = i - 1;
+        alive[i] = 1;
+    }
+    nxt[n] = 0;
+    pre[1] = 0;
 }
-} // namespace TANGYIXIAO
+
+void erase_node(int x) {
+    if (!alive[x]) {
+        return;
+    }
+    if (pre[x]) {
+        nxt[pre[x]] = nxt[x];
+    } else {
+        head = nxt[x];
+    }
+    if (nxt[x]) {
+        pre[nxt[x]] = pre[x];
+    }
+    alive[x] = 0;
+}
+
+void dfs1(int s) {
+    vector<pair<int,int>> st;
+
+    vis[s] = 1;
+    erase_node(s);
+
+    for (int x : rg[s]) {
+        mark_[x] = s;
+    }
+
+    st.push_back({s, head});
+
+    while (!st.empty()) {
+        int u = st.back().first;
+        int &p = st.back().second;
+
+        while (p && !alive[p]) {
+            p = nxt[p];
+        }
+
+        if (!p) {
+            order.push_back(u);
+            st.pop_back();
+            continue;
+        }
+
+        int v = p;
+        p = nxt[v];
+
+        if (mark_[v] == u) {
+            continue;
+        }
+
+        vis[v] = 1;
+        erase_node(v);
+
+        for (int x : rg[v]) {
+            mark_[x] = v;
+        }
+
+        st.push_back({v, head});
+    }
+}
+
+void dfs2(int s, int id) {
+    vector<pair<int,int>> st;
+
+    comp[s] = id;
+    erase_node(s);
+
+    for (int x : g[s]) {
+        mark_[x] = s;
+    }
+
+    st.push_back({s, head});
+
+    while (!st.empty()) {
+        int u = st.back().first;
+        int &p = st.back().second;
+
+        while (p && !alive[p]) {
+            p = nxt[p];
+        }
+
+        if (!p) {
+            st.pop_back();
+            continue;
+        }
+
+        int v = p;
+        p = nxt[v];
+
+        if (mark_[v] == u) {
+            continue;
+        }
+
+        comp[v] = id;
+        erase_node(v);
+
+        for (int x : g[v]) {
+            mark_[x] = v;
+        }
+
+        st.push_back({v, head});
+    }
+}
+
+inline void solve(int Task_Id) {
+
+    cin >> n;
+
+    for (int i = 1; i <= n; i++) {
+        int k;
+        cin >> k;
+
+        while (k--) {
+            int x;
+            cin >> x;
+
+            // 原图：i 赢 x
+            g[i].push_back(x);
+            rg[x].push_back(i);
+        }
+    }
+
+    init_list();
+
+    for (int i = 1; i <= n; i++) {
+        if (!vis[i]) {
+            for (int x : rg[i]) {
+                mark_[x] = i;
+            }
+            dfs1(i);
+        }
+    }
+
+    init_list();
+
+    int cnt = 0;
+
+    for (int i = n - 1; i >= 0; i--) {
+        int x = order[i];
+
+        if (!comp[x]) {
+            cnt++;
+            for (int y : g[x]) {
+                mark_[y] = x;
+            }
+            dfs2(x, cnt);
+        }
+    }
+
+    // Kosaraju 第二遍第一次找到的是源 SCC
+    vector<int> ans;
+
+    for (int i = 1; i <= n; i++) {
+        if (comp[i] == 1) {
+            ans.push_back(i);
+        }
+    }
+
+    cout << ans.size();
+
+    for (int x : ans) {
+        cout << " " << x;
+    }
+
+    cout << "\n";
+}
+
+}
