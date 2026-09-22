@@ -596,6 +596,21 @@ signed main() {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 inline void solve(int Task_Id) {
+    int n, m;
+    cin >> n >> m;
+    vector<vector<int>> g(n + 1);
+    for (int i = 1, u, v; i <= m; i++) {
+        cin >> u >> v;
+        g[u].push_back(v);
+    }
+    for (int u = 1; u <= n; u++) {
+        sort(g[u].begin(), g[u].end());
+        for (size_t i = 0; i < g[u].size(); i++) {
+            if (i) { cout << ' '; }
+            cout << g[u][i];
+        }
+        cout << '\n';
+    }
     return;
 }
 } // namespace TANGYIXIAO
