@@ -596,6 +596,69 @@ signed main() {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 inline void solve(int Task_Id) {
+    string s, t;
+    cin >> s >> t;
+    int cnt_s[26] = {}, cnt_t[26] = {};
+    for (char c : s) { cnt_s[c - 'a']++; }
+    for (char c : t) { cnt_t[c - 'a']++; }
+    for (int i = 0; i < 26; i++) {
+        if (cnt_t[i] >= 2) { cout << "NO\n"; return; }
+    }
+    bool inT[26] = {};
+    for (int i = 0; i < 26; i++) {
+        if (cnt_t[i] == 1) {
+            inT[i] = true;
+            if (cnt_s[i] == 0) { cout << "NO\n"; return; }
+        }
+    }
+    int R[26];
+    long long E = 0;
+    for (int i = 0; i < 26; i++) { R[i] = cnt_s[i] - (inT[i] ? 1 : 0); E += R[i]; }
+    string tPrime;
+    for (int i = 0; i < 26; i++) { if (inT[i]) { tPrime.push_back((char)('a' + i)); } }
+    if (E == 0) {
+        cout << "YES\n" << tPrime << "\n" << tPrime << "\n";
+        return;
+    }
+    vector<int> W;
+    for (int i = 0; i < 26; i++) { if (R[i] >= 2) { W.push_back(i); } }
+    if (W.empty()) { cout << "NO\n"; return; }
+    vector<int> singles;
+    for (int i = 0; i < 26; i++) { if (R[i] == 1) { singles.push_back(i); } }
+    string reducePart;
+    reducePart.reserve((size_t)E);
+    int used[26] = {};
+    if (W.size() == 1) {
+        int c0 = W[0];
+        if (R[c0] % 2 != 0) { cout << "NO\n"; return; }
+        reducePart.push_back((char)('a' + c0));
+        for (int c : singles) { reducePart.push_back((char)('a' + c)); }
+        reducePart.push_back((char)('a' + c0));
+        used[c0] += 2;
+    } else {
+        int b1 = W[0], b2 = W[1];
+        string part1, part2;
+        part1.push_back((char)('a' + b1));
+        for (int c : singles) { part1.push_back((char)('a' + c)); }
+        for (size_t idx = 1; idx < W.size(); idx++) {
+            int c = W[idx];
+            if (R[c] % 2 != 0) { part1.push_back((char)('a' + c)); used[c] += 1; }
+        }
+        part1.push_back((char)('a' + b1));
+        used[b1] += 2;
+        part2.push_back((char)('a' + b2));
+        if (R[b1] % 2 != 0) { part2.push_back((char)('a' + b1)); used[b1] += 1; }
+        part2.push_back((char)('a' + b2));
+        used[b2] += 2;
+        reducePart += part1;
+        reducePart += part2;
+    }
+    for (int c : W) {
+        int rem = R[c] - used[c];
+        for (int k = 0; k < rem; k++) { reducePart.push_back((char)('a' + c)); }
+    }
+    string sPrime = reducePart + tPrime;
+    cout << "YES\n" << sPrime << "\n" << tPrime << "\n";
     return;
 }
 } // namespace TANGYIXIAO
