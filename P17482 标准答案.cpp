@@ -599,3 +599,138 @@ inline void solve(int Task_Id) {
     return;
 }
 } // namespace TANGYIXIAO
+/*
+#include <cstdlib>
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+typedef long long ll;
+typedef unsigned long long ull;
+
+int main() {
+
+    int n, m;
+
+    cin >> n >> m;
+
+    vector<ll> x(n), c(n);
+
+    for (int i = 0; i < n; i++) {
+
+        cin >> x[i];
+
+        c[i] = -m + 2 * x[i] + 1;
+
+    }
+
+    vector<string> a(n);
+
+    for (int i = 0; i < n; i++)
+        cin >> a[i];
+
+    vector<int> s(n, -1);
+
+    vector<ll> q(m, 0);
+
+    ll C = 0, S = 0;
+
+    for (int i = 0; i < n; i++) {
+
+        C -= c[i];
+
+        for (int j = 0; j < m; j++) {
+
+            if (a[i][j] == 'A')
+                q[j]--;
+
+            else
+                q[j]++;
+
+        }
+
+    }
+
+    for (int j = 0; j < m; j++)
+        S += abs(q[j]);
+
+    ll ans = C + S;
+
+    ull best = 0, lst = 0;
+
+    for (ull mask = 1; mask < (1ULL << n); mask++) {
+
+        ull g = mask ^ (mask >> 1);
+
+        ull d = g ^ lst;
+
+        int k = __builtin_ctzll(d);
+
+        C -= 2ll * s[k] * c[k];
+
+        for (int j = 0; j < m; j++) {
+
+            ll old = q[j];
+
+            int v = (a[k][j] == 'A' ? 1 : -1);
+
+            q[j] -= 2ll * s[k] * v;
+
+            S += abs(q[j]) - abs(old);
+
+        }
+
+        s[k] = -s[k];
+
+        if (C + S > ans) {
+
+            ans = C + S;
+
+            best = g;
+
+        }
+
+        lst = g;
+
+    }
+
+    for (int i = 0; i < n; i++) {
+
+        if ((best >> i) & 1)
+            s[i] = 1;
+
+        else
+            s[i] = -1;
+
+    }
+
+    string res(m, 'A');
+
+    for (int j = 0; j < m; j++) {
+
+        ll v = 0;
+
+        for (int i = 0; i < n; i++) {
+
+            if (a[i][j] == 'A')
+                v += s[i];
+
+            else
+                v -= s[i];
+
+        }
+
+        if (v + (n & 1) >= 0)
+            res[j] = 'A';
+
+        else
+            res[j] = 'B';
+
+    }
+
+    cout << res << endl;
+
+    return 0;
+}
+*/
