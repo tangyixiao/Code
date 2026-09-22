@@ -603,12 +603,12 @@ struct Edge {
 };
 int n, m, s, t;
 vector<Edge> g[N];
-vector<pair<int, int>> e1,e2;
+vector<pair<int, int>> e1, e2;
 long long dis[N];
 bool vis[N];
 inline void solve(int Task_Id) {
     cin >> n >> m >> s >> t;
-    for (int i = 1,a,b; i <= m; i++) {
+    for (int i = 1, a, b; i <= m; i++) {
         char c;
         cin >> a >> b >> c;
         g[a].push_back({b, (c == '+') ? 1 : -1, i});
@@ -634,17 +634,19 @@ inline void solve(int Task_Id) {
         return;
     }
     long long d = 0;
+
     for (int u = 1; u <= n; u++) {
         for (auto [v, w, id] : g[u]) {
-            d = gcd(d, llabs(dis[u] + w - dis[v]));
+            d = gcd(d, 2LL);
+            d = gcd(d, llabs(dis[u] + w + dis[v]));
         }
     }
-
     if (d == 0) {
         cout << llabs(dis[t]) << "\n";
     } else {
         cout << min(llabs(dis[t] % d), d - llabs(dis[t] % d)) << "\n";
     }
+    return;
 }
 
 } // namespace TANGYIXIAO
