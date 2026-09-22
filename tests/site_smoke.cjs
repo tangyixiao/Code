@@ -16,7 +16,7 @@ async function mockRawSources(page) {
   await page.route('https://raw.githubusercontent.com/**', (route) => {
     const url = decodeURIComponent(route.request().url());
     const body = url.endsWith('P9709 [KMOI R1] 军事行动.md')
-      ? `# 军事行动\n\n$ x_1 + x_2 = 10 $\n\n$ y = ax^2 + bx + c $\n\n$ \\sum_{i=1}^{n} i $\n\n$ \\frac{a}{b} $\n\n$ \\alpha + \\beta = \\gamma $\n\n$ \\int_0^1 x^2 dx $\n`
+      ? `# 军事行动\n\n$ x_1 + x_2 = 10 $\n\n$ y = ax^2 + bx + c $\n\n$ \\sum_{i=1}^{n} i $\n\n$ \\frac{a}{b} $\n\n$ \\alpha + \\beta = \\gamma $\n\n$ \\int_0^1 x^2 dx $\n\n:::info[信息]\n普通提示。\n:::\n\n:::success[展开提示]{open}\n默认展开。\n:::\n\n:::warning[嵌套提示]\n::::error[错误]\n嵌套错误。\n::::\n:::\n\n:::align{center}\n居中内容。\n:::\n\n:::epigraph[——otto]\n引文内容。\n:::\n\n::cute-table{three}\n| 测试点 | n | m |\n| --- | --- | --- |\n| 1 | 100 | 100 |\n| ^ | 200 | 200 |\n\n::cute-table{tuack=3}\n| a | b | c |\n| --- | --- | --- |\n| x | > | z |\n| y | q | < |\n\n~~~cpp lines=2-3,5\nint main() {\n  int x = 1;\n  x += 1;\n  return x;\n}\n~~~\n`
       : url.endsWith('P1241 括号序列.md')
         ? '# 括号序列\n\n配对题解内容保留。\n'
         : 'int main() { return 0; }\n';
@@ -95,6 +95,18 @@ async function main() {
     await desktop.locator('#viewer .markdown-body').waitFor();
     await desktop.locator('#viewer .katex').first().waitFor();
     assert.ok(await desktop.locator('#viewer .katex').count() > 5);
+    assert.equal(await desktop.locator('.markdown-callout').count(), 4);
+    assert.equal(await desktop.locator('.markdown-callout-success[open]').count(), 1);
+    assert.equal(await desktop.locator('.markdown-callout-warning .markdown-callout-error').count(), 1);
+    assert.equal(await desktop.locator('.markdown-align[data-align="center"]').count(), 1);
+    assert.equal(await desktop.locator('.markdown-epigraph[data-author="——otto"]').count(), 1);
+    assert.equal(await desktop.locator('table.cute-table-three').count(), 1);
+    assert.equal(await desktop.locator('table.cute-table-three td[rowspan="2"]').count(), 1);
+    assert.equal(await desktop.locator('table.cute-table-tuack[data-tuack="3"]').count(), 1);
+    assert.equal(await desktop.locator('table.cute-table-tuack td[colspan="2"]').count(), 2);
+    assert.equal(await desktop.locator('.markdown-code-block').count(), 1);
+    assert.equal(await desktop.locator('.markdown-code-block .line-number').count(), 5);
+    assert.equal(await desktop.locator('.markdown-code-block .code-line[data-highlighted="true"]').count(), 3);
     await saveScreenshot(desktop, process.env.MATH_SCREENSHOT);
 
     await desktop.getByPlaceholder('搜索题目编号或文件名').fill('P1241 括号序列');

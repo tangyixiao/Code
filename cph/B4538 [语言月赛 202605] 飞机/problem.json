@@ -1,0 +1,39 @@
+{
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "testType": "single", 
+  "batch": {
+    "id": "0490b19a-7634-44b0-a8e3-55f76960c7e0", 
+    "size": 1
+  }, 
+  "interactive": false, 
+  "url": "https://www.luogu.com.cn/problem/B4538", 
+  "memoryLimit": 512, 
+  "languages": {
+    "java": {
+      "taskClass": "B4538202605", 
+      "mainClass": "Main"
+    }
+  }, 
+  "timeLimit": 1000, 
+  "tests": [
+    {
+      "input": "2 5\n2 1\n2 2\n2 1\n2 2\n1 4\n", 
+      "output": "2 1\n2 2\n"
+    }, 
+    {
+      "input": "4 5\n2 1\n2 2\n2 3\n2 4\n2 3\n", 
+      "output": "1 1 2 1\n1 1 2 1\n"
+    }, 
+    {
+      "input": "6 6\n2 1\n2 4\n2 1\n1 1\n2 1\n2 2\n", 
+      "output": "2 1 0 1 0 0\n3 1 0 1 0 0\n"
+    }
+  ], 
+  "name": "B4538 [语言月赛 202605] 飞机"
+}

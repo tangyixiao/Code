@@ -1,0 +1,39 @@
+{
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "testType": "single", 
+  "batch": {
+    "id": "df90ef55-14aa-4f86-9327-157e430c5139", 
+    "size": 1
+  }, 
+  "interactive": false, 
+  "url": "https://www.luogu.com.cn/problem/P16455", 
+  "memoryLimit": 512, 
+  "languages": {
+    "java": {
+      "taskClass": "P16455UOI2026UniqueLetters", 
+      "mainClass": "Main"
+    }
+  }, 
+  "timeLimit": 300, 
+  "tests": [
+    {
+      "input": "bbcdfe\nfe\n", 
+      "output": "YES\nbcdbef\nef\n"
+    }, 
+    {
+      "input": "bbfcbbd\nf\n", 
+      "output": "YES\nbcdbfbb\nf\n"
+    }, 
+    {
+      "input": "cgbfedc\ngfbc\n", 
+      "output": "NO\n"
+    }
+  ], 
+  "name": "P16455 [UOI 2026] Unique Letters"
+}

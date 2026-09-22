@@ -141,6 +141,33 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 .markdown-body table { display: block; max-width: 100%; overflow: auto; border-collapse: collapse; }
 .markdown-body th, .markdown-body td { padding: .55em .8em; border: 1px solid var(--line); }
 .markdown-body .katex-display { overflow-x: auto; overflow-y: hidden; padding: .5em 0; }
+.markdown-body .markdown-code-block { display: block; padding: 0; overflow: auto; counter-reset: code-line; }
+.markdown-body .markdown-code-block code { display: block; min-width: max-content; padding: 13px 0; }
+.markdown-body .code-line { display: grid; grid-template-columns: 3.5em minmax(max-content, 1fr); min-height: 1.5em; padding-right: 20px; }
+.markdown-body .code-line[data-highlighted="true"] { background: rgba(98, 221, 255, .13); box-shadow: inset 2px 0 var(--aurora); }
+.markdown-body .line-number { padding-right: 1em; color: #52748c; text-align: right; user-select: none; }
+.markdown-body .line-content { white-space: pre; }
+.markdown-body .markdown-callout { margin: 1.4em 0; overflow: hidden; border: 1px solid rgba(98, 221, 255, .24); border-left: 3px solid var(--aurora); border-radius: 4px; background: rgba(10, 34, 56, .65); }
+.markdown-body .markdown-callout summary { padding: .72em 1em; color: #dff8ff; cursor: pointer; font-weight: 600; list-style-position: inside; }
+.markdown-body .markdown-callout-content { padding: .1em 1em .65em; }
+.markdown-body .markdown-callout-content > :first-child { margin-top: .35em; }
+.markdown-body .markdown-callout-content > :last-child { margin-bottom: .35em; }
+.markdown-body .markdown-callout-info { border-left-color: #62ddff; }
+.markdown-body .markdown-callout-success { border-left-color: #74e6a1; background: rgba(16, 61, 52, .54); }
+.markdown-body .markdown-callout-warning { border-left-color: #f0c66e; background: rgba(72, 53, 20, .48); }
+.markdown-body .markdown-callout-error { border-left-color: #f17b8a; background: rgba(71, 28, 42, .48); }
+.markdown-body .markdown-align[data-align="left"] { text-align: left; }
+.markdown-body .markdown-align[data-align="center"] { text-align: center; }
+.markdown-body .markdown-align[data-align="right"] { text-align: right; }
+.markdown-body .markdown-epigraph { margin: 1.8em 0; color: #b9c9d8; text-align: right; }
+.markdown-body .markdown-epigraph blockquote { margin: 0; padding: 0 1.2em 0 0; border: 0; font-style: italic; }
+.markdown-body .markdown-epigraph figcaption { margin-top: .5em; color: var(--muted); font-size: .9em; }
+.markdown-body table.cute-table { display: table; width: 100%; max-width: none; overflow: visible; }
+.markdown-body table.cute-table-three { border-top: 2px solid rgba(215, 234, 250, .7); border-bottom: 2px solid rgba(215, 234, 250, .7); }
+.markdown-body table.cute-table-three th, .markdown-body table.cute-table-three td { border-width: 0 0 1px; border-color: rgba(113, 190, 229, .18); }
+.markdown-body table.cute-table-three thead th { border-bottom: 1px solid rgba(215, 234, 250, .55); }
+.markdown-body table.cute-table-tuack th, .markdown-body table.cute-table-tuack td { border-color: rgba(113, 190, 229, .16); }
+.markdown-body table.cute-table-tuack[data-tuack="3"] th:nth-child(3), .markdown-body table.cute-table-tuack[data-tuack="3"] td:nth-child(3) { border-right: 2px solid rgba(215, 234, 250, .5); }
 
 .reader-state, .error-card { display: grid; place-content: center; gap: 14px; min-height: 260px; padding: 40px; color: var(--muted); text-align: center; }
 .reader-loading { display: flex; align-items: center; justify-content: center; }

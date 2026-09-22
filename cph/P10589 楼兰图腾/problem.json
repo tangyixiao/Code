@@ -1,0 +1,31 @@
+{
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "testType": "single", 
+  "batch": {
+    "id": "01704c36-6625-439c-914c-f1bf90f1ee47", 
+    "size": 1
+  }, 
+  "interactive": false, 
+  "url": "https://www.luogu.com.cn/problem/P10589", 
+  "memoryLimit": 512, 
+  "languages": {
+    "java": {
+      "taskClass": "P10589", 
+      "mainClass": "Main"
+    }
+  }, 
+  "timeLimit": 1000, 
+  "tests": [
+    {
+      "input": "5\n1 5 3 2 4\n", 
+      "output": "3 4\n"
+    }
+  ], 
+  "name": "P10589 楼兰图腾"
+}

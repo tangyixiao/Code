@@ -1,0 +1,35 @@
+{
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "testType": "single", 
+  "batch": {
+    "id": "22dfd29e-aa90-484d-a5db-a8d7e7ff9ee4", 
+    "size": 1
+  }, 
+  "interactive": false, 
+  "url": "https://www.luogu.com.cn/problem/P17481", 
+  "memoryLimit": 512, 
+  "languages": {
+    "java": {
+      "taskClass": "P17481", 
+      "mainClass": "Main"
+    }
+  }, 
+  "timeLimit": 1000, 
+  "tests": [
+    {
+      "input": "5 4 1 3\n1 2 +\n2 3 +\n2 4 +\n4 5 -\n", 
+      "output": "0\n"
+    }, 
+    {
+      "input": "3 2 1 2\n1 2 +\n2 3 -\n", 
+      "output": "1\n"
+    }
+  ], 
+  "name": "P17481 平衡路线"
+}

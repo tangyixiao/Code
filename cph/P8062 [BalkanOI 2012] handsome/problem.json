@@ -1,0 +1,31 @@
+{
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "testType": "single", 
+  "batch": {
+    "id": "77de40ef-26b6-4530-ad82-0fea8aa5ee5e", 
+    "size": 1
+  }, 
+  "interactive": false, 
+  "url": "https://www.luogu.com.cn/problem/P8062", 
+  "memoryLimit": 256, 
+  "languages": {
+    "java": {
+      "taskClass": "P8062BalkanOI2012Handsome", 
+      "mainClass": "Main"
+    }
+  }, 
+  "timeLimit": 2000, 
+  "tests": [
+    {
+      "input": "3\n2 1 3\n2\n22 13\n321\n", 
+      "output": "9\n"
+    }
+  ], 
+  "name": "P8062 [BalkanOI 2012] handsome"
+}
