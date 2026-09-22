@@ -1,10 +1,10 @@
 /*
 Copyright (C) 2026 TangYixiao
 */
-#define PRAGMA_TYPE 0 // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
+#define PRAGMA_TYPE 0                     // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
-#define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file, 2 for local file
-#define FILE_INDEX 1 // the index of the file in the local file system
+#define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
+#define FILE_INDEX 1                      // the index of the file in the local file system
 // #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
@@ -570,7 +570,9 @@ signed main() {
 #ifdef MULTIPLE_TEST
     cin >> T;
 #endif
-    for (int Task_Id = 1; Task_Id <= T; Task_Id++) { solve(Task_Id); }
+    for (int Task_Id = 1; Task_Id <= T; Task_Id++) {
+        solve(Task_Id);
+    }
 #ifdef TIME_COUNT
     End_Time_Count();
     Print_Time_Count("TOTAL");
@@ -580,7 +582,99 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-inline void solve(int Task_Id) {
+
+const int N = 1e5 + 5;
+
+int n, m, tim, tp, scc, cnt, dfn[N], low[N], st[N], ins[N], bel[N], sz[N], deg[N], q[N], f[N], g[N], eu[N], ev[N];
+vector<int> e[N], E[N];
+
+inline void tarjan(int u) {
+    dfn[u] = low[u] = ++tim, st[++tp] = u, ins[u] = 1;
+    for (int v : e[u]) {
+        if (!dfn[v]) {
+            tarjan(v), low[u] = min(low[u], low[v]);
+        } else if (ins[v]) {
+            low[u] = min(low[u], dfn[v]);
+        }
+    }
+    if (dfn[u] == low[u]) {
+        scc++;
+        for (int x = 0; x != u;) {
+            x = st[tp--], ins[x] = 0, bel[x] = scc, sz[scc]++;
+        }
+    }
     return;
 }
+
+inline void solve(int Task_Id) {
+    cin >> n >> m;
+    for (int i = 1; i <= m; i++) {
+        cin >> eu[i] >> ev[i];
+        e[eu[i]].push_back(ev[i]);
+    }
+
+    for (int i = 1; i <= n; i++) {
+        if (!dfn[i]) {
+            tarjan(i);
+        }
+    }
+
+    for (int i = 1; i <= m; i++) {
+        int u = bel[eu[i]], v = bel[ev[i]];
+        if (u != v) {
+            E[u].push_back(v), deg[v]++;
+        }
+    }
+
+    int l = 1, r = 0;
+    for (int i = 1; i <= scc; i++) {
+        if (!deg[i]) {
+            q[++r] = i;
+        }
+    }
+
+    for (; l <= r; l++) {
+        int u = q[l];
+        for (int v : E[u]) {
+            if (!(--deg[v])) {
+                q[++r] = v;
+            }
+        }
+    }
+
+    int S = bel[1];
+    f[S] = g[S] = sz[S];
+
+    for (int i = 1; i <= scc; i++) {
+        int u = q[i];
+        if (!f[u]) {
+            continue;
+        }
+        for (int v : E[u]) {
+            f[v] = max(f[v], f[u] + sz[v]);
+        }
+    }
+
+    for (int i = scc; i >= 1; i--) {
+        int u = q[i];
+        for (int v : E[u]) {
+            if (g[v]) {
+                g[u] = max(g[u], g[v] + sz[u]);
+            }
+        }
+    }
+
+    int ans = sz[S];
+
+    for (int i = 1; i <= m; i++) {
+        int u = bel[eu[i]], v = bel[ev[i]];
+        if (u != v && f[v] && g[u]) {
+            ans = max(ans, f[v] + g[u] - sz[S]);
+        }
+    }
+
+    cout << ans << "\n";
+    return;
+}
+
 } // namespace TANGYIXIAO
