@@ -1,11 +1,11 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import DOMPurify from 'dompurify'
-import { marked } from 'marked'
 import hljs from 'highlight.js/lib/common'
 import renderMathInElement from 'katex/contrib/auto-render'
 import 'katex/dist/katex.min.css'
 import { useReducedMotion } from 'motion/react'
 import DeepSeaCanvas from './visual/DeepSeaCanvas'
+import { renderMarkdown } from './markdown'
 
 type Kind = 'cpp' | 'md'
 type Entry = { name: string; path: string; type: Kind; size: number }
@@ -269,7 +269,7 @@ function Source({ entry, commit, onReady }: { entry: Entry; commit: string; onRe
 
 function Markdown({ source, onReady }: { source: string; onReady?: () => void }) {
   const [element, setElement] = useState<HTMLElement | null>(null)
-  const html = useMemo(() => DOMPurify.sanitize(marked.parse(source) as string), [source])
+  const html = useMemo(() => DOMPurify.sanitize(renderMarkdown(source)), [source])
   useEffect(() => {
     if (element) renderMathInElement(element, {
       delimiters: [
