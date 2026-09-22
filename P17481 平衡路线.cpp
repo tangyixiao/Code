@@ -598,53 +598,92 @@ signed main() {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 const int N = 2e5 + 5;
+
 struct Edge {
-    int v, w, id;
+    int v, w;
 };
+
 int n, m, s, t;
 vector<Edge> g[N];
-vector<pair<int, int>> e1, e2;
-long long dis[N];
-bool vis[N];
+
+int dis[N];
+int col[N];
+
 inline void solve(int Task_Id) {
+
     cin >> n >> m >> s >> t;
-    for (int i = 1, a, b; i <= m; i++) {
+
+    for (int i = 1; i <= n; i++) {
+        g[i].clear();
+        dis[i] = -1;
+        col[i] = -1;
+    }
+
+    for (int i = 1; i <= m; i++) {
+
+        int a, b;
         char c;
+
         cin >> a >> b >> c;
-        g[a].push_back({b, (c == '+') ? 1 : -1, i});
-        g[b].push_back({a, (c == '+') ? 1 : -1, i});
+
+        int w = (c == '+') ? 1 : -1;
+
+        g[a].push_back({b, w});
+        g[b].push_back({a, w});
     }
 
     queue<int> q;
+
+    int p = 0, ng = 0;
+    bool ok = true;
+
     q.push(s);
-    vis[s] = true;
-    for (; !q.empty();) {
+    dis[s] = 0;
+    col[s] = 0;
+
+    while (!q.empty()) {
+
         int u = q.front();
         q.pop();
-        for (auto [v, w, id] : g[u]) {
-            if (!vis[v]) {
-                vis[v] = true;
-                dis[v] = dis[u] + w;
+
+        for (auto [v, w] : g[u]) {
+
+            if (w > 0)
+                p = 1;
+
+            if (w < 0)
+                ng = 1;
+
+            if (dis[v] == -1) {
+
+                dis[v] = dis[u] + 1;
+                col[v] = col[u] ^ 1;
+
                 q.push(v);
+
+            } else if (col[v] == col[u]) {
+
+                ok = false;
             }
         }
     }
-    if (!vis[t]) {
+
+    if (dis[t] == -1) {
+
         cout << -1 << "\n";
         return;
     }
-    long long d = 0;
 
-    for (int u = 1; u <= n; u++) {
-        for (auto [v, w, id] : g[u]) {
-            d = gcd(d, 2LL);
-            d = gcd(d, llabs(dis[u] + w + dis[v]));
-        }
+    if (!p || !ng) {
+
+        cout << dis[t] << "\n";
+        return;
     }
-    if (d == 0) {
-        cout << llabs(dis[t]) << "\n";
+
+    if (!ok || col[s] == col[t]) {
+        cout << 0 << "\n";
     } else {
-        cout << min(llabs(dis[t] % d), d - llabs(dis[t] % d)) << "\n";
+        cout << 1 << "\n";
     }
     return;
 }
