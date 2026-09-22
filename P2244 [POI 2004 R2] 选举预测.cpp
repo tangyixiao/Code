@@ -600,129 +600,160 @@ signed main() {
 namespace TANGYIXIAO {
 
 const int N = 1000005;
+const int M = 1000005;
 
 int n;
-vector<int> g[N], rg[N];
 
-int vis[N], comp[N];
+int h[N], rh[N];
+int to[M], nxt[M];
+int rto[M], rnxt[M];
+int tot, rtot;
+
+int vis[N], id[N];
+
+int pre[N], nxt_[N];
+int head;
+
 int mark_[N];
 
-int head, tot;
-int nxt[N], pre[N];
-int alive[N];
+int stk[N], top;
 
-vector<int> order;
+int ord[N], cnt;
 
-void init_list() {
+int ans[N], acnt;
+
+inline void add(int u, int v) {
+
+    to[++tot] = v;
+    nxt[tot] = h[u];
+    h[u] = tot;
+
+    rto[++rtot] = u;
+    rnxt[rtot] = rh[v];
+    rh[v] = rtot;
+}
+
+inline void init_list() {
+
     head = 1;
+
     for (int i = 1; i <= n; i++) {
-        nxt[i] = i + 1;
+
         pre[i] = i - 1;
-        alive[i] = 1;
+        nxt_[i] = i + 1;
     }
-    nxt[n] = 0;
+
+    nxt_[n] = 0;
     pre[1] = 0;
 }
 
-void erase_node(int x) {
-    if (!alive[x]) {
-        return;
-    }
+inline void del(int x) {
+
     if (pre[x]) {
-        nxt[pre[x]] = nxt[x];
+
+        nxt_[pre[x]] = nxt_[x];
+
     } else {
-        head = nxt[x];
+
+        head = nxt_[x];
     }
-    if (nxt[x]) {
-        pre[nxt[x]] = pre[x];
+
+    if (nxt_[x]) {
+
+        pre[nxt_[x]] = pre[x];
     }
-    alive[x] = 0;
 }
 
-void dfs1(int s) {
-    vector<pair<int, int>> st;
+inline void dfs1(int s) {
+
+    int x;
 
     vis[s] = 1;
-    erase_node(s);
+    del(s);
 
-    for (int x : rg[s]) {
-        mark_[x] = s;
+    for (int i = rh[s]; i; i = rnxt[i]) {
+
+        mark_[rto[i]] = s;
     }
 
-    st.push_back({s, head});
+    stk[++top] = s;
 
-    while (!st.empty()) {
-        int u = st.back().first;
-        int &p = st.back().second;
+    while (top) {
 
-        while (p && !alive[p]) {
-            p = nxt[p];
+        x = stk[top];
+
+        int &p = nxt_[x];
+
+        while (p && mark_[p] == x) {
+
+            p = nxt_[p];
         }
 
         if (!p) {
-            order.push_back(u);
-            st.pop_back();
+
+            ord[++cnt] = x;
+            top--;
             continue;
         }
 
-        int v = p;
-        p = nxt[v];
+        int y = p;
 
-        if (mark_[v] == u) {
-            continue;
+        del(y);
+
+        vis[y] = 1;
+
+        for (int i = rh[y]; i; i = rnxt[i]) {
+
+            mark_[rto[i]] = y;
         }
 
-        vis[v] = 1;
-        erase_node(v);
-
-        for (int x : rg[v]) {
-            mark_[x] = v;
-        }
-
-        st.push_back({v, head});
+        stk[++top] = y;
     }
 }
 
-void dfs2(int s, int id) {
-    vector<pair<int, int>> st;
+inline void dfs2(int s, int c) {
 
-    comp[s] = id;
-    erase_node(s);
+    int x;
 
-    for (int x : g[s]) {
-        mark_[x] = s;
+    id[s] = c;
+    del(s);
+
+    for (int i = h[s]; i; i = nxt[i]) {
+
+        mark_[to[i]] = s;
     }
 
-    st.push_back({s, head});
+    stk[++top] = s;
 
-    while (!st.empty()) {
-        int u = st.back().first;
-        int &p = st.back().second;
+    while (top) {
 
-        while (p && !alive[p]) {
-            p = nxt[p];
+        x = stk[top];
+
+        int &p = nxt_[x];
+
+        while (p && mark_[p] == x) {
+
+            p = nxt_[p];
         }
 
         if (!p) {
-            st.pop_back();
+
+            top--;
             continue;
         }
 
-        int v = p;
-        p = nxt[v];
+        int y = p;
 
-        if (mark_[v] == u) {
-            continue;
+        del(y);
+
+        id[y] = c;
+
+        for (int i = h[y]; i; i = nxt[i]) {
+
+            mark_[to[i]] = y;
         }
 
-        comp[v] = id;
-        erase_node(v);
-
-        for (int x : g[v]) {
-            mark_[x] = v;
-        }
-
-        st.push_back({v, head});
+        stk[++top] = y;
     }
 }
 
@@ -731,58 +762,60 @@ inline void solve(int Task_Id) {
     cin >> n;
 
     for (int i = 1; i <= n; i++) {
+
         int k;
+
         cin >> k;
 
         while (k--) {
+
             int x;
+
             cin >> x;
 
-            g[i].push_back(x);
-            rg[x].push_back(i);
+            add(i, x);
         }
     }
 
     init_list();
 
     for (int i = 1; i <= n; i++) {
+
         if (!vis[i]) {
-            for (int x : rg[i]) {
-                mark_[x] = i;
-            }
+
             dfs1(i);
         }
     }
 
     init_list();
 
-    int cnt = 0;
+    int c = 0;
 
-    for (int i = n - 1; i >= 0; i--) {
-        int x = order[i];
+    for (int i = n; i >= 1; i--) {
 
-        if (!comp[x]) {
-            cnt++;
-            for (int y : g[x]) {
-                mark_[y] = x;
-            }
-            dfs2(x, cnt);
+        int x = ord[i];
+
+        if (!id[x]) {
+
+            c++;
+
+            dfs2(x, c);
         }
     }
-
-    // Kosaraju 第二遍第一次找到的是源 SCC
-    vector<int> ans;
 
     for (int i = 1; i <= n; i++) {
-        if (comp[i] == 1) {
-            ans.push_back(i);
+
+        if (id[i] == 1) {
+
+            ans[++acnt] = i;
         }
     }
 
-    cout << ans.size();
+    cout << acnt;
 
-    for (int x : ans) {
-        cout << " " << x;
+    for (int i = 1; i <= acnt; i++) {
+
+        cout << " " << ans[i];
     }
 
     cout << "\n";
