@@ -136,3 +136,145 @@ NO
 - （$28$ 分）：无额外限制。
 
 翻译由 DeepSeek V4 Pro 完成
+
+---
+
+
+# P16455 [UOI 2026] Unique Letters
+
+## 题目描述
+
+You are given two strings $s$ and $t$, consisting of lowercase Latin letters.
+
+You may arbitrarily permute the characters in string $s$ and arbitrarily permute the characters in string $t$.
+
+We define the $\textit{uniquization}$ of a string $x$ as the following process. First, an auxiliary string $a$ is empty. Then the characters of string $x$ are processed from left to right. Suppose the current character is $c$.
+
+- If character $c$ is not present in the current string $a$, then character $c$ is appended to the end of string $a$.
+- If character $c$ is already present in the current string $a$, then the suffix of string $a$ up to and including the first occurrence of character $c$ is removed from $a$. In this case, the currently processed character $c$ is not added.
+
+The string $a$ obtained after processing all characters will be called the result of uniquization of this string.
+
+Determine whether it is possible to obtain strings $s'$ and $t'$ such that:
+
+- $s'$ is a permutation of the characters of string $s$;
+- $t'$ is a permutation of the characters of string $t$;
+- the result of uniquization of string $s'$ is equal to $t'$.
+
+## 输入格式
+
+The first line contains string $s$ $(1 \le |s| \le 2 \cdot 10^5)$.
+
+The second line contains string $t$ $(1 \le |t| \le 2 \cdot 10^5)$.
+
+Both strings consist only of lowercase Latin letters.
+
+## 输出格式
+
+If it is impossible to obtain the required strings $s'$ and $t'$, output $\tt{NO}$.
+
+Otherwise, output $\tt{YES}$. Then output two strings $s'$ and $t'$ such that:
+
+- $s'$ is a permutation of the characters of string $s$;
+- $t'$ is a permutation of the characters of string $t$;
+- the result of uniquization of string $s'$ is equal to $t'$.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+bbcdfe
+fe
+```
+
+### 输出 #1
+
+```
+YES
+bcdbef
+ef
+```
+
+## 输入输出样例 #2
+
+### 输入 #2
+
+```
+bbfcbbd
+f
+```
+
+### 输出 #2
+
+```
+YES
+bcdbfbb
+f
+```
+
+## 输入输出样例 #3
+
+### 输入 #3
+
+```
+cgbfedc
+gfbc
+```
+
+### 输出 #3
+
+```
+NO
+```
+
+## 说明/提示
+
+For the first sample:
+
+We permute string $s$ as $\texttt{bcdbef}$, and string $t$ as $\texttt{ef}$.
+
+Construct string $a$:
+
+- after character $\texttt{b}$, we have $a = \texttt{b}$;
+- after character $\texttt{c}$, we have $a = \texttt{bc}$;
+- after character $\texttt{d}$, we have $a = \texttt{bcd}$;
+- after character $\texttt{b}$, the letter $\texttt{b}$ is already present in string $a$, so we remove the suffix up to and including the first occurrence of $\texttt{b}$. After that, $a$ becomes an empty string;
+- after character $\texttt{e}$, we have $a = \texttt{e}$;
+- after character $\texttt{f}$, we have $a = \texttt{ef}$.
+
+
+At the fourth step, letters $\texttt{c}$ and $\texttt{d}$ are also removed from string $a$, not only letter $\texttt{b}$.
+
+The resulting string $a$ is equal to the permuted string $t$, so an answer exists.
+
+For the second sample:
+
+We permute string $s$ as $\texttt{bcdbfbb}$, and leave string $t$ as $\texttt{f}$.
+
+Construct string $a$:
+
+- after character $\texttt{b}$, we have $a = \texttt{b}$;
+- after character $\texttt{c}$, we have $a = \texttt{bc}$;
+- after character $\texttt{d}$, we have $a = \texttt{bcd}$;
+- after character $\texttt{b}$, the letter $\texttt{b}$ is already present in string $a$, so we remove the suffix up to and including the first occurrence of $\texttt{b}$. After that, $a$ becomes an empty string;
+- after character $\texttt{f}$, we have $a = \texttt{f}$;
+- after character $\texttt{b}$, we have $a = \texttt{fb}$;
+- after character $\texttt{b}$, the letter $\texttt{b}$ is already present in string $a$, so we remove the suffix up to and including the first occurrence of $\texttt{b}$. After that, $a = \texttt{f}$.
+
+
+At the fourth step, letters $\texttt{c}$ and $\texttt{d}$ are also removed from string $a$, not only letter $\texttt{b}$.
+
+The resulting string $a$ is equal to the permuted string $t$, so an answer exists.
+
+In the third sample, it can be proved that for no permutation of string $\texttt{cgbfedc}$ will the result of uniquization be a permutation of string $\texttt{gfbc}$.
+
+### Scoring
+
+- ($4$ points): $|s|=|t|=1$;
+- ($8$ points): $s$ can be obtained from $t$ by permuting letters;
+- ($8$ points): all letters in $s$ are distinct;
+- ($12$ points): only one letter in string $s$ appears more than once;
+- ($24$ points): $s=\texttt{aaaaabbbbbcccccddddd}$;
+- ($16$ points): $|s| \le 8$;
+- ($28$ points): no additional constraints.
