@@ -9,18 +9,18 @@
 //  Test Type: single
 //  Batch ID: 3bd2732d-1de6-46a4-8e9e-12b03b568db9
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
 */
-#define PRAGMA_TYPE 0 // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
+#define PRAGMA_TYPE 0                     // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
-#define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file, 2 for local file
-#define FILE_INDEX 1 // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
+#define FILE_INDEX 1                      // the index of the file in the local file system
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -585,7 +585,9 @@ signed main() {
 #ifdef MULTIPLE_TEST
     cin >> T;
 #endif
-    for (int Task_Id = 1; Task_Id <= T; Task_Id++) { solve(Task_Id); }
+    for (int Task_Id = 1; Task_Id <= T; Task_Id++) {
+        solve(Task_Id);
+    }
 #ifdef TIME_COUNT
     End_Time_Count();
     Print_Time_Count("TOTAL");
@@ -598,9 +600,10 @@ namespace TANGYIXIAO {
 using ll = long long;
 const int N = 1e5 + 5;
 int n, k, p, q;
-ll s0[N], s1[N], s[N], ans = (1LL << 62), x, a, b;
+ll s0[N], s1[N], s[N], ans, x, a, b;
 inline void solve(int Task_Id) {
     cin >> n >> k >> p >> q;
+    ans = (1LL << 62);
     s0[0] = s1[0] = s[0] = 0;
     for (int i = 1; i <= n; i++) {
         cin >> x;
