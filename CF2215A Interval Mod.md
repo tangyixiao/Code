@@ -71,3 +71,71 @@
 
 ---
 
+# CF2215A Interval Mod
+
+## 题目描述
+
+You are given an array  $ a $  consisting of  $ n $  integers, as well as a parameter  $ k $  and an integer set  $ M=\{p, q\} $ .
+
+You can perform the following operation on  $ a $  an arbitrary number of times (possibly zero):
+
+- First, choose an interval  $ [l,r] $  ( $ 1 \le l \le r \le n $ ) of length at least  $ k $  (i.e.,  $ r-l+1\ge k $ ) and an integer  $ m \in M $ ;
+- Then, set  $ a_i \gets a_i \bmod m $  for each  $ l \le i \le r $ .
+
+You have to find the minimum possible value of  $ \sum \limits_{i=1}^n a_i $  after all operations.
+
+## 输入格式
+
+Each test contains multiple test cases. The first line contains the number of test cases  $ t $  ( $ 1 \le t \le 10^4 $ ). The description of the test cases follows.
+
+The first line of each test case contains four integers  $ n $ ,  $ k $ ,  $ p $ , and  $ q $  ( $ 1\le k\le n\le 10^5 $ ,  $ 1\le p \lt q\le 10^9 $ ) — the length of  $ a $ , the parameter, and the elements of  $ M $ .
+
+The second line contains  $ n $  integers  $ a_1, a_2, \ldots, a_n $  ( $ 1\le a_i\le 10^9 $ ) — the elements of  $ a $ .
+
+It is guaranteed that the sum of  $ n $  over all test cases does not exceed  $ 10^5 $ .
+
+## 输出格式
+
+For each test case, output a single integer — the minimum possible value of  $ \sum \limits_{i=1}^n a_i $  after all operations.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+6
+1 1 3 4
+2026
+3 2 10 20
+31 41 59
+4 3 3 4
+1 2 3 4
+6 4 9 20
+18 27 180 9 45 99
+7 4 3 5
+6 7 14 12 100 78 4
+9 4 244 353
+9982 4435 3998 2443 5399 8244 3539 9824 4353
+```
+
+### 输出 #1
+
+```
+1
+11
+3
+0
+4
+569
+```
+
+## 说明/提示
+
+In the second test case, a possible way to obtain  $ \sum \limits_{i=1}^n a_i=11 $  is to apply the following operation to  $ a $ :
+
+1. Choose  $ [l,r]=[1,3] $  and  $ m=10 $ , then  $ a $  becomes  $ [1,1,9] $ .
+
+In the third test case, a possible way to obtain  $ \sum \limits_{i=1}^n a_i=3 $  is to apply the following operations to  $ a $ :
+
+1. Choose  $ [l,r]=[1,4] $  and  $ m=4 $ , then  $ a $  becomes  $ [1,2,3,0] $ ;
+2. Choose  $ [l,r]=[2,4] $  and  $ m=3 $ , then  $ a $  becomes  $ [1,2,0,0] $ .
