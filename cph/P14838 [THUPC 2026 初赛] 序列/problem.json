@@ -1,0 +1,31 @@
+{
+  "url": "https://www.luogu.com.cn/problem/P14838", 
+  "group": "Luogu", 
+  "name": "P14838 [THUPC 2026 初赛] 序列", 
+  "batch": {
+    "id": "8a2e121d-90fb-4b95-bfd4-1734f6f6bc17", 
+    "size": 1
+  }, 
+  "languages": {
+    "java": {
+      "taskClass": "P14838THUPC2026", 
+      "mainClass": "Main"
+    }
+  }, 
+  "memoryLimit": 512, 
+  "tests": [
+    {
+      "input": "2\n3 3\n2 1\n", 
+      "output": "YES\nNO\n"
+    }
+  ], 
+  "timeLimit": 1000, 
+  "interactive": false, 
+  "testType": "single", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }
+}
