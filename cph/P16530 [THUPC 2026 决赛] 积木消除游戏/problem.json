@@ -1,0 +1,31 @@
+{
+  "url": "https://www.luogu.com.cn/problem/P16530", 
+  "group": "Luogu", 
+  "name": "P16530 [THUPC 2026 决赛] 积木消除游戏", 
+  "batch": {
+    "id": "1979273a-9014-4697-8dde-aea97746e787", 
+    "size": 1
+  }, 
+  "languages": {
+    "java": {
+      "taskClass": "P16530THUPC2026", 
+      "mainClass": "Main"
+    }
+  }, 
+  "memoryLimit": 256, 
+  "tests": [
+    {
+      "input": "6\n1 1 3 4\n2026\n3 2 10 20\n31 41 59\n4 3 3 4\n1 2 3 4\n6 4 9 20\n18 27 180 9 45 99\n7 4 3 5\n6 7 14 12 100 78 4\n9 4 244 353\n9982 4435 3998 2443 5399 8244 3539 9824 4353\n", 
+      "output": "1\n11\n3\n0\n4\n569\n"
+    }
+  ], 
+  "timeLimit": 2000, 
+  "interactive": false, 
+  "testType": "single", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }
+}
