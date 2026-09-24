@@ -9,17 +9,17 @@
 //  Test Type: single
 //  Batch ID: 8d510cca-c240-4396-b4a1-2bb7f2396151
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
 */
-#define PRAGMA_TYPE 0 // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
+#define PRAGMA_TYPE 0                     // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
-#define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file, 2 for local file
-#define FILE_INDEX 1 // the index of the file in the local file system
+#define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
+#define FILE_INDEX 1                      // the index of the file in the local file system
 // #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
@@ -585,7 +585,9 @@ signed main() {
 #ifdef MULTIPLE_TEST
     cin >> T;
 #endif
-    for (int Task_Id = 1; Task_Id <= T; Task_Id++) { solve(Task_Id); }
+    for (int Task_Id = 1; Task_Id <= T; Task_Id++) {
+        solve(Task_Id);
+    }
 #ifdef TIME_COUNT
     End_Time_Count();
     Print_Time_Count("TOTAL");
@@ -595,7 +597,200 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-inline void solve(int Task_Id) {
-    return;
+
+using ui = unsigned int;
+
+const int N = 1e6 + 5;
+const int M = 5e6 + 5;
+const int S = 1500000;
+
+struct Query {
+    ui l, id;
+};
+
+ui n, m;
+ui a[N], b[N], c[N];
+ui h[N], ne[M], v[N], tag[N], tim[N], ans[M];
+ui cnt, now;
+
+Query q[M];
+
+namespace FastIO {
+
+char ib[S + 5], ob[S + 5];
+char *p1 = ib, *p2 = ib;
+ui op;
+
+inline char gc() {
+
+    if (p1 == p2) {
+
+        p2 = (p1 = ib) + fread(ib, 1, S, stdin);
+
+        if (p1 == p2) {
+            return 0;
+        }
+    }
+
+    return *p1++;
 }
+
+inline ui read() {
+
+    ui x = 0;
+    char c = gc();
+
+    while (c < '0' || c > '9') {
+        c = gc();
+    }
+
+    while (c >= '0' && c <= '9') {
+
+        x = x * 10 + (c ^ 48);
+        c = gc();
+    }
+
+    return x;
+}
+
+inline void pc(char c) {
+
+    if (op == S) {
+
+        fwrite(ob, 1, op, stdout);
+        op = 0;
+    }
+
+    ob[op++] = c;
+}
+
+inline void write(ui x) {
+
+    if (!x) {
+
+        pc('0');
+        pc('\n');
+        return;
+    }
+
+    char s[12];
+    int len = 0;
+
+    while (x) {
+
+        s[len++] = char('0' + x % 10);
+        x /= 10;
+    }
+
+    while (len) {
+        pc(s[--len]);
+    }
+
+    pc('\n');
+}
+
+inline void flush() {
+
+    fwrite(ob, 1, op, stdout);
+    op = 0;
+}
+
+} // namespace FastIO
+
+inline ui gcd_fast(ui x, ui y) {
+
+    int z = __builtin_ctz(x | y);
+
+    x >>= __builtin_ctz(x);
+
+    while (y) {
+
+        y >>= __builtin_ctz(y);
+
+        if (x > y) {
+            swap(x, y);
+        }
+
+        y -= x;
+    }
+
+    return x << z;
+}
+
+inline void solve(int Task_Id) {
+
+    using namespace FastIO;
+
+    n = read();
+    m = read();
+
+    memset(h, 0xff, (n + 2) * sizeof(ui));
+
+    for (ui i = 1; i <= n; i++) {
+        a[i] = read();
+    }
+
+    for (ui i = 1; i <= n; i++) {
+        b[i] = read();
+    }
+
+    for (ui i = 1; i <= n; i++) {
+        c[i] = read();
+    }
+
+    for (ui i = 1; i <= m; i++) {
+
+        ui l = read(), r = read();
+
+        q[cnt] = {l, i};
+        ne[cnt] = h[r];
+        h[r] = cnt++;
+    }
+
+    for (ui i = 1; i <= n; i++) {
+
+        ui k = i;
+
+        for (int j = (int)i - 1; j >= 1; j--) {
+
+            ui x = a[j] & a[j + 1];
+            ui y = b[j] | b[j + 1];
+            ui z = gcd_fast(c[j], c[j + 1]);
+
+            if (x == a[j] && y == b[j] && z == c[j]) {
+                break;
+            }
+
+            k = j;
+            a[j] = x;
+            b[j] = y;
+            c[j] = z;
+        }
+
+        v[i] = v[i - 1] + (now - tim[i - 1]) * tag[i - 1];
+
+        for (ui j = k; j <= i; j++) {
+
+            v[j] += (now - tim[j]) * tag[j];
+            tag[j] = tag[j - 1] + a[j] * b[j] * c[j];
+            tim[j] = now;
+        }
+
+        now++;
+
+        for (ui j = h[i]; j != UINT_MAX; j = ne[j]) {
+
+            ui l = q[j].l;
+
+            ans[q[j].id] = v[i] + (now - tim[i]) * tag[i] - v[l - 1] - (now - tim[l - 1]) * tag[l - 1];
+        }
+    }
+
+    for (ui i = 1; i <= m; i++) {
+        write(ans[i]);
+    }
+
+    flush();
+}
+
 } // namespace TANGYIXIAO
