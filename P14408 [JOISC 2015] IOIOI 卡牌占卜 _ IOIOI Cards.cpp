@@ -595,7 +595,115 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-inline void solve(int Task_Id) {
-    return;
+
+using ll = long long;
+
+const int N = 5e5 + 5;
+const int M = 2e5 + 5;
+const ll inf = (1LL << 60);
+
+int h[N], to[M], ne[M], w[M], cnt;
+ll dis[N], d[5][5];
+
+inline void add(int u, int v, int x) {
+
+    to[++cnt] = v;
+    w[cnt] = x;
+    ne[cnt] = h[u];
+    h[u] = cnt;
+
 }
-} // namespace TANGYIXIAO
+
+inline void dij(int s, int n) {
+
+    for (int i = 1; i <= n + 1; i++) {
+
+        dis[i] = inf;
+
+    }
+
+    priority_queue<pair<ll, int>,
+                   vector<pair<ll, int>>,
+                   greater<pair<ll, int>>> q;
+
+    dis[s] = 0;
+    q.push({0, s});
+
+    while (!q.empty()) {
+
+        auto [du, u] = q.top();
+        q.pop();
+
+        if (du != dis[u]) {
+
+            continue;
+
+        }
+
+        for (int e = h[u]; e; e = ne[e]) {
+
+            int v = to[e];
+            ll nd = du + w[e];
+
+            if (nd < dis[v]) {
+
+                dis[v] = nd;
+                q.push({nd, v});
+
+            }
+
+        }
+
+    }
+
+}
+
+inline void solve(int Task_Id) {
+
+    int A, B, C, D, E, m;
+
+    cin >> A >> B >> C >> D >> E;
+    cin >> m;
+
+    int n = A + B + C + D + E;
+
+    for (int i = 1; i <= m; i++) {
+
+        int l, r;
+        cin >> l >> r;
+
+        add(l, r + 1, r - l + 1);
+        add(r + 1, l, r - l + 1);
+
+    }
+
+    int p[5];
+
+    p[1] = A + 1;
+    p[2] = A + B + 1;
+    p[3] = A + B + C + 1;
+    p[4] = A + B + C + D + 1;
+
+    for (int i = 1; i <= 4; i++) {
+
+        dij(p[i], n);
+
+        for (int j = 1; j <= 4; j++) {
+
+            d[i][j] = dis[p[j]];
+
+        }
+
+    }
+
+    ll ans = inf;
+
+    ans = min(ans, d[1][2] + d[3][4]);
+    ans = min(ans, d[1][3] + d[2][4]);
+    ans = min(ans, d[1][4] + d[2][3]);
+
+    cout << (ans >= inf / 2 ? -1 : ans) << "\n";
+
+}
+
+}
