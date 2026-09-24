@@ -9,17 +9,17 @@
 //  Test Type: single
 //  Batch ID: bb25aa97-e1c7-402f-8b71-c077aa449fab
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
 */
-#define PRAGMA_TYPE 0 // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
+#define PRAGMA_TYPE 0                     // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
-#define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file, 2 for local file
-#define FILE_INDEX 1 // the index of the file in the local file system
+#define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
+#define FILE_INDEX 1                      // the index of the file in the local file system
 // #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
@@ -585,7 +585,9 @@ signed main() {
 #ifdef MULTIPLE_TEST
     cin >> T;
 #endif
-    for (int Task_Id = 1; Task_Id <= T; Task_Id++) { solve(Task_Id); }
+    for (int Task_Id = 1; Task_Id <= T; Task_Id++) {
+        solve(Task_Id);
+    }
 #ifdef TIME_COUNT
     End_Time_Count();
     Print_Time_Count("TOTAL");
@@ -595,7 +597,111 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+
+using u32 = uint32_t;
+
+const int N = 1e6 + 5;
+const int M = 5e6 + 5;
+
+struct Query {
+
+    int l, id;
+};
+
+int n, m, h[N], ne[M], cnt;
+Query q[M];
+
+u32 a[N], b[N], c[N];
+u32 v[N], tag[N], tim[N], ans[M], now;
+
+Fread_Input in;
+Fwrite_Output out;
+
 inline void solve(int Task_Id) {
-    return;
+
+    in.read_int(n);
+    in.read_int(m);
+
+    memset(h, -1, sizeof(int) * (n + 2));
+
+    for (int i = 1; i <= n; i++) {
+
+        in.read_int(a[i]);
+    }
+
+    for (int i = 1; i <= n; i++) {
+
+        in.read_int(b[i]);
+    }
+
+    for (int i = 1; i <= n; i++) {
+
+        in.read_int(c[i]);
+    }
+
+    for (int i = 1; i <= m; i++) {
+
+        int l, r;
+
+        in.read_int(l);
+        in.read_int(r);
+
+        q[cnt] = {l, i};
+        ne[cnt] = h[r];
+        h[r] = cnt++;
+    }
+
+    for (int i = 1, j, k; i <= n; i++) {
+
+        for (j = i - 1, k = i; j >= 1; j--) {
+
+            u32 x = a[j + 1] & a[j];
+            u32 y = b[j + 1] | b[j];
+            u32 z = std::gcd(c[j + 1], c[j]);
+
+            if (x == a[j] && y == b[j] && z == c[j]) {
+
+                break;
+            }
+
+            k = j;
+
+            a[j] = x;
+            b[j] = y;
+            c[j] = z;
+        }
+
+        v[i] = v[i - 1] + (now - tim[i - 1]) * tag[i - 1];
+
+        for (j = k; j <= i; j++) {
+
+            v[j] += (now - tim[j]) * tag[j];
+
+            tag[j] = tag[j - 1] + a[j] * b[j] * c[j];
+
+            tim[j] = now;
+        }
+
+        now++;
+
+        for (j = h[i]; j != -1; j = ne[j]) {
+
+            int l = q[j].l;
+
+            u32 R = v[i] + (now - tim[i]) * tag[i];
+
+            u32 L = v[l - 1] + (now - tim[l - 1]) * tag[l - 1];
+
+            ans[q[j].id] = R - L;
+        }
+    }
+
+    for (int i = 1; i <= m; i++) {
+
+        out.write_int(ans[i], '\n');
+    }
+
+    out.flush();
 }
+
 } // namespace TANGYIXIAO
