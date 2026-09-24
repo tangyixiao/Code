@@ -9,17 +9,17 @@
 //  Test Type: single
 //  Batch ID: 3fe28e63-6111-4fa1-b384-012b669fa690
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
 */
-#define PRAGMA_TYPE 0 // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
+#define PRAGMA_TYPE 0                     // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
-#define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file, 2 for local file
-#define FILE_INDEX 1 // the index of the file in the local file system
+#define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
+#define FILE_INDEX 1                      // the index of the file in the local file system
 // #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
@@ -585,7 +585,9 @@ signed main() {
 #ifdef MULTIPLE_TEST
     cin >> T;
 #endif
-    for (int Task_Id = 1; Task_Id <= T; Task_Id++) { solve(Task_Id); }
+    for (int Task_Id = 1; Task_Id <= T; Task_Id++) {
+        solve(Task_Id);
+    }
 #ifdef TIME_COUNT
     End_Time_Count();
     Print_Time_Count("TOTAL");
@@ -611,7 +613,6 @@ inline void add(int u, int v, int x) {
     w[cnt] = x;
     ne[cnt] = h[u];
     h[u] = cnt;
-
 }
 
 inline void dij(int s, int n) {
@@ -619,12 +620,12 @@ inline void dij(int s, int n) {
     for (int i = 1; i <= n + 1; i++) {
 
         dis[i] = inf;
-
     }
 
     priority_queue<pair<ll, int>,
                    vector<pair<ll, int>>,
-                   greater<pair<ll, int>>> q;
+                   greater<pair<ll, int>>>
+        q;
 
     dis[s] = 0;
     q.push({0, s});
@@ -637,7 +638,6 @@ inline void dij(int s, int n) {
         if (du != dis[u]) {
 
             continue;
-
         }
 
         for (int e = h[u]; e; e = ne[e]) {
@@ -649,13 +649,9 @@ inline void dij(int s, int n) {
 
                 dis[v] = nd;
                 q.push({nd, v});
-
             }
-
         }
-
     }
-
 }
 
 inline void solve(int Task_Id) {
@@ -674,7 +670,6 @@ inline void solve(int Task_Id) {
 
         add(l, r + 1, r - l + 1);
         add(r + 1, l, r - l + 1);
-
     }
 
     int p[5];
@@ -691,9 +686,7 @@ inline void solve(int Task_Id) {
         for (int j = 1; j <= 4; j++) {
 
             d[i][j] = dis[p[j]];
-
         }
-
     }
 
     ll ans = inf;
@@ -703,7 +696,6 @@ inline void solve(int Task_Id) {
     ans = min(ans, d[1][4] + d[2][3]);
 
     cout << (ans >= inf / 2 ? -1 : ans) << "\n";
-
 }
 
-}
+} // namespace TANGYIXIAO
