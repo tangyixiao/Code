@@ -183,7 +183,7 @@ function renderCode({ text, lang }: Tokens.Code) {
     return `<span class="code-line" data-line="${lineNumber}"${active}><span class="line-number" aria-hidden="true">${lineNumber}</span><span class="line-content">${code}</span></span>`
   }).join('')
 
-  return `<pre class="markdown-code-block" data-language="${escapeHtml(language)}"><code>${lines}</code></pre>`
+  return `<pre class="markdown-code-block" data-language="${escapeHtml(language)}"><code class="hljs">${lines}</code></pre>`
 }
 
 const directiveExtension = {

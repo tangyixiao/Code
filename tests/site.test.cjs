@@ -78,11 +78,12 @@ async function main() {
     await page.route('https://raw.githubusercontent.com/**', async (route) => {
       const decoded = decodeURIComponent(route.request().url());
       const body = decoded.endsWith('.md')
-        ? `# 题目\n${'内容保留滚动位置。\n\n'.repeat(80)}<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" onerror="document.body.dataset.xss=1">\n`
+        ? `# 题目\n\n\`\`\`cpp\nint answer = 42;\n\`\`\`\n\n${'内容保留滚动位置。\n\n'.repeat(80)}<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" onerror="document.body.dataset.xss=1">\n`
         : `${'int main(){}\n'.repeat(120)}`;
       await route.fulfill({ status: 200, contentType: 'text/plain; charset=utf-8', body });
     });
 
+    await page.emulateMedia({ colorScheme: 'light' });
     await page.goto(`http://127.0.0.1:${port}/Code/#file=${encodeURIComponent('题目 #1.md')}`);
     await page.locator('.count').waitFor({ state: 'attached' });
     await page.locator('[data-scene-root]').waitFor({ state: 'attached', timeout: 15000 });
@@ -101,6 +102,29 @@ async function main() {
     assert.equal(await page.locator('#meta-name').textContent(), '题目 #1.md');
     assert.equal(await page.locator('body').getAttribute('data-xss'), null);
     assert.match(await page.locator('#viewer').textContent(), /题目/);
+    await page.locator('#viewer .markdown-code-block code').waitFor();
+    assert.equal(await page.locator('.reader').getAttribute('data-code-theme'), 'light');
+    assert.equal(await page.locator('#viewer .markdown-code-block').evaluate((element) => getComputedStyle(element).backgroundColor), 'rgb(255, 255, 255)');
+    assert.equal(await page.locator('#viewer .markdown-code-block .line-content').evaluate((element) => getComputedStyle(element).color), 'rgb(0, 0, 0)');
+    assert.equal(await page.locator('#viewer .markdown-code-block .hljs-type').evaluate((element) => getComputedStyle(element).color), 'rgb(38, 127, 153)');
+    await page.emulateMedia({ colorScheme: 'dark' });
+    await page.waitForFunction(() => document.querySelector('.reader')?.getAttribute('data-code-theme') === 'dark');
+    assert.equal(await page.locator('#viewer .markdown-code-block').evaluate((element) => getComputedStyle(element).backgroundColor), 'rgb(30, 30, 30)');
+    assert.equal(await page.locator('#viewer .markdown-code-block .line-content').evaluate((element) => getComputedStyle(element).color), 'rgb(212, 212, 212)');
+    assert.equal(await page.locator('#viewer .markdown-code-block .hljs-type').evaluate((element) => getComputedStyle(element).color), 'rgb(78, 201, 176)');
+    await page.emulateMedia({ colorScheme: 'light' });
+    await page.waitForFunction(() => document.querySelector('.reader')?.getAttribute('data-code-theme') === 'light');
+    const sidebarBackground = await page.locator('.sidebar').evaluate((element) => getComputedStyle(element).backgroundColor);
+    await page.getByRole('button', { name: '切换为深色代码主题' }).click();
+    assert.equal(await page.locator('.reader').getAttribute('data-code-theme'), 'dark');
+    assert.equal(await page.locator('#viewer .markdown-code-block').evaluate((element) => getComputedStyle(element).backgroundColor), 'rgb(30, 30, 30)');
+    assert.equal(await page.locator('.sidebar').evaluate((element) => getComputedStyle(element).backgroundColor), sidebarBackground);
+    await page.emulateMedia({ colorScheme: 'dark' });
+    assert.equal(await page.locator('.reader').getAttribute('data-code-theme'), 'dark', 'manual selection should override system changes for this page');
+    await page.emulateMedia({ colorScheme: 'light' });
+    await page.reload();
+    await page.locator('#viewer .markdown-code-block code').waitFor();
+    assert.equal(await page.locator('.reader').getAttribute('data-code-theme'), 'light', 'reload should restore the system preference');
     assert.equal(await page.locator('.file-row').count(), 3);
     assert.equal(await page.locator('.file-row').first().evaluate((element) => element.tagName), 'BUTTON');
     const desktopLayout = await page.evaluate(() => ({
@@ -128,6 +152,10 @@ async function main() {
     await page.getByPlaceholder('搜索题目编号或文件名').fill('');
     await page.getByRole('button', { name: /C\+\+ A\.cpp/ }).click();
     await page.locator('#viewer code').waitFor();
+    assert.equal(await page.locator('.reader').getAttribute('data-code-theme'), 'light');
+    assert.equal(await page.locator('#viewer .code').evaluate((element) => getComputedStyle(element).backgroundColor), 'rgb(255, 255, 255)');
+    await page.getByRole('button', { name: '切换为深色代码主题' }).click();
+    assert.equal(await page.locator('#viewer .code').evaluate((element) => getComputedStyle(element).backgroundColor), 'rgb(30, 30, 30)');
     const firstPulse = await page.locator('[data-scene-root]').getAttribute('data-scene-pulse');
     assert.equal(firstPulse, '2.000');
     const search = page.getByPlaceholder('搜索题目编号或文件名');
@@ -158,9 +186,10 @@ async function main() {
     const mobileErrors = [];
     mobile.on('pageerror', (error) => mobileErrors.push(error.message));
     mobile.on('console', (message) => { if (message.type() === 'error') mobileErrors.push(message.text()); });
+    await mobile.emulateMedia({ colorScheme: 'dark' });
     await mobile.route('https://cdn.jsdelivr.net/**', (route) => route.abort());
     await mobile.route('https://raw.githubusercontent.com/**', (route) =>
-      route.fulfill({ status: 200, contentType: 'text/plain; charset=utf-8', body: 'int main(){}\n' })
+      route.fulfill({ status: 200, contentType: 'text/plain; charset=utf-8', body: route.request().url().endsWith('.md') ? '# 移动端\n\n```cpp\nint answer = 1;\n```\n' : 'int main(){}\n' })
     );
     await mobile.goto(`http://127.0.0.1:${port}/Code/#file=${encodeURIComponent('题目 #1.md')}`);
     await mobile.locator('.count').waitFor({ state: 'attached' });
@@ -173,6 +202,11 @@ async function main() {
     assert.equal(await mobile.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
     assert.equal(await mobile.locator('body').getAttribute('data-mobile-view'), 'viewer');
     assert.equal(await mobile.locator('#meta-name').textContent(), '题目 #1.md');
+    await mobile.locator('.markdown-code-block code').waitFor();
+    assert.equal(await mobile.getByRole('button', { name: '切换为浅色代码主题' }).isVisible(), true);
+    await mobile.getByRole('button', { name: '切换为浅色代码主题' }).click();
+    assert.equal(await mobile.locator('.reader').getAttribute('data-code-theme'), 'light');
+    assert.equal(await mobile.locator('.markdown-code-block').evaluate((element) => getComputedStyle(element).backgroundColor), 'rgb(255, 255, 255)');
     await mobile.getByRole('button', { name: '返回文件列表' }).click();
     assert.equal(await mobile.locator('body').getAttribute('data-mobile-view'), 'list');
     await mobile.getByRole('button', { name: /A\.cpp/ }).click();

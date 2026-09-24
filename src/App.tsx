@@ -8,6 +8,7 @@ import DeepSeaCanvas from './visual/DeepSeaCanvas'
 import { renderMarkdown } from './markdown'
 
 type Kind = 'cpp' | 'md'
+type CodeTheme = 'dark' | 'light'
 type Entry = { name: string; path: string; type: Kind; size: number }
 type Manifest = { schemaVersion: 1; commit: string; generatedAt: string; count: number; files: Entry[] }
 
@@ -20,6 +21,8 @@ const hashPath = () => {
 }
 
 function App() {
+  const [codeTheme, setCodeTheme] = useState<CodeTheme>(() => window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+  const [codeThemeOverride, setCodeThemeOverride] = useState(false)
   const [manifest, setManifest] = useState<Manifest | null>(null)
   const [error, setError] = useState('')
   const [query, setQuery] = useState('')
@@ -31,6 +34,14 @@ function App() {
   const readerScrollTopRef = useRef(0)
   const reduced = useReducedMotion()
 
+  useEffect(() => {
+    const preference = window.matchMedia('(prefers-color-scheme: dark)')
+    const syncTheme = () => {
+      if (!codeThemeOverride) setCodeTheme(preference.matches ? 'dark' : 'light')
+    }
+    preference.addEventListener('change', syncTheme)
+    return () => preference.removeEventListener('change', syncTheme)
+  }, [codeThemeOverride])
   useEffect(() => { document.body.dataset.motion = reduced ? 'reduced' : 'full' }, [reduced])
   useEffect(() => { document.body.dataset.mobileView = mobileView }, [mobileView])
 
@@ -100,6 +111,11 @@ function App() {
           manifest={manifest}
           selected={selected}
           reduced={Boolean(reduced)}
+          codeTheme={codeTheme}
+          onToggleCodeTheme={() => {
+            setCodeThemeOverride(true)
+            setCodeTheme((theme) => theme === 'dark' ? 'light' : 'dark')
+          }}
           scrollRestoreTop={readerScrollRestoreTop}
           onReaderScroll={(value) => { readerScrollTopRef.current = value }}
           onSelect={select}
@@ -183,13 +199,15 @@ type ReaderProps = {
   manifest: Manifest | null
   selected: Entry | null
   reduced: boolean
+  codeTheme: CodeTheme
+  onToggleCodeTheme: () => void
   scrollRestoreTop: number
   onReaderScroll: (value: number) => void
   onSelect: (path: string) => void
   onBack: () => void
 }
 
-function ReaderPane({ manifest, selected, reduced, scrollRestoreTop, onReaderScroll, onSelect, onBack }: ReaderProps) {
+function ReaderPane({ manifest, selected, reduced, codeTheme, onToggleCodeTheme, scrollRestoreTop, onReaderScroll, onSelect, onBack }: ReaderProps) {
   const readerBodyRef = useRef<HTMLDivElement>(null)
   const readerScrollRef = useRef(0)
   const pair = selected ? counterpart(selected.path, manifest?.files ?? []) : undefined
@@ -224,7 +242,7 @@ function ReaderPane({ manifest, selected, reduced, scrollRestoreTop, onReaderScr
       observer.disconnect()
     }
   }, [selected?.path, scrollRestoreTop])
-  return <section className="reader" id="viewer" aria-live="polite">
+  return <section className="reader" id="viewer" data-code-theme={codeTheme} aria-live="polite">
     <div className="reader-toolbar">
       <button className="mobile-back" onClick={onBack} aria-label="返回文件列表">← 文件</button>
       <div className="open-file"><p className="utility-label">OPEN FILE</p><strong id="meta-name">{selected?.name ?? '选择文件'}</strong></div>
@@ -232,6 +250,13 @@ function ReaderPane({ manifest, selected, reduced, scrollRestoreTop, onReaderScr
         <a href={sourceUrl} target="_blank" rel="noreferrer">原文 ↗</a>
         <button onClick={() => navigator.clipboard.writeText(sourceUrl)}>复制链接</button>
         {pair ? <button onClick={() => onSelect(pair.path)}>查看{pair.type === 'cpp' ? '代码' : '题解'}</button> : null}
+        <button
+          className="code-theme-toggle"
+          aria-label={`切换为${codeTheme === 'dark' ? '浅色' : '深色'}代码主题`}
+          onClick={onToggleCodeTheme}
+        >
+          {codeTheme === 'dark' ? '浅色代码' : '深色代码'}
+        </button>
       </div> : null}
     </div>
     <div ref={readerBodyRef} className="reader-body" onScroll={(event) => {
@@ -263,7 +288,7 @@ function Source({ entry, commit, onReady }: { entry: Entry; commit: string; onRe
 
   if (error) return <div className="reader-state reader-error"><p>{error}</p><button onClick={() => setAttempt((value) => value + 1)}>重试正文</button></div>
   if (!source) return <div className="reader-state reader-loading"><span />正在读取正文…</div>
-  if (entry.type === 'cpp') return <pre className="code"><code dangerouslySetInnerHTML={{ __html: hljs.highlight(source, { language: 'cpp' }).value }} /></pre>
+  if (entry.type === 'cpp') return <pre className="code"><code className="hljs" dangerouslySetInnerHTML={{ __html: hljs.highlight(source, { language: 'cpp' }).value }} /></pre>
   return <Markdown source={source} onReady={onReady} />
 }
 

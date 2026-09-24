@@ -118,12 +118,46 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 .reader-body { min-width: 0; min-height: 0; overflow: auto; overflow-anchor: none; scrollbar-color: rgba(118,228,214,.24) transparent; scrollbar-width: thin; }
 .reader-document { min-height: 100%; }
 
-.code { min-width: max-content; min-height: 100%; margin: 0; padding: 30px 34px 90px; color: #cbd6e4; background: transparent; font: 13px/1.75 ui-monospace, SFMono-Regular, Consolas, monospace; tab-size: 4; }
-.hljs-keyword, .hljs-selector-tag, .hljs-literal { color: #c7a8ff; }
-.hljs-title, .hljs-title.function_, .hljs-function { color: #83d8ff; }
-.hljs-string, .hljs-meta .hljs-string { color: #b6d896; }
-.hljs-number, .hljs-symbol { color: #efb48f; }
-.hljs-comment { color: #66738a; font-style: italic; }
+/* Map VS Code Dark+ / Light+ token colors onto the existing highlight.js classes. */
+.reader[data-code-theme="dark"] {
+  --code-background: #1e1e1e;
+  --code-foreground: #d4d4d4;
+  --code-border: #333;
+  --code-comment: #6a9955;
+  --code-keyword: #569cd6;
+  --code-string: #ce9178;
+  --code-number: #b5cea8;
+  --code-function: #dcdcaa;
+  --code-type: #4ec9b0;
+  --code-variable: #9cdcfe;
+  --code-gutter: #858585;
+  --code-line-highlight: rgba(55, 55, 61, .65);
+  --code-accent: #569cd6;
+}
+.reader[data-code-theme="light"] {
+  --code-background: #fff;
+  --code-foreground: #000;
+  --code-border: #e5e5e5;
+  --code-comment: #008000;
+  --code-keyword: #00f;
+  --code-string: #a31515;
+  --code-number: #098658;
+  --code-function: #795e26;
+  --code-type: #267f99;
+  --code-variable: #001080;
+  --code-gutter: #858585;
+  --code-line-highlight: rgba(0, 122, 204, .11);
+  --code-accent: #007acc;
+}
+.code { min-width: max-content; min-height: 100%; margin: 0; padding: 30px 34px 90px; color: var(--code-foreground); background: var(--code-background); font: 13px/1.75 ui-monospace, SFMono-Regular, Consolas, monospace; tab-size: 4; }
+.reader .hljs-comment, .reader .hljs-quote { color: var(--code-comment); }
+.reader .hljs-keyword, .reader .hljs-selector-tag, .reader .hljs-literal, .reader .hljs-meta { color: var(--code-keyword); }
+.reader .hljs-title, .reader .hljs-title.function_, .reader .hljs-function { color: var(--code-function); }
+.reader .hljs-title.class_, .reader .hljs-type, .reader .hljs-built_in { color: var(--code-type); }
+.reader .hljs-string, .reader .hljs-regexp, .reader .hljs-meta .hljs-string { color: var(--code-string); }
+.reader .hljs-number, .reader .hljs-symbol, .reader .hljs-bullet { color: var(--code-number); }
+.reader .hljs-variable, .reader .hljs-params, .reader .hljs-attr, .reader .hljs-property { color: var(--code-variable); }
+.reader .hljs-operator, .reader .hljs-punctuation { color: var(--code-foreground); }
 
 .markdown-body { max-width: 860px; margin: 0 auto; padding: 42px clamp(26px, 6vw, 82px) 100px; color: #c6d7e5; font: 400 15px/1.82 "Space Grotesk", "Microsoft YaHei", sans-serif; overflow-wrap: anywhere; }
 .markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4 { color: #edf8ff; font-family: "Space Grotesk", "Microsoft YaHei", sans-serif; font-weight: 500; letter-spacing: -.025em; line-height: 1.25; scroll-margin-top: 20px; }
@@ -134,7 +168,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 .markdown-body p, .markdown-body ul, .markdown-body ol { margin: 0 0 1.1em; }
 .markdown-body a { color: var(--aurora); text-decoration-color: rgba(118,228,214,.38); text-underline-offset: 3px; }
 .markdown-body blockquote { margin: 1.5em 0; padding: .2em 0 .2em 1.25em; border-left: 2px solid var(--violet); color: #9eacc0; }
-.markdown-body pre { overflow: auto; padding: 18px 20px; border: 1px solid var(--line); border-left: 2px solid var(--aurora); border-radius: 2px; background: rgba(15, 20, 32, .88); }
+.markdown-body pre { overflow: auto; padding: 18px 20px; border: 1px solid var(--code-border); border-left: 2px solid var(--code-accent); border-radius: 2px; color: var(--code-foreground); background: var(--code-background); }
 .markdown-body code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: .88em; }
 .markdown-body :not(pre) > code { padding: .15em .38em; border: 1px solid rgba(139,124,246,.15); border-radius: 3px; background: rgba(139,124,246,.08); color: #d8d0ff; }
 .markdown-body img { max-width: 100%; }
@@ -144,8 +178,8 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 .markdown-body .markdown-code-block { display: block; padding: 0; overflow: auto; counter-reset: code-line; }
 .markdown-body .markdown-code-block code { display: block; min-width: max-content; padding: 13px 0; }
 .markdown-body .code-line { display: grid; grid-template-columns: 3.5em minmax(max-content, 1fr); min-height: 1.5em; padding-right: 20px; }
-.markdown-body .code-line[data-highlighted="true"] { background: rgba(98, 221, 255, .13); box-shadow: inset 2px 0 var(--aurora); }
-.markdown-body .line-number { padding-right: 1em; color: #52748c; text-align: right; user-select: none; }
+.markdown-body .code-line[data-highlighted="true"] { background: var(--code-line-highlight); box-shadow: inset 2px 0 var(--code-accent); }
+.markdown-body .line-number { padding-right: 1em; color: var(--code-gutter); text-align: right; user-select: none; }
 .markdown-body .line-content { white-space: pre; }
 .markdown-body .markdown-callout { margin: 1.4em 0; overflow: hidden; border: 1px solid rgba(98, 221, 255, .24); border-left: 3px solid var(--aurora); border-radius: 4px; background: rgba(10, 34, 56, .65); }
 .markdown-body .markdown-callout summary { padding: .72em 1em; color: #dff8ff; cursor: pointer; font-weight: 600; list-style-position: inside; }

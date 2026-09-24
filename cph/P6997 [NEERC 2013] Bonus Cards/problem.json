@@ -1,0 +1,35 @@
+{
+  "batch": {
+    "id": "939901bd-9cfb-4de2-9038-782e99469836", 
+    "size": 1
+  }, 
+  "interactive": false, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P6997", 
+  "timeLimit": 1000, 
+  "memoryLimit": 256, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P6997NEERC2013BonusCards"
+    }
+  }, 
+  "tests": [
+    {
+      "output": "0.3333333333333333\n0.2\n", 
+      "input": "1 1 2\n"
+    }, 
+    {
+      "output": "0.5870875690480144\n0.3640355515319861\n", 
+      "input": "10 10 10\n"
+    }
+  ], 
+  "testType": "single", 
+  "group": "Luogu", 
+  "name": "P6997 [NEERC 2013] Bonus Cards", 
+  "output": {
+    "type": "stdout"
+  }
+}

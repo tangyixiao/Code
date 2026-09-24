@@ -1,0 +1,35 @@
+{
+  "batch": {
+    "id": "3fe28e63-6111-4fa1-b384-012b669fa690", 
+    "size": 1
+  }, 
+  "interactive": false, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P14408", 
+  "timeLimit": 1000, 
+  "memoryLimit": 256, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P14408JOISC2015IOIOIIOIOICards"
+    }
+  }, 
+  "tests": [
+    {
+      "output": "12\n", 
+      "input": "1 2 3 4 5\n3\n2 3\n2 6\n4 10\n"
+    }, 
+    {
+      "output": "-1\n", 
+      "input": "1 1 1 1 1\n1\n1 1\n"
+    }
+  ], 
+  "testType": "single", 
+  "group": "Luogu", 
+  "name": "P14408 [JOISC 2015] IOIOI 卡牌占卜 / IOIOI Cards", 
+  "output": {
+    "type": "stdout"
+  }
+}
