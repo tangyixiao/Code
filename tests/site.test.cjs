@@ -105,10 +105,12 @@ async function main() {
     await page.locator('#viewer .markdown-code-block code').waitFor();
     assert.equal(await page.locator('.reader').getAttribute('data-code-theme'), 'light');
     assert.equal(await page.locator('#viewer .markdown-code-block').evaluate((element) => getComputedStyle(element).backgroundColor), 'rgb(255, 255, 255)');
+    assert.equal(await page.locator('#viewer .markdown-code-block .line-content').evaluate((element) => getComputedStyle(element).color), 'rgb(0, 0, 0)');
     assert.equal(await page.locator('#viewer .markdown-code-block .hljs-type').evaluate((element) => getComputedStyle(element).color), 'rgb(38, 127, 153)');
     await page.emulateMedia({ colorScheme: 'dark' });
     await page.waitForFunction(() => document.querySelector('.reader')?.getAttribute('data-code-theme') === 'dark');
     assert.equal(await page.locator('#viewer .markdown-code-block').evaluate((element) => getComputedStyle(element).backgroundColor), 'rgb(30, 30, 30)');
+    assert.equal(await page.locator('#viewer .markdown-code-block .line-content').evaluate((element) => getComputedStyle(element).color), 'rgb(212, 212, 212)');
     assert.equal(await page.locator('#viewer .markdown-code-block .hljs-type').evaluate((element) => getComputedStyle(element).color), 'rgb(78, 201, 176)');
     await page.emulateMedia({ colorScheme: 'light' });
     await page.waitForFunction(() => document.querySelector('.reader')?.getAttribute('data-code-theme') === 'light');

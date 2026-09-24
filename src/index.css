@@ -168,7 +168,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 .markdown-body p, .markdown-body ul, .markdown-body ol { margin: 0 0 1.1em; }
 .markdown-body a { color: var(--aurora); text-decoration-color: rgba(118,228,214,.38); text-underline-offset: 3px; }
 .markdown-body blockquote { margin: 1.5em 0; padding: .2em 0 .2em 1.25em; border-left: 2px solid var(--violet); color: #9eacc0; }
-.markdown-body pre { overflow: auto; padding: 18px 20px; border: 1px solid var(--code-border); border-left: 2px solid var(--code-accent); border-radius: 2px; background: var(--code-background); }
+.markdown-body pre { overflow: auto; padding: 18px 20px; border: 1px solid var(--code-border); border-left: 2px solid var(--code-accent); border-radius: 2px; color: var(--code-foreground); background: var(--code-background); }
 .markdown-body code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: .88em; }
 .markdown-body :not(pre) > code { padding: .15em .38em; border: 1px solid rgba(139,124,246,.15); border-radius: 3px; background: rgba(139,124,246,.08); color: #d8d0ff; }
 .markdown-body img { max-width: 100%; }
