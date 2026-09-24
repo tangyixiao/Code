@@ -62,3 +62,68 @@ $1\le l\le r\le n$
 
 ---
 
+# P8421 [THUPC 2022 Finals] rsraogps
+
+## 题目描述
+
+Given sequences $a_1,\dots,a_n$, $b_1,\dots,b_n$, $c_1,\dots,c_n$.
+
+Define the value of an interval $[l,r]$ as the product of the following three quantities: the bitwise AND of $a_l,\dots,a_r$, the bitwise OR of $b_l,\dots,b_r$, and the greatest common divisor of $c_l,\dots,c_r$.
+
+There are $m$ queries. Each query gives an interval $[l,r]$, and asks for the sum of values over all subintervals $[l',r']$ satisfying $l\le l'\le r'\le r$.
+
+## 输入格式
+
+The first line contains two integers $n,m$.
+
+The second line contains $n$ integers $a_1,\dots,a_n$.
+
+The third line contains $n$ integers $b_1,\dots,b_n$.
+
+The fourth line contains $n$ integers $c_1,\dots,c_n$.
+
+The next $m$ lines each contain two integers $l,r$, representing one query.
+
+## 输出格式
+
+Output $m$ lines. Each line contains one integer, the answer for the corresponding query, output after taking modulo $2^{32}$.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+5 3
+3 3 1 1 1
+2 1 3 2 2
+4 5 3 4 4
+1 2
+2 5
+4 5
+
+```
+
+### 输出 #1
+
+```
+48
+63
+24
+
+```
+
+## 说明/提示
+
+Constraints:
+
+$1\le n\le 10^6$.
+
+$1\le m\le 5\times 10^6$.
+
+$1\le a_i,b_i,c_i\le n$.
+
+$1\le l\le r\le n$.
+
+Efficient input/output methods are recommended.
+
+Translated by ChatGPT 5
