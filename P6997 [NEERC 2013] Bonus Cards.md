@@ -57,3 +57,63 @@
 时间限制：1 秒，内存限制：128 MB。
 
 题面翻译由 ChatGPT-4o 提供。
+
+---
+
+# P6997 [NEERC 2013] Bonus Cards
+
+## 题目描述
+
+Dmitry loves programming competitions very much. The Finals of the famed Champions League are taking place in Dmitry's home city, so he wants to visit the competition. The competition is very popular, but most tickets to the competition are reserved for VIPs and for sponsors.
+
+For the general public tickets to the Champions League Finals are distributed in the following way. Spectators, that want to see the competition, submit their request that states the payment method they want to use to pay for their ticket. Suppose there are $n$ seats available. Several draw round are conducted. In each round every request that is not yet fulfilled receives some number of slots depending on the payment method. Then one of those slots is selected uniformly at random. The request to which this slot belongs is considered fulfilled and does not take part in subsequent drawing rounds. Draw ends after $n$ rounds or when there are no more unfulfilled requests, whichever occurs first. An International Card Processing Corporation (ICPC) is a sponsor of the Champions League. Those who chose ICPC card as a payment method receive two slots in each draw round, while users of other payment methods receive only one.
+
+Dmitry has a card from ICPC, but he also has a card from Advanced Credit Merchandise $(ACM),$ which offers him a bonus on all his spendings. His brother Petr works in a company that conducts draw to distribute tickets, so he told Dmitry in advance how many people had already decided to use ICPC card and how many had decided to use other methods. Now Dmitry want to know the probabilities he would get a ticket if he would use his ICPC card or if he would use his ACM card, so that he can make an informed choice. His request is going to be in addition to the number of requests Petr had told him about.
+
+Can you help?
+
+## 输入格式
+
+The first and the only line of the input contains $3$ integer numbers -- the number of seats available for a draw $n (1 \le n \le 3000)$ , the number of requests with ICPC card as a payment method a , and the number of requests with other payment methods $b (0 \le $ a , $b \le 10^{9}).$
+
+## 输出格式
+
+On the first line output the probability of getting a ticket using ICPC card. On the second line output the probability of getting a ticket using ACM card. Answers should have an absolute error of no more than $10^{-9}.$
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+1 1 2
+
+```
+
+### 输出 #1
+
+```
+0.3333333333333333
+0.2
+
+```
+
+## 输入输出样例 #2
+
+### 输入 #2
+
+```
+10 10 10
+
+```
+
+### 输出 #2
+
+```
+0.5870875690480144
+0.3640355515319861
+
+```
+
+## 说明/提示
+
+Time limit: 1 s, Memory limit: 128 MB.
