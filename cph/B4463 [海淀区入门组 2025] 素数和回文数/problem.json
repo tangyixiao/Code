@@ -1,0 +1,23 @@
+{
+  "name": "B4463 [海淀区入门组 2025] 素数和回文数",
+  "url": "https://www.luogu.com.cn/problem/B4463",
+  "group": "",
+  "memoryLimit": null,
+  "timeLimit": null,
+  "interactive": null,
+  "testType": "",
+  "tests": [
+    {
+      "input": "1 1\n",
+      "output": "40\n"
+    },
+    {
+      "input": "1 42\n",
+      "output": "1\n"
+    },
+    {
+      "input": "6 4\n",
+      "output": "172\n"
+    }
+  ]
+}

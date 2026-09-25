@@ -1,3 +1,18 @@
+//  Author: Tangyixiao
+//  Time: $date$ $time$
+//  Problem: $name$
+//  Contest: $group$
+//  URL: $url$
+//  Memory Limit: [fill manually] MB
+//  Time Limit: [fill manually] ms
+//  Interactive: [fill manually]
+//  Test Type: $testType$
+//
+// Algorithm:
+// Complexity: O()
+// Note:
+//
+//  Powered by Visual Studio Code + CPH (Competitive Programming Helper)
 
 /*
 Copyright (C) 2026 TangYixiao

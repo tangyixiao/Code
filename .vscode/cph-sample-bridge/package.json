@@ -1,0 +1,38 @@
+{
+  "name": "cph-sample-bridge",
+  "displayName": "CPH Sample Bridge",
+  "description": "Writes Competitive Companion samples to the workspace and forwards imports to CPH-NG.",
+  "version": "1.0.0",
+  "publisher": "tangyixiao",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": ["Other"],
+  "main": "./extension.js",
+  "activationEvents": ["workspaceContains:.vscode/template.cpp"],
+  "contributes": {
+    "configuration": {
+      "title": "CPH Sample Bridge",
+      "properties": {
+        "cphSampleBridge.listenPort": {
+          "type": "number",
+          "default": 27121,
+          "description": "Local port used by Competitive Companion."
+        },
+        "cphSampleBridge.cphNgPort": {
+          "type": "number",
+          "default": 27122,
+          "description": "Local port used by CPH-NG behind the sample bridge."
+        },
+        "cphSampleBridge.cphNgHost": {
+          "type": "string",
+          "default": "::1",
+          "description": "Loopback host used to reach the CPH-NG router."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "test": "node --test test/bridge.test.js"
+  }
+}
