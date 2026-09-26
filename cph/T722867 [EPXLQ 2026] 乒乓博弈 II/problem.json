@@ -1,0 +1,31 @@
+{
+  "name": "T722867 [EPXLQ 2026] 乒乓博弈 II",
+  "group": "Luogu - EPXLQ 2026 Fall Round",
+  "url": "https://www.luogu.com.cn/problem/T722867?contestId=289873",
+  "interactive": false,
+  "memoryLimit": 512,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "3\n2 1\n2 2\n5 3\n",
+      "output": "1\n-1\n2\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "T722867EPXLQ2026II"
+    }
+  },
+  "batch": {
+    "id": "89728c6a-48dc-40b1-8797-f35849317159",
+    "size": 1
+  }
+}
