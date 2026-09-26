@@ -46,3 +46,50 @@ $$
 
 ---
 
+# P1482 Cantor Table (Upgraded Version)
+
+## 题目描述
+
+One of the famous results in modern mathematics is Georg Cantor’s proof that the rational numbers are countable. He used the following table to demonstrate this fact:
+
+$$\begin{matrix}
+1/1 & 1/2 & 1/3 & 1/4 & 1/5 & \cdots \cr
+2/1 & 2/2 & 2/3 & 2/4 &  \cdots \cr
+3/1 & 3/2 & 3/3 &  \cdots \cr
+4/1 & 4/2 &  \cdots \cr
+5/1 &  \cdots \cr
+\end{matrix}
+$$
+
+This time, unlike NOIp 1999 Problem 1, you need to input two fractions (not necessarily in lowest terms), compute their product (make sure to reduce it to lowest terms), and output which column and which row the product falls into in the original table (if the product is of the form $a$ (i.e., an integer) or $1/a$, treat it as $a/1$ or $1/a$ in the table).
+
+## 输入格式
+
+Two lines. Each line contains a fraction (not necessarily in lowest terms).
+
+## 输出格式
+
+Two integers, indicating in which column and which row the product of the two input fractions appears in the table.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+4/5
+5/4
+```
+
+### 输出 #1
+
+```
+1 1
+```
+
+## 说明/提示
+
+### Constraints
+
+For all testdata, the numerators and denominators of the two fractions are less than $10^4$.
+
+Translated by ChatGPT 5
