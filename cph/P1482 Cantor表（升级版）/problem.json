@@ -1,0 +1,31 @@
+{
+  "name": "P1482 Cantor表（升级版）",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P1482",
+  "interactive": false,
+  "memoryLimit": 125,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "4/5\n5/4\n",
+      "output": "1 1\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P1482Cantor"
+    }
+  },
+  "batch": {
+    "id": "b89062ce-95b3-4989-825f-658586b75929",
+    "size": 1
+  }
+}
