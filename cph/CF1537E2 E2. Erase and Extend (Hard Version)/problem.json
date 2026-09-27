@@ -1,0 +1,35 @@
+{
+  "name": "E2. Erase and Extend (Hard Version)", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "memoryLimit": 256, 
+  "url": "https://codeforces.com/contest/1537/problem/E2", 
+  "timeLimit": 2000, 
+  "testType": "single", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "tests": [
+    {
+      "output": "dbcadabcdbcadabc\n", 
+      "input": "8 16\ndbcadabc\n"
+    }, 
+    {
+      "output": "aaaaa\n", 
+      "input": "4 5\nabcd\n"
+    }
+  ], 
+  "interactive": false, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "E2EraseAndExtendHardVersion"
+    }
+  }, 
+  "group": "Codeforces - Codeforces Round 726 (Div. 2)", 
+  "batch": {
+    "id": "a46d1e11-e318-4bb3-b64b-e0c63cc5935c", 
+    "size": 1
+  }
+}
