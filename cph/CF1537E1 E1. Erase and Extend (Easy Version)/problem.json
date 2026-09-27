@@ -1,0 +1,35 @@
+{
+  "batch": {
+    "size": 1, 
+    "id": "376338ae-606e-42d4-8cd1-027dd014cc0b"
+  }, 
+  "memoryLimit": 256, 
+  "testType": "single", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "url": "https://codeforces.com/contest/1537/problem/E1", 
+  "interactive": false, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "languages": {
+    "java": {
+      "taskClass": "E1EraseAndExtendEasyVersion", 
+      "mainClass": "Main"
+    }
+  }, 
+  "timeLimit": 2000, 
+  "group": "Codeforces - Codeforces Round 726 (Div. 2)", 
+  "tests": [
+    {
+      "output": "dbcadabcdbcadabc\n", 
+      "input": "8 16\ndbcadabc\n"
+    }, 
+    {
+      "output": "aaaaa\n", 
+      "input": "4 5\nabcd\n"
+    }
+  ], 
+  "name": "E1. Erase and Extend (Easy Version)"
+}
