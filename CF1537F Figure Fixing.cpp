@@ -651,6 +651,7 @@ inline void solve(int Task_Id) {
     } else {
         cout << ((s[0] + s[1]) % 2 == 0 ? "YES" : "NO") << "\n";
     }
+    return;
 }
 
 } // namespace TANGYIXIAO
