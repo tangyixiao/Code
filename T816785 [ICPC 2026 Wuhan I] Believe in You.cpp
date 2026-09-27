@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: c6e19836-72b7-4a71-8b95-baf8fded5442
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -595,10 +595,33 @@ signed main() {
     return EXIT_SUCCESS;
 }
 #pragma endregion MAIN
-#pragma endregion PREPROCESSOR
+#pragma endregion PREPROCESSOR #include < bits / stdc++.h>
+using namespace std;
+
 namespace TANGYIXIAO {
+int n, S, D, HP;
+
 inline void solve(int Task_Id) {
-    // do something here
-    return;
+    cin >> n >> S >> D >> HP;
+    int sum = 0;
+    for (int i = 1; i <= n; i++) {
+        int a, k;
+        cin >> a >> k;
+
+        if (sum + min(a, 3) * S >= HP) {
+            cout << "Yes\n"
+                 << i << "\n";
+            return;
+        }
+
+        int need = (k + D - 1) / D;
+        if (need > 3 || need > 5 - a) {
+            cout << "No\n";
+            return;
+        }
+
+        sum += min(a, 3 - need) * S;
+    }
+    cout << "No\n";
 }
 } // namespace TANGYIXIAO
