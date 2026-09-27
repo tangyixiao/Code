@@ -600,7 +600,7 @@ namespace TANGYIXIAO {
 int n, m, r, c;
 inline void solve(int Task_Id) {
     cin >> n >> m >> r >> c;
-    cout << "1 1 " << n << m << "\n";
+    cout << "1 1 " << n << " " << m << "\n";
     return;
 }
 } // namespace TANGYIXIAO
