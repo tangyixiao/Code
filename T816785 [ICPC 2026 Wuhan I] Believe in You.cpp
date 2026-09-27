@@ -595,20 +595,17 @@ signed main() {
     return EXIT_SUCCESS;
 }
 #pragma endregion MAIN
-#pragma endregion PREPROCESSOR #include < bits / stdc++.h>
-using namespace std;
+#pragma endregion PREPROCESSOR 
 
 namespace TANGYIXIAO {
-int n, S, D, HP;
+int n, S, D, h, sum;
 
 inline void solve(int Task_Id) {
-    cin >> n >> S >> D >> HP;
-    int sum = 0;
-    for (int i = 1; i <= n; i++) {
-        int a, k;
+    cin >> n >> S >> D >> h;
+    for (int i = 1, a, k; i <= n; i++) {
         cin >> a >> k;
 
-        if (sum + min(a, 3) * S >= HP) {
+        if (sum + min(a, 3) * S >= h) {
             cout << "Yes\n"
                  << i << "\n";
             return;
