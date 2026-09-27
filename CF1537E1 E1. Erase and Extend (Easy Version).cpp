@@ -601,9 +601,7 @@ bool flag;
 int n, k, b;
 string s;
 inline void solve(int Task_Id) {
-    cin >> n >> k;
-    cin >> s;
-    b = 1;
+    cin >> n >> k >> s, b = 1;
     for (int k = 2; k <= n; k++, flag = false) {
         for (int i = 0; i < min(k, k + b); i++) {
             if (s[i % k] != s[i % b]) {
