@@ -159,9 +159,9 @@ inline int unlocked_putchar(int c) { return putchar_unlocked(c); }
 template<class T>
 inline bool read_unlocked(T &x) { typedef typename Unsigned_Of<T>::type U; int c = unlocked_getchar(); bool neg = false; U v = 0; for (; c != EOF && c <= ' '; c = unlocked_getchar()) {} if (c == EOF) { return false; } if (c == '-') { neg = true, c = unlocked_getchar(); } for (; c >= '0' && c <= '9'; c = unlocked_getchar()) { v = (v << 3) + (v << 1) + U(c - '0'); } x = neg && v ? T(-T(v - 1) - 1) : T(v); return true; }
 struct Fread_Input {
-    static const int S = 1 << 20;
-    int p = 0, n = 0; char b[S];
-    inline int gc() { if (p == n) { n = (int)fread(b, 1, S, stdin), p = 0; if (!n) { return EOF; } } return b[p++]; }
+    static const int s = 1 << 20;
+    int p = 0, n = 0; char b[s];
+    inline int gc() { if (p == n) { n = (int)fread(b, 1, s, stdin), p = 0; if (!n) { return EOF; } } return b[p++]; }
     template<class T>
     inline bool read_int(T &x) { typedef typename Unsigned_Of<T>::type U; int c = gc(); bool neg = false; U v = 0; for (; c != EOF && c <= ' '; c = gc()) {} if (c == EOF) { return false; } if (c == '-') { neg = true, c = gc(); } for (; c >= '0' && c <= '9'; c = gc()) { v = (v << 3) + (v << 1) + U(c - '0'); } x = neg && v ? T(-T(v - 1) - 1) : T(v); return true; }
     inline bool read_char(char &c) { int x = gc(); for (; x != EOF && x <= ' '; x = gc()) {} if (x == EOF) { return false; } c = (char)x; return true; }
@@ -170,11 +170,11 @@ struct Fread_Input {
     inline bool read_float(T &x) { string s; if (!read_string(s)) { return false; } x = (T)strtold(s.c_str(), nullptr); return true; }
 };
 struct Fwrite_Output {
-    static const int S = 1 << 20;
-    int p = 0; char b[S];
+    static const int s = 1 << 20;
+    int p = 0; char b[s];
     inline ~Fwrite_Output() { flush(); }
     inline void flush() { if (p) { fwrite(b, 1, p, stdout), p = 0; } return; }
-    inline void pc(char c) { if (p == S) { flush(); } b[p++] = c; return; }
+    inline void pc(char c) { if (p == s) { flush(); } b[p++] = c; return; }
     template<class T>
     inline void write_int(T x, char end = 0) { typedef typename Unsigned_Of<T>::type U; bool neg = x < 0; U v = neg ? U(-(x + 1)) + 1 : U(x); if (neg) { pc('-'); } if (!v) { pc('0'); } else { char s[64]; int n = 0; for (; v; v /= 10) { s[n++] = char('0' + v % 10); } for (int i = n - 1; i >= 0; i--) { pc(s[i]); } } if (end) { pc(end); } return; }
     inline void write_char(char c) { pc(c); return; }
@@ -460,7 +460,7 @@ struct Fibonacci_Heap {
     inline void add_root(int p) { tr[p].parent = 0, tr[p].mark = false; if (!rt) { singleton(p), rt = p; } else { add_after(rt, p); if (better(tr[p].val, tr[rt].val)) { rt = p; } } return; }
     inline vector<int> list_nodes(int p) const { vector<int> v; if (!p) { return v; } int x = p; do { v.push_back(x); x = tr[x].right; } while (x != p); return v; }
     inline void link_as_child(int y, int x) { remove_from_list(y), tr[y].parent = x, tr[y].mark = false; if (!tr[x].child) { tr[x].child = y, singleton(y); } else { add_after(tr[x].child, y); } tr[x].degree++; return; }
-    inline void consolidate() { if (!rt) { return; } int D = 1; for (int x = n; x; x >>= 1) { D++; } vector<int> A(D + 5, 0), roots = list_nodes(rt);
+    inline void consolidate() { if (!rt) { return; } int d = 1; for (int x = n; x; x >>= 1) { d++; } vector<int> A(d + 5, 0), roots = list_nodes(rt);
         for (int x : roots) { if (tr[x].parent) { continue; } int d = tr[x].degree; for (; A[d]; d++) { int y = A[d]; if (better(tr[y].val, tr[x].val)) { swap(x, y); } link_as_child(y, x), A[d] = 0; } A[d] = x; }
         rt = 0; for (int x : A) { if (!x || tr[x].parent) { continue; } singleton(x); if (!rt) { rt = x; } else { add_after(rt, x); if (better(tr[x].val, tr[rt].val)) { rt = x; } } } return;
     }
@@ -595,30 +595,25 @@ signed main() {
     return EXIT_SUCCESS;
 }
 #pragma endregion MAIN
-#pragma endregion PREPROCESSOR 
-
+#pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-int n, S, D, h, sum;
-
+int n, s, d, h, sum;
 inline void solve(int Task_Id) {
-    cin >> n >> S >> D >> h;
+    cin >> n >> s >> d >> h;
     for (int i = 1, a, k; i <= n; i++) {
         cin >> a >> k;
-
-        if (sum + min(a, 3) * S >= h) {
+        if (sum + min(a, 3) * s >= h) {
             cout << "Yes\n"
                  << i << "\n";
             return;
         }
-
-        int need = (k + D - 1) / D;
-        if (need > 3 || need > 5 - a) {
+        if ((k + d - 1) / d > 3 || (k + d - 1) / d > 5 - a) {
             cout << "No\n";
             return;
         }
-
-        sum += min(a, 3 - need) * S;
+        sum += min(a, 3 - (k + d - 1) / d) * s;
     }
     cout << "No\n";
+    return;
 }
 } // namespace TANGYIXIAO
