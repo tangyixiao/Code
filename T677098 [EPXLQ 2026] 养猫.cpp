@@ -597,8 +597,38 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 8e2 + 5;
+struct Cat {
+    int a, b, c;
+    bool operator<(const Cat &y) const {
+        return a != y.a ? a < y.a : (b != y.b ? b < y.b : c < y.c);
+    }
+} p[N];
+int n, na, nb, nc, A[N], B[N], C[N], cnt[N][N], nw[N];
+ll dp[2][N][N], sum;
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n;
+    for (int i = 1; i <= n; sum += 1LL * p[i].a + p[i].b + p[i].c, i++) {
+        cin >> p[i].a >> p[i].b >> p[i].c, A[i] = p[i].a, B[i] = p[i].b, C[i] = p[i].c;
+    }
+    sort(A + 1, A + n + 1), na = unique(A + 1, A + n + 1) - A - 1, sort(B + 1, B + n + 1), nb = unique(B + 1, B + n + 1) - B - 1, sort(C + 1, C + n + 1), nc = unique(C + 1, C + n + 1) - C - 1;
+    for (int i = 1; i <= n; i++) {
+        p[i].a = lower_bound(A + 1, A + na + 1, p[i].a) - A, p[i].b = lower_bound(B + 1, B + nb + 1, p[i].b) - B, p[i].c = lower_bound(C + 1, C + nc + 1, p[i].c) - C;
+    }
+    sort(p + 1, p + n + 1);
+    for (int x = 1, id = 1; x <= na; x++) {
+        memset(nw, 0, sizeof nw);
+        for (int y = 1; y <= nb; y++) {
+            for (; id <= n && p[id].a == x && p[id].b == y; id++) {
+                nw[p[id].c]++;
+            }
+            for (int z = 1, w = 0; z <= nc; z++) {
+                w += nw[z], cnt[y][z] += w, dp[x & 1][y][z] = min(dp[(x & 1) ^ 1][y][z] + w * (1LL * A[x] + B[y] + C[z]), min(dp[x & 1][y - 1][z] + (cnt[y][z] - cnt[y - 1][z]) * (1LL * A[x] + B[y] + C[z]), dp[x & 1][y][z - 1] + (cnt[y][z] - cnt[y][z - 1]) * (1LL * A[x] + B[y] + C[z])));
+            }
+        }
+    }
+    cout << dp[na & 1][nb][nc] - sum << "\n";
     return;
 }
+
 } // namespace TANGYIXIAO
