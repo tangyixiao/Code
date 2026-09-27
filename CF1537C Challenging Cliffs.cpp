@@ -610,12 +610,14 @@ inline void solve(int Task_Id) {
             id = i, c = abs(h[i] - h[i - 1]);
         }
     }
-    for (int i = id; i <= n; i++) {
+    cout << h[id - 1] << " ";
+    for (int i = id + 1; i <= n; i++) {
         cout << h[i] << " ";
     }
-    for (int i = 1; i < id; i++) {
+    for (int i = 1; i < id - 1; i++) {
         cout << h[i] << " ";
     }
+    cout << h[id] << " ";
     cout << "\n";
     return;
 }
