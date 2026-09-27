@@ -1,0 +1,31 @@
+{
+  "batch": {
+    "size": 1, 
+    "id": "99c8c608-4dbc-4787-be5f-ef5a8bedde4a"
+  }, 
+  "memoryLimit": 256, 
+  "testType": "single", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "url": "https://codeforces.com/contest/1537/problem/C", 
+  "interactive": false, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "languages": {
+    "java": {
+      "taskClass": "CChallengingCliffs", 
+      "mainClass": "Main"
+    }
+  }, 
+  "timeLimit": 2000, 
+  "group": "Codeforces - Codeforces Round 726 (Div. 2)", 
+  "tests": [
+    {
+      "output": "2 4 1 2\n1 3\n", 
+      "input": "2\n4\n4 2 1 2\n2\n3 1\n"
+    }
+  ], 
+  "name": "C. Challenging Cliffs"
+}
