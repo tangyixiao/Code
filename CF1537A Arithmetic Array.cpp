@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 6dbbd252-aa69-43ac-bca2-ea9151da37d3
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,13 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+int n, sum;
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n, sum = 0;
+    for (int i = 1, x; i <= n; i++) {
+        cin >> x, sum += x;
+    }
+    cout << sum < n ? 1 : sum - n << "\n";
     return;
 }
 } // namespace TANGYIXIAO
