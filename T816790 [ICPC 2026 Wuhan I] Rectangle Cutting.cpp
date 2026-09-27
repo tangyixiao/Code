@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: b56e4f5d-67ca-48e0-bc9a-57cbc27a6ec3
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -596,9 +596,43 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
+int n, m, q;
+set<int> sx, sy;
+multiset<int> lx, ly;
+
+inline void cut(set<int> &s, multiset<int> &len, int x) {
+    auto it = s.lower_bound(x);
+    int r = *it, l = *prev(it);
+    len.erase(len.find(r - l));
+    len.insert(x - l);
+    len.insert(r - x);
+    s.insert(x);
+}
+
 inline void solve(int Task_Id) {
-    // do something here
-    return;
+    cin >> n >> m >> q;
+
+    sx.insert(0);
+    sx.insert(n);
+    sy.insert(0);
+    sy.insert(m);
+    lx.insert(n);
+    ly.insert(m);
+
+    for (int i = 1; i <= q; i++) {
+        int op, k;
+        cin >> op >> k;
+
+        if (op == 1) {
+            cut(sx, lx, k);
+        } else {
+            cut(sy, ly, k);
+        }
+
+        cout << 1LL * (*lx.rbegin()) * (*ly.rbegin()) << "\n";
+    }
 }
 } // namespace TANGYIXIAO
+
