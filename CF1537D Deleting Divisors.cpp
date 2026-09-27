@@ -600,9 +600,13 @@ namespace TANGYIXIAO {
 int n, cnt;
 inline void solve(int Task_Id) {
     cin >> n;
+    if (n & 1) {
+        cout << "Bob\n";
+        return;
+    }
     for (cnt = 0; !(n & 1); cnt++, n >>= 1)
         ;
-    cout << (n & 1) ? "Bob" : ((n > 1) ? "Alice" : (cnt & 1 ? "Bob" : "Alice")) << "\n";
+    cout << ((n == 1 && (cnt & 1)) ? "Bob" : "Alice") << "\n";
     return;
 }
 } // namespace TANGYIXIAO
