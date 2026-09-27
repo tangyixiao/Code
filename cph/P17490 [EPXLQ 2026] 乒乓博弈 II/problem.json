@@ -1,0 +1,31 @@
+{
+  "name": "P17490 [EPXLQ 2026] 乒乓博弈 II", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "memoryLimit": 512, 
+  "url": "https://www.luogu.com.cn/problem/P17490", 
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "tests": [
+    {
+      "output": "1\n-1\n2\n", 
+      "input": "3\n2 1\n2 2\n5 3\n"
+    }
+  ], 
+  "interactive": false, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P17490EPXLQ2026II"
+    }
+  }, 
+  "group": "Luogu", 
+  "batch": {
+    "id": "4fdfc349-c04a-46dc-be52-c163e8f3ab14", 
+    "size": 1
+  }
+}
