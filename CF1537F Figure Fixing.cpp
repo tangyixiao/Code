@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: a61e544d-769b-4a7f-82a8-8430633a7b2a
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -20,7 +20,7 @@ Copyright (C) 2026 TangYixiao
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
 #define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
 #define FILE_INDEX 1                      // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -597,8 +597,60 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-inline void solve(int Task_Id) {
-    // do something here
+
+const int N = 200005;
+
+int n, m, w[N];
+long long d[N];
+vector<int> e[N];
+bool flag;
+
+inline void dfs(int u, int c) {
+    w[u] = c;
+    for (int v : e[u]) {
+        if (w[v] == -1) {
+            dfs(v, c ^ 1);
+        } else if (w[v] == w[u]) {
+            flag = false;
+        }
+    }
     return;
 }
+
+inline void solve(int Task_Id) {
+    cin >> n >> m;
+
+    for (int i = 1; i <= n; i++) {
+        cin >> d[i];
+        e[i].clear();
+        w[i] = -1;
+    }
+
+    for (int i = 1; i <= n; i++) {
+        long long x;
+        cin >> x;
+        d[i] = x - d[i];
+    }
+
+    for (int i = 1, u, v; i <= m; i++) {
+        cin >> u >> v;
+        e[u].push_back(v);
+        e[v].push_back(u);
+    }
+
+    flag = true;
+    dfs(1, 0);
+
+    long long s[2] = {0, 0};
+    for (int i = 1; i <= n; i++) {
+        s[w[i]] += d[i];
+    }
+
+    if (flag) {
+        cout << (s[0] == s[1] ? "YES" : "NO") << "\n";
+    } else {
+        cout << ((s[0] + s[1]) % 2 == 0 ? "YES" : "NO") << "\n";
+    }
+}
+
 } // namespace TANGYIXIAO
