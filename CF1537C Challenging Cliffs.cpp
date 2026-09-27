@@ -617,8 +617,7 @@ inline void solve(int Task_Id) {
     for (int i = 1; i < id - 1; i++) {
         cout << h[i] << " ";
     }
-    cout << h[id] << " ";
-    cout << "\n";
+    cout << h[id] << "\n";
     return;
 }
 } // namespace TANGYIXIAO

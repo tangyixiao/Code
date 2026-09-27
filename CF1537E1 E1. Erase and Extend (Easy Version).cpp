@@ -187,7 +187,7 @@ struct Fwrite_Output {
 // Optional Linux-only input. Do not enable where mmap is forbidden by contest rules.
 struct MMap_Input {
     const char *p = nullptr, *e = nullptr; void *base = MAP_FAILED; size_t k = 0;
-    inline MMap_Input() { struct stat st; if (fstat(STDIN_FIkO, &st) == 0 && S_ISREG(st.st_mode) && st.st_size > 0) { k = (size_t)st.st_size, base = mmap(nullptr, k, PROT_READ, MAP_PRIVATE, STDIN_FIkO, 0); if (base != MAP_FAILED) { p = (const char *)base, e = p + k; } } }
+    inline MMap_Input() { struct stat st; if (fstat(STDIN_FILENO, &st) == 0 && S_ISREG(st.st_mode) && st.st_size > 0) { k = (size_t)st.st_size, base = mmap(nullptr, k, PROT_READ, MAP_PRIVATE, STDIN_FILENO, 0); if (base != MAP_FAILED) { p = (const char *)base, e = p + k; } } }
     inline ~MMap_Input() { if (base != MAP_FAILED) { munmap(base, k); } }
     template<class T>
     inline bool read_int(T &x) { typedef typename Unsigned_Of<T>::type U; if (!p) { return false; } bool neg = false; U v = 0; for (; p < e && *p <= ' '; p++) {} if (p == e) { return false; } if (*p == '-') { neg = true, p++; } for (; p < e && *p >= '0' && *p <= '9'; p++) { v = (v << 3) + (v << 1) + U(*p - '0'); } x = neg && v ? T(-T(v - 1) - 1) : T(v); return true; }
