@@ -601,7 +601,6 @@ namespace TANGYIXIAO {
 int n, m, q;
 set<int> sx, sy;
 multiset<int> lx, ly;
-
 inline void cut(set<int> &s, multiset<int> &len, int x) {
     auto it = s.lower_bound(x);
     int r = *it, l = *prev(it);
@@ -609,30 +608,22 @@ inline void cut(set<int> &s, multiset<int> &len, int x) {
     len.insert(x - l);
     len.insert(r - x);
     s.insert(x);
+    return;
 }
-
 inline void solve(int Task_Id) {
     cin >> n >> m >> q;
-
-    sx.insert(0);
-    sx.insert(n);
-    sy.insert(0);
-    sy.insert(m);
-    lx.insert(n);
-    ly.insert(m);
-
-    for (int i = 1; i <= q; i++) {
-        int op, k;
+    sx.insert(0), sx.insert(n);
+    sy.insert(0), sy.insert(m);
+    lx.insert(n), ly.insert(m);
+    for (int i = 1, op, k; i <= q; i++) {
         cin >> op >> k;
-
         if (op == 1) {
             cut(sx, lx, k);
         } else {
             cut(sy, ly, k);
         }
-
         cout << 1LL * (*lx.rbegin()) * (*ly.rbegin()) << "\n";
     }
+    return;
 }
 } // namespace TANGYIXIAO
-
