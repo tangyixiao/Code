@@ -602,16 +602,15 @@ int n, k, b;
 string s;
 inline void solve(int Task_Id) {
     cin >> n >> k >> s, b = 1;
-    for (int len = 2; len <= n; len++) {
-        flag = false;
-        for (int i = 0; i < min(k, len + b); i++) {
-            if (s[i % len] != s[i % b]) {
-                flag = s[i % len] < s[i % b];
+    for (int p = 2; p <= n; p++, flag = false) {
+        for (int i = 0; i < min(k, p + b); i++) {
+            if (s[i % p] != s[i % b]) {
+                flag = s[i % p] < s[i % b];
                 break;
             }
         }
         if (flag) {
-            b = len;
+            b = p;
         }
     }
     for (int i = 0; i < k; i++) {
