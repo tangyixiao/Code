@@ -598,16 +598,13 @@ signed main() {
 #pragma endregion PREPROCESSOR
 
 namespace TANGYIXIAO {
-int n, m, q;
+int n, m, q, l, r;
 set<int> sx, sy;
 multiset<int> lx, ly;
 inline void del(set<int> &s, multiset<int> &len, int x) {
     auto it = s.lower_bound(x);
-    int r = *it, l = *prev(it);
-    len.erase(len.find(r - l));
-    len.insert(x - l);
-    len.insert(r - x);
-    s.insert(x);
+    l = *prev(it), r = *it;
+    len.erase(len.find(r - l)), len.insert(x - l), len.insert(r - x), s.insert(x);
     return;
 }
 inline void solve(int Task_Id) {
