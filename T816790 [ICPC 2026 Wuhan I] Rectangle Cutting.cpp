@@ -433,7 +433,7 @@ struct Pairing_Heap {
     inline bool better(const T &a, const T &b) const { return cmp(b, a); }
     inline int meld(int x, int y) { if (!x || !y) { return x | y; } if (better(tr[y].val, tr[x].val)) { swap(x, y); } tr[y].prev = x, tr[y].next = tr[x].child; if (tr[x].child) { tr[tr[x].child].prev = y; } tr[x].child = y; return x; }
     inline int merge_pairs(int x) { if (!x) { return 0; } vector<int> v; for (int p = x; p;) { int a = p, b = tr[a].next; p = b ? tr[b].next : 0; tr[a].prev = tr[a].next = 0; if (b) { tr[b].prev = tr[b].next = 0; v.push_back(meld(a, b)); } else { v.push_back(a); } } int r = 0; for (int i = (int)v.size() - 1; i >= 0; i--) { r = meld(r, v[i]); } return r; }
-    inline void cut(int p) { int q = tr[p].prev; if (!q) { return; } if (tr[q].child == p) { tr[q].child = tr[p].next; if (tr[p].next) { tr[tr[p].next].prev = q; } } else { tr[q].next = tr[p].next; if (tr[p].next) { tr[tr[p].next].prev = q; } } tr[p].prev = tr[p].next = 0; return; }
+    inline void del(int p) { int q = tr[p].prev; if (!q) { return; } if (tr[q].child == p) { tr[q].child = tr[p].next; if (tr[p].next) { tr[tr[p].next].prev = q; } } else { tr[q].next = tr[p].next; if (tr[p].next) { tr[tr[p].next].prev = q; } } tr[p].prev = tr[p].next = 0; return; }
     inline bool empty() const { return n == 0; }
     inline int size() const { return n; }
     inline const T &top() const { return tr[rt].val; }
@@ -441,8 +441,8 @@ struct Pairing_Heap {
     inline int insert(const T &x) { int p = ++tot; tr[p].val = x, tr[p].child = tr[p].next = tr[p].prev = 0, tr[p].alive = true, rt = meld(rt, p), n++; return p; }
     inline void push(const T &x) { insert(x); return; }
     inline void pop() { int old = rt; int c = tr[old].child; if (c) { tr[c].prev = 0; } rt = merge_pairs(c); tr[old].alive = false; tr[old].child = tr[old].next = tr[old].prev = 0; n--; return; }
-    inline bool improve(int p, const T &x) { if (!tr[p].alive || !better(x, tr[p].val)) { return false; } tr[p].val = x; if (p != rt) { cut(p); rt = meld(rt, p); } return true; }
-    inline bool erase(int p) { if (!tr[p].alive) { return false; } if (p == rt) { pop(); return true; } cut(p); int sub = merge_pairs(tr[p].child); tr[p].alive = false; tr[p].child = tr[p].next = tr[p].prev = 0; rt = meld(rt, sub); n--; return true; }
+    inline bool improve(int p, const T &x) { if (!tr[p].alive || !better(x, tr[p].val)) { return false; } tr[p].val = x; if (p != rt) { del(p); rt = meld(rt, p); } return true; }
+    inline bool erase(int p) { if (!tr[p].alive) { return false; } if (p == rt) { pop(); return true; } del(p); int sub = merge_pairs(tr[p].child); tr[p].alive = false; tr[p].child = tr[p].next = tr[p].prev = 0; rt = meld(rt, sub); n--; return true; }
 };
 template<class T, int N, class Compare = less<T>>
 struct Fibonacci_Heap {
@@ -464,8 +464,8 @@ struct Fibonacci_Heap {
         for (int x : roots) { if (tr[x].parent) { continue; } int d = tr[x].degree; for (; A[d]; d++) { int y = A[d]; if (better(tr[y].val, tr[x].val)) { swap(x, y); } link_as_child(y, x), A[d] = 0; } A[d] = x; }
         rt = 0; for (int x : A) { if (!x || tr[x].parent) { continue; } singleton(x); if (!rt) { rt = x; } else { add_after(rt, x); if (better(tr[x].val, tr[rt].val)) { rt = x; } } } return;
     }
-    inline void cut(int x, int y) { if (tr[y].child == x) { if (tr[x].right == x) { tr[y].child = 0; } else { tr[y].child = tr[x].right; } } remove_from_list(x); tr[y].degree--; add_root(x); return; }
-    inline void cascading_cut(int y) { int z = tr[y].parent; if (!z) { return; } if (!tr[y].mark) { tr[y].mark = true; } else { cut(y, z); cascading_cut(z); } return; }
+    inline void del(int x, int y) { if (tr[y].child == x) { if (tr[x].right == x) { tr[y].child = 0; } else { tr[y].child = tr[x].right; } } remove_from_list(x); tr[y].degree--; add_root(x); return; }
+    inline void cascading_cut(int y) { int z = tr[y].parent; if (!z) { return; } if (!tr[y].mark) { tr[y].mark = true; } else { del(y, z); cascading_cut(z); } return; }
     inline bool empty() const { return n == 0; }
     inline int size() const { return n; }
     inline const T &top() const { return tr[rt].val; }
@@ -473,7 +473,7 @@ struct Fibonacci_Heap {
     inline int insert(const T &x) { int p = ++tot; tr[p].val = x, tr[p].parent = tr[p].child = 0, tr[p].degree = 0, tr[p].mark = false, tr[p].alive = true; singleton(p), add_root(p), n++; return p; }
     inline void push(const T &x) { insert(x); return; }
     inline void pop() { int z = rt; vector<int> children = list_nodes(tr[z].child); for (int x : children) { remove_from_list(x); add_root(x); } tr[z].child = 0; if (tr[z].right == z) { rt = 0; } else { int nr = tr[z].right; remove_from_list(z); rt = nr; } tr[z].alive = false; n--; if (rt) { consolidate(); } return; }
-    inline bool improve(int x, const T &v) { if (!tr[x].alive || !better(v, tr[x].val)) { return false; } tr[x].val = v; int y = tr[x].parent; if (y && better(tr[x].val, tr[y].val)) { cut(x, y); cascading_cut(y); } if (better(tr[x].val, tr[rt].val)) { rt = x; } return true; }
+    inline bool improve(int x, const T &v) { if (!tr[x].alive || !better(v, tr[x].val)) { return false; } tr[x].val = v; int y = tr[x].parent; if (y && better(tr[x].val, tr[y].val)) { del(x, y); cascading_cut(y); } if (better(tr[x].val, tr[rt].val)) { rt = x; } return true; }
 };
 template<int N, int Sigma = 26, char Base = 'a'>
 struct Trie {
@@ -557,7 +557,7 @@ struct Link_Cut_Tree {
     inline int find_root(int x) { access(x); for (;;) { push(x); if (!ch[x][0]) { break; } x = ch[x][0]; } splay(x); return x; }
     inline bool connected(int x, int y) { if (x == y) { return true; } make_root(x); return find_root(y) == x; }
     inline bool link(int x, int y) { make_root(x); if (find_root(y) == x) { return false; } fa[x] = y; return true; }
-    inline bool cut(int x, int y) { make_root(x), access(y); if (ch[y][0] != x || ch[x][1]) { return false; } ch[y][0] = fa[x] = 0, pull(y); return true; }
+    inline bool del(int x, int y) { make_root(x), access(y); if (ch[y][0] != x || ch[x][1]) { return false; } ch[y][0] = fa[x] = 0, pull(y); return true; }
     inline void split(int x, int y) { make_root(x), access(y); return; }
     inline void set_value(int x, const T &v) { access(x), val[x] = v, pull(x); return; }
     inline T query_path(int x, int y) { split(x, y); return sum[y]; }
@@ -601,7 +601,7 @@ namespace TANGYIXIAO {
 int n, m, q;
 set<int> sx, sy;
 multiset<int> lx, ly;
-inline void cut(set<int> &s, multiset<int> &len, int x) {
+inline void del(set<int> &s, multiset<int> &len, int x) {
     auto it = s.lower_bound(x);
     int r = *it, l = *prev(it);
     len.erase(len.find(r - l));
@@ -618,9 +618,9 @@ inline void solve(int Task_Id) {
     for (int i = 1, op, k; i <= q; i++) {
         cin >> op >> k;
         if (op == 1) {
-            cut(sx, lx, k);
+            del(sx, lx, k);
         } else {
-            cut(sy, ly, k);
+            del(sy, ly, k);
         }
         cout << 1LL * (*lx.rbegin()) * (*ly.rbegin()) << "\n";
     }
