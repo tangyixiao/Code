@@ -1,0 +1,31 @@
+{
+  "batch": {
+    "size": 1, 
+    "id": "c414ee20-9914-4211-a199-807890455b02"
+  }, 
+  "memoryLimit": 256, 
+  "testType": "single", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "url": "https://codeforces.com/contest/1537/problem/D", 
+  "interactive": false, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "languages": {
+    "java": {
+      "taskClass": "DDeletingDivisors", 
+      "mainClass": "Main"
+    }
+  }, 
+  "timeLimit": 2000, 
+  "group": "Codeforces - Codeforces Round 726 (Div. 2)", 
+  "tests": [
+    {
+      "output": "Bob\nAlice\nAlice\nBob\n", 
+      "input": "4\n1\n4\n12\n69\n"
+    }
+  ], 
+  "name": "D. Deleting Divisors"
+}
