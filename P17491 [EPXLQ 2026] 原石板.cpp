@@ -597,8 +597,64 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-inline void solve(int Task_Id) {
-    // do something here
+const int N = 2e3 + 5;
+int n, m, ld[2][N], rd[2][N], lu[2][N], ru[2][N], bit[2][N], tot[2], dn[N][N], up[N][N];
+ll ans;
+string s[N];
+vector<int> g[N];
+inline void add(int p, int x, int v) {
+    for (; x <= (n >> 1) + 1; x += x & -x) {
+        bit[p][x] += v;
+    }
     return;
 }
+inline int query(int p, int x) {
+    int res;
+    for (res = 0; x; x -= x & -x) {
+        res += bit[p][x];
+    }
+    return res;
+}
+inline void solve(int Task_Id) {
+    cin >> n >> m;
+    for (int i = 1; i <= n; i++) {
+        cin >> s[i], s[i] = " " + s[i];
+    }
+    if (n < 2 || m < 2) {
+        cout << "0\n";
+        return;
+    }
+    for (int i = n; i >= 1; i--) {
+        for (int j = 1; j <= m + 1; j++) {
+            ld[i & 1][j] = (j > 1 && s[i][j - 1] == '/') ? ld[(i + 1) & 1][j - 1] + 1 : 0, rd[i & 1][j] = (j <= m && s[i][j] == '\\') ? rd[(i + 1) & 1][j + 1] + 1 : 0, dn[i][j] = min(ld[i & 1][j], rd[i & 1][j]);
+        }
+    }
+    for (int i = 2; i <= n + 1; i++) {
+        for (int j = 1; j <= m + 1; j++) {
+            lu[i & 1][j] = (j > 1 && s[i - 1][j - 1] == '\\') ? lu[(i - 1) & 1][j - 1] + 1 : 0, ru[i & 1][j] = (j <= m && s[i - 1][j] == '/') ? ru[(i - 1) & 1][j + 1] + 1 : 0, up[i][j] = min(lu[i & 1][j], ru[i & 1][j]);
+        }
+    }
+    for (int j = 2; j <= m; j++) {
+        memset(bit, 0, sizeof bit), memset(tot, 0, sizeof tot);
+        for (int b = 3; b <= n + 1; b++) {
+            for (int t : g[b]) {
+                add(t & 1, (t + 1) >> 1, -1), tot[t & 1]--;
+            }
+            g[b].clear();
+            int t = b - 2;
+            if (dn[t][j]) {
+                add(t & 1, (t + 1) >> 1, 1), tot[t & 1]++;
+                if (t + (dn[t][j] << 1) + 1 <= n + 1) {
+                    g[t + (dn[t][j] << 1) + 1].push_back(t);
+                }
+            }
+            if (up[b][j]) {
+                ans += tot[b & 1] - query(b & 1, max(0, b - (up[b][j] << 1) - 1) >> 1);
+            }
+        }
+    }
+    cout << ans << "\n";
+    return;
+}
+
 } // namespace TANGYIXIAO
