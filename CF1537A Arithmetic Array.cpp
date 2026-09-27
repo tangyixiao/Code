@@ -603,7 +603,7 @@ inline void solve(int Task_Id) {
     for (int i = 1, x; i <= n; i++) {
         cin >> x, sum += x;
     }
-    cout << sum < n ? 1 : sum - n << "\n";
+    cout << (sum < n ? 1 : sum - n) << "\n";
     return;
 }
 } // namespace TANGYIXIAO
