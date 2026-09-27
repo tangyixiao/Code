@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 667173f8-822b-46f4-8217-293f5225090f
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,53 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+ll x, y, u, v;
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> x >> y >> u >> v;
+
+    auto r = [](ll a, ll b) {
+        if (b < 0)
+            a = -a, b = -b;
+        ll g = gcd(abs(a), b);
+        return pair{a / g, b / g};
+    };
+
+    auto [kn, kd] = r(v - y, u - x);
+    auto [bn, bd] = r(y * u - v * x, u - x);
+
+    cout << "y=";
+    if (kn == 0) {
+        if (bn == 0) {
+            cout << 0;
+        } else {
+            if (bd == 1) {
+                cout << bn;
+            } else {
+                cout << bn << "/" << bd;
+            }
+        }
+        return;
+    }
+
+    if (kn == 1 && kd == 1)
+        cout << "x";
+    else if (kn == -1 && kd == 1)
+        cout << "-x";
+    else if (kd == 1)
+        cout << kn << "x";
+    else
+        cout << kn << "/" << kd << "*x";
+
+    if (bn) {
+        cout << (bn > 0 ? "+" : "-");
+        ll a = abs(bn);
+        if (bd == 1) {
+            cout << a;
+        } else {
+            cout << a << "/" << bd;
+        }
+    }
+    cout << "\n";
     return;
 }
 } // namespace TANGYIXIAO
