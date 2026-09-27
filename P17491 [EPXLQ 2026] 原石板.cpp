@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 842d2993-3098-465b-b045-0ce71646c3d2
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
