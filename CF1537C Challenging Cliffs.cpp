@@ -600,15 +600,11 @@ namespace TANGYIXIAO {
 const int N = 2e5 + 5, inf = 0x3f3f3f3f;
 int n, h[N], id, c;
 inline void solve(int Task_Id) {
-    cin >> n, id = -1, c = inf;
+    cin >> n, c = inf;
     for (int i = 1; i <= n; i++) {
         cin >> h[i];
     }
     sort(h + 1, h + 1 + n);
-    if (n == 2) {
-        cout << h[0] << " " << h[1] << "\n";
-        return;
-    }
     for (int i = 2; i <= n; i++) {
         if (c > abs(h[i] - h[i - 1])) {
             id = i, c = abs(h[i] - h[i - 1]);
