@@ -55,3 +55,61 @@ Curtis Nishikino 已经知道了一些风筝间的关系，比如给出一对风
 对于 $100\%$ 的数据，$0<n\le2\times10^5,\ 0<m\le5\times10^5,\ 0<k\le200$。
 
 ---
+
+# P4742 [Wind Festival] Running In The Sky
+
+## 题目背景
+
+[Night - 20:02 P.M.]
+
+The night sky is so beautiful... but... it is about to end soon....
+
+## 题目描述
+
+After a day of activities, all the students stop to admire the kites lit up under the night sky. Curtis Nishikino wants to experience it from a closer view, so she runs onto the kites in the sky (which is a bit unbelievable for a girl)! Each kite’s light has a brightness $k_i$. Because of the wind, some kites get tangled together. This does not ruin the mood—tangled kites pool their lights to form a brighter light source.
+
+Curtis Nishikino already knows some relations between the kites: for a given pair of kites $(a, b)$, she can run from $a$ to $b$, but she cannot return.
+
+Now, please help her find a path (she may reach a kite multiple times, but only the first arrival counts toward the light she experiences) so that she experiences the maximum total brightness. Also tell her the maximum brightness of a single kite on this path. If there are multiple paths that achieve the same total brightness, output the answer that yields the maximum single-kite brightness.
+
+## 输入格式
+
+The first line contains two integers $n$ and $m$. Here, $n$ is the number of kites, and $m$ is the number of relation pairs.
+
+The next line contains $n$ integers $k_i$.
+
+Each of the next $m$ lines contains two integers $a$ and $b$, meaning Curtis can run from $a$ to $b$.
+
+## 输出格式
+
+Output one line with two integers: the total brightness Curtis experiences along the computed path, and the maximum brightness of a single kite on that path.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+5 5
+8 9 11 6 7
+1 2
+2 3
+2 4
+4 5
+5 2
+```
+
+### 输出 #1
+
+```
+41 11
+```
+
+## 说明/提示
+
+For $20\%$ of the testdata, $0<n \le 5\times10^3, \ 0 < m \le 10^4$.
+
+For $80\%$ of the testdata, $0 < n \le 10^5, \ 0 < m \le 3\times10^5$.
+
+For $100\%$ of the testdata, $0<n\le2\times10^5,\ 0<m\le5\times10^5,\ 0<k_i\le200$.
+
+Translated by ChatGPT 5
