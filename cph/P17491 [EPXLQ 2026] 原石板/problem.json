@@ -1,0 +1,47 @@
+{
+  "name": "P17491 [EPXLQ 2026] 原石板", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "memoryLimit": 512, 
+  "url": "https://www.luogu.com.cn/problem/P17491", 
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "tests": [
+    {
+      "output": "1\n", 
+      "input": "2 2\n/\\\n\\/\n"
+    }, 
+    {
+      "output": "2\n", 
+      "input": "4 4\n//\\/\n//\\\\\n\\\\//\n/\\//\n"
+    }, 
+    {
+      "output": "5\n", 
+      "input": "4 4\n/\\/\\\n\\/\\/\n/\\/\\\n\\/\\/\n"
+    }, 
+    {
+      "output": "0\n", 
+      "input": "2 2\n//\n//\n"
+    }, 
+    {
+      "output": "4\n", 
+      "input": "6 6\n///\\//\n////\\/\n/////\\\n\\///\\/\n/\\/\\//\n//\\///\n"
+    }
+  ], 
+  "interactive": false, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P17491EPXLQ2026"
+    }
+  }, 
+  "group": "Luogu", 
+  "batch": {
+    "id": "842d2993-3098-465b-b045-0ce71646c3d2", 
+    "size": 1
+  }
+}

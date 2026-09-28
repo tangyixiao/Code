@@ -1,0 +1,39 @@
+{
+  "name": "P2026 求一次函数解析式", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "tests": [
+    {
+      "input": "3 6\n2 4\n", 
+      "output": "y=2x\n"
+    }, 
+    {
+      "input": "3 5\n2 7\n", 
+      "output": "y=-2x+11\n"
+    }, 
+    {
+      "input": "3 -1\n5 -2\n", 
+      "output": "y=-1/2*x+1/2\n"
+    }
+  ], 
+  "timeLimit": 1000, 
+  "group": "Luogu", 
+  "interactive": false, 
+  "url": "https://www.luogu.com.cn/problem/P2026", 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P2026"
+    }
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "batch": {
+    "id": "667173f8-822b-46f4-8217-293f5225090f", 
+    "size": 1
+  }, 
+  "memoryLimit": 125, 
+  "testType": "single"
+}

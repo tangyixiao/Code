@@ -1,0 +1,47 @@
+{
+  "name": "T816785 [ICPC 2026 Wuhan I] Believe in You", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "memoryLimit": 512, 
+  "url": "https://www.luogu.com.cn/problem/T816785?contestId=357859", 
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "tests": [
+    {
+      "output": "Yes\n3\n", 
+      "input": "4\n5 5 25\n4 0\n1 10\n2 12\n2 12\n"
+    }, 
+    {
+      "output": "Yes\n3\n", 
+      "input": "5\n1 5 4\n1 4\n2 0\n5 3\n0 4\n0 1\n"
+    }, 
+    {
+      "output": "No\n", 
+      "input": "4\n1 5 5\n0 1\n3 3\n0 5\n2 1\n"
+    }, 
+    {
+      "output": "No\n", 
+      "input": "5\n1 4 4\n5 4\n1 5\n3 1\n4 4\n5 4\n"
+    }, 
+    {
+      "output": "Yes\n1\n", 
+      "input": "4\n4 5 4\n1 2\n1 0\n4 5\n1 1\n"
+    }
+  ], 
+  "interactive": false, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "T816785ICPC2026WuhanIBelieveInYou"
+    }
+  }, 
+  "group": "Luogu - [ICPC2026 Wuhan I] ICPC 2026 邀请赛武汉站重现赛", 
+  "batch": {
+    "id": "c6e19836-72b7-4a71-8b95-baf8fded5442", 
+    "size": 1
+  }
+}

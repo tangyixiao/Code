@@ -1,0 +1,31 @@
+{
+  "name": "T816790 [ICPC 2026 Wuhan I] Rectangle Cutting", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "memoryLimit": 512, 
+  "url": "https://www.luogu.com.cn/problem/T816790?contestId=357859", 
+  "timeLimit": 3000, 
+  "testType": "single", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "tests": [
+    {
+      "output": "12\n9\n6\n", 
+      "input": "5 3 3\n1 1\n1 4\n2 2\n"
+    }
+  ], 
+  "interactive": false, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "T816790ICPC2026WuhanIRectangleCutting"
+    }
+  }, 
+  "group": "Luogu - [ICPC2026 Wuhan I] ICPC 2026 邀请赛武汉站重现赛", 
+  "batch": {
+    "id": "b56e4f5d-67ca-48e0-bc9a-57cbc27a6ec3", 
+    "size": 1
+  }
+}

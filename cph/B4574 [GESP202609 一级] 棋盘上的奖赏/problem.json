@@ -1,0 +1,35 @@
+{
+  "batch": {
+    "size": 1, 
+    "id": "10635e47-b3a1-4c78-9aa9-f7c745bd38c6"
+  }, 
+  "memoryLimit": 512, 
+  "testType": "single", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/B4574", 
+  "interactive": false, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "languages": {
+    "java": {
+      "taskClass": "B4574GESP202609", 
+      "mainClass": "Main"
+    }
+  }, 
+  "timeLimit": 1000, 
+  "group": "Luogu", 
+  "tests": [
+    {
+      "output": "7\n", 
+      "input": "3\n"
+    }, 
+    {
+      "output": "1023\n", 
+      "input": "10\n"
+    }
+  ], 
+  "name": "B4574 [GESP202609 一级] 棋盘上的奖赏"
+}

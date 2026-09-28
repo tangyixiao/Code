@@ -1,0 +1,35 @@
+{
+  "name": "T677098 [EPXLQ 2026] 养猫", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "memoryLimit": 256, 
+  "url": "https://www.luogu.com.cn/problem/T677098?contestId=289873", 
+  "timeLimit": 5000, 
+  "testType": "single", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "tests": [
+    {
+      "output": "1\n", 
+      "input": "3\n3 3 3\n1 2 1\n2 1 2\n"
+    }, 
+    {
+      "output": "3\n", 
+      "input": "5\n1 2 3\n2 3 1\n1 3 3\n4 5 6\n5 5 5\n"
+    }
+  ], 
+  "interactive": false, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "T677098EPXLQ2026"
+    }
+  }, 
+  "group": "Luogu - EPXLQ 2026 Fall Round", 
+  "batch": {
+    "id": "52c0c93d-f3a9-4262-95b1-229fa71d6834", 
+    "size": 1
+  }
+}

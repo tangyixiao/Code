@@ -1,0 +1,31 @@
+{
+  "name": "F. Figure Fixing", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "memoryLimit": 256, 
+  "url": "https://codeforces.com/contest/1537/problem/F", 
+  "timeLimit": 2000, 
+  "testType": "single", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "tests": [
+    {
+      "output": "YES\nNO\n", 
+      "input": "2\n4 4\n5 1 2 -3\n3 3 10 1\n1 2\n1 4\n3 2\n3 4\n4 4\n5 8 6 6\n-3 1 15 4\n1 2\n1 4\n3 2\n3 4\n"
+    }
+  ], 
+  "interactive": false, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "FFigureFixing"
+    }
+  }, 
+  "group": "Codeforces - Codeforces Round 726 (Div. 2)", 
+  "batch": {
+    "id": "7283d294-62fe-407a-9c3a-a693f80f7b72", 
+    "size": 1
+  }
+}
