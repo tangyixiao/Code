@@ -1,0 +1,31 @@
+{
+  "name": "P2926 [USACO08DEC] Patting Heads S",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P2926",
+  "interactive": false,
+  "memoryLimit": 125,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "5\n2\n1\n2\n3\n4\n",
+      "output": "2\n0\n2\n1\n3\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P2926USACO08DECPattingHeadsS"
+    }
+  },
+  "batch": {
+    "id": "132f9a89-7914-4674-9fa8-38571bb2bf40",
+    "size": 1
+  }
+}
