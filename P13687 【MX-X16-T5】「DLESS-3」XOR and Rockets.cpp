@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: f81b5f46-f969-4afe-97f8-45335910bb10
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,84 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+
+using ll = long long;
+
+const int N = 5005;
+const int M = 1 << 13;
+const ll INF = 1LL << 62;
+
+int n, a[N];
+ll b[N], f[2][M];
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n;
+
+    int mx = 0;
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i];
+        mx = max(mx, a[i]);
+    }
+    for (int i = 1; i <= n; i++) {
+        cin >> b[i];
+    }
+
+    int V = 1;
+    while (V <= mx) {
+        V <<= 1;
+    }
+
+    ll ans = INF;
+
+    for (int j = 0; j < V; j++) {
+        f[n & 1][j] = INF;
+    }
+    f[n & 1][a[n]] = 0;
+
+    for (int i = n - 1; i >= 1; i--) {
+        for (int j = 0; j < V; j++) {
+            f[i & 1][j] = INF;
+        }
+
+        ll mn = INF;
+
+        for (int j = V - 1; j >= 0; j--) {
+            int k = a[i] ^ a[i + 1] ^ j;
+
+            if (k <= j) {
+                f[i & 1][k] = min(f[i & 1][k], f[(i + 1) & 1][j]);
+            }
+
+            mn = min(mn, f[(i + 1) & 1][j]);
+            f[i & 1][j] = min(f[i & 1][j], mn + b[i]);
+        }
+    }
+
+    for (int j = 0; j < V; j++) {
+        ans = min(ans, f[1][j]);
+    }
+    for (int j = 0; j < V; j++) {
+        f[n & 1][j] = b[n];
+    }
+    for (int i = n - 1; i >= 1; i--) {
+        ll mn = INF;
+        for (int j = 0; j < V; j++) {
+            mn = min(mn, f[(i + 1) & 1][j]);
+        }
+        for (int j = 0; j < V; j++) {
+            f[i & 1][j] = mn + b[i];
+            if ((a[i] ^ j) <= (a[i + 1] ^ j)) {
+                f[i & 1][j] = min(f[i & 1][j], f[(i + 1) & 1][j]);
+            }
+        }
+    }
+
+    for (int j = 0; j < V; j++) {
+        ans = min(ans, f[1][j]);
+    }
+
+    cout << ans << "\n";
     return;
 }
+
 } // namespace TANGYIXIAO
