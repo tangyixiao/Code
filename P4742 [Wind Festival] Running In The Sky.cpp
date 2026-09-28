@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 3a3cbc71-276c-4dad-aa44-40752306944d
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,136 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 2e5 + 5;
+
+int val[N];
+
+vector<int> edge1[N], edge2[N];
+
+void add(vector<int> *edge, int u, int v) {
+    edge[u].push_back(v);
+}
+
+int dfn[N], dfstot;
+int low[N];
+int scc[N], scctot;
+
+stack<int> sta;
+
+void tarjan(int x) {
+    dfn[x] = low[x] = ++dfstot;
+
+    sta.push(x);
+
+    for (int i = 0; i < edge1[x].size(); ++i) {
+        int to = edge1[x][i];
+
+        if (dfn[to] == 0) {
+            tarjan(to);
+            low[x] = min(low[x], low[to]);
+        } else if (scc[to] == 0) {
+            low[x] = min(low[x], dfn[to]);
+        }
+    }
+
+    if (low[x] == dfn[x]) {
+        ++scctot;
+
+        while (1) {
+            int t = sta.top();
+            sta.pop();
+
+            scc[t] = scctot;
+            if (t == x) {
+                break;
+            }
+        }
+    }
+}
+
+int arr1[N];
+int arr2[N];
+int in[N];
+int dp1[N];
+int dp2[N];
 inline void solve(int Task_Id) {
-    // do something here
+    int n, m;
+    scanf("%d%d", &n, &m);
+
+    for (int i = 1; i <= n; ++i) {
+        scanf("%d", &val[i]);
+    }
+
+    for (int i = 1; i <= m; ++i) {
+        int u, v;
+        scanf("%d%d", &u, &v);
+
+        add(edge1, u, v);
+    }
+
+    for (int i = 1; i <= n; ++i) {
+        if (dfn[i] == 0) {
+            tarjan(i);
+        }
+    }
+
+    for (int i = 1; i <= n; ++i) {
+        int si = scc[i];
+        arr1[si] += val[i];
+        arr2[si] = max(arr2[si], val[i]);
+
+        for (int j = 0; j < edge1[i].size(); ++j) {
+            int to = edge1[i][j];
+            int st = scc[to];
+
+            if (si == st) {
+                continue;
+            }
+
+            add(edge2, si, st);
+            ++in[st];
+        }
+    }
+
+    queue<int> que;
+
+    for (int i = 1; i <= scctot; ++i) {
+        if (in[i] == 0) {
+            que.push(i);
+            dp1[i] = arr1[i];
+            dp2[i] = arr2[i];
+        }
+    }
+
+    while (!que.empty()) {
+        int x = que.front();
+        que.pop();
+
+        for (int i = 0; i < edge2[x].size(); ++i) {
+            int to = edge2[x][i];
+
+            if (dp1[to] < dp1[x] || dp1[to] == dp1[x] && dp2[to] < dp2[x]) {
+                dp1[to] = dp1[x];
+                dp2[to] = dp2[x];
+            }
+
+            --in[to];
+            if (in[to] == 0) {
+                dp1[to] += arr1[to];
+                dp2[to] = max(dp2[to], arr2[to]);
+                que.push(to);
+            }
+        }
+    }
+
+    int ans1 = 0, ans2 = 0;
+    for (int i = 1; i <= scctot; ++i) {
+        if (ans1 < dp1[i] || ans1 == dp1[i] && ans2 < dp2[i]) {
+            ans1 = dp1[i];
+            ans2 = dp2[i];
+        }
+    }
+    printf("%d %d", ans1, ans2);
     return;
 }
 } // namespace TANGYIXIAO
