@@ -352,7 +352,35 @@ type BrowserProps = {
 
 function FileBrowser({ files, folders, directory, availableKinds, total, selectedPath, query, filter, sortOrder, onQuery, onFilter, onSortOrder, onSelect, onDirectory }: BrowserProps) {
   const crumbs = directory ? directory.split('/') : []
-  return <aside className="sidebar" aria-label="文件列表">
+  const [folderHeight, setFolderHeight] = useState(() => {
+    const saved = Number(localStorage.getItem('archive-folder-height'))
+    return Number.isFinite(saved) && saved >= 80 ? saved : 185
+  })
+  const [foldersCollapsed, setFoldersCollapsed] = useState(() => localStorage.getItem('archive-folders-collapsed') === 'true')
+  const sidebarRef = useRef<HTMLElement>(null)
+  const folderHeightRef = useRef(folderHeight)
+  const folderLimit = () => Math.max(80, (sidebarRef.current?.clientHeight ?? window.innerHeight) - (sidebarRef.current?.querySelector<HTMLElement>('.browser-head')?.offsetHeight ?? 0) - 145)
+  const resizeFolders = (height: number) => {
+    const next = Math.max(80, Math.min(folderLimit(), height))
+    folderHeightRef.current = next
+    sidebarRef.current?.style.setProperty('--folder-pane-height', `${next}px`)
+    sidebarRef.current?.querySelector('.stack-resizer')?.setAttribute('aria-valuenow', String(Math.round(next)))
+  }
+  const saveFolderHeight = () => {
+    setFolderHeight(folderHeightRef.current)
+    localStorage.setItem('archive-folder-height', String(Math.round(folderHeightRef.current)))
+  }
+  useEffect(() => {
+    const clampToViewport = () => {
+      if (folderHeightRef.current <= folderLimit()) return
+      resizeFolders(folderHeightRef.current)
+      saveFolderHeight()
+    }
+    clampToViewport()
+    addEventListener('resize', clampToViewport)
+    return () => removeEventListener('resize', clampToViewport)
+  }, [])
+  return <aside ref={sidebarRef} className={`sidebar${folders.length ? ' has-folders' : ''}${foldersCollapsed ? ' folders-collapsed' : ''}`} style={{ '--folder-pane-height': `${folderHeight}px` } as CSSProperties} aria-label="文件列表">
     <div className="browser-head">
       <div className="browser-title"><div><p className="utility-label">浏览目录</p><h2>文件</h2></div><span>{total.toLocaleString()}</span></div>
       <label className="search"><span aria-hidden="true">⌕</span><input aria-label="搜索文件" placeholder="搜索文件名或路径" value={query} onChange={(event) => onQuery(event.target.value)} /></label>
@@ -378,7 +406,20 @@ function FileBrowser({ files, folders, directory, availableKinds, total, selecte
         </label>
       </div>
     </div>
-    {folders.length ? <div className="folder-area"><div className="folder-area-title">文件夹 <span>{folders.length}</span></div><div className="folder-list">{folders.map((folder) => <button className="folder-row" key={folder.path} onClick={() => onDirectory(folder.path)} title={folder.path}><span className="folder-icon" aria-hidden="true">▸</span><span className="folder-name">{folder.name}</span><span className="folder-count">{folder.count}</span></button>)}</div></div> : null}
+    {folders.length ? <><div className="folder-area"><div className="folder-area-title"><button aria-label={foldersCollapsed ? '展开文件夹' : '折叠文件夹'} aria-expanded={!foldersCollapsed} onClick={() => {
+      setFoldersCollapsed((value) => { localStorage.setItem('archive-folders-collapsed', String(!value)); return !value })
+    }}><span aria-hidden="true">{foldersCollapsed ? '▸' : '▾'}</span> 文件夹</button><span>{folders.length}</span></div><div className="folder-list">{folders.map((folder) => <button className="folder-row" key={folder.path} onClick={() => onDirectory(folder.path)} title={folder.path}><span className="folder-icon" aria-hidden="true">▸</span><span className="folder-name">{folder.name}</span><span className="folder-count">{folder.count}</span></button>)}</div></div>
+      <div className="stack-resizer" role="separator" tabIndex={foldersCollapsed ? -1 : 0} aria-label="调整文件夹区域高度" aria-orientation="horizontal" aria-valuemin={80} aria-valuemax={folderLimit()} aria-valuenow={folderHeight}
+        onPointerDown={(event) => { if (event.button === 0) event.currentTarget.setPointerCapture(event.pointerId) }}
+        onPointerMove={(event) => { if (event.currentTarget.hasPointerCapture(event.pointerId)) resizeFolders(event.clientY - (sidebarRef.current?.querySelector('.folder-area')?.getBoundingClientRect().top ?? 0)) }}
+        onPointerUp={(event) => { if (event.currentTarget.hasPointerCapture(event.pointerId)) { event.currentTarget.releasePointerCapture(event.pointerId); saveFolderHeight() } }}
+        onPointerCancel={saveFolderHeight}
+        onDoubleClick={() => { resizeFolders(185); saveFolderHeight() }}
+        onKeyDown={(event) => {
+          const next = event.key === 'ArrowUp' ? folderHeight - 24 : event.key === 'ArrowDown' ? folderHeight + 24 : event.key === 'Home' ? 80 : event.key === 'End' ? folderLimit() : null
+          if (next !== null) { event.preventDefault(); resizeFolders(next); saveFolderHeight() }
+        }}
+      /></> : null}
     <div className="file-list">
       {files.length === 0 && folders.length === 0 && total > 0 ? <p className="empty-list">没有找到匹配的文件</p> : null}
       {files.map((file) => <button
