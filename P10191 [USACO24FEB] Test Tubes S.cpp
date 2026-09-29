@@ -597,8 +597,123 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-inline void solve(int Task_Id) {
-    // do something here
-    return;
+
+const int MAXN = 200005;
+
+int tube[4][MAXN], len[4];
+
+pair<int, int> op[MAXN];
+int tot;
+
+inline void pour(int x, int y) {
+    int c = tube[x][len[x]];
+    len[x]--;
+
+    if (len[y] == 0 || tube[y][len[y]] != c) {
+        tube[y][++len[y]] = c;
+    }
+
+    op[++tot] = {x, y};
 }
+
+inline void solve(int Task_Id) {
+    int n, p;
+    cin >> n >> p;
+
+    for (int id = 1; id <= 2; id++) {
+        string s;
+        cin >> s;
+
+        len[id] = 0;
+
+        for (char ch : s) {
+            int c = ch - '0';
+
+            if (len[id] == 0 || tube[id][len[id]] != c) {
+                tube[id][++len[id]] = c;
+            }
+        }
+    }
+
+    len[3] = 0;
+    tot = 0;
+
+    if (tube[1][1] == tube[2][1]) {
+        int c = tube[1][1];
+
+        for (int i = len[1]; i >= 1; i--) {
+            tube[1][i + 1] = tube[1][i];
+        }
+
+        tube[1][1] = 3 - c;
+        len[1]++;
+    }
+
+    int k = len[1] + len[2] - 2;
+    int answer = k;
+
+    if (k > 1) {
+        answer++;
+    }
+
+    cout << answer << "\n";
+
+    if (p == 1) {
+        return;
+    }
+
+    if (tube[1][len[1]] == tube[2][len[2]]) {
+        if (len[1] > len[2]) {
+            pour(1, 2);
+        } else {
+            pour(2, 1);
+        }
+    }
+
+    int src = 0;
+
+    for (int i = 1; i <= 2; i++) {
+        if (len[i] > 1) {
+            src = i;
+            break;
+        }
+    }
+
+    if (src != 0) {
+        pour(src, 3);
+
+        int c = tube[3][1];
+
+        int x = 1;
+
+        if (tube[x][1] == c) {
+            x = 2;
+        }
+
+        while (len[x] > 1) {
+            if (tube[x][len[x]] == c) {
+                pour(x, 3);
+            } else {
+                pour(x, 3 - x);
+            }
+        }
+
+        x = 3 - x;
+
+        while (len[x] > 1) {
+            if (tube[x][len[x]] == c) {
+                pour(x, 3);
+            } else {
+                pour(x, 3 - x);
+            }
+        }
+
+        pour(3, x);
+    }
+
+    for (int i = 1; i <= tot; i++) {
+        cout << op[i].first << " " << op[i].second << "\n";
+    }
+}
+
 } // namespace TANGYIXIAO
