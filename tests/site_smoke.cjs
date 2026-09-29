@@ -74,15 +74,11 @@ async function main() {
     desktop.on('console', (message) => { if (message.type() === 'error') pageErrors.push(message.text()); });
     await mockRawSources(desktop);
     await desktop.goto(siteUrl, { waitUntil: 'domcontentloaded' });
+    await desktop.getByRole('heading', { name: /代码与题解/ }).waitFor();
+    assert.equal(await desktop.locator('.reader').count(), 0, 'the root URL should open on the archive landing page');
+    await desktop.getByRole('button', { name: /浏览文件/ }).click();
     await desktop.getByText(`显示 ${manifest.count} / ${manifest.count} 个文件`).waitFor();
-    await desktop.locator('[data-scene-root]').waitFor({ state: 'attached' });
-    assert.equal(await desktop.locator('[data-scene-canvas]').count(), 1);
-    assert.equal(await desktop.locator('[data-scene-root]').getAttribute('data-scene-variant'), 'workbench');
-    assert.equal(await desktop.locator('[data-scene-root]').getAttribute('data-scene-motion'), 'full');
-    assert.equal(await desktop.locator('[data-scene-root]').getAttribute('data-scene-fallback'), 'inactive');
-    assert.equal(await desktop.locator('[data-scene-root]').getAttribute('data-scene-particles'), '360');
-    await desktop.waitForFunction(() => Number(document.querySelector('[data-scene-root]')?.getAttribute('data-scene-render-count')) > 0);
-    assert.ok(Number(await desktop.locator('[data-scene-root]').getAttribute('data-scene-render-count')) > 0);
+    assert.equal(await desktop.locator('.app-shell').getAttribute('data-theme'), 'light');
     assert.equal(await desktop.locator('.file-row').count(), manifest.count);
 
     await desktop.getByPlaceholder('搜索题目编号或文件名').fill('260509练习赛①#A. 三投');
@@ -122,13 +118,8 @@ async function main() {
     mobile.on('console', (message) => { if (message.type() === 'error') pageErrors.push(message.text()); });
     await mockRawSources(mobile);
     await mobile.goto(new URL('./', siteUrl).href, { waitUntil: 'domcontentloaded' });
+    await mobile.getByRole('button', { name: /浏览文件/ }).click();
     await mobile.getByText(`显示 ${manifest.count} / ${manifest.count} 个文件`).waitFor();
-    await mobile.locator('[data-scene-root]').waitFor({ state: 'attached' });
-    assert.equal(await mobile.locator('[data-scene-canvas]').count(), 1);
-    assert.equal(await mobile.locator('[data-scene-root]').getAttribute('data-scene-motion'), 'full');
-    assert.equal(await mobile.locator('[data-scene-root]').getAttribute('data-scene-particles'), '360');
-    await mobile.waitForFunction(() => Number(document.querySelector('[data-scene-root]')?.getAttribute('data-scene-render-count')) > 0);
-    assert.ok(Number(await mobile.locator('[data-scene-root]').getAttribute('data-scene-render-count')) > 0);
     assert.equal(await mobile.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
     assert.equal(await mobile.locator('body').getAttribute('data-mobile-view'), 'list');
     await mobile.getByPlaceholder('搜索题目编号或文件名').fill('P1241 括号序列');
@@ -146,12 +137,8 @@ async function main() {
     reduced.on('console', (message) => { if (message.type() === 'error') pageErrors.push(message.text()); });
     await mockRawSources(reduced);
     await reduced.goto(siteUrl, { waitUntil: 'domcontentloaded' });
-    await reduced.locator('[data-scene-root]').waitFor({ state: 'attached' });
-    assert.equal(await reduced.locator('[data-scene-root]').getAttribute('data-scene-animation'), 'static');
-    await reduced.waitForFunction(() => Number(document.querySelector('[data-scene-root]')?.getAttribute('data-scene-render-count')) === 1);
-    const reducedRenderCount = await reduced.locator('[data-scene-root]').getAttribute('data-scene-render-count');
-    await reduced.waitForTimeout(250);
-    assert.equal(await reduced.locator('[data-scene-root]').getAttribute('data-scene-render-count'), reducedRenderCount);
+    await reduced.getByRole('heading', { name: /代码与题解/ }).waitFor();
+    assert.equal(await reduced.locator('[data-scene-root]').count(), 0);
     await saveScreenshot(reduced, process.env.REDUCED_SCREENSHOT);
 
     assert.deepEqual(pageErrors, []);

@@ -86,19 +86,10 @@ async function main() {
     await page.emulateMedia({ colorScheme: 'light' });
     await page.goto(`http://127.0.0.1:${port}/Code/#file=${encodeURIComponent('题目 #1.md')}`);
     await page.locator('.count').waitFor({ state: 'attached' });
-    await page.locator('[data-scene-root]').waitFor({ state: 'attached', timeout: 15000 });
-    assert.equal(await page.title(), 'Paradox Praxis Clinamen — 深海算法档案');
-    assert.equal(await page.getByText('Paradox Praxis Clinamen', { exact: true }).count(), 1);
-    assert.equal(await page.getByText('佯谬·践履·偏斜', { exact: true }).count(), 1);
-    assert.equal(await page.locator('[data-scene-canvas]').count(), 1);
-    assert.equal(await page.locator('[data-scene-root]').getAttribute('data-scene-variant'), 'workbench');
-    assert.equal(await page.locator('[data-scene-root]').getAttribute('data-scene-phase'), 'workbench');
-    assert.equal(await page.locator('[data-scene-root]').getAttribute('data-scene-motion'), 'full');
-    assert.equal(await page.locator('[data-scene-root]').getAttribute('data-scene-animation'), 'running');
-    assert.equal(await page.locator('[data-scene-root]').getAttribute('data-scene-fallback'), 'inactive');
-    assert.equal(await page.locator('[data-scene-root]').getAttribute('data-scene-particles'), '360');
-    assert.ok(Number(await page.locator('[data-scene-root]').getAttribute('data-scene-render-count')) > 0);
-    assert.equal(await page.locator('[data-scene-canvas]').evaluate((element) => getComputedStyle(element).pointerEvents), 'none');
+    assert.equal(await page.title(), '算法档案 · tangyixiao');
+    assert.equal(await page.getByRole('heading', { name: '算法档案' }).count(), 1);
+    assert.equal(await page.locator('.app-shell').getAttribute('data-theme'), 'light');
+    assert.equal(await page.locator('[data-scene-root]').count(), 0);
     assert.equal(await page.locator('#meta-name').textContent(), '题目 #1.md');
     assert.equal(await page.locator('body').getAttribute('data-xss'), null);
     assert.match(await page.locator('#viewer').textContent(), /题目/);
@@ -115,16 +106,18 @@ async function main() {
     await page.emulateMedia({ colorScheme: 'light' });
     await page.waitForFunction(() => document.querySelector('.reader')?.getAttribute('data-code-theme') === 'light');
     const sidebarBackground = await page.locator('.sidebar').evaluate((element) => getComputedStyle(element).backgroundColor);
-    await page.getByRole('button', { name: '切换为深色代码主题' }).click();
+    await page.getByRole('button', { name: '切换为深色模式' }).click();
     assert.equal(await page.locator('.reader').getAttribute('data-code-theme'), 'dark');
     assert.equal(await page.locator('#viewer .markdown-code-block').evaluate((element) => getComputedStyle(element).backgroundColor), 'rgb(30, 30, 30)');
-    assert.equal(await page.locator('.sidebar').evaluate((element) => getComputedStyle(element).backgroundColor), sidebarBackground);
+    assert.notEqual(await page.locator('.sidebar').evaluate((element) => getComputedStyle(element).backgroundColor), sidebarBackground);
     await page.emulateMedia({ colorScheme: 'dark' });
     assert.equal(await page.locator('.reader').getAttribute('data-code-theme'), 'dark', 'manual selection should override system changes for this page');
     await page.emulateMedia({ colorScheme: 'light' });
     await page.reload();
     await page.locator('#viewer .markdown-code-block code').waitFor();
-    assert.equal(await page.locator('.reader').getAttribute('data-code-theme'), 'light', 'reload should restore the system preference');
+    assert.equal(await page.locator('.reader').getAttribute('data-code-theme'), 'dark', 'manual selection should survive reload');
+    await page.getByRole('button', { name: '切换为浅色模式' }).click();
+    assert.equal(await page.locator('.reader').getAttribute('data-code-theme'), 'light');
     assert.equal(await page.locator('.file-row').count(), 3);
     assert.equal(await page.locator('.file-row').first().evaluate((element) => element.tagName), 'BUTTON');
     const desktopLayout = await page.evaluate(() => ({
@@ -154,10 +147,8 @@ async function main() {
     await page.locator('#viewer code').waitFor();
     assert.equal(await page.locator('.reader').getAttribute('data-code-theme'), 'light');
     assert.equal(await page.locator('#viewer .code').evaluate((element) => getComputedStyle(element).backgroundColor), 'rgb(255, 255, 255)');
-    await page.getByRole('button', { name: '切换为深色代码主题' }).click();
+    await page.getByRole('button', { name: '切换为深色模式' }).click();
     assert.equal(await page.locator('#viewer .code').evaluate((element) => getComputedStyle(element).backgroundColor), 'rgb(30, 30, 30)');
-    const firstPulse = await page.locator('[data-scene-root]').getAttribute('data-scene-pulse');
-    assert.equal(firstPulse, '2.000');
     const search = page.getByPlaceholder('搜索题目编号或文件名');
     await search.focus();
     const readerScroll = await page.locator('.reader-body').evaluate((element) => {
@@ -172,13 +163,7 @@ async function main() {
     await page.waitForTimeout(1000);
     assert.equal(await page.locator('.reader-body').evaluate((element) => element.scrollTop), expectedReaderScroll);
     assert.equal(await page.locator('.reader-body').evaluate((element) => element.scrollTop), expectedReaderScroll);
-    assert.equal(await page.locator('[data-scene-root]').getAttribute('data-scene-pulse'), '3.000');
     assert.match(await page.locator('#viewer').textContent(), /题目/);
-
-    await page.evaluate(() => document.querySelector('[data-scene-canvas]').dispatchEvent(new Event('webglcontextlost', { cancelable: true })));
-    await page.waitForFunction(() => document.querySelector('[data-scene-root]')?.getAttribute('data-scene-fallback') === 'active');
-    await page.locator('.deep-sea-fallback').waitFor({ state: 'visible' });
-    assert.equal(await page.locator('.deep-sea-fallback').isVisible(), true);
     assert.deepEqual(pageErrors, []);
 
     const mobile = await browser.newPage({ viewport: { width: 390, height: 844 } });
@@ -193,19 +178,15 @@ async function main() {
     );
     await mobile.goto(`http://127.0.0.1:${port}/Code/#file=${encodeURIComponent('题目 #1.md')}`);
     await mobile.locator('.count').waitFor({ state: 'attached' });
-    await mobile.locator('[data-scene-root]').waitFor();
-    assert.equal(await mobile.locator('[data-scene-canvas]').count(), 1);
-    assert.equal(await mobile.locator('[data-scene-root]').getAttribute('data-scene-motion'), 'full');
-    assert.equal(await mobile.locator('[data-scene-root]').getAttribute('data-scene-particles'), '360');
-    await mobile.waitForFunction(() => Number(document.querySelector('[data-scene-root]')?.getAttribute('data-scene-render-count')) > 0);
-    assert.ok(Number(await mobile.locator('[data-scene-root]').getAttribute('data-scene-render-count')) > 0);
+    assert.equal(await mobile.locator('.app-shell').getAttribute('data-theme'), 'dark');
     assert.equal(await mobile.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
     assert.equal(await mobile.locator('body').getAttribute('data-mobile-view'), 'viewer');
     assert.equal(await mobile.locator('#meta-name').textContent(), '题目 #1.md');
     await mobile.locator('.markdown-code-block code').waitFor();
-    assert.equal(await mobile.getByRole('button', { name: '切换为浅色代码主题' }).isVisible(), true);
-    await mobile.getByRole('button', { name: '切换为浅色代码主题' }).click();
+    assert.equal(await mobile.getByRole('button', { name: '切换为浅色模式' }).isVisible(), true);
+    await mobile.getByRole('button', { name: '切换为浅色模式' }).click();
     assert.equal(await mobile.locator('.reader').getAttribute('data-code-theme'), 'light');
+    assert.equal(await mobile.locator('.app-shell').getAttribute('data-theme'), 'light');
     assert.equal(await mobile.locator('.markdown-code-block').evaluate((element) => getComputedStyle(element).backgroundColor), 'rgb(255, 255, 255)');
     await mobile.getByRole('button', { name: '返回文件列表' }).click();
     assert.equal(await mobile.locator('body').getAttribute('data-mobile-view'), 'list');
@@ -214,40 +195,6 @@ async function main() {
     await mobile.getByRole('button', { name: '返回文件列表' }).click();
     assert.equal(await mobile.locator('body').getAttribute('data-mobile-view'), 'list');
     assert.deepEqual(mobileErrors, []);
-
-    const reduced = await browser.newPage({ viewport: { width: 1440, height: 900 } });
-    reduced.setDefaultTimeout(15000);
-    await reduced.emulateMedia({ reducedMotion: 'reduce' });
-    const reducedErrors = [];
-    reduced.on('pageerror', (error) => reducedErrors.push(error.message));
-    reduced.on('console', (message) => { if (message.type() === 'error') reducedErrors.push(message.text()); });
-    await reduced.addInitScript(() => {
-      window.__sceneRafCalls = 0;
-      const requestAnimationFrame = window.requestAnimationFrame.bind(window);
-      window.requestAnimationFrame = (callback) => {
-        window.__sceneRafCalls += 1;
-        return requestAnimationFrame(callback);
-      };
-    });
-    await reduced.route('https://raw.githubusercontent.com/**', (route) =>
-      route.fulfill({ status: 200, contentType: 'text/plain; charset=utf-8', body: 'int main(){}\n' })
-    );
-    await reduced.goto(`http://127.0.0.1:${port}/Code/`, { waitUntil: 'domcontentloaded' });
-    await reduced.locator('[data-scene-root]').waitFor();
-    assert.equal(await reduced.locator('[data-scene-root]').getAttribute('data-scene-motion'), 'reduced');
-    assert.equal(await reduced.locator('[data-scene-root]').getAttribute('data-scene-animation'), 'static');
-    await reduced.waitForFunction(() => Number(document.querySelector('[data-scene-root]')?.getAttribute('data-scene-render-count')) === 1);
-    const reducedRenderCount = await reduced.locator('[data-scene-root]').getAttribute('data-scene-render-count');
-    const reducedRafCalls = await reduced.evaluate(() => window.__sceneRafCalls);
-    await reduced.waitForTimeout(250);
-    assert.equal(await reduced.locator('[data-scene-root]').getAttribute('data-scene-render-count'), reducedRenderCount);
-    assert.equal(await reduced.evaluate(() => window.__sceneRafCalls), reducedRafCalls);
-    await reduced.evaluate(() => { Object.defineProperty(document, 'hidden', { configurable: true, value: true }); document.dispatchEvent(new Event('visibilitychange')); });
-    await reduced.evaluate(() => { Object.defineProperty(document, 'hidden', { configurable: true, value: false }); document.dispatchEvent(new Event('visibilitychange')); });
-    await reduced.waitForTimeout(250);
-    assert.equal(await reduced.locator('[data-scene-root]').getAttribute('data-scene-render-count'), reducedRenderCount);
-    assert.equal(await reduced.evaluate(() => window.__sceneRafCalls), reducedRafCalls);
-    assert.deepEqual(reducedErrors, []);
 
     console.log('site browser tests passed');
   } finally {

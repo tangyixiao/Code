@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "build": "vite build && node scripts/verify_lazy_chunks.cjs",
+    "build": "vite build",
     "test:unit": "node --experimental-strip-types --test tests/visual-lifecycle.test.mjs",
     "test:browser": "node tests/site.test.cjs && python3 scripts/build_pages.py --root . --output _site --commit \"$(git rev-parse HEAD)\" && node tests/site_smoke.cjs"
   },

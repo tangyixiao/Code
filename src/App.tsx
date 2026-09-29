@@ -3,8 +3,6 @@ import DOMPurify from 'dompurify'
 import hljs from 'highlight.js/lib/common'
 import renderMathInElement from 'katex/contrib/auto-render'
 import 'katex/dist/katex.min.css'
-import { useReducedMotion } from 'motion/react'
-import DeepSeaCanvas from './visual/DeepSeaCanvas'
 import { renderMarkdown } from './markdown'
 
 type Kind = 'cpp' | 'md'
@@ -21,28 +19,32 @@ const hashPath = () => {
 }
 
 function App() {
-  const [codeTheme, setCodeTheme] = useState<CodeTheme>(() => window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-  const [codeThemeOverride, setCodeThemeOverride] = useState(false)
+  const [themeChoice, setThemeChoice] = useState<CodeTheme | 'system'>(() => {
+    const saved = localStorage.getItem('archive-theme')
+    return saved === 'dark' || saved === 'light' ? saved : 'system'
+  })
+  const [systemTheme, setSystemTheme] = useState<CodeTheme>(() => window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+  const theme = themeChoice === 'system' ? systemTheme : themeChoice
   const [manifest, setManifest] = useState<Manifest | null>(null)
   const [error, setError] = useState('')
   const [query, setQuery] = useState('')
   const [filter, setFilter] = useState<'all' | Kind>('all')
   const [selectedPath, setSelectedPath] = useState(hashPath)
+  const [browsing, setBrowsing] = useState(() => Boolean(hashPath()))
   const [mobileView, setMobileView] = useState<'list' | 'viewer'>(() => hashPath() ? 'viewer' : 'list')
-  const [scenePulse, setScenePulse] = useState(0)
   const [readerScrollRestoreTop, setReaderScrollRestoreTop] = useState(0)
   const readerScrollTopRef = useRef(0)
-  const reduced = useReducedMotion()
 
   useEffect(() => {
     const preference = window.matchMedia('(prefers-color-scheme: dark)')
-    const syncTheme = () => {
-      if (!codeThemeOverride) setCodeTheme(preference.matches ? 'dark' : 'light')
-    }
+    const syncTheme = () => setSystemTheme(preference.matches ? 'dark' : 'light')
     preference.addEventListener('change', syncTheme)
     return () => preference.removeEventListener('change', syncTheme)
-  }, [codeThemeOverride])
-  useEffect(() => { document.body.dataset.motion = reduced ? 'reduced' : 'full' }, [reduced])
+  }, [])
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#11161c' : '#f6f7f9')
+  }, [theme])
   useEffect(() => { document.body.dataset.mobileView = mobileView }, [mobileView])
 
   const load = () => fetch('./files.json')
@@ -53,10 +55,10 @@ function App() {
       }
       setManifest(data)
       setError('')
-      if (!selectedPath || !data.files.some((file) => file.path === selectedPath)) {
-        const firstPath = data.files[0].path
-        history.replaceState(null, '', `#file=${encodeURIComponent(firstPath)}`)
-        setSelectedPath(firstPath)
+      if (selectedPath && !data.files.some((file) => file.path === selectedPath)) {
+        history.replaceState(null, '', location.pathname + location.search)
+        setSelectedPath('')
+        setBrowsing(false)
         setMobileView('list')
       }
     })
@@ -67,7 +69,8 @@ function App() {
     const onHash = () => {
       const path = hashPath()
       setSelectedPath(path)
-      if (path) setMobileView('viewer')
+      setBrowsing(Boolean(path))
+      setMobileView(path ? 'viewer' : 'list')
     }
     addEventListener('hashchange', onHash)
     return () => removeEventListener('hashchange', onHash)
@@ -78,8 +81,8 @@ function App() {
     setReaderScrollRestoreTop(readerScrollTop)
     location.hash = `file=${encodeURIComponent(path)}`
     setSelectedPath(path)
+    setBrowsing(true)
     setMobileView('viewer')
-    setScenePulse((value) => value + 1)
     requestAnimationFrame(() => {
       const readerBody = document.querySelector<HTMLElement>('.reader-body')
       if (readerBody) readerBody.scrollTop = readerScrollTop
@@ -90,12 +93,20 @@ function App() {
   ) ?? [], [manifest, filter, query])
   const selected = manifest?.files.find((file) => file.path === selectedPath) ?? null
 
-  return <main className="app-shell">
-    <DeepSeaCanvas variant="workbench" phase="workbench" pulse={scenePulse} reducedMotion={Boolean(reduced)} />
-    <AuroraField />
-    <ArchiveTopbar count={manifest?.count} pulse={scenePulse} />
+  return <main className="app-shell" data-theme={theme}>
+    <ArchiveTopbar count={manifest?.count} theme={theme} onHome={() => {
+      history.pushState(null, '', location.pathname + location.search)
+      setSelectedPath('')
+      setBrowsing(false)
+      setMobileView('list')
+    }} onToggleTheme={() => {
+      const next = theme === 'dark' ? 'light' : 'dark'
+      localStorage.setItem('archive-theme', next)
+      setThemeChoice(next)
+    }} />
     {error
       ? <section className="error-card" role="alert"><p>{error}</p><button onClick={() => void load()}>重试加载</button></section>
+      : !browsing ? <ArchiveLanding manifest={manifest} onBrowse={() => setBrowsing(true)} onSelect={select} />
       : <div className="workspace">
         <FileBrowser
           files={files}
@@ -110,12 +121,7 @@ function App() {
         <ReaderPane
           manifest={manifest}
           selected={selected}
-          reduced={Boolean(reduced)}
-          codeTheme={codeTheme}
-          onToggleCodeTheme={() => {
-            setCodeThemeOverride(true)
-            setCodeTheme((theme) => theme === 'dark' ? 'light' : 'dark')
-          }}
+          codeTheme={theme}
           scrollRestoreTop={readerScrollRestoreTop}
           onReaderScroll={(value) => { readerScrollTopRef.current = value }}
           onSelect={select}
@@ -125,34 +131,47 @@ function App() {
   </main>
 }
 
-function AuroraField() {
-  return <div className="aurora-field" aria-hidden="true">
-    <span className="aurora-band aurora-band-a" />
-    <span className="aurora-band aurora-band-b" />
-    <span className="star-dust" />
-    <pre className="ascii-atom" aria-hidden="true">{`       ·   .   ·
-    .    /\\ /\\    .
-  ·    <  ◉  >    ·
-    .    \\/ \\/    .
-       ·   |   ·
-           ·`}</pre>
-  </div>
+function ArchiveTopbar({ count, theme, onHome, onToggleTheme }: { count?: number; theme: CodeTheme; onHome: () => void; onToggleTheme: () => void }) {
+  return <header className="topbar">
+    <div className="brand-lockup">
+      <h1 className="brand-name"><button onClick={onHome} title="返回档案首页">算法档案</button></h1>
+      <p className="brand-cn">tangyixiao / 代码与题解</p>
+    </div>
+    <div className="topbar-meta">
+      <p className="archive-status">{count ? `收录 ${count.toLocaleString()} 个文件` : '正在加载文件清单'}</p>
+      <button className="theme-toggle" onClick={onToggleTheme} aria-label={`切换为${theme === 'dark' ? '浅色' : '深色'}模式`}>
+        <span aria-hidden="true">{theme === 'dark' ? '☀' : '☾'}</span>{theme === 'dark' ? '浅色' : '深色'}
+      </button>
+      <a className="home-link" href="https://tangyixiao.github.io/">个人主页 ↗</a>
+    </div>
+  </header>
 }
 
-function ArchiveTopbar({ count, pulse }: { count?: number; pulse: number }) {
-  return <header className="topbar">
-    <a className="home-link" href="https://tangyixiao.github.io/" aria-label="返回个人主页">TY<span>↗</span></a>
-    <div className="brand-lockup">
-      <h1 className="brand-name">Paradox Praxis Clinamen</h1>
-      <p className="brand-cn">佯谬·践履·偏斜</p>
+function ArchiveLanding({ manifest, onBrowse, onSelect }: { manifest: Manifest | null; onBrowse: () => void; onSelect: (path: string) => void }) {
+  const preview = manifest?.files.slice(0, 4) ?? []
+  return <section className="landing" aria-labelledby="landing-title">
+    <div className="landing-copy">
+      <p className="landing-label">TANGYIXIAO / CODE ARCHIVE</p>
+      <h2 id="landing-title">代码与题解，<br />都在这里。</h2>
+      <p className="landing-description">收录 C++ 解题代码和 Markdown 题解。按题目编号或文件名查找，打开后可直接阅读原文件。</p>
+      <div className="landing-actions">
+        <button className="browse-button" onClick={onBrowse}>浏览文件 <span aria-hidden="true">↗</span></button>
+        <span>{manifest ? `${manifest.count.toLocaleString()} 个文件` : '正在读取目录…'}</span>
+      </div>
     </div>
-    <svg className="clinamen-mark" data-pulse={pulse} viewBox="0 0 320 34" role="img" aria-label="偏斜轨迹">
-      <path className="orbit-line" d="M2 17H112C141 17 142 6 165 6S187 28 210 28 235 17 258 17h60" />
-      <circle cx="165" cy="6" r="3" />
-      <circle cx="210" cy="28" r="2" />
-    </svg>
-    <p className="archive-status"><span className="status-pulse" />{count ? `${count.toLocaleString()} FILES` : 'SYNCING'}</p>
-  </header>
+    <div className="landing-preview" aria-label="目录预览">
+      <div className="preview-head"><span>目录预览</span><span>CPP / MD</span></div>
+      <div className="preview-list">
+        {preview.map((file) => <button key={file.path} onClick={() => onSelect(file.path)}>
+          <span className="preview-kind">{file.type === 'cpp' ? 'C++' : 'MD'}</span>
+          <span className="preview-name">{file.name}</span>
+          <span aria-hidden="true">↗</span>
+        </button>)}
+        {!manifest ? <p className="preview-loading">正在读取文件清单…</p> : null}
+      </div>
+      <p className="preview-note">选择文件，打开代码或题解</p>
+    </div>
+  </section>
 }
 
 type BrowserProps = {
@@ -169,7 +188,7 @@ type BrowserProps = {
 function FileBrowser({ files, total, selectedPath, query, filter, onQuery, onFilter, onSelect }: BrowserProps) {
   return <aside className="sidebar" aria-label="文件列表">
     <div className="browser-head">
-      <div className="browser-title"><div><p className="utility-label">ALGORITHM ARCHIVE</p><h2>算法档案</h2></div><span>{total.toLocaleString()}</span></div>
+      <div className="browser-title"><div><p className="utility-label">浏览目录</p><h2>文件</h2></div><span>{total.toLocaleString()}</span></div>
       <label className="search"><span aria-hidden="true">⌕</span><input aria-label="搜索文件" placeholder="搜索题目编号或文件名" value={query} onChange={(event) => onQuery(event.target.value)} /></label>
       <div className="filters" aria-label="文件类型筛选">
         <button className={filter === 'all' ? 'active' : ''} onClick={() => onFilter('all')}>全部</button>
@@ -179,6 +198,7 @@ function FileBrowser({ files, total, selectedPath, query, filter, onQuery, onFil
       <p className="count">显示 {files.length} / {total} 个文件</p>
     </div>
     <div className="file-list">
+      {files.length === 0 && total > 0 ? <p className="empty-list">没有找到匹配的文件</p> : null}
       {files.map((file) => <button
         key={file.path}
         aria-label={`${file.type === 'cpp' ? 'C++' : 'Markdown'} ${file.name}`}
@@ -189,7 +209,7 @@ function FileBrowser({ files, total, selectedPath, query, filter, onQuery, onFil
       >
         <span className={`file-kind ${file.type}`}>{file.type === 'cpp' ? 'C++' : 'MD'}</span>
         <span className="file-name">{file.name}</span>
-        <span className="file-arrow" aria-hidden="true">↗</span>
+        <span className="file-arrow" aria-hidden="true">›</span>
       </button>)}
     </div>
   </aside>
@@ -198,16 +218,14 @@ function FileBrowser({ files, total, selectedPath, query, filter, onQuery, onFil
 type ReaderProps = {
   manifest: Manifest | null
   selected: Entry | null
-  reduced: boolean
   codeTheme: CodeTheme
-  onToggleCodeTheme: () => void
   scrollRestoreTop: number
   onReaderScroll: (value: number) => void
   onSelect: (path: string) => void
   onBack: () => void
 }
 
-function ReaderPane({ manifest, selected, reduced, codeTheme, onToggleCodeTheme, scrollRestoreTop, onReaderScroll, onSelect, onBack }: ReaderProps) {
+function ReaderPane({ manifest, selected, codeTheme, scrollRestoreTop, onReaderScroll, onSelect, onBack }: ReaderProps) {
   const readerBodyRef = useRef<HTMLDivElement>(null)
   const readerScrollRef = useRef(0)
   const pair = selected ? counterpart(selected.path, manifest?.files ?? []) : undefined
@@ -245,25 +263,18 @@ function ReaderPane({ manifest, selected, reduced, codeTheme, onToggleCodeTheme,
   return <section className="reader" id="viewer" data-code-theme={codeTheme} aria-live="polite">
     <div className="reader-toolbar">
       <button className="mobile-back" onClick={onBack} aria-label="返回文件列表">← 文件</button>
-      <div className="open-file"><p className="utility-label">OPEN FILE</p><strong id="meta-name">{selected?.name ?? '选择文件'}</strong></div>
+      <div className="open-file"><p className="utility-label">当前文件</p><strong id="meta-name">{selected?.name ?? '选择文件'}</strong></div>
       {selected ? <div className="reader-actions">
         <a href={sourceUrl} target="_blank" rel="noreferrer">原文 ↗</a>
         <button onClick={() => navigator.clipboard.writeText(sourceUrl)}>复制链接</button>
         {pair ? <button onClick={() => onSelect(pair.path)}>查看{pair.type === 'cpp' ? '代码' : '题解'}</button> : null}
-        <button
-          className="code-theme-toggle"
-          aria-label={`切换为${codeTheme === 'dark' ? '浅色' : '深色'}代码主题`}
-          onClick={onToggleCodeTheme}
-        >
-          {codeTheme === 'dark' ? '浅色代码' : '深色代码'}
-        </button>
       </div> : null}
     </div>
     <div ref={readerBodyRef} className="reader-body" onScroll={(event) => {
       readerScrollRef.current = event.currentTarget.scrollTop
       onReaderScroll(event.currentTarget.scrollTop)
     }}>
-      {selected && manifest ? <div key={selected.path} className="reader-document"><Source entry={selected} commit={manifest.commit} onReady={scrollRestoreTop > 0 ? restoreReaderScroll : undefined} /></div> : null}
+      {selected && manifest ? <div key={selected.path} className="reader-document"><Source entry={selected} commit={manifest.commit} onReady={scrollRestoreTop > 0 ? restoreReaderScroll : undefined} /></div> : <div className="reader-empty">从左侧选择一个文件</div>}
     </div>
   </section>
 }
