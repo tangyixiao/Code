@@ -116,3 +116,116 @@
 
 ---
 
+# P9352 [JOI 2023 Final] 训猫 / Cat Exercise
+
+## 题目描述
+
+There are $N$ cat towers, numbered from $1$ to $N$. The height of Tower $i$ ($1 \le i \le N$) is $P_i$. The heights of the towers are distinct integers between $1$ and $N$, inclusive. There are $N - 1$ adjacent pairs of towers. For each $j$ ($1 \le j \le N - 1$), Tower $A_j$ and Tower $B_j$ are adjacent to each other. In the beginning, it is possible to travel from a tower to any other tower by repeating moves from towers to adjacent towers.
+
+In the beginning, a cat stays in a tower of height $N$.
+
+Then we perform **cat exercises**. In cat exercises, we repeatedly choose a tower and put an obstacle on it. However, we cannot put an obstacle on a tower where we already put an obstacle on it. During the process, the following will happen.
+
+- If the cat does not stay in the chosen tower, nothing will happen.
+- If the cat stays in the chosen tower and there is an obstacle on every tower which is adjacent to the chosen tower, the cat exercises will finish.
+- Otherwise, among the towers where the cat can arrive by repeating moves from towers to adjacent towers without obstacles, the cat will move to the highest tower except for the current tower by repeating moves from towers to adjacent towers. In this process, the cat takes the route where the number of moves from towers to adjacent towers becomes minimum.
+
+Given information of the heights of the towers and pairs of adjacent towers, write a program which calculates the maximum possible sum of the number of moves of the cat from towers to adjacent towers if we put obstacles suitably.
+
+## 输入格式
+
+Read the following data from the standard input.
+
+> $N$  
+> $P_1$ $P_2$ $\cdots$ $P_N$  
+> $A_1$ $B_1$  
+> $A_2$ $B_2$  
+> $\vdots$    
+> $A_{N-1}$ $B_{N-1}$
+
+## 输出格式
+
+Write one line to the standard output. The output should contain the maximum possible sum of the number of moves of the cat from towers to adjacent towers.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+4
+3 4 1 2
+1 2
+2 3
+3 4
+
+```
+
+### 输出 #1
+
+```
+3
+
+```
+
+## 输入输出样例 #2
+
+### 输入 #2
+
+```
+7
+3 2 7 1 5 4 6
+1 2
+1 3
+2 4
+2 5
+3 6
+3 7
+
+```
+
+### 输出 #2
+
+```
+7
+
+```
+
+## 说明/提示
+
+## Samples
+
+### Sample 1
+
+If we perform the cat exercises in the following way, the cat moves 3 times in total.
+
+- We put an obstacle on Tower 1. The cat does not move.
+- We put an obstacle on Tower 2. The cat moves from Tower 2 to Tower 3. Then, the cat moves from Tower 3 to Tower 4.
+- We put an obstacle on Tower 4. The cat moves from Tower 4 to Tower 3.
+- We put an obstacle on Tower 3. Then the cat exercises finish.
+
+Since there is no way to perform cat exercises where the cat moves more than or equal to 4 times from towers to adjacent towers, output 3.
+
+This sample input satisfies the constraints of Subtasks 1, 2, 3, 4, 5, 7.
+
+### Sample 2
+
+This sample input satisfies the constraints of Subtasks 4, 6, 7.
+
+## Constraints
+
+- $2 \le N \le 2\times 10^5$.
+- $1 \le P_i \le N$ ($1 \le i \le N$).
+- $P_i \neq P_j$ ($1 \le i < j \le N$).
+- $1 \le A_j < B_j \le N$ ($1 \le j \le N - 1$).
+- In the beginning, it is possible to travel from a tower to any other tower by repeating moves from towers to adjacent towers.
+- Given values are all integers.
+
+## Subtasks
+
+1. (7 points) $A_i = i, B_i = i + 1$ ($1 \le i \le N - 1$), $N \le 16$．
+2. (7 points) $A_i = i, B_i = i + 1$ ($1 \le i \le N - 1$), $N \le 300$．
+3. (7 points) $A_i = i, B_i = i + 1$ ($1 \le i \le N - 1$), $N \le 5 000$．
+4. (10 points) $N \le 5 000$．
+5. (20 points) $A_i = i, B_i = i + 1$ ($1 \le i \le N - 1$)．
+6. (23 points) $A_i =\left\lfloor\frac{i+1}2\right\rfloor, B_i = i + 1$ ($1 \le i \le N - 1$). Here $\lfloor x \rfloor$ is the largest integer which is smaller than or equal to $x$.
+7. (26 points) No additional constraints.
