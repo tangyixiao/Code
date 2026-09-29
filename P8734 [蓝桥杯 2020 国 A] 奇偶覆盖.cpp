@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: f2c85758-ef5a-4570-9bd3-bbcf8bebb989
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,127 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+
+using ll = long long;
+
+const int N = 200005;
+
+struct Line {
+    ll x, y1, y2;
+    int v;
+} a[N];
+
+struct Node {
+    int mn, tag;
+    ll len, mnlen, odd;
+} tr[N << 2];
+
+int n, m, tot;
+ll y[N];
+
+inline void pushup(int p) {
+    tr[p].mn = min(tr[p << 1].mn, tr[p << 1 | 1].mn);
+    tr[p].mnlen = 0;
+    if (tr[p << 1].mn == tr[p].mn) {
+        tr[p].mnlen += tr[p << 1].mnlen;
+    }
+    if (tr[p << 1 | 1].mn == tr[p].mn) {
+        tr[p].mnlen += tr[p << 1 | 1].mnlen;
+    }
+    tr[p].odd = tr[p << 1].odd + tr[p << 1 | 1].odd;
+}
+
+inline void addtag(int p, int v) {
+    tr[p].mn += v, tr[p].tag += v;
+    if (v & 1) {
+        tr[p].odd = tr[p].len - tr[p].odd;
+    }
+}
+
+inline void pushdown(int p) {
+    if (tr[p].tag) {
+        addtag(p << 1, tr[p].tag), addtag(p << 1 | 1, tr[p].tag);
+        tr[p].tag = 0;
+    }
+}
+
+inline void build(int p, int l, int r) {
+    tr[p].mn = tr[p].tag = 0, tr[p].odd = 0;
+    if (l == r) {
+        tr[p].len = tr[p].mnlen = y[l + 1] - y[l];
+        return;
+    }
+    int mid = (l + r) >> 1;
+    build(p << 1, l, mid), build(p << 1 | 1, mid + 1, r);
+    tr[p].len = tr[p << 1].len + tr[p << 1 | 1].len;
+    pushup(p);
+}
+
+inline void modify(int p, int l, int r, int ql, int qr, int v) {
+    if (ql <= l && r <= qr) {
+        addtag(p, v);
+        return;
+    }
+    pushdown(p);
+    int mid = (l + r) >> 1;
+    if (ql <= mid) {
+        modify(p << 1, l, mid, ql, qr, v);
+    }
+    if (qr > mid) {
+        modify(p << 1 | 1, mid + 1, r, ql, qr, v);
+    }
+    pushup(p);
+}
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n;
+    for (int i = 1; i <= n; i++) {
+        ll l, b, r, t;
+        cin >> l >> b >> r >> t;
+        if (l == r || b == t) {
+            continue;
+        }
+        a[++tot] = {l, b, t, 1}, a[++tot] = {r, b, t, -1};
+        y[++m] = b, y[++m] = t;
+    }
+    if (!tot) {
+        cout << 0 << "\n"
+             << 0 << "\n";
+        return;
+    }
+    sort(y + 1, y + m + 1);
+    int cnt = 0;
+    for (int i = 1; i <= m; i++) {
+        if (i == 1 || y[i] != y[i - 1]) {
+            y[++cnt] = y[i];
+        }
+    }
+    m = cnt;
+    sort(a + 1, a + tot + 1, [](Line A, Line B) {
+        return A.x < B.x;
+    });
+    build(1, 1, m - 1);
+    ll ans1 = 0, ans2 = 0, las = a[1].x;
+    for (int i = 1; i <= tot;) {
+        ll x = a[i].x, dx = x - las;
+        ll odd = tr[1].odd;
+        ll zero = tr[1].mn == 0 ? tr[1].mnlen : 0;
+        ll cover = tr[1].len - zero;
+        ans1 += odd * dx, ans2 += (cover - odd) * dx;
+        int j = i;
+        while (j <= tot && a[j].x == x) {
+            int l = lower_bound(y + 1, y + m + 1, a[j].y1) - y;
+            int r = lower_bound(y + 1, y + m + 1, a[j].y2) - y - 1;
+            if (l <= r) {
+                modify(1, 1, m - 1, l, r, a[j].v);
+            }
+            j++;
+        }
+        las = x, i = j;
+    }
+    cout << ans1 << "\n"
+         << ans2 << "\n";
     return;
 }
+
 } // namespace TANGYIXIAO
