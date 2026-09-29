@@ -96,6 +96,9 @@ async function main() {
     assert.ok(await desktop.locator('.commit-row').count() > 100);
     assert.equal(await desktop.locator('.commit-row .git-node').count(), await desktop.locator('.commit-row').count());
     assert.ok(await desktop.locator('.commit-connector .git-rail').count() > 0);
+    await desktop.getByRole('button', { name: '最近合并 ↘' }).click();
+    assert.equal(await desktop.locator('.commit-row.selected').isVisible(), true);
+    assert.ok((await desktop.locator('.commit-row.selected .git-graph path').count()) > 0);
     await desktop.getByText('部署成功').first().waitFor();
     assert.equal(await desktop.locator('.commit-ref-list .push-ref').count(), 1);
     await desktop.getByRole('button', { name: /origin\/main/ }).click();

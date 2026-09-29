@@ -20,16 +20,16 @@ const runStatus = (run: PushRun) => run.status !== 'completed' ? '部署中' : r
 
 function Graph({ value, columns, connector = false, selected = false, root = false }: { value: string; columns: number; connector?: boolean; selected?: boolean; root?: boolean }) {
   const height = connector ? 22 : 44
-  const width = 24 + columns * 12
+  const width = 20 + columns * 9
   return <svg className="git-graph" width={width} height={height} viewBox={`0 0 ${width} ${height}`} aria-hidden="true">
     {Array.from(value).map((char, index) => {
-      const x = 12 + index * 12
+      const x = 10 + index * 9
       const lane = char === '\\' ? Math.ceil(index / 2) : Math.floor(index / 2)
       const path = char === '|' || char === '*'
         ? `M ${x} 0 V ${root && char === '*' ? height / 2 : height}`
-        : char === '\\' ? `M ${x - 12} 0 Q ${x} ${height / 2} ${x + 12} ${height}`
-          : char === '/' ? `M ${x + 12} 0 Q ${x} ${height / 2} ${x - 12} ${height}`
-            : char === '_' || char === '-' ? `M ${x - 12} ${height / 2} H ${x + 12}` : ''
+        : char === '\\' ? `M ${x - 9} 0 Q ${x} ${height / 2} ${x + 9} ${height}`
+          : char === '/' ? `M ${x + 9} 0 Q ${x} ${height / 2} ${x - 9} ${height}`
+            : char === '_' || char === '-' ? `M ${x - 9} ${height / 2} H ${x + 9}` : ''
       if (!path) return null
       return <g key={index} className={`git-lane-${lane % 6}`}>
         <path className="git-rail" d={path} />
@@ -42,6 +42,7 @@ function Graph({ value, columns, connector = false, selected = false, root = fal
 export default function GitHistory({ data }: { data: GitHistoryData }) {
   const commits = useMemo(() => data.rows.filter((row): row is CommitRow & { sha: string } => Boolean(row.sha)), [data])
   const graphColumns = useMemo(() => Math.max(2, ...data.rows.map((row) => row.graph.length)), [data])
+  const latestMerge = commits.find((row) => (row.parents?.length ?? 0) > 1)
   const [selectedSha, setSelectedSha] = useState(data.remoteMain ?? commits[0]?.sha ?? '')
   const [pushRuns, setPushRuns] = useState<PushRun[] | null>(null)
   const [pushError, setPushError] = useState(false)
@@ -104,7 +105,7 @@ export default function GitHistory({ data }: { data: GitHistoryData }) {
         </div>
       </aside>
       <div className="history-commits" aria-label="提交关系图">
-        <div className="history-section-head"><h3>提交图</h3><span>新 → 旧</span></div>
+        <div className="history-section-head"><h3>提交图</h3><div className="graph-controls">{latestMerge ? <button onClick={() => select(latestMerge.sha)}>最近合并 ↘</button> : null}<span>新 → 旧</span></div></div>
         <div className="commit-list">
           {data.rows.map((row, index) => row.sha
             ? <button key={row.sha} ref={(element) => { if (element) rowRefs.current.set(row.sha!, element); else rowRefs.current.delete(row.sha!) }} className={`commit-row${selected?.sha === row.sha ? ' selected' : ''}`} onClick={() => select(row.sha!)} aria-label={`${shortSha(row.sha)} ${row.subject}`}>
