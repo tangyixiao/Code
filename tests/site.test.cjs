@@ -123,6 +123,18 @@ async function main() {
     assert.equal(await page.locator('#viewer .markdown-code-block').evaluate((element) => getComputedStyle(element).backgroundColor), 'rgb(30, 30, 30)');
     assert.equal(await page.locator('#viewer .markdown-code-block .line-content').evaluate((element) => getComputedStyle(element).color), 'rgb(212, 212, 212)');
     assert.equal(await page.locator('#viewer .markdown-code-block .hljs-type').evaluate((element) => getComputedStyle(element).color), 'rgb(78, 201, 176)');
+    assert.equal(await page.locator('.markdown-body').evaluate((element) => getComputedStyle(element).fontSize), '15px');
+    await page.locator('.reader-body').hover();
+    await page.keyboard.down('Control');
+    await page.mouse.wheel(0, -100);
+    await page.keyboard.up('Control');
+    assert.equal(await page.locator('.markdown-body').evaluate((element) => getComputedStyle(element).fontSize), '16px');
+    assert.equal(await page.getByRole('button', { name: '重置阅读字体' }).textContent(), '14px');
+    await page.reload();
+    await page.locator('.markdown-body').waitFor();
+    assert.equal(await page.locator('.markdown-body').evaluate((element) => getComputedStyle(element).fontSize), '16px', 'reader font size should survive reload');
+    await page.getByRole('button', { name: '重置阅读字体' }).click();
+    assert.equal(await page.locator('.markdown-body').evaluate((element) => getComputedStyle(element).fontSize), '15px');
     await page.emulateMedia({ colorScheme: 'dark' });
     await page.emulateMedia({ colorScheme: 'light' });
     assert.equal(await page.locator('.reader').getAttribute('data-code-theme'), 'dark');

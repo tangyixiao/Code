@@ -452,6 +452,32 @@ type ReaderProps = {
 function ReaderPane({ manifest, selected, codeTheme, scrollRestoreTop, onReaderScroll, onSelect, onBack }: ReaderProps) {
   const readerBodyRef = useRef<HTMLDivElement>(null)
   const readerScrollRef = useRef(0)
+  const [fontSize, setFontSize] = useState(() => {
+    const saved = Number(localStorage.getItem('archive-reader-font-size'))
+    return Number.isFinite(saved) && saved >= 11 && saved <= 24 ? saved : 13
+  })
+  const wheelDeltaRef = useRef(0)
+  const adjustFontSize = (step: number) => setFontSize((size) => {
+    const next = Math.max(11, Math.min(24, size + step))
+    localStorage.setItem('archive-reader-font-size', String(next))
+    return next
+  })
+  useEffect(() => {
+    const body = readerBodyRef.current
+    if (!body) return
+    const onWheel = (event: WheelEvent) => {
+      if (!event.ctrlKey && !event.metaKey) return
+      event.preventDefault()
+      if (Math.sign(wheelDeltaRef.current) !== Math.sign(event.deltaY)) wheelDeltaRef.current = 0
+      wheelDeltaRef.current += event.deltaY
+      const steps = Math.trunc(wheelDeltaRef.current / 80)
+      if (!steps) return
+      wheelDeltaRef.current -= steps * 80
+      adjustFontSize(-steps)
+    }
+    body.addEventListener('wheel', onWheel, { passive: false })
+    return () => body.removeEventListener('wheel', onWheel)
+  }, [])
   const pair = selected ? counterpart(selected.path, manifest?.files ?? []) : undefined
   const sourceUrl = selected && manifest ? `${RAW}${manifest.commit}/${rawPath(selected.path)}` : ''
   const restoreReaderScroll = () => {
@@ -484,11 +510,12 @@ function ReaderPane({ manifest, selected, codeTheme, scrollRestoreTop, onReaderS
       observer.disconnect()
     }
   }, [selected?.path, scrollRestoreTop])
-  return <section className="reader" id="viewer" data-code-theme={codeTheme} aria-live="polite">
+  return <section className="reader" id="viewer" data-code-theme={codeTheme} style={{ '--reader-font-size': `${fontSize}px`, '--reader-text-size': `${fontSize + 2}px` } as CSSProperties} aria-live="polite">
     <div className="reader-toolbar">
       <button className="mobile-back" onClick={onBack} aria-label="返回文件列表">← 文件</button>
       <div className="open-file"><p className="utility-label">当前文件</p><strong id="meta-name">{selected?.name ?? '选择文件'}</strong></div>
       {selected ? <div className="reader-actions">
+        {isTextFile(selected) ? <div className="font-controls" title="Ctrl / ⌘ + 滚轮调整字号"><button onClick={() => adjustFontSize(-1)} aria-label="缩小阅读字体">A−</button><button onClick={() => { setFontSize(13); localStorage.setItem('archive-reader-font-size', '13') }} aria-label="重置阅读字体">{fontSize}px</button><button onClick={() => adjustFontSize(1)} aria-label="放大阅读字体">A+</button></div> : null}
         <a href={sourceUrl} target="_blank" rel="noreferrer">原文 ↗</a>
         <button onClick={() => navigator.clipboard.writeText(sourceUrl)}>复制链接</button>
         {pair ? <button onClick={() => onSelect(pair.path)}>查看{pair.type === 'cpp' ? '代码' : '题解'}</button> : null}
