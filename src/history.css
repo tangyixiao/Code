@@ -60,7 +60,7 @@
 .commit-ref-list .remote { border-color: var(--accent-soft); color: var(--accent); }
 .commit-ref-list .build-ref { border-color: #688e77; color: #91ba9d; }
 .commit-sha { flex: 0 0 auto; margin-left: 12px; color: var(--muted); font: .66rem ui-monospace, SFMono-Regular, Consolas, monospace; }
-.commit-connector { height: 22px; padding: 0 14px; }
+.commit-connector { height: 22px; padding: 0 4px; }
 .detail-content { padding: 24px 21px; }
 .detail-eyebrow { color: var(--accent); font: .68rem ui-monospace, SFMono-Regular, Consolas, monospace; }
 .detail-content h3 { margin: 11px 0 25px; color: var(--heading); font-size: 1.1rem; font-weight: 600; line-height: 1.45; overflow-wrap: anywhere; }

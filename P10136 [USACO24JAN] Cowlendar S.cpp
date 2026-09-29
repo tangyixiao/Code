@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 081c8cd2-0c9b-4cab-af25-55f49cfd3e64
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -596,9 +596,80 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
+
+using ll = long long;
+
+const int N = 1e4 + 5;
+
+int n, m;
+ll a[N], b[N];
+
+inline bool check(ll L) {
+    ll r[4];
+    int cnt = 0;
+    for (int i = 1; i <= m; i++) {
+        ll x = b[i] % L;
+        bool flag = false;
+        for (int j = 1; j <= cnt; j++) {
+            if (r[j] == x) {
+                flag = true;
+            }
+        }
+        if (!flag) {
+            if (cnt == 3) {
+                return false;
+            }
+            r[++cnt] = x;
+        }
+    }
+    return true;
+}
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n;
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i];
+    }
+    sort(a + 1, a + n + 1);
+    for (int i = 1; i <= n; i++) {
+        if (i == 1 || a[i] != a[i - 1]) {
+            b[++m] = a[i];
+        }
+    }
+
+    ll lim = b[1] / 4;
+    if (m <= 3) {
+        cout << lim * (lim + 1) / 2 << "\n";
+        return;
+    }
+
+    set<ll> S;
+    for (int i = 1; i <= 4; i++) {
+        for (int j = i + 1; j <= 4; j++) {
+            ll d = b[j] - b[i];
+            for (ll k = 1; k * k <= d; k++) {
+                if (d % k == 0) {
+                    if (k <= lim) {
+                        S.insert(k);
+                    }
+                    if (d / k <= lim) {
+                        S.insert(d / k);
+                    }
+                }
+            }
+        }
+    }
+
+    ll ans = 0;
+    for (ll L : S) {
+        if (check(L)) {
+            ans += L;
+        }
+    }
+    cout << ans << "\n";
     return;
 }
+
 } // namespace TANGYIXIAO
