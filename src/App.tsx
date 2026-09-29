@@ -22,6 +22,7 @@ const kindLabel = (type: string) => languageNames[type] ?? type.toUpperCase()
 const badges: Record<string, string> = { cpp: 'C++', md: 'MD', py: 'PY', js: 'JS', ts: 'TS', tsx: 'TSX', php: 'PHP', html: 'HTML' }
 const kindBadge = (type: string) => badges[type] ?? type.toUpperCase().slice(0, 4)
 const isTextFile = (entry: Entry) => textTypes.has(entry.type) || ['.gitignore', '.gitattributes', '.clang-format', 'Makefile', 'Dockerfile'].includes(entry.name)
+const plainCodeLines = (code: string) => code.split('\n').map((line) => line.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;'))
 const fileNameCollator = new Intl.Collator('en', { numeric: true, sensitivity: 'base' })
 const rawPath = (path: string) => path.split('/').map(encodeURIComponent).join('/')
 const parentPath = (path: string) => path.includes('/') ? path.slice(0, path.lastIndexOf('/')) : ''
@@ -573,7 +574,7 @@ function Markdown({ source, onReady }: { source: string; onReady?: () => void })
     let live = true
     setHtml('')
     if (!/^[ \t]*(?:`{3,}|~{3,})/m.test(source)) {
-      setHtml(DOMPurify.sanitize(renderMarkdown(source, (code) => code.split('\n'))))
+      setHtml(DOMPurify.sanitize(renderMarkdown(source, plainCodeLines)))
       return () => { live = false }
     }
     import('./syntax')
@@ -582,7 +583,7 @@ function Markdown({ source, onReady }: { source: string; onReady?: () => void })
         return DOMPurify.sanitize(renderMarkdown(source, (code, language) => highlightLines(highlighter, code, language)))
       })
       .then((result) => { if (live) setHtml(result) })
-      .catch(() => { if (live) setHtml(DOMPurify.sanitize(renderMarkdown(source, (code) => code.split('\n')))) })
+      .catch(() => { if (live) setHtml(DOMPurify.sanitize(renderMarkdown(source, plainCodeLines))) })
     return () => { live = false }
   }, [source])
   useEffect(() => {
