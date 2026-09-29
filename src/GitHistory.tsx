@@ -14,19 +14,34 @@ export type GitHistoryData = {
   rows: CommitRow[]
 }
 
-const graphGlyph: Record<string, string> = { '*': '●', '|': '│', '/': '╱', '\\': '╲', '-': '─', '_': '─' }
 const shortSha = (sha: string) => sha.slice(0, 7)
 const dateText = (value?: string) => value ? new Intl.DateTimeFormat('zh-CN', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(value)) : ''
 const runStatus = (run: PushRun) => run.status !== 'completed' ? '部署中' : run.conclusion === 'success' ? '部署成功' : run.conclusion === 'failure' ? '部署失败' : '已结束'
 
-function Graph({ value }: { value: string }) {
-  return <span className="git-graph" aria-hidden="true">{Array.from(value).map((char, index) =>
-    <span key={index} className={`git-lane-${Math.floor(index / 2) % 6}`}>{graphGlyph[char] ?? char}</span>
-  )}</span>
+function Graph({ value, columns, connector = false, selected = false, root = false }: { value: string; columns: number; connector?: boolean; selected?: boolean; root?: boolean }) {
+  const height = connector ? 22 : 44
+  const width = 24 + columns * 12
+  return <svg className="git-graph" width={width} height={height} viewBox={`0 0 ${width} ${height}`} aria-hidden="true">
+    {Array.from(value).map((char, index) => {
+      const x = 12 + index * 12
+      const lane = char === '\\' ? Math.ceil(index / 2) : Math.floor(index / 2)
+      const path = char === '|' || char === '*'
+        ? `M ${x} 0 V ${root && char === '*' ? height / 2 : height}`
+        : char === '\\' ? `M ${x - 12} 0 Q ${x} ${height / 2} ${x + 12} ${height}`
+          : char === '/' ? `M ${x + 12} 0 Q ${x} ${height / 2} ${x - 12} ${height}`
+            : char === '_' || char === '-' ? `M ${x - 12} ${height / 2} H ${x + 12}` : ''
+      if (!path) return null
+      return <g key={index} className={`git-lane-${lane % 6}`}>
+        <path className="git-rail" d={path} />
+        {char === '*' ? <><circle className="git-node-outline" cx={x} cy={height / 2} r={selected ? 9 : 7.5} /><circle className="git-node" cx={x} cy={height / 2} r={selected ? 5.5 : 4.8} /></> : null}
+      </g>
+    })}
+  </svg>
 }
 
 export default function GitHistory({ data }: { data: GitHistoryData }) {
   const commits = useMemo(() => data.rows.filter((row): row is CommitRow & { sha: string } => Boolean(row.sha)), [data])
+  const graphColumns = useMemo(() => Math.max(2, ...data.rows.map((row) => row.graph.length)), [data])
   const [selectedSha, setSelectedSha] = useState(data.remoteMain ?? commits[0]?.sha ?? '')
   const [pushRuns, setPushRuns] = useState<PushRun[] | null>(null)
   const [pushError, setPushError] = useState(false)
@@ -93,11 +108,11 @@ export default function GitHistory({ data }: { data: GitHistoryData }) {
         <div className="commit-list">
           {data.rows.map((row, index) => row.sha
             ? <button key={row.sha} ref={(element) => { if (element) rowRefs.current.set(row.sha!, element); else rowRefs.current.delete(row.sha!) }} className={`commit-row${selected?.sha === row.sha ? ' selected' : ''}`} onClick={() => select(row.sha!)} aria-label={`${shortSha(row.sha)} ${row.subject}`}>
-                <Graph value={row.graph} />
+                <Graph value={row.graph} columns={graphColumns} selected={selected?.sha === row.sha} root={row.parents?.length === 0} />
                 <span className="commit-content"><span className="commit-subject">{row.subject}</span><span className="commit-ref-list">{(refsBySha.get(row.sha) ?? []).map((branch) => <span key={branch.name} className={branch.remote ? 'remote' : ''}>{branch.name}</span>)}{pushesBySha.has(row.sha) ? <span className="push-ref">推送</span> : null}{row.sha === data.buildCommit ? <span className="build-ref">本站构建</span> : null}</span></span>
                 <span className="commit-sha">{shortSha(row.sha)}</span>
               </button>
-            : <div className="commit-connector" key={`connector-${index}`}><Graph value={row.graph} /></div>)}
+            : <div className="commit-connector" key={`connector-${index}`}><Graph value={row.graph} columns={graphColumns} connector /></div>)}
         </div>
       </div>
       <aside className="history-detail" aria-label="提交详情">

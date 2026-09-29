@@ -94,6 +94,8 @@ async function main() {
     await desktop.getByRole('button', { name: 'Git 历程' }).click();
     await desktop.getByRole('heading', { name: 'Git 历程' }).waitFor();
     assert.ok(await desktop.locator('.commit-row').count() > 100);
+    assert.equal(await desktop.locator('.commit-row .git-node').count(), await desktop.locator('.commit-row').count());
+    assert.ok(await desktop.locator('.commit-connector .git-rail').count() > 0);
     await desktop.getByText('部署成功').first().waitFor();
     assert.equal(await desktop.locator('.commit-ref-list .push-ref').count(), 1);
     await desktop.getByRole('button', { name: /origin\/main/ }).click();

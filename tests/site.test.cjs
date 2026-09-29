@@ -211,6 +211,9 @@ async function main() {
     await page.getByRole('button', { name: 'Git 历程' }).click();
     await page.getByRole('heading', { name: 'Git 历程' }).waitFor();
     assert.equal(await page.locator('.commit-row').count(), 2);
+    assert.equal(await page.locator('.commit-row .git-node').count(), 2);
+    assert.ok(await page.locator('.commit-connector .git-rail').count() >= 2);
+    assert.equal(await page.locator('.git-graph').first().evaluate((element) => element.tagName.toLowerCase()), 'svg');
     assert.match(await page.locator('.history-push').textContent(), /本次由 main 推送触发/);
     await page.getByText('部署成功').first().waitFor();
     assert.equal(await page.locator('.commit-ref-list .push-ref').count(), 1);

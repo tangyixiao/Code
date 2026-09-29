@@ -43,7 +43,12 @@
 .commit-row { display: flex; align-items: center; width: 100%; min-height: 44px; padding: 0 10px 0 4px; border: 0; border-radius: 5px; background: transparent; color: var(--text); cursor: pointer; text-align: left; }
 .commit-row:hover { background: var(--hover); }
 .commit-row.selected { background: var(--selected); }
-.git-graph { display: inline-block; flex: 0 0 auto; min-width: 2ch; white-space: pre; font: 1.04rem/1.1 ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: 0; }
+.git-graph { display: block; flex: 0 0 auto; overflow: visible; }
+.git-rail { fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; opacity: .72; }
+.git-node-outline { fill: var(--panel); }
+.git-node { fill: currentColor; transition: r .16s ease; }
+.commit-row.selected .git-node-outline { fill: var(--selected); }
+.commit-row:hover .git-node { r: 5.5; }
 .git-lane-0 { color: var(--accent); }.git-lane-1 { color: #83a9cc; }.git-lane-2 { color: #9cba94; }.git-lane-3 { color: #bc9dcb; }.git-lane-4 { color: #c6ad7e; }.git-lane-5 { color: #80b6b4; }
 .commit-content { display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1; padding-left: 10px; }
 .commit-subject { overflow: hidden; color: var(--heading); font-size: .77rem; text-overflow: ellipsis; white-space: nowrap; }
@@ -52,8 +57,7 @@
 .commit-ref-list .remote { border-color: var(--accent-soft); color: var(--accent); }
 .commit-ref-list .build-ref { border-color: #688e77; color: #91ba9d; }
 .commit-sha { flex: 0 0 auto; margin-left: 12px; color: var(--muted); font: .66rem ui-monospace, SFMono-Regular, Consolas, monospace; }
-.commit-connector { height: 19px; padding: 0 14px; }
-.commit-connector .git-graph { line-height: 19px; }
+.commit-connector { height: 22px; padding: 0 14px; }
 .detail-content { padding: 24px 21px; }
 .detail-eyebrow { color: var(--accent); font: .68rem ui-monospace, SFMono-Regular, Consolas, monospace; }
 .detail-content h3 { margin: 11px 0 25px; color: var(--heading); font-size: 1.1rem; font-weight: 600; line-height: 1.45; overflow-wrap: anywhere; }
