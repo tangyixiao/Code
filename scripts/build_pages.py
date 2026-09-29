@@ -37,9 +37,9 @@ def latest_file_commits(root: Path) -> dict[str, tuple[int, str, str]]:
     return latest
 
 
-def tracked_root_files(root: Path) -> list[dict[str, object]]:
+def tracked_files(root: Path) -> list[dict[str, object]]:
     result = subprocess.run(
-        ["git", "ls-files", "-z", "--", "*.cpp", "*.md"],
+        ["git", "ls-files", "-z"],
         cwd=root,
         check=True,
         stdout=subprocess.PIPE,
@@ -51,8 +51,6 @@ def tracked_root_files(root: Path) -> list[dict[str, object]]:
         if not value:
             continue
         path = Path(value)
-        if path.parent != Path(".") or path.suffix.casefold() not in {".cpp", ".md"}:
-            continue
         if value not in commits:
             raise ValueError(f"missing commit history for {value}; fetch the full Git history")
         full_path = root / path
@@ -60,7 +58,7 @@ def tracked_root_files(root: Path) -> list[dict[str, object]]:
             {
                 "name": path.name,
                 "path": path.as_posix(),
-                "type": path.suffix[1:].casefold(),
+                "type": path.suffix[1:].casefold() or "file",
                 "size": full_path.stat().st_size,
                 "updatedAt": commits[value][1],
                 "lastCommit": commits[value][2],
@@ -136,9 +134,9 @@ def build(root: Path, output: Path, commit: str) -> None:
     if not (dist / "index.html").is_file():
         raise FileNotFoundError(f"missing Vite build output: {dist / 'index.html'}")
 
-    files = tracked_root_files(root)
+    files = tracked_files(root)
     if not files:
-        raise ValueError("no tracked root .cpp or .md files found")
+        raise ValueError("no tracked files found")
 
     if output.exists():
         shutil.rmtree(output)

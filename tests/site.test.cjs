@@ -13,11 +13,14 @@ const manifest = JSON.stringify({
   schemaVersion: 2,
   commit,
   generatedAt: '2026-08-20T00:00:00Z',
-  count: 3,
+  count: 6,
   files: [
     { name: 'A.cpp', path: 'A.cpp', type: 'cpp', size: 13, updatedAt: '2026-09-29T09:00:00+08:00', lastCommit: commit },
     { name: 'P10 题解.md', path: 'P10 题解.md', type: 'md', size: 8, updatedAt: '2026-09-28T09:00:00+08:00', lastCommit: commit },
     { name: '题目 #1.md', path: '题目 #1.md', type: 'md', size: 30, updatedAt: '2026-09-27T09:00:00+08:00', lastCommit: commit },
+    { name: 'helper.py', path: 'tools/helper.py', type: 'py', size: 26, updatedAt: '2026-09-26T09:00:00+08:00', lastCommit: commit },
+    { name: 'index.php', path: 'tools/index.php', type: 'php', size: 28, updatedAt: '2026-09-25T09:00:00+08:00', lastCommit: commit },
+    { name: 'sample.bin', path: 'assets/sample.bin', type: 'bin', size: 1024, updatedAt: '2026-09-24T09:00:00+08:00', lastCommit: commit },
   ],
 });
 const historyData = JSON.stringify({
@@ -99,7 +102,7 @@ async function main() {
     }));
     await page.route('https://raw.githubusercontent.com/**', async (route) => {
       const decoded = decodeURIComponent(route.request().url());
-      const body = decoded.endsWith('.md')
+      const body = decoded.endsWith('.py') ? 'def answer():\n    return 42\n' : decoded.endsWith('.md')
         ? `# 题目\n\n\`\`\`cpp\nint answer = 42;\n\`\`\`\n\n${'内容保留滚动位置。\n\n'.repeat(80)}<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" onerror="document.body.dataset.xss=1">\n`
         : `${'int main(){}\n'.repeat(120)}`;
       await route.fulfill({ status: 200, contentType: 'text/plain; charset=utf-8', body });
@@ -175,14 +178,14 @@ async function main() {
     assert.ok(desktopLayout.markdownHeadingSize >= 36 && desktopLayout.markdownHeadingSize <= 40, 'markdown h1 should be about 2.4rem');
 
     await page.getByRole('button', { name: 'Markdown', exact: true }).click();
-    await page.getByText('显示 2 / 3 个文件').waitFor();
-    await page.getByPlaceholder('搜索题目编号或文件名').fill('P10');
-    await page.getByText('显示 1 / 3 个文件').waitFor();
+    await page.getByText('显示 2 / 6 个文件').waitFor();
+    await page.getByPlaceholder('搜索文件名或路径').fill('P10');
+    await page.getByText('显示 1 / 6 个文件').waitFor();
     await page.getByRole('button', { name: /P10 题解\.md/ }).click();
     assert.match(page.url(), /#file=P10%20%E9%A2%98%E8%A7%A3\.md$/);
 
     await page.getByRole('button', { name: '全部', exact: true }).click();
-    await page.getByPlaceholder('搜索题目编号或文件名').fill('');
+    await page.getByPlaceholder('搜索文件名或路径').fill('');
     await page.getByRole('button', { name: /C\+\+ A\.cpp/ }).click();
     await page.locator('#viewer code').waitFor();
     assert.equal((await page.locator('.code-gutter').textContent()).split('\n').length, 121);
@@ -190,7 +193,7 @@ async function main() {
     assert.equal(await page.locator('#viewer .code').evaluate((element) => getComputedStyle(element).backgroundColor), 'rgb(255, 255, 255)');
     await page.getByRole('button', { name: '切换为深色模式' }).click();
     assert.equal(await page.locator('#viewer .code').evaluate((element) => getComputedStyle(element).backgroundColor), 'rgb(30, 30, 30)');
-    const search = page.getByPlaceholder('搜索题目编号或文件名');
+    const search = page.getByPlaceholder('搜索文件名或路径');
     await search.focus();
     const readerScroll = await page.locator('.reader-body').evaluate((element) => {
       element.scrollTop = Math.min(24, element.scrollHeight - element.clientHeight);
@@ -217,6 +220,18 @@ async function main() {
     assert.match(await page.locator('.history-detail').textContent(), /update archive/);
     await page.getByRole('button', { name: '文件', exact: true }).click();
     await page.getByLabel('文件排序').waitFor();
+    await page.locator('.folder-row').filter({ hasText: 'tools' }).click();
+    assert.match(page.url(), /#dir=tools$/);
+    assert.equal(await page.locator('.file-row').count(), 2);
+    await page.getByLabel('其他语言与文件类型').selectOption('py');
+    assert.equal(await page.locator('.file-row').count(), 1);
+    await page.getByRole('button', { name: 'Python tools/helper.py' }).click();
+    await page.locator('.code .hljs-keyword').first().waitFor();
+    await page.getByRole('button', { name: '仓库' }).click();
+    await page.locator('.folder-row').filter({ hasText: 'assets' }).click();
+    await page.getByRole('button', { name: '全部', exact: true }).click();
+    await page.getByRole('button', { name: 'BIN assets/sample.bin' }).click();
+    assert.match(await page.locator('.binary-preview').textContent(), /无法在网页中预览/);
     assert.deepEqual(pageErrors, []);
 
     const mobile = await browser.newPage({ viewport: { width: 390, height: 844 } });

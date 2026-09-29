@@ -21,7 +21,9 @@ async function mockRawSources(page, sha) {
     const url = decodeURIComponent(route.request().url());
     const body = url.endsWith('P9709 [KMOI R1] 军事行动.md')
       ? `# 军事行动\n\n$ x_1 + x_2 = 10 $\n\n$ y = ax^2 + bx + c $\n\n$ \\sum_{i=1}^{n} i $\n\n$ \\frac{a}{b} $\n\n$ \\alpha + \\beta = \\gamma $\n\n$ \\int_0^1 x^2 dx $\n\n:::info[信息]\n普通提示。\n:::\n\n:::success[展开提示]{open}\n默认展开。\n:::\n\n:::warning[嵌套提示]\n::::error[错误]\n嵌套错误。\n::::\n:::\n\n:::align{center}\n居中内容。\n:::\n\n:::epigraph[——otto]\n引文内容。\n:::\n\n::cute-table{three}\n| 测试点 | n | m |\n| --- | --- | --- |\n| 1 | 100 | 100 |\n| ^ | 200 | 200 |\n\n::cute-table{tuack=3}\n| a | b | c |\n| --- | --- | --- |\n| x | > | z |\n| y | q | < |\n\n~~~cpp lines=2-3,5\nint main() {\n  int x = 1;\n  x += 1;\n  return x;\n}\n~~~\n`
-      : url.endsWith('P1241 括号序列.md')
+      : url.endsWith('.tsx')
+        ? 'export const app = () => 1\n'
+        : url.endsWith('P1241 括号序列.md')
         ? '# 括号序列\n\n配对题解内容保留。\n'
         : url.endsWith('P1241 括号序列.cpp')
           ? '#include <bits/stdc++.h>\n// 配对括号\nusing namespace std;\nint main() {\n    int answer = 42;\n    cout << "done" << answer << "\\n";\n    return 0;\n}\n'
@@ -75,6 +77,8 @@ async function main() {
     assert.ok(manifest.count > 2000, `expected a full archive, received ${manifest.count}`);
     assert.ok(manifest.files.every((file) => file.updatedAt && file.lastCommit));
     assert.ok(manifest.files.every((file, index) => index === 0 || Date.parse(manifest.files[index - 1].updatedAt) >= Date.parse(file.updatedAt)));
+    assert.ok(manifest.files.some((file) => file.path.includes('/') && file.type === 'py'));
+    const rootFiles = manifest.files.filter((file) => !file.path.includes('/'));
     const historyData = await (await fetch(new URL('history.json', siteUrl))).json();
     assert.equal(historyData.schemaVersion, 1);
     assert.ok(historyData.rows.some((row) => row.sha === manifest.commit), 'the build commit must appear in the graph');
@@ -110,18 +114,31 @@ async function main() {
     assert.ok(await desktop.locator('.landing-copy').evaluate((element) => parseFloat(getComputedStyle(element).animationDuration)) > .1);
     assert.equal(await desktop.locator('.reader').count(), 0, 'the root URL should open on the archive landing page');
     await desktop.getByRole('button', { name: /浏览文件/ }).click();
-    await desktop.getByText(`显示 ${manifest.count} / ${manifest.count} 个文件`).waitFor();
+    await desktop.getByText(`显示 ${rootFiles.length} / ${manifest.count} 个文件`).waitFor();
     assert.equal(await desktop.locator('.app-shell').getAttribute('data-theme'), 'dark');
-    assert.equal(await desktop.locator('.file-row').count(), manifest.count);
+    assert.equal(await desktop.locator('.file-row').count(), rootFiles.length);
     assert.equal(await desktop.getByLabel('文件排序').inputValue(), 'recent');
-    assert.match(await desktop.locator('.file-row').first().textContent(), new RegExp(manifest.files[0].name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+    assert.match(await desktop.locator('.file-row').first().textContent(), new RegExp(rootFiles[0].name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+    assert.ok(await desktop.locator('.folder-row').count() >= 20);
+    await saveScreenshot(desktop, process.env.FOLDER_SCREENSHOT);
+    await desktop.setViewportSize({ width: 800, height: 750 });
+    assert.ok(await desktop.locator('.sidebar').evaluate((element) => element.getBoundingClientRect().width) <= 310);
+    await saveScreenshot(desktop, process.env.FOLDER_NARROW_SCREENSHOT);
+    await desktop.setViewportSize({ width: 1440, height: 900 });
+    await desktop.locator('.folder-row[title="src"]').click();
+    assert.match(desktop.url(), /#dir=src$/);
+    await desktop.getByLabel('其他语言与文件类型').selectOption('tsx');
+    await desktop.getByRole('button', { name: 'TSX src/App.tsx' }).click();
+    await desktop.locator('.code .hljs-keyword').first().waitFor();
+    await desktop.getByRole('button', { name: '仓库' }).click();
+    await desktop.getByRole('button', { name: '全部', exact: true }).click();
 
-    await desktop.getByPlaceholder('搜索题目编号或文件名').fill('260509练习赛①#A. 三投');
-    await desktop.getByRole('button', { name: /260509练习赛①#A\. 三投\.cpp/ }).click();
+    await desktop.getByPlaceholder('搜索文件名或路径').fill('260509练习赛①#A. 三投');
+    await desktop.getByRole('button', { name: 'C++ 260509练习赛①#A. 三投.cpp', exact: true }).click();
     await desktop.locator('#viewer code').waitFor();
     assert.match(desktop.url(), /%23A/);
 
-    await desktop.getByPlaceholder('搜索题目编号或文件名').fill('P9709 [KMOI R1] 军事行动.md');
+    await desktop.getByPlaceholder('搜索文件名或路径').fill('P9709 [KMOI R1] 军事行动.md');
     await desktop.getByRole('button', { name: /Markdown P9709 \[KMOI R1\] 军事行动\.md/ }).click();
     await desktop.locator('#viewer .markdown-body').waitFor();
     await desktop.locator('#viewer .katex').first().waitFor();
@@ -140,7 +157,7 @@ async function main() {
     assert.equal(await desktop.locator('.markdown-code-block .code-line[data-highlighted="true"]').count(), 3);
     await saveScreenshot(desktop, process.env.MATH_SCREENSHOT);
 
-    await desktop.getByPlaceholder('搜索题目编号或文件名').fill('P1241 括号序列');
+    await desktop.getByPlaceholder('搜索文件名或路径').fill('P1241 括号序列');
     await desktop.getByRole('button', { name: /C\+\+ P1241 括号序列\.cpp/ }).click();
     await desktop.locator('.code-gutter').waitFor();
     assert.ok(await desktop.locator('.code .hljs-comment').count() > 0);
@@ -167,10 +184,10 @@ async function main() {
     await mobile.getByRole('button', { name: '算法档案' }).click();
     await saveScreenshot(mobile, process.env.MOBILE_LANDING_SCREENSHOT);
     await mobile.getByRole('button', { name: /浏览文件/ }).click();
-    await mobile.getByText(`显示 ${manifest.count} / ${manifest.count} 个文件`).waitFor();
+    await mobile.getByText(`显示 ${rootFiles.length} / ${manifest.count} 个文件`).waitFor();
     assert.equal(await mobile.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
     assert.equal(await mobile.locator('body').getAttribute('data-mobile-view'), 'list');
-    await mobile.getByPlaceholder('搜索题目编号或文件名').fill('P1241 括号序列');
+    await mobile.getByPlaceholder('搜索文件名或路径').fill('P1241 括号序列');
     await mobile.getByRole('button', { name: /C\+\+ P1241 括号序列\.cpp/ }).click();
     await mobile.locator('#viewer code').waitFor();
     assert.equal(await mobile.locator('body').getAttribute('data-mobile-view'), 'viewer');

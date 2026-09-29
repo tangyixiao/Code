@@ -1,25 +1,51 @@
 import { lazy, Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import DOMPurify from 'dompurify'
 import hljs from 'highlight.js/lib/common'
+import powershell from 'highlight.js/lib/languages/powershell'
+import latex from 'highlight.js/lib/languages/latex'
+import dos from 'highlight.js/lib/languages/dos'
 import renderMathInElement from 'katex/contrib/auto-render'
 import 'katex/dist/katex.min.css'
 import { renderMarkdown } from './markdown'
 import type { GitHistoryData } from './GitHistory'
 
-type Kind = 'cpp' | 'md'
+type Kind = string
 type CodeTheme = 'dark' | 'light'
 type SortOrder = 'recent' | 'oldest' | 'name'
 type Entry = { name: string; path: string; type: Kind; size: number; updatedAt: string; lastCommit: string }
+type Folder = { name: string; path: string; count: number; updatedAt: string }
 type Manifest = { schemaVersion: 2; commit: string; generatedAt: string; count: number; files: Entry[] }
 
 const RAW = 'https://raw.githubusercontent.com/tangyixiao/Code/'
 const GitHistory = lazy(() => import('./GitHistory'))
+hljs.registerLanguage('powershell', powershell)
+hljs.registerLanguage('latex', latex)
+hljs.registerLanguage('dos', dos)
+const languageNames: Record<string, string> = { cpp: 'C++', md: 'Markdown', py: 'Python', php: 'PHP', c: 'C', h: 'C/C++', hpp: 'C++', js: 'JavaScript', ts: 'TypeScript', tsx: 'TSX', html: 'HTML', css: 'CSS', sh: 'Shell', ps1: 'PowerShell', bat: 'Batch', tex: 'LaTeX', java: 'Java', go: 'Go', rs: 'Rust', cs: 'C#', sql: 'SQL', lua: 'Lua', rb: 'Ruby', swift: 'Swift', kt: 'Kotlin' }
+const codeTypes = new Set(Object.keys(languageNames).filter((type) => type !== 'md'))
+const textTypes = new Set([...codeTypes, 'md', 'txt', 'in', 'out', 'ans', 'json', 'yml', 'yaml', 'xml', 'svg', 'bib', 'gitignore', 'gitattributes', 'clang-format', 'cjs', 'mjs', 'toml', 'ini', 'cfg', 'csv', 'tsv'])
+const imageTypes = new Set(['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg'])
+const highlightLanguages: Record<string, string> = { cpp: 'cpp', c: 'c', h: 'cpp', hpp: 'cpp', py: 'python', js: 'javascript', ts: 'typescript', tsx: 'typescript', html: 'xml', css: 'css', sh: 'bash', ps1: 'powershell', bat: 'dos', tex: 'latex', cjs: 'javascript', mjs: 'javascript', yml: 'yaml', svg: 'xml' }
+const kindLabel = (type: string) => languageNames[type] ?? type.toUpperCase()
+const badges: Record<string, string> = { cpp: 'C++', md: 'MD', py: 'PY', js: 'JS', ts: 'TS', tsx: 'TSX', php: 'PHP', html: 'HTML' }
+const kindBadge = (type: string) => badges[type] ?? type.toUpperCase().slice(0, 4)
+const isTextFile = (entry: Entry) => textTypes.has(entry.type) || ['.gitignore', '.gitattributes', '.clang-format', 'Makefile', 'Dockerfile'].includes(entry.name)
+const highlightedCode = (source: string, type: string) => {
+  const language = highlightLanguages[type] ?? type
+  return hljs.getLanguage(language) ? hljs.highlight(source, { language }).value : source.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
+}
 const fileNameCollator = new Intl.Collator('en', { numeric: true, sensitivity: 'base' })
 const rawPath = (path: string) => path.split('/').map(encodeURIComponent).join('/')
+const parentPath = (path: string) => path.includes('/') ? path.slice(0, path.lastIndexOf('/')) : ''
 const counterpart = (path: string, files: Entry[]) => files.find((file) => file.path === path.replace(/\.(cpp|md)$/i, (_, ext) => ext === 'cpp' ? '.md' : '.cpp'))
 const hashPath = () => {
   if (!location.hash.startsWith('#file=')) return ''
   try { return decodeURIComponent(location.hash.slice(6)) }
+  catch { return '' }
+}
+const hashDirectory = () => {
+  if (!location.hash.startsWith('#dir=')) return ''
+  try { return decodeURIComponent(location.hash.slice(5)) }
   catch { return '' }
 }
 
@@ -34,7 +60,8 @@ function App() {
   const [filter, setFilter] = useState<'all' | Kind>('all')
   const [sortOrder, setSortOrder] = useState<SortOrder>('recent')
   const [selectedPath, setSelectedPath] = useState(hashPath)
-  const [browsing, setBrowsing] = useState(() => Boolean(hashPath()))
+  const [directory, setDirectory] = useState(() => parentPath(hashPath()) || hashDirectory())
+  const [browsing, setBrowsing] = useState(() => Boolean(hashPath()) || location.hash.startsWith('#dir='))
   const [historyOpen, setHistoryOpen] = useState(() => location.hash === '#history')
   const [gitHistory, setGitHistory] = useState<GitHistoryData | null>(null)
   const [historyError, setHistoryError] = useState('')
@@ -117,8 +144,9 @@ function App() {
       }
       setHistoryOpen(false)
       const path = hashPath()
+      setDirectory(path ? parentPath(path) : hashDirectory())
       setSelectedPath(path)
-      setBrowsing(Boolean(path))
+      setBrowsing(Boolean(path) || location.hash.startsWith('#dir='))
       setMobileView(path ? 'viewer' : 'list')
     }
     addEventListener('hashchange', onHash)
@@ -130,6 +158,7 @@ function App() {
     setReaderScrollRestoreTop(readerScrollTop)
     location.hash = `file=${encodeURIComponent(path)}`
     setSelectedPath(path)
+    setDirectory(parentPath(path))
     setBrowsing(true)
     setHistoryOpen(false)
     setMobileView('viewer')
@@ -140,17 +169,36 @@ function App() {
   }
   const files = useMemo(() => {
     const matching = manifest?.files.filter((file) =>
-      (filter === 'all' || file.type === filter) && file.name.toLocaleLowerCase().includes(query.toLocaleLowerCase())
+      (filter === 'all' || (filter === 'other' ? !codeTypes.has(file.type) && file.type !== 'md' : file.type === filter)) &&
+      (query ? file.path.toLocaleLowerCase().includes(query.toLocaleLowerCase()) : parentPath(file.path) === directory)
     ) ?? []
     if (sortOrder === 'recent') return matching
     return matching.sort((a, b) => sortOrder === 'name'
       ? fileNameCollator.compare(a.name, b.name)
       : Date.parse(a.updatedAt) - Date.parse(b.updatedAt) || fileNameCollator.compare(a.name, b.name))
-  }, [manifest, filter, query, sortOrder])
+  }, [manifest, filter, query, sortOrder, directory])
+  const folders = useMemo(() => {
+    const all = new Map<string, Folder>()
+    for (const file of manifest?.files ?? []) {
+      const parts = file.path.split('/')
+      for (let index = 1; index < parts.length; index += 1) {
+        const path = parts.slice(0, index).join('/')
+        const folder = all.get(path) ?? { name: parts[index - 1], path, count: 0, updatedAt: file.updatedAt }
+        folder.count += 1
+        if (Date.parse(file.updatedAt) > Date.parse(folder.updatedAt)) folder.updatedAt = file.updatedAt
+        all.set(path, folder)
+      }
+    }
+    return [...all.values()].filter((folder) => parentPath(folder.path) === directory).sort((a, b) => sortOrder === 'name'
+      ? fileNameCollator.compare(a.name, b.name)
+      : (Date.parse(b.updatedAt) - Date.parse(a.updatedAt)) * (sortOrder === 'oldest' ? -1 : 1) || fileNameCollator.compare(a.name, b.name))
+  }, [manifest, directory, sortOrder])
+  const availableKinds = useMemo(() => [...new Set(manifest?.files.map((file) => file.type).filter((type) => codeTypes.has(type) && type !== 'cpp') ?? [])].sort((a, b) => fileNameCollator.compare(kindLabel(a), kindLabel(b))), [manifest])
   const selected = manifest?.files.find((file) => file.path === selectedPath) ?? null
   const openHome = () => {
     history.pushState(null, '', location.pathname + location.search)
     setSelectedPath('')
+    setDirectory('')
     setBrowsing(false)
     setHistoryOpen(false)
     setMobileView('list')
@@ -160,6 +208,7 @@ function App() {
   const openBrowser = () => {
     history.pushState(null, '', location.pathname + location.search)
     setSelectedPath('')
+    setDirectory('')
     setBrowsing(true)
     setHistoryOpen(false)
     setMobileView('list')
@@ -169,6 +218,15 @@ function App() {
     setSelectedPath('')
     setBrowsing(false)
     setHistoryOpen(true)
+    setMobileView('list')
+  }
+  const openDirectory = (path: string) => {
+    location.hash = `dir=${encodeURIComponent(path)}`
+    setDirectory(path)
+    setSelectedPath('')
+    setQuery('')
+    setBrowsing(true)
+    setHistoryOpen(false)
     setMobileView('list')
   }
 
@@ -188,6 +246,9 @@ function App() {
       : <div className="workspace" ref={workspaceRef} style={{ '--sidebar-width': `${sidebarWidth}px` } as CSSProperties}>
         <FileBrowser
           files={files}
+          folders={query ? [] : folders}
+          directory={directory}
+          availableKinds={availableKinds}
           total={manifest?.count ?? 0}
           selectedPath={selectedPath}
           query={query}
@@ -197,6 +258,7 @@ function App() {
           onFilter={setFilter}
           onSortOrder={setSortOrder}
           onSelect={select}
+          onDirectory={openDirectory}
         />
         <div className="pane-resizer" role="separator" tabIndex={0} aria-label="调整文件列表宽度" aria-orientation="vertical" aria-valuemin={240} aria-valuemax={sidebarLimit()} aria-valuenow={sidebarWidth}
           onPointerDown={(event) => { if (event.button === 0) event.currentTarget.setPointerCapture(event.pointerId) }}
@@ -250,17 +312,17 @@ function ArchiveLanding({ manifest, onBrowse, onSelect }: { manifest: Manifest |
     <div className="landing-copy">
       <p className="landing-label">TANGYIXIAO / CODE ARCHIVE</p>
       <h2 id="landing-title">代码与题解，<br />都在这里。</h2>
-      <p className="landing-description">收录 C++ 解题代码和 Markdown 题解。按题目编号或文件名查找，打开后可直接阅读原文件。</p>
+      <p className="landing-description">浏览仓库中的代码、题解与项目文件。按题目编号、文件名或路径查找，打开后可直接查看原文件。</p>
       <div className="landing-actions">
         <button className="browse-button" onClick={onBrowse}>浏览文件 <span aria-hidden="true">↗</span></button>
         <span>{manifest ? `${manifest.count.toLocaleString()} 个文件` : '正在读取目录…'}</span>
       </div>
     </div>
     <div className="landing-preview" aria-label="目录预览">
-      <div className="preview-head"><span>目录预览</span><span>CPP / MD</span></div>
+      <div className="preview-head"><span>目录预览</span><span>REPOSITORY</span></div>
       <div className="preview-list">
         {preview.map((file) => <button key={file.path} onClick={() => onSelect(file.path)}>
-          <span className="preview-kind">{file.type === 'cpp' ? 'C++' : 'MD'}</span>
+          <span className="preview-kind">{kindBadge(file.type)}</span>
           <span className="preview-name">{file.name}</span>
           <span aria-hidden="true">↗</span>
         </button>)}
@@ -273,27 +335,38 @@ function ArchiveLanding({ manifest, onBrowse, onSelect }: { manifest: Manifest |
 
 type BrowserProps = {
   files: Entry[]
+  folders: Folder[]
+  directory: string
+  availableKinds: string[]
   total: number
   selectedPath: string
   query: string
-  filter: 'all' | Kind
+  filter: Kind
   sortOrder: SortOrder
   onQuery: (value: string) => void
-  onFilter: (value: 'all' | Kind) => void
+  onFilter: (value: Kind) => void
   onSortOrder: (value: SortOrder) => void
   onSelect: (path: string) => void
+  onDirectory: (path: string) => void
 }
 
-function FileBrowser({ files, total, selectedPath, query, filter, sortOrder, onQuery, onFilter, onSortOrder, onSelect }: BrowserProps) {
+function FileBrowser({ files, folders, directory, availableKinds, total, selectedPath, query, filter, sortOrder, onQuery, onFilter, onSortOrder, onSelect, onDirectory }: BrowserProps) {
+  const crumbs = directory ? directory.split('/') : []
   return <aside className="sidebar" aria-label="文件列表">
     <div className="browser-head">
       <div className="browser-title"><div><p className="utility-label">浏览目录</p><h2>文件</h2></div><span>{total.toLocaleString()}</span></div>
-      <label className="search"><span aria-hidden="true">⌕</span><input aria-label="搜索文件" placeholder="搜索题目编号或文件名" value={query} onChange={(event) => onQuery(event.target.value)} /></label>
+      <label className="search"><span aria-hidden="true">⌕</span><input aria-label="搜索文件" placeholder="搜索文件名或路径" value={query} onChange={(event) => onQuery(event.target.value)} /></label>
       <div className="filters" aria-label="文件类型筛选">
         <button className={filter === 'all' ? 'active' : ''} onClick={() => onFilter('all')}>全部</button>
         <button className={filter === 'cpp' ? 'active' : ''} onClick={() => onFilter('cpp')}>C++</button>
         <button className={filter === 'md' ? 'active' : ''} onClick={() => onFilter('md')}>Markdown</button>
+        <select aria-label="其他语言与文件类型" value={filter === 'all' || filter === 'cpp' || filter === 'md' ? '' : filter} onChange={(event) => onFilter(event.target.value)}>
+          <option value="" disabled>更多类型</option>
+          {availableKinds.map((kind) => <option key={kind} value={kind}>{kindLabel(kind)}</option>)}
+          <option value="other">其他文件</option>
+        </select>
       </div>
+      <nav className="folder-breadcrumb" aria-label="当前目录"><button onClick={() => onDirectory('')}>仓库</button>{crumbs.map((name, index) => <span key={index}><span aria-hidden="true">/</span><button onClick={() => onDirectory(crumbs.slice(0, index + 1).join('/'))}>{name}</button></span>)}</nav>
       <div className="list-meta">
         <p className="count">显示 {files.length} / {total} 个文件</p>
         <label className="sort-label">排序
@@ -305,18 +378,19 @@ function FileBrowser({ files, total, selectedPath, query, filter, sortOrder, onQ
         </label>
       </div>
     </div>
+    {folders.length ? <div className="folder-area"><div className="folder-area-title">文件夹 <span>{folders.length}</span></div><div className="folder-list">{folders.map((folder) => <button className="folder-row" key={folder.path} onClick={() => onDirectory(folder.path)} title={folder.path}><span className="folder-icon" aria-hidden="true">▸</span><span className="folder-name">{folder.name}</span><span className="folder-count">{folder.count}</span></button>)}</div></div> : null}
     <div className="file-list">
-      {files.length === 0 && total > 0 ? <p className="empty-list">没有找到匹配的文件</p> : null}
+      {files.length === 0 && folders.length === 0 && total > 0 ? <p className="empty-list">没有找到匹配的文件</p> : null}
       {files.map((file) => <button
         key={file.path}
-        aria-label={`${file.type === 'cpp' ? 'C++' : 'Markdown'} ${file.name}`}
+        aria-label={`${kindLabel(file.type)} ${file.path}`}
         aria-current={file.path === selectedPath ? 'true' : undefined}
         className={`file-row ${file.path === selectedPath ? 'selected' : ''}`}
         onMouseDown={(event) => { event.preventDefault(); onSelect(file.path) }}
         onClick={(event) => { if (event.detail === 0) onSelect(file.path) }}
       >
-        <span className={`file-kind ${file.type}`}>{file.type === 'cpp' ? 'C++' : 'MD'}</span>
-        <span className="file-name">{file.name}</span>
+        <span className={`file-kind ${file.type}`}>{kindBadge(file.type)}</span>
+        <span className="file-name" title={file.path}>{query ? file.path : file.name}</span>
         <time className="file-date" dateTime={file.updatedAt}>{file.updatedAt.slice(0, 10)}</time>
         <span className="file-arrow" aria-hidden="true">›</span>
       </button>)}
@@ -383,34 +457,39 @@ function ReaderPane({ manifest, selected, codeTheme, scrollRestoreTop, onReaderS
       readerScrollRef.current = event.currentTarget.scrollTop
       onReaderScroll(event.currentTarget.scrollTop)
     }}>
-      {selected && manifest ? <div key={selected.path} className={`reader-document ${selected.type === 'cpp' ? 'reader-code-document' : ''}`}><Source entry={selected} commit={manifest.commit} onReady={scrollRestoreTop > 0 ? restoreReaderScroll : undefined} /></div> : <div className="reader-empty">从左侧选择一个文件</div>}
+      {selected && manifest ? <div key={selected.path} className={`reader-document ${selected.type !== 'md' && isTextFile(selected) ? 'reader-code-document' : ''}`}><Source entry={selected} commit={manifest.commit} onReady={scrollRestoreTop > 0 ? restoreReaderScroll : undefined} /></div> : <div className="reader-empty">从左侧选择一个文件</div>}
     </div>
   </section>
 }
 
 function Source({ entry, commit, onReady }: { entry: Entry; commit: string; onReady?: () => void }) {
-  const [source, setSource] = useState('')
+  const [source, setSource] = useState<string | null>(null)
   const [error, setError] = useState('')
   const [attempt, setAttempt] = useState(0)
+  const previewable = isTextFile(entry) && !imageTypes.has(entry.type)
+  const sourceUrl = `${RAW}${commit}/${rawPath(entry.path)}`
   useEffect(() => {
+    if (!previewable) return
     let live = true
-    setSource('')
+    setSource(null)
     setError('')
-    fetch(`${RAW}${commit}/${rawPath(entry.path)}`)
+    fetch(sourceUrl)
       .then((response) => response.ok ? response.text() : Promise.reject(new Error(`正文加载失败 (${response.status})`)))
       .then((text) => { if (live) { setSource(text); onReady?.() } })
       .catch((reason: Error) => { if (live) setError(reason.message) })
     return () => { live = false }
-  }, [entry.path, commit, attempt])
+  }, [entry.path, commit, attempt, previewable])
   useLayoutEffect(() => {
-    if (source) onReady?.()
+    if (source !== null) onReady?.()
   }, [source])
 
+  if (imageTypes.has(entry.type)) return <div className="asset-preview"><img src={sourceUrl} alt={entry.name} /><p>{entry.path}</p></div>
+  if (!previewable) return <div className="binary-preview"><span className="binary-icon" aria-hidden="true">◇</span><h2>{entry.name}</h2><p>{entry.path}</p><p>{(entry.size / 1024).toLocaleString('zh-CN', { maximumFractionDigits: 1 })} KB · 此文件无法在网页中预览</p><a href={sourceUrl} target="_blank" rel="noreferrer">打开原文件 ↗</a></div>
   if (error) return <div className="reader-state reader-error"><p>{error}</p><button onClick={() => setAttempt((value) => value + 1)}>重试正文</button></div>
-  if (!source) return <div className="reader-state reader-loading"><span />正在读取正文…</div>
-  if (entry.type === 'cpp') return <div className="code-editor">
+  if (source === null) return <div className="reader-state reader-loading"><span />正在读取正文…</div>
+  if (entry.type !== 'md') return <div className="code-editor">
     <pre className="code-gutter" aria-hidden="true">{Array.from({ length: source.split(/\r\n|\r|\n/).length }, (_, index) => index + 1).join('\n')}</pre>
-    <pre className="code"><code className="hljs" dangerouslySetInnerHTML={{ __html: hljs.highlight(source, { language: 'cpp' }).value }} /></pre>
+    <pre className="code"><code className="hljs" dangerouslySetInnerHTML={{ __html: highlightedCode(source, entry.type) }} /></pre>
   </div>
   return <Markdown source={source} onReady={onReady} />
 }

@@ -59,7 +59,7 @@ class BuildPagesTests(unittest.TestCase):
             capture_output=True,
         )
 
-    def test_builds_manifest_from_tracked_root_cpp_and_markdown(self) -> None:
+    def test_builds_manifest_from_all_tracked_files(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp)
             self.make_repo(repo)
@@ -71,9 +71,10 @@ class BuildPagesTests(unittest.TestCase):
             self.assertEqual(manifest["schemaVersion"], 2)
             self.assertEqual(manifest["commit"], "a" * 40)
             self.assertRegex(manifest["generatedAt"], r"^\d{4}-\d{2}-\d{2}T.*Z$")
-            self.assertEqual(manifest["count"], 2)
-            self.assertEqual([file["name"] for file in manifest["files"]], ["A.cpp", "题目 #1.md"])
-            self.assertEqual([file["size"] for file in manifest["files"]], [13, 9])
+            self.assertEqual(manifest["count"], 5)
+            self.assertEqual({file["path"] for file in manifest["files"]}, {"A.cpp", "题目 #1.md", "index.html", "skip.exe", "nested/tracked.cpp"})
+            self.assertEqual({file["path"]: file["size"] for file in manifest["files"]}["A.cpp"], 13)
+            self.assertEqual({file["path"]: file["type"] for file in manifest["files"]}["skip.exe"], "exe")
             self.assertTrue(all(file["updatedAt"] == "2020-01-01T00:00:00Z" for file in manifest["files"]))
             self.assertTrue(all(len(file["lastCommit"]) == 40 for file in manifest["files"]))
             self.assertEqual((repo / "_site" / "index.html").read_text(encoding="utf-8"), "<div id=\"root\"></div>\n")
@@ -127,7 +128,7 @@ class BuildPagesTests(unittest.TestCase):
 
             self.assertEqual(result.returncode, 0, result.stderr)
             files = json.loads((repo / "_site" / "files.json").read_text(encoding="utf-8"))["files"]
-            self.assertEqual([file["name"] for file in files], ["题目 #1.md", "Z.cpp", "A.cpp"])
+            self.assertEqual([file["name"] for file in files[:2]], ["题目 #1.md", "Z.cpp"])
             self.assertEqual(files[0]["lastCommit"], latest)
             self.assertEqual(files[1]["lastCommit"], first)
 
