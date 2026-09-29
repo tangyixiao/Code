@@ -1,0 +1,31 @@
+{
+  "name": "P8903 [USACO22DEC] Bribing Friends G", 
+  "tests": [
+    {
+      "input": "3 10 8\n5 5 4\n6 7 3\n10 6 3\n", 
+      "output": "15\n"
+    }
+  ], 
+  "group": "Luogu", 
+  "timeLimit": 2000, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P8903", 
+  "interactive": false, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P8903USACO22DECBribingFriendsG"
+    }
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "batch": {
+    "id": "8c0694c1-190f-408d-b036-b5f0d0018659", 
+    "size": 1
+  }, 
+  "testType": "single", 
+  "memoryLimit": 256
+}
