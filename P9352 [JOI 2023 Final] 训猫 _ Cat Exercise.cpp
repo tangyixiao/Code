@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 7bda4636-e632-46b3-9d2c-8267ad16b80d
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,92 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+
+using ll = long long;
+
+const int N = 2e5 + 5, LOG = 20;
+
+int n, p[N], dep[N], fa[N], up[N][LOG + 1];
+ll dp[N];
+vector<int> g[N];
+
+inline int find(int x) {
+    if (fa[x] == x) {
+        return x;
+    }
+    return fa[x] = find(fa[x]);
+}
+
+inline int lca(int u, int v) {
+    if (dep[u] < dep[v]) {
+        swap(u, v);
+    }
+    for (int i = LOG; i >= 0; i--) {
+        if (dep[up[u][i]] >= dep[v]) {
+            u = up[u][i];
+        }
+    }
+    if (u == v) {
+        return u;
+    }
+    for (int i = LOG; i >= 0; i--) {
+        if (up[u][i] != up[v][i]) {
+            u = up[u][i], v = up[v][i];
+        }
+    }
+    return up[u][0];
+}
+
+inline int dis(int u, int v) {
+    int w = lca(u, v);
+    return dep[u] + dep[v] - dep[w] * 2;
+}
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n;
+    for (int i = 1; i <= n; i++) {
+        cin >> p[i];
+    }
+    for (int i = 1; i < n; i++) {
+        int u, v;
+        cin >> u >> v;
+        u = p[u], v = p[v];
+        g[u].push_back(v), g[v].push_back(u);
+    }
+
+    queue<int> q;
+    dep[1] = 1, q.push(1);
+    while (!q.empty()) {
+        int u = q.front();
+        q.pop();
+        for (int v : g[u]) {
+            if (v == up[u][0]) {
+                continue;
+            }
+            dep[v] = dep[u] + 1, up[v][0] = u;
+            for (int j = 1; j <= LOG; j++) {
+                up[v][j] = up[up[v][j - 1]][j - 1];
+            }
+            q.push(v);
+        }
+    }
+
+    for (int i = 1; i <= n; i++) {
+        fa[i] = i;
+    }
+    for (int u = 1; u <= n; u++) {
+        for (int v : g[u]) {
+            if (v > u) {
+                continue;
+            }
+            int w = find(v);
+            dp[u] = max(dp[u], dp[w] + dis(u, w));
+            fa[w] = u;
+        }
+    }
+
+    cout << dp[n] << "\n";
     return;
 }
+
 } // namespace TANGYIXIAO
