@@ -596,9 +596,206 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
+
+using ll = long long;
+
+const int N = 2e5 + 5;
+
+struct Seg {
+    int k, l, r, id;
+};
+
+struct Pos {
+    ll p, nxt;
+    int v, id, e;
+};
+
+int n, p, x[N], y[N], a[N], g[N][2], d[N], ord[N], rk[N];
+int cx, cy;
+ll pre[N], len[N], c[N], ans[N], L;
+Seg sx[N], sy[N];
+
+inline ll dis(int u, int v) {
+    return abs((ll)x[u] - x[v]) + abs((ll)y[u] - y[v]);
+}
+
+inline void add(int u, int v) {
+    g[u][d[u]++] = v, g[v][d[v]++] = u;
+}
+
+inline int getv(int X, int Y) {
+    int l = 1, r = p, res = p + 1;
+    while (l <= r) {
+        int mid = (l + r) >> 1, u = a[mid];
+        if (x[u] > X || (x[u] == X && y[u] >= Y)) {
+            res = mid, r = mid - 1;
+        } else {
+            l = mid + 1;
+        }
+    }
+    if (res <= p && x[a[res]] == X && y[a[res]] == Y) {
+        return a[res];
+    }
+    return 0;
+}
+
+inline int gets(Seg *s, int cnt, int k, int v) {
+    int l = 1, r = cnt, res = 0;
+    while (l <= r) {
+        int mid = (l + r) >> 1;
+        if (s[mid].k < k || (s[mid].k == k && s[mid].l <= v)) {
+            res = mid, l = mid + 1;
+        } else {
+            r = mid - 1;
+        }
+    }
+    if (res && s[res].k == k && v <= s[res].r) {
+        return s[res].id;
+    }
+    return 0;
+}
+
+inline Pos getpos(int X, int Y) {
+    int u = getv(X, Y);
+    if (u) {
+        int t = rk[u];
+        return {pre[t], 0, 1, t, 0};
+    }
+    int e = gets(sx, cx, X, Y);
+    if (!e) {
+        e = gets(sy, cy, Y, X);
+    }
+    ll t = abs((ll)x[ord[e]] - X) + abs((ll)y[ord[e]] - Y);
+    return {pre[e] + t, len[e] - t, 0, 0, e};
+}
+
+inline void modify(int l, int r) {
+    if (l <= r) {
+        c[l]++, c[r + 1]--;
+    } else {
+        c[l]++, c[p + 1]--, c[1]++, c[r + 1]--;
+    }
+}
+
+inline void modify(Pos A, Pos B, ll D) {
+    if (A.nxt > D) {
+        return;
+    }
+    int l = A.v ? A.id : A.e % p + 1;
+    int r = B.v ? B.id : B.e;
+    modify(l, r);
+}
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> p;
+    for (int i = 1; i <= p; i++) {
+        cin >> x[i] >> y[i], a[i] = i, d[i] = c[i] = 0;
+    }
+
+    sort(a + 1, a + p + 1, [&](int u, int v) {
+        if (x[u] != x[v]) {
+            return x[u] < x[v];
+        }
+        return y[u] < y[v];
+    });
+    for (int l = 1; l <= p; ) {
+        int r = l;
+        while (r <= p && x[a[r]] == x[a[l]]) {
+            r++;
+        }
+        for (int i = l; i < r; i += 2) {
+            add(a[i], a[i + 1]);
+        }
+        l = r;
+    }
+
+    sort(a + 1, a + p + 1, [&](int u, int v) {
+        if (y[u] != y[v]) {
+            return y[u] < y[v];
+        }
+        return x[u] < x[v];
+    });
+    for (int l = 1; l <= p; ) {
+        int r = l;
+        while (r <= p && y[a[r]] == y[a[l]]) {
+            r++;
+        }
+        for (int i = l; i < r; i += 2) {
+            add(a[i], a[i + 1]);
+        }
+        l = r;
+    }
+
+    int u = 1, las = 0;
+    for (int i = 1; i <= p; i++) {
+        ord[i] = u, rk[u] = i;
+        int v = g[u][0] == las ? g[u][1] : g[u][0];
+        las = u, u = v;
+    }
+
+    pre[1] = 0;
+    for (int i = 1; i <= p; i++) {
+        int j = i % p + 1;
+        len[i] = dis(ord[i], ord[j]);
+        if (i < p) {
+            pre[i + 1] = pre[i] + len[i];
+        }
+    }
+    L = pre[p] + len[p];
+
+    cx = cy = 0;
+    for (int i = 1; i <= p; i++) {
+        int j = i % p + 1, u = ord[i], v = ord[j];
+        if (x[u] == x[v]) {
+            sx[++cx] = {x[u], min(y[u], y[v]), max(y[u], y[v]), i};
+        } else {
+            sy[++cy] = {y[u], min(x[u], x[v]), max(x[u], x[v]), i};
+        }
+    }
+
+    sort(sx + 1, sx + cx + 1, [&](Seg A, Seg B) {
+        if (A.k != B.k) {
+            return A.k < B.k;
+        }
+        return A.l < B.l;
+    });
+    sort(sy + 1, sy + cy + 1, [&](Seg A, Seg B) {
+        if (A.k != B.k) {
+            return A.k < B.k;
+        }
+        return A.l < B.l;
+    });
+
+    sort(a + 1, a + p + 1, [&](int u, int v) {
+        if (x[u] != x[v]) {
+            return x[u] < x[v];
+        }
+        return y[u] < y[v];
+    });
+
+    for (int i = 1; i <= n; i++) {
+        int x1, y1, x2, y2;
+        cin >> x1 >> y1 >> x2 >> y2;
+        Pos A = getpos(x1, y1), B = getpos(x2, y2);
+        ll D = (B.p - A.p + L) % L;
+        if (D * 2 < L) {
+            modify(A, B, D);
+        } else {
+            modify(B, A, L - D);
+        }
+    }
+
+    ll now = 0;
+    for (int i = 1; i <= p; i++) {
+        now += c[i], ans[i] = now;
+    }
+    for (int i = 1; i <= p; i++) {
+        cout << ans[rk[i]] << "\n";
+    }
     return;
 }
+
 } // namespace TANGYIXIAO
+
