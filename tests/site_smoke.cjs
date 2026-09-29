@@ -19,6 +19,8 @@ async function mockRawSources(page) {
       ? `# 军事行动\n\n$ x_1 + x_2 = 10 $\n\n$ y = ax^2 + bx + c $\n\n$ \\sum_{i=1}^{n} i $\n\n$ \\frac{a}{b} $\n\n$ \\alpha + \\beta = \\gamma $\n\n$ \\int_0^1 x^2 dx $\n\n:::info[信息]\n普通提示。\n:::\n\n:::success[展开提示]{open}\n默认展开。\n:::\n\n:::warning[嵌套提示]\n::::error[错误]\n嵌套错误。\n::::\n:::\n\n:::align{center}\n居中内容。\n:::\n\n:::epigraph[——otto]\n引文内容。\n:::\n\n::cute-table{three}\n| 测试点 | n | m |\n| --- | --- | --- |\n| 1 | 100 | 100 |\n| ^ | 200 | 200 |\n\n::cute-table{tuack=3}\n| a | b | c |\n| --- | --- | --- |\n| x | > | z |\n| y | q | < |\n\n~~~cpp lines=2-3,5\nint main() {\n  int x = 1;\n  x += 1;\n  return x;\n}\n~~~\n`
       : url.endsWith('P1241 括号序列.md')
         ? '# 括号序列\n\n配对题解内容保留。\n'
+        : url.endsWith('P1241 括号序列.cpp')
+          ? '#include <bits/stdc++.h>\n// 配对括号\nusing namespace std;\nint main() {\n    int answer = 42;\n    cout << "done" << answer << "\\n";\n    return 0;\n}\n'
         : 'int main() { return 0; }\n';
     return route.fulfill({ status: 200, contentType: 'text/plain; charset=utf-8', body });
   });
@@ -77,6 +79,7 @@ async function main() {
     await mockRawSources(desktop);
     await desktop.goto(siteUrl, { waitUntil: 'domcontentloaded' });
     await desktop.getByRole('heading', { name: /代码与题解/ }).waitFor();
+    assert.ok(await desktop.locator('.landing-copy').evaluate((element) => parseFloat(getComputedStyle(element).animationDuration)) > .1);
     assert.equal(await desktop.locator('.reader').count(), 0, 'the root URL should open on the archive landing page');
     await desktop.getByRole('button', { name: /浏览文件/ }).click();
     await desktop.getByText(`显示 ${manifest.count} / ${manifest.count} 个文件`).waitFor();
@@ -109,6 +112,9 @@ async function main() {
 
     await desktop.getByPlaceholder('搜索题目编号或文件名').fill('P1241 括号序列');
     await desktop.getByRole('button', { name: /C\+\+ P1241 括号序列\.cpp/ }).click();
+    await desktop.locator('.code-gutter').waitFor();
+    assert.ok(await desktop.locator('.code .hljs-comment').count() > 0);
+    assert.ok(await desktop.locator('.code .hljs-string').count() > 0);
     await desktop.getByRole('button', { name: '查看题解' }).click();
     await desktop.locator('#meta-name').getByText('P1241 括号序列.md', { exact: true }).waitFor();
     await desktop.locator('#viewer .markdown-body, #viewer .markdown-fallback').waitFor();
@@ -142,6 +148,7 @@ async function main() {
     await mockRawSources(reduced);
     await reduced.goto(siteUrl, { waitUntil: 'domcontentloaded' });
     await reduced.getByRole('heading', { name: /代码与题解/ }).waitFor();
+    assert.ok(await reduced.locator('.landing-copy').evaluate((element) => parseFloat(getComputedStyle(element).animationDuration)) < .001);
     assert.equal(await reduced.locator('[data-scene-root]').count(), 0);
     await saveScreenshot(reduced, process.env.REDUCED_SCREENSHOT);
 

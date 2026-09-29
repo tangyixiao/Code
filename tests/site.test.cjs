@@ -140,6 +140,7 @@ async function main() {
     await page.getByPlaceholder('搜索题目编号或文件名').fill('');
     await page.getByRole('button', { name: /C\+\+ A\.cpp/ }).click();
     await page.locator('#viewer code').waitFor();
+    assert.equal((await page.locator('.code-gutter').textContent()).split('\n').length, 121);
     assert.equal(await page.locator('.reader').getAttribute('data-code-theme'), 'light');
     assert.equal(await page.locator('#viewer .code').evaluate((element) => getComputedStyle(element).backgroundColor), 'rgb(255, 255, 255)');
     await page.getByRole('button', { name: '切换为深色模式' }).click();

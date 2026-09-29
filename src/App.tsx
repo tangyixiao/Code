@@ -296,7 +296,10 @@ function Source({ entry, commit, onReady }: { entry: Entry; commit: string; onRe
 
   if (error) return <div className="reader-state reader-error"><p>{error}</p><button onClick={() => setAttempt((value) => value + 1)}>重试正文</button></div>
   if (!source) return <div className="reader-state reader-loading"><span />正在读取正文…</div>
-  if (entry.type === 'cpp') return <pre className="code"><code className="hljs" dangerouslySetInnerHTML={{ __html: hljs.highlight(source, { language: 'cpp' }).value }} /></pre>
+  if (entry.type === 'cpp') return <div className="code-editor">
+    <pre className="code-gutter" aria-hidden="true">{Array.from({ length: source.split(/\r\n|\r|\n/).length }, (_, index) => index + 1).join('\n')}</pre>
+    <pre className="code"><code className="hljs" dangerouslySetInnerHTML={{ __html: hljs.highlight(source, { language: 'cpp' }).value }} /></pre>
+  </div>
   return <Markdown source={source} onReady={onReady} />
 }
 
