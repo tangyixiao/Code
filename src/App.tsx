@@ -1,12 +1,9 @@
 import { lazy, Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import DOMPurify from 'dompurify'
-import hljs from 'highlight.js/lib/common'
-import powershell from 'highlight.js/lib/languages/powershell'
-import latex from 'highlight.js/lib/languages/latex'
-import dos from 'highlight.js/lib/languages/dos'
 import renderMathInElement from 'katex/contrib/auto-render'
 import 'katex/dist/katex.min.css'
 import { renderMarkdown } from './markdown'
+import { getSyntaxHighlighter, highlightLines, markdownLanguages } from './syntax'
 import type { GitHistoryData } from './GitHistory'
 
 type Kind = string
@@ -18,22 +15,14 @@ type Manifest = { schemaVersion: 2; commit: string; generatedAt: string; count: 
 
 const RAW = 'https://raw.githubusercontent.com/tangyixiao/Code/'
 const GitHistory = lazy(() => import('./GitHistory'))
-hljs.registerLanguage('powershell', powershell)
-hljs.registerLanguage('latex', latex)
-hljs.registerLanguage('dos', dos)
 const languageNames: Record<string, string> = { cpp: 'C++', md: 'Markdown', py: 'Python', php: 'PHP', c: 'C', h: 'C/C++', hpp: 'C++', js: 'JavaScript', ts: 'TypeScript', tsx: 'TSX', html: 'HTML', css: 'CSS', sh: 'Shell', ps1: 'PowerShell', bat: 'Batch', tex: 'LaTeX', java: 'Java', go: 'Go', rs: 'Rust', cs: 'C#', sql: 'SQL', lua: 'Lua', rb: 'Ruby', swift: 'Swift', kt: 'Kotlin' }
 const codeTypes = new Set(Object.keys(languageNames).filter((type) => type !== 'md'))
 const textTypes = new Set([...codeTypes, 'md', 'txt', 'in', 'out', 'ans', 'json', 'yml', 'yaml', 'xml', 'svg', 'bib', 'gitignore', 'gitattributes', 'clang-format', 'cjs', 'mjs', 'toml', 'ini', 'cfg', 'csv', 'tsv'])
 const imageTypes = new Set(['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg'])
-const highlightLanguages: Record<string, string> = { cpp: 'cpp', c: 'c', h: 'cpp', hpp: 'cpp', py: 'python', js: 'javascript', ts: 'typescript', tsx: 'typescript', html: 'xml', css: 'css', sh: 'bash', ps1: 'powershell', bat: 'dos', tex: 'latex', cjs: 'javascript', mjs: 'javascript', yml: 'yaml', svg: 'xml' }
 const kindLabel = (type: string) => languageNames[type] ?? type.toUpperCase()
 const badges: Record<string, string> = { cpp: 'C++', md: 'MD', py: 'PY', js: 'JS', ts: 'TS', tsx: 'TSX', php: 'PHP', html: 'HTML' }
 const kindBadge = (type: string) => badges[type] ?? type.toUpperCase().slice(0, 4)
 const isTextFile = (entry: Entry) => textTypes.has(entry.type) || ['.gitignore', '.gitattributes', '.clang-format', 'Makefile', 'Dockerfile'].includes(entry.name)
-const highlightedCode = (source: string, type: string) => {
-  const language = highlightLanguages[type] ?? type
-  return hljs.getLanguage(language) ? hljs.highlight(source, { language }).value : source.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
-}
 const fileNameCollator = new Intl.Collator('en', { numeric: true, sensitivity: 'base' })
 const rawPath = (path: string) => path.split('/').map(encodeURIComponent).join('/')
 const parentPath = (path: string) => path.includes('/') ? path.slice(0, path.lastIndexOf('/')) : ''
@@ -555,16 +544,38 @@ function Source({ entry, commit, onReady }: { entry: Entry; commit: string; onRe
   if (!previewable) return <div className="binary-preview"><span className="binary-icon" aria-hidden="true">◇</span><h2>{entry.name}</h2><p>{entry.path}</p><p>{(entry.size / 1024).toLocaleString('zh-CN', { maximumFractionDigits: 1 })} KB · 此文件无法在网页中预览</p><a href={sourceUrl} target="_blank" rel="noreferrer">打开原文件 ↗</a></div>
   if (error) return <div className="reader-state reader-error"><p>{error}</p><button onClick={() => setAttempt((value) => value + 1)}>重试正文</button></div>
   if (source === null) return <div className="reader-state reader-loading"><span />正在读取正文…</div>
-  if (entry.type !== 'md') return <div className="code-editor">
-    <pre className="code-gutter" aria-hidden="true">{Array.from({ length: source.split(/\r\n|\r|\n/).length }, (_, index) => index + 1).join('\n')}</pre>
-    <pre className="code"><code className="hljs" dangerouslySetInnerHTML={{ __html: highlightedCode(source, entry.type) }} /></pre>
-  </div>
+  if (entry.type !== 'md') return <CodeSource source={source} language={entry.type} />
   return <Markdown source={source} onReady={onReady} />
+}
+
+function CodeSource({ source, language }: { source: string; language: string }) {
+  const [html, setHtml] = useState('')
+  useEffect(() => {
+    let live = true
+    setHtml('')
+    getSyntaxHighlighter([language])
+      .then((highlighter) => { if (live) setHtml(highlightLines(highlighter, source, language).join('\n')) })
+      .catch(() => { if (live) setHtml(source.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')) })
+    return () => { live = false }
+  }, [source, language])
+  return <div className="code-editor">
+    <pre className="code-gutter" aria-hidden="true">{Array.from({ length: source.split(/\r\n|\r|\n/).length }, (_, index) => index + 1).join('\n')}</pre>
+    <pre className="code"><code className="shiki" dangerouslySetInnerHTML={{ __html: html }} /></pre>
+  </div>
 }
 
 function Markdown({ source, onReady }: { source: string; onReady?: () => void }) {
   const [element, setElement] = useState<HTMLElement | null>(null)
-  const html = useMemo(() => DOMPurify.sanitize(renderMarkdown(source)), [source])
+  const [html, setHtml] = useState('')
+  useEffect(() => {
+    let live = true
+    setHtml('')
+    getSyntaxHighlighter(markdownLanguages(source))
+      .then((highlighter) => DOMPurify.sanitize(renderMarkdown(source, (code, language) => highlightLines(highlighter, code, language))))
+      .then((result) => { if (live) setHtml(result) })
+      .catch(() => { if (live) setHtml(DOMPurify.sanitize(renderMarkdown(source, (code) => code.split('\n')))) })
+    return () => { live = false }
+  }, [source])
   useEffect(() => {
     if (element) renderMathInElement(element, {
       delimiters: [
