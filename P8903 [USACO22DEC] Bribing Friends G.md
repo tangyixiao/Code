@@ -48,3 +48,59 @@ Bessie 可以将 $4$ 哞尼和 $4$ 个冰激凌甜筒给奶牛 $1$，将 $6$ 哞
  - 测试点 $8-10$ 满足 $N,A,B,P_i,C_i,X_i \le 50$。
  - 测试点 $11-15$ 满足 $N,A,B,P_i,C_i,X_i \le 200$。
  - 测试点 $16-20$ 没有额外限制。
+
+ ---
+
+
+# P8903 [USACO22DEC] Bribing Friends G
+
+## 题目描述
+
+Bessie wants to watch the documentary: Cow Genomics, but she does not want to go alone. Unfortunately, her friends are not enthusiastic enough to go with her. So Bessie needs to bribe her friends to accompany her to the movie theater. She has two tools in her bribery arsenal: **Moonies** and **ice cream cones**.
+
+Bessie has $N(1 \le N \le 2000)$ friends. However, not all friends are created equal. Friend $i$ has popularity $P_i(1 \le P_i \le 2000)$, and Bessie wants to maximize the sum of popularities of the friends who go with her. Friend $i$ will go with Bessie only if Bessie gives her $C_i(1 \le C_i \le 2000)$ Moonies. If Bessie gives her $X_i(1 \le X_i \le 2000)$ ice cream cones, then the friend can also give Bessie a discount of $1$ Moony. Bessie can obtain any integer number of discounts from a friend, as long as these discounts do not make the friend give Moonies back to her.
+
+Bessie has $A$ Moonies and $B$ ice cream cones available ($0 \le A,B \le 2000$). Please help her find the maximum possible total popularity she can achieve if she spends her Moonies and ice cream cones in the best way.
+
+## 输入格式
+
+The first line contains three integers $N$, $A$, and $B$, representing the number of friends Bessie has, the number of Moonies, and the number of ice cream cones.
+
+The next $N$ lines each contain three integers $P_i$, $C_i$, and $X_i$, representing the popularity ($P_i$), the number of Moonies needed to bribe friend $i$ to accompany Bessie ($C_i$), and the number of ice cream cones needed to get a discount of $1$ Moony from friend $i$ ($X_i$).
+
+## 输出格式
+
+Output the maximum total popularity of the friends who accompany Bessie, assuming she spends her Moonies and ice cream cones in the best way.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+3 10 8
+5 5 4
+6 7 3
+10 6 3
+```
+
+### 输出 #1
+
+```
+15
+```
+
+## 说明/提示
+
+### Explanation for Sample 1
+
+Bessie can give $4$ Moonies and $4$ ice cream cones to cow $1$, and give $6$ Moonies and $3$ ice cream cones to cow $3$. Then cows $1$ and $3$ can accompany her, obtaining popularity $5+10=15$.
+
+### Test Point Properties
+
+- Test points $2-4$ satisfy $N \le 5$ and $C_i=1$.
+- Test points $5-7$ satisfy $B=0$.
+- Test points $8-10$ satisfy $N,A,B,P_i,C_i,X_i \le 50$.
+- Test points $11-15$ satisfy $N,A,B,P_i,C_i,X_i \le 200$.
+- Test points $16-20$ have no additional constraints.
+
+Translated by ChatGPT 5
