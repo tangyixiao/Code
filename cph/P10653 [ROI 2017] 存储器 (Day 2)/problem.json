@@ -1,0 +1,35 @@
+{
+  "batch": {
+    "size": 1, 
+    "id": "fe7ec7c1-04e7-4f30-9f0f-2f0295ff27b5"
+  }, 
+  "tests": [
+    {
+      "input": "3\n++- +++\n++-- ++++\n++-+--+- ++++++++\n", 
+      "output": "Yes\nNo\nYes\n"
+    }, 
+    {
+      "input": "3\n++-+-- ++----\n++-+-- +++---\n-++- -++-\n", 
+      "output": "Yes\nNo\nYes\n"
+    }
+  ], 
+  "input": {
+    "type": "stdin"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P10653", 
+  "interactive": false, 
+  "testType": "single", 
+  "timeLimit": 2000, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P10653ROI2017Day2"
+    }
+  }, 
+  "group": "Luogu", 
+  "memoryLimit": 512, 
+  "name": "P10653 [ROI 2017] 存储器 (Day 2)", 
+  "output": {
+    "type": "stdout"
+  }
+}
