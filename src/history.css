@@ -24,6 +24,21 @@
 .push-dot { flex: 0 0 7px; width: 7px; height: 7px; margin-top: 5px; border-radius: 50%; background: #79aa8e; box-shadow: 0 0 0 4px rgba(121, 170, 142, .1); }
 .history-push strong { color: var(--text); font-size: .7rem; font-weight: 550; }
 .history-push p { margin: 5px 0 0; color: var(--muted); font: .68rem ui-monospace, SFMono-Regular, Consolas, monospace; }
+.push-runs { margin-top: 8px; border-top: 1px solid var(--line); }
+.push-runs .history-section-head { border-bottom: 0; }
+.push-run-list { padding: 0 10px 15px; }
+.push-run-list button { display: flex; align-items: center; gap: 9px; width: 100%; min-height: 50px; padding: 6px 9px; border: 0; border-radius: 6px; background: transparent; color: var(--text); cursor: pointer; text-align: left; }
+.push-run-list button:hover { background: var(--hover); }
+.run-status { flex: 0 0 7px; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+.run-status.success { background: #79aa8e; }.run-status.failure { background: #cc8282; }
+.run-main { display: flex; flex: 1; flex-direction: column; gap: 4px; min-width: 0; }
+.run-main strong { color: var(--heading); font: .69rem ui-monospace, SFMono-Regular, Consolas, monospace; }
+.run-main small { color: var(--muted); font-size: .61rem; white-space: nowrap; }
+.run-result { color: var(--muted); font-size: .63rem; white-space: nowrap; }
+.push-run-state { margin: 0; padding: 4px 20px 20px; color: var(--muted); font-size: .68rem; line-height: 1.7; }
+.push-run-state a, .run-link { color: var(--accent); text-decoration: none; }
+.push-run-state a:hover, .run-link:hover { text-decoration: underline; }
+.commit-ref-list .push-ref { border-color: #688e77; color: #91ba9d; }
 .commit-list { min-height: 0; overflow: auto; padding: 10px 13px 36px; scrollbar-color: var(--line-strong) transparent; scrollbar-width: thin; }
 .commit-row { display: flex; align-items: center; width: 100%; min-height: 44px; padding: 0 10px 0 4px; border: 0; border-radius: 5px; background: transparent; color: var(--text); cursor: pointer; text-align: left; }
 .commit-row:hover { background: var(--hover); }
@@ -68,6 +83,9 @@
   .branch-name { max-width: 135px; }
   .branch-sha { display: none; }
   .history-push { margin: 0 19px; padding: 11px 0 14px; }
+  .push-run-list { display: flex; gap: 5px; overflow-x: auto; padding: 0 14px 12px; }
+  .push-run-list button { flex: 0 0 auto; width: auto; min-height: 40px; border: 1px solid var(--line); }
+  .run-main small { display: none; }
   .history-commits { display: block; }
   .commit-list { height: min(50dvh, 430px); padding-inline: 8px; }
   .commit-row { min-height: 43px; }
