@@ -10,14 +10,14 @@ const root = path.resolve(__dirname, '..');
 const dist = path.join(root, 'dist');
 const commit = 'a'.repeat(40);
 const manifest = JSON.stringify({
-  schemaVersion: 1,
+  schemaVersion: 2,
   commit,
   generatedAt: '2026-08-20T00:00:00Z',
   count: 3,
   files: [
-    { name: 'A.cpp', path: 'A.cpp', type: 'cpp', size: 13 },
-    { name: 'P10 题解.md', path: 'P10 题解.md', type: 'md', size: 8 },
-    { name: '题目 #1.md', path: '题目 #1.md', type: 'md', size: 30 },
+    { name: 'A.cpp', path: 'A.cpp', type: 'cpp', size: 13, updatedAt: '2026-09-29T09:00:00+08:00', lastCommit: commit },
+    { name: 'P10 题解.md', path: 'P10 题解.md', type: 'md', size: 8, updatedAt: '2026-09-28T09:00:00+08:00', lastCommit: commit },
+    { name: '题目 #1.md', path: '题目 #1.md', type: 'md', size: 30, updatedAt: '2026-09-27T09:00:00+08:00', lastCommit: commit },
   ],
 });
 

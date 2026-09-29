@@ -1,4 +1,5 @@
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -11,6 +12,16 @@ SCRIPT = ROOT / "scripts" / "build_pages.py"
 
 
 class BuildPagesTests(unittest.TestCase):
+    def commit(self, directory: Path, message: str, date: str) -> str:
+        env = os.environ.copy()
+        env.update({"GIT_AUTHOR_DATE": date, "GIT_COMMITTER_DATE": date})
+        subprocess.run(
+            ["git", "-C", directory, "-c", "user.name=Test", "-c", "user.email=test@example.com", "commit", "-qm", message],
+            check=True,
+            env=env,
+        )
+        return subprocess.check_output(["git", "-C", directory, "rev-parse", "HEAD"], text=True).strip()
+
     def make_repo(self, directory: Path) -> None:
         subprocess.run(["git", "init", "-q", directory], check=True)
         subprocess.run(["git", "-C", directory, "config", "core.autocrlf", "false"], check=True)
@@ -30,6 +41,7 @@ class BuildPagesTests(unittest.TestCase):
             ["git", "-C", directory, "add", "--", "index.html", "A.cpp", "题目 #1.md", "skip.exe", "nested/tracked.cpp"],
             check=True,
         )
+        self.commit(directory, "initial files", "2020-01-01T00:00:00+00:00")
 
     def run_builder(self, directory: Path, commit: str = "a" * 40) -> subprocess.CompletedProcess[str]:
         return subprocess.run(
@@ -56,17 +68,14 @@ class BuildPagesTests(unittest.TestCase):
 
             self.assertEqual(result.returncode, 0, result.stderr)
             manifest = json.loads((repo / "_site" / "files.json").read_text(encoding="utf-8"))
-            self.assertEqual(manifest["schemaVersion"], 1)
+            self.assertEqual(manifest["schemaVersion"], 2)
             self.assertEqual(manifest["commit"], "a" * 40)
             self.assertRegex(manifest["generatedAt"], r"^\d{4}-\d{2}-\d{2}T.*Z$")
             self.assertEqual(manifest["count"], 2)
-            self.assertEqual(
-                manifest["files"],
-                [
-                    {"name": "A.cpp", "path": "A.cpp", "type": "cpp", "size": 13},
-                    {"name": "题目 #1.md", "path": "题目 #1.md", "type": "md", "size": 9},
-                ],
-            )
+            self.assertEqual([file["name"] for file in manifest["files"]], ["A.cpp", "题目 #1.md"])
+            self.assertEqual([file["size"] for file in manifest["files"]], [13, 9])
+            self.assertTrue(all(file["updatedAt"] == "2020-01-01T00:00:00Z" for file in manifest["files"]))
+            self.assertTrue(all(len(file["lastCommit"]) == 40 for file in manifest["files"]))
             self.assertEqual((repo / "_site" / "index.html").read_text(encoding="utf-8"), "<div id=\"root\"></div>\n")
             self.assertEqual((repo / "_site" / "assets" / "app.js").read_text(encoding="utf-8"), "console.log('vite')\n")
             self.assertTrue((repo / "_site" / ".nojekyll").is_file())
@@ -88,6 +97,7 @@ class BuildPagesTests(unittest.TestCase):
             (repo / "P10.cpp").write_bytes(b"10\n")
             (repo / "P2.cpp").write_bytes(b"2\n")
             subprocess.run(["git", "-C", repo, "add", "--", "P10.cpp", "P2.cpp"], check=True)
+            self.commit(repo, "add two problems", "2020-01-02T00:00:00+00:00")
 
             result = self.run_builder(repo)
 
@@ -95,6 +105,25 @@ class BuildPagesTests(unittest.TestCase):
             manifest = json.loads((repo / "_site" / "files.json").read_text(encoding="utf-8"))
             names = [file["name"] for file in manifest["files"]]
             self.assertLess(names.index("P2.cpp"), names.index("P10.cpp"))
+
+    def test_orders_files_by_latest_commit_time(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            self.make_repo(repo)
+            (repo / "Z.cpp").write_text("// new\n", encoding="utf-8")
+            subprocess.run(["git", "-C", repo, "add", "--", "Z.cpp"], check=True)
+            first = self.commit(repo, "add Z", "2020-01-02T00:00:00+00:00")
+            (repo / "题目 #1.md").write_text("# 更新\n", encoding="utf-8")
+            subprocess.run(["git", "-C", repo, "add", "--", "题目 #1.md"], check=True)
+            latest = self.commit(repo, "update note", "2020-01-03T00:00:00+00:00")
+
+            result = self.run_builder(repo)
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            files = json.loads((repo / "_site" / "files.json").read_text(encoding="utf-8"))["files"]
+            self.assertEqual([file["name"] for file in files], ["题目 #1.md", "Z.cpp", "A.cpp"])
+            self.assertEqual(files[0]["lastCommit"], latest)
+            self.assertEqual(files[1]["lastCommit"], first)
 
 
 if __name__ == "__main__":

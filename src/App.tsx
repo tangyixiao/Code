@@ -7,8 +7,8 @@ import { renderMarkdown } from './markdown'
 
 type Kind = 'cpp' | 'md'
 type CodeTheme = 'dark' | 'light'
-type Entry = { name: string; path: string; type: Kind; size: number }
-type Manifest = { schemaVersion: 1; commit: string; generatedAt: string; count: number; files: Entry[] }
+type Entry = { name: string; path: string; type: Kind; size: number; updatedAt: string; lastCommit: string }
+type Manifest = { schemaVersion: 2; commit: string; generatedAt: string; count: number; files: Entry[] }
 
 const RAW = 'https://raw.githubusercontent.com/tangyixiao/Code/'
 const rawPath = (path: string) => path.split('/').map(encodeURIComponent).join('/')
@@ -42,7 +42,7 @@ function App() {
   const load = () => fetch('./files.json')
     .then((response) => response.ok ? response.json() : Promise.reject(new Error(`清单加载失败 (${response.status})`)))
     .then((data: Manifest) => {
-      if (data.schemaVersion !== 1 || !Array.isArray(data.files) || !data.files.length || data.count !== data.files.length) {
+      if (data.schemaVersion !== 2 || !Array.isArray(data.files) || !data.files.length || data.count !== data.files.length || !data.files.every((file) => file.updatedAt && file.lastCommit)) {
         throw new Error('文件清单格式不兼容或为空')
       }
       setManifest(data)
@@ -191,7 +191,7 @@ function FileBrowser({ files, total, selectedPath, query, filter, onQuery, onFil
         <button className={filter === 'cpp' ? 'active' : ''} onClick={() => onFilter('cpp')}>C++</button>
         <button className={filter === 'md' ? 'active' : ''} onClick={() => onFilter('md')}>Markdown</button>
       </div>
-      <p className="count">显示 {files.length} / {total} 个文件</p>
+      <p className="count">显示 {files.length} / {total} 个文件 · 最近提交在前</p>
     </div>
     <div className="file-list">
       {files.length === 0 && total > 0 ? <p className="empty-list">没有找到匹配的文件</p> : null}
@@ -205,6 +205,7 @@ function FileBrowser({ files, total, selectedPath, query, filter, onQuery, onFil
       >
         <span className={`file-kind ${file.type}`}>{file.type === 'cpp' ? 'C++' : 'MD'}</span>
         <span className="file-name">{file.name}</span>
+        <time className="file-date" dateTime={file.updatedAt}>{file.updatedAt.slice(0, 10)}</time>
         <span className="file-arrow" aria-hidden="true">›</span>
       </button>)}
     </div>

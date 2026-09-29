@@ -65,8 +65,10 @@ async function main() {
 
   try {
     const manifest = await (await fetch(new URL('files.json', siteUrl))).json();
-    assert.equal(manifest.schemaVersion, 1);
+    assert.equal(manifest.schemaVersion, 2);
     assert.ok(manifest.count > 2000, `expected a full archive, received ${manifest.count}`);
+    assert.ok(manifest.files.every((file) => file.updatedAt && file.lastCommit));
+    assert.ok(manifest.files.every((file, index) => index === 0 || Date.parse(manifest.files[index - 1].updatedAt) >= Date.parse(file.updatedAt)));
 
     const desktop = await browser.newPage({ viewport: { width: 1440, height: 900 } });
     desktop.setDefaultTimeout(15000);

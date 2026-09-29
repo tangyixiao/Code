@@ -14,6 +14,28 @@ def natural_key(value: str) -> tuple[tuple[int, object], ...]:
     )
 
 
+def latest_file_commits(root: Path) -> dict[str, tuple[int, str, str]]:
+    result = subprocess.run(
+        ["git", "log", "--format=%x1e%H%x09%ct%x09%cI", "--name-only", "-z", "--diff-filter=AMRT"],
+        cwd=root,
+        check=True,
+        stdout=subprocess.PIPE,
+    )
+    latest = {}
+    for block in result.stdout.split(b"\x1e")[1:]:
+        header, separator, names = block.partition(b"\0\n")
+        if not separator:
+            continue
+        sha, timestamp, committed_at = header.decode("utf-8").split("\t")
+        for raw_path in names.split(b"\0"):
+            if not raw_path:
+                continue
+            path = raw_path.decode("utf-8")
+            if path not in latest or int(timestamp) > latest[path][0]:
+                latest[path] = (int(timestamp), committed_at, sha)
+    return latest
+
+
 def tracked_root_files(root: Path) -> list[dict[str, object]]:
     result = subprocess.run(
         ["git", "ls-files", "-z", "--", "*.cpp", "*.md"],
@@ -22,6 +44,7 @@ def tracked_root_files(root: Path) -> list[dict[str, object]]:
         stdout=subprocess.PIPE,
     )
     paths = result.stdout.decode("utf-8").split("\0")
+    commits = latest_file_commits(root)
     files = []
     for value in paths:
         if not value:
@@ -29,6 +52,8 @@ def tracked_root_files(root: Path) -> list[dict[str, object]]:
         path = Path(value)
         if path.parent != Path(".") or path.suffix.casefold() not in {".cpp", ".md"}:
             continue
+        if value not in commits:
+            raise ValueError(f"missing commit history for {value}; fetch the full Git history")
         full_path = root / path
         files.append(
             {
@@ -36,9 +61,15 @@ def tracked_root_files(root: Path) -> list[dict[str, object]]:
                 "path": path.as_posix(),
                 "type": path.suffix[1:].casefold(),
                 "size": full_path.stat().st_size,
+                "updatedAt": commits[value][1],
+                "lastCommit": commits[value][2],
+                "_sortTime": commits[value][0],
             }
         )
-    return sorted(files, key=lambda item: natural_key(str(item["name"])))
+    files.sort(key=lambda item: (-int(item["_sortTime"]), natural_key(str(item["name"]))))
+    for file in files:
+        del file["_sortTime"]
+    return files
 
 
 def build(root: Path, output: Path, commit: str) -> None:
@@ -57,7 +88,7 @@ def build(root: Path, output: Path, commit: str) -> None:
     shutil.copytree(dist, output)
     (output / ".nojekyll").write_text("", encoding="utf-8")
     manifest = {
-        "schemaVersion": 1,
+        "schemaVersion": 2,
         "commit": commit.lower(),
         "generatedAt": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
         "count": len(files),
