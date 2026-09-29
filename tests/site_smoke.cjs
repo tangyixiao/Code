@@ -12,7 +12,11 @@ async function saveScreenshot(page, target) {
   await page.screenshot({ path: target, fullPage: true });
 }
 
-async function mockRawSources(page) {
+async function mockRawSources(page, sha) {
+  await page.route('https://api.github.com/repos/tangyixiao/Code/actions/workflows/pages.yml/runs**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8',
+    body: JSON.stringify({ workflow_runs: [{ id: 1, head_sha: sha, created_at: '2026-09-29T02:00:00Z', status: 'completed', conclusion: 'success', html_url: 'https://github.com/tangyixiao/Code/actions/runs/1' }] }),
+  }));
   await page.route('https://raw.githubusercontent.com/**', (route) => {
     const url = decodeURIComponent(route.request().url());
     const body = url.endsWith('P9709 [KMOI R1] 军事行动.md')
@@ -80,12 +84,14 @@ async function main() {
     desktop.setDefaultTimeout(15000);
     desktop.on('pageerror', (error) => pageErrors.push(error.message));
     desktop.on('console', (message) => { if (message.type() === 'error') pageErrors.push(message.text()); });
-    await mockRawSources(desktop);
+    await mockRawSources(desktop, manifest.commit);
     await desktop.goto(siteUrl, { waitUntil: 'domcontentloaded' });
     await desktop.getByRole('heading', { name: /代码与题解/ }).waitFor();
     await desktop.getByRole('button', { name: 'Git 历程' }).click();
     await desktop.getByRole('heading', { name: 'Git 历程' }).waitFor();
     assert.ok(await desktop.locator('.commit-row').count() > 100);
+    await desktop.getByText('部署成功').first().waitFor();
+    assert.equal(await desktop.locator('.commit-ref-list .push-ref').count(), 1);
     await desktop.getByRole('button', { name: /origin\/main/ }).click();
     assert.match(await desktop.locator('.history-detail').textContent(), new RegExp(historyData.remoteMain.slice(0, 7)));
     await saveScreenshot(desktop, process.env.HISTORY_SCREENSHOT);
@@ -148,7 +154,7 @@ async function main() {
     mobile.setDefaultTimeout(15000);
     mobile.on('pageerror', (error) => pageErrors.push(error.message));
     mobile.on('console', (message) => { if (message.type() === 'error') pageErrors.push(message.text()); });
-    await mockRawSources(mobile);
+    await mockRawSources(mobile, manifest.commit);
     await mobile.goto(new URL('./', siteUrl).href, { waitUntil: 'domcontentloaded' });
     await mobile.getByRole('heading', { name: /代码与题解/ }).waitFor();
     await mobile.getByRole('button', { name: 'Git 历程' }).click();
@@ -177,7 +183,7 @@ async function main() {
     await reduced.emulateMedia({ reducedMotion: 'reduce' });
     reduced.on('pageerror', (error) => pageErrors.push(error.message));
     reduced.on('console', (message) => { if (message.type() === 'error') pageErrors.push(message.text()); });
-    await mockRawSources(reduced);
+    await mockRawSources(reduced, manifest.commit);
     await reduced.goto(siteUrl, { waitUntil: 'domcontentloaded' });
     await reduced.getByRole('heading', { name: /代码与题解/ }).waitFor();
     assert.ok(await reduced.locator('.landing-copy').evaluate((element) => parseFloat(getComputedStyle(element).animationDuration)) < .001);

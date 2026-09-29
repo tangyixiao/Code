@@ -93,6 +93,10 @@ async function main() {
     page.on('pageerror', (error) => pageErrors.push(error.message));
     page.on('console', (message) => { if (message.type() === 'error') pageErrors.push(message.text()); });
     await page.route('https://cdn.jsdelivr.net/**', (route) => route.abort());
+    await page.route('https://api.github.com/repos/tangyixiao/Code/actions/workflows/pages.yml/runs**', (route) => route.fulfill({
+      status: 200, contentType: 'application/json; charset=utf-8',
+      body: JSON.stringify({ workflow_runs: [{ id: 1, head_sha: commit, created_at: '2026-09-29T02:00:00Z', status: 'completed', conclusion: 'success', html_url: 'https://github.com/tangyixiao/Code/actions/runs/1' }] }),
+    }));
     await page.route('https://raw.githubusercontent.com/**', async (route) => {
       const decoded = decodeURIComponent(route.request().url());
       const body = decoded.endsWith('.md')
@@ -189,6 +193,8 @@ async function main() {
     await page.getByRole('heading', { name: 'Git 历程' }).waitFor();
     assert.equal(await page.locator('.commit-row').count(), 2);
     assert.match(await page.locator('.history-push').textContent(), /本次由 main 推送触发/);
+    await page.getByText('部署成功').first().waitFor();
+    assert.equal(await page.locator('.commit-ref-list .push-ref').count(), 1);
     await page.locator('.commit-row').last().click();
     assert.match(await page.locator('.history-detail').textContent(), /initial commit/);
     await page.getByRole('button', { name: /origin\/main/ }).click();
