@@ -1,0 +1,35 @@
+{
+  "name": "P10136 [USACO24JAN] Cowlendar S", 
+  "tests": [
+    {
+      "input": "12\n31 28 31 30 31 30 31 31 30 31 30 31\n", 
+      "output": "28\n"
+    }, 
+    {
+      "input": "4\n31 35 28 29\n", 
+      "output": "23\n"
+    }
+  ], 
+  "group": "Luogu", 
+  "timeLimit": 2000, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P10136", 
+  "interactive": false, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P10136USACO24JANCowlendarS"
+    }
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "batch": {
+    "id": "081c8cd2-0c9b-4cab-af25-55f49cfd3e64", 
+    "size": 1
+  }, 
+  "testType": "single", 
+  "memoryLimit": 256
+}
