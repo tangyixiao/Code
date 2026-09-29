@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 8c0694c1-190f-408d-b036-b5f0d0018659
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,54 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+
+const int N = 2005, M = 4005;
+
+struct Node {
+    int p, c, x;
+} a[N];
+
+int n, A, B, dp[M];
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> A >> B;
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i].p >> a[i].c >> a[i].x;
+    }
+    sort(a + 1, a + n + 1, [](Node u, Node v) {
+        return u.x < v.x;
+    });
+    memset(dp, -0x3f, sizeof(dp));
+    dp[0] = 0;
+    for (int i = 1; i <= n; i++) {
+        for (int j = A + B; j >= 0; j--) {
+            if (dp[j] < 0) {
+                continue;
+            }
+            if (j > B) {
+                if (j + a[i].c <= A + B) {
+                    dp[j + a[i].c] = max(dp[j + a[i].c], dp[j] + a[i].p);
+                }
+            } else {
+                int r = B - j;
+                if (r >= a[i].c * a[i].x) {
+                    int k = j + a[i].c * a[i].x;
+                    dp[k] = max(dp[k], dp[j] + a[i].p);
+                } else {
+                    int cost = a[i].c - r / a[i].x;
+                    if (cost <= A) {
+                        dp[B + cost] = max(dp[B + cost], dp[j] + a[i].p);
+                    }
+                }
+            }
+        }
+    }
+    int ans = 0;
+    for (int i = 0; i <= A + B; i++) {
+        ans = max(ans, dp[i]);
+    }
+    cout << ans << "\n";
     return;
 }
+
 } // namespace TANGYIXIAO
