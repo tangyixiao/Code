@@ -79,6 +79,12 @@ class BuildPagesTests(unittest.TestCase):
             self.assertEqual((repo / "_site" / "index.html").read_text(encoding="utf-8"), "<div id=\"root\"></div>\n")
             self.assertEqual((repo / "_site" / "assets" / "app.js").read_text(encoding="utf-8"), "console.log('vite')\n")
             self.assertTrue((repo / "_site" / ".nojekyll").is_file())
+            history = json.loads((repo / "_site" / "history.json").read_text(encoding="utf-8"))
+            self.assertEqual(history["schemaVersion"], 1)
+            self.assertEqual(history["buildCommit"], "a" * 40)
+            self.assertIsNone(history["remoteMain"])
+            self.assertEqual(len([row for row in history["rows"] if "sha" in row]), 1)
+            self.assertEqual(history["rows"][0]["subject"], "initial files")
 
     def test_rejects_non_sha_commit(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

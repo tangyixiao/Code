@@ -1,5 +1,6 @@
 import argparse
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -72,6 +73,62 @@ def tracked_root_files(root: Path) -> list[dict[str, object]]:
     return files
 
 
+def git_history(root: Path, commit: str, generated_at: str) -> dict[str, object]:
+    log = subprocess.run(
+        ["git", "log", "--all", "--graph", "--date-order", "--max-count=1200", "--format=%x1e%H%x1f%P%x1f%cI%x1f%an%x1f%s"],
+        cwd=root,
+        check=True,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+    )
+    rows = []
+    for line in log.stdout.split("\n"):
+        if "\x1e" not in line:
+            if line.strip():
+                rows.append({"graph": line})
+            continue
+        graph, details = line.split("\x1e", 1)
+        sha, parents, committed_at, author, subject = details.split("\x1f", 4)
+        rows.append({
+            "graph": graph,
+            "sha": sha,
+            "parents": parents.split() if parents else [],
+            "committedAt": committed_at,
+            "author": author,
+            "subject": subject,
+        })
+
+    refs = subprocess.run(
+        ["git", "for-each-ref", "--format=%(refname)%09%(objectname)", "refs/heads", "refs/remotes/origin"],
+        cwd=root,
+        check=True,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+    )
+    branches = []
+    for line in refs.stdout.splitlines():
+        ref, sha = line.split("\t", 1)
+        if ref.endswith("/HEAD"):
+            continue
+        remote = ref.startswith("refs/remotes/")
+        name = ref.removeprefix("refs/remotes/") if remote else ref.removeprefix("refs/heads/")
+        branches.append({"name": name, "sha": sha, "remote": remote})
+    branches.sort(key=lambda branch: (not branch["remote"], branch["name"] != "origin/main", branch["name"]))
+
+    return {
+        "schemaVersion": 1,
+        "generatedAt": generated_at,
+        "buildCommit": commit.lower(),
+        "pushEvent": os.environ.get("GITHUB_EVENT_NAME") == "push" and os.environ.get("GITHUB_REF") == "refs/heads/main",
+        "remoteMain": next((branch["sha"] for branch in branches if branch["name"] == "origin/main"), None),
+        "branches": branches,
+        "rows": rows,
+    }
+
+
 def build(root: Path, output: Path, commit: str) -> None:
     if not re.fullmatch(r"[0-9a-fA-F]{40}", commit):
         raise ValueError("commit must be a 40-character hexadecimal SHA")
@@ -87,15 +144,20 @@ def build(root: Path, output: Path, commit: str) -> None:
         shutil.rmtree(output)
     shutil.copytree(dist, output)
     (output / ".nojekyll").write_text("", encoding="utf-8")
+    generated_at = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
     manifest = {
         "schemaVersion": 2,
         "commit": commit.lower(),
-        "generatedAt": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
+        "generatedAt": generated_at,
         "count": len(files),
         "files": files,
     }
     (output / "files.json").write_text(
         json.dumps(manifest, ensure_ascii=False, separators=(",", ":")) + "\n",
+        encoding="utf-8",
+    )
+    (output / "history.json").write_text(
+        json.dumps(git_history(root, commit, generated_at), ensure_ascii=False, separators=(",", ":")) + "\n",
         encoding="utf-8",
     )
     print(f"Built {len(files)} entries for {commit.lower()}")

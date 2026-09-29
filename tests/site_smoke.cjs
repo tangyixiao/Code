@@ -71,6 +71,10 @@ async function main() {
     assert.ok(manifest.count > 2000, `expected a full archive, received ${manifest.count}`);
     assert.ok(manifest.files.every((file) => file.updatedAt && file.lastCommit));
     assert.ok(manifest.files.every((file, index) => index === 0 || Date.parse(manifest.files[index - 1].updatedAt) >= Date.parse(file.updatedAt)));
+    const historyData = await (await fetch(new URL('history.json', siteUrl))).json();
+    assert.equal(historyData.schemaVersion, 1);
+    assert.ok(historyData.rows.some((row) => row.sha === manifest.commit), 'the build commit must appear in the graph');
+    assert.ok(historyData.branches.some((branch) => branch.name === 'origin/main'));
 
     const desktop = await browser.newPage({ viewport: { width: 1440, height: 900 } });
     desktop.setDefaultTimeout(15000);
@@ -79,6 +83,24 @@ async function main() {
     await mockRawSources(desktop);
     await desktop.goto(siteUrl, { waitUntil: 'domcontentloaded' });
     await desktop.getByRole('heading', { name: /代码与题解/ }).waitFor();
+    await desktop.getByRole('button', { name: 'Git 历程' }).click();
+    await desktop.getByRole('heading', { name: 'Git 历程' }).waitFor();
+    assert.ok(await desktop.locator('.commit-row').count() > 100);
+    await desktop.getByRole('button', { name: /origin\/main/ }).click();
+    assert.match(await desktop.locator('.history-detail').textContent(), new RegExp(historyData.remoteMain.slice(0, 7)));
+    await saveScreenshot(desktop, process.env.HISTORY_SCREENSHOT);
+    const otherBranch = historyData.branches.find((branch) => branch.name === 'origin/School');
+    if (otherBranch) {
+      await desktop.getByRole('button', { name: /origin\/School/ }).click();
+      assert.match(await desktop.locator('.history-detail').textContent(), new RegExp(otherBranch.sha.slice(0, 7)));
+      assert.equal(await desktop.locator('.commit-row.selected').isVisible(), true);
+      await saveScreenshot(desktop, process.env.HISTORY_BRANCH_SCREENSHOT);
+    }
+    await desktop.getByRole('button', { name: '切换为浅色模式' }).click();
+    assert.equal(await desktop.locator('.app-shell').getAttribute('data-theme'), 'light');
+    await saveScreenshot(desktop, process.env.HISTORY_LIGHT_SCREENSHOT);
+    await desktop.getByRole('button', { name: '切换为深色模式' }).click();
+    await desktop.getByRole('button', { name: '算法档案' }).click();
     assert.ok(await desktop.locator('.landing-copy').evaluate((element) => parseFloat(getComputedStyle(element).animationDuration)) > .1);
     assert.equal(await desktop.locator('.reader').count(), 0, 'the root URL should open on the archive landing page');
     await desktop.getByRole('button', { name: /浏览文件/ }).click();
@@ -129,6 +151,14 @@ async function main() {
     await mockRawSources(mobile);
     await mobile.goto(new URL('./', siteUrl).href, { waitUntil: 'domcontentloaded' });
     await mobile.getByRole('heading', { name: /代码与题解/ }).waitFor();
+    await mobile.getByRole('button', { name: 'Git 历程' }).click();
+    await mobile.getByRole('heading', { name: 'Git 历程' }).waitFor();
+    assert.equal(await mobile.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+    assert.ok(await mobile.locator('.commit-row').count() > 100);
+    await mobile.locator('.history-detail').scrollIntoViewIfNeeded();
+    assert.equal(await mobile.locator('.history-detail').isVisible(), true);
+    await saveScreenshot(mobile, process.env.MOBILE_HISTORY_SCREENSHOT);
+    await mobile.getByRole('button', { name: '算法档案' }).click();
     await saveScreenshot(mobile, process.env.MOBILE_LANDING_SCREENSHOT);
     await mobile.getByRole('button', { name: /浏览文件/ }).click();
     await mobile.getByText(`显示 ${manifest.count} / ${manifest.count} 个文件`).waitFor();

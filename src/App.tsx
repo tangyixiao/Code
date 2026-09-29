@@ -1,9 +1,10 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import DOMPurify from 'dompurify'
 import hljs from 'highlight.js/lib/common'
 import renderMathInElement from 'katex/contrib/auto-render'
 import 'katex/dist/katex.min.css'
 import { renderMarkdown } from './markdown'
+import type { GitHistoryData } from './GitHistory'
 
 type Kind = 'cpp' | 'md'
 type CodeTheme = 'dark' | 'light'
@@ -12,11 +13,13 @@ type Entry = { name: string; path: string; type: Kind; size: number; updatedAt: 
 type Manifest = { schemaVersion: 2; commit: string; generatedAt: string; count: number; files: Entry[] }
 
 const RAW = 'https://raw.githubusercontent.com/tangyixiao/Code/'
+const GitHistory = lazy(() => import('./GitHistory'))
 const fileNameCollator = new Intl.Collator('en', { numeric: true, sensitivity: 'base' })
 const rawPath = (path: string) => path.split('/').map(encodeURIComponent).join('/')
 const counterpart = (path: string, files: Entry[]) => files.find((file) => file.path === path.replace(/\.(cpp|md)$/i, (_, ext) => ext === 'cpp' ? '.md' : '.cpp'))
 const hashPath = () => {
-  try { return decodeURIComponent(location.hash.replace(/^#file=/, '')) }
+  if (!location.hash.startsWith('#file=')) return ''
+  try { return decodeURIComponent(location.hash.slice(6)) }
   catch { return '' }
 }
 
@@ -32,6 +35,9 @@ function App() {
   const [sortOrder, setSortOrder] = useState<SortOrder>('recent')
   const [selectedPath, setSelectedPath] = useState(hashPath)
   const [browsing, setBrowsing] = useState(() => Boolean(hashPath()))
+  const [historyOpen, setHistoryOpen] = useState(() => location.hash === '#history')
+  const [gitHistory, setGitHistory] = useState<GitHistoryData | null>(null)
+  const [historyError, setHistoryError] = useState('')
   const [mobileView, setMobileView] = useState<'list' | 'viewer'>(() => hashPath() ? 'viewer' : 'list')
   const [readerScrollRestoreTop, setReaderScrollRestoreTop] = useState(0)
   const readerScrollTopRef = useRef(0)
@@ -41,6 +47,18 @@ function App() {
     document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#11161c' : '#f6f7f9')
   }, [theme])
   useEffect(() => { document.body.dataset.mobileView = mobileView }, [mobileView])
+  useEffect(() => {
+    if (!historyOpen || gitHistory || historyError) return
+    let live = true
+    fetch('./history.json')
+      .then((response) => response.ok ? response.json() : Promise.reject(new Error(`提交历史加载失败 (${response.status})`)))
+      .then((data: GitHistoryData) => {
+        if (data.schemaVersion !== 1 || !Array.isArray(data.rows) || !Array.isArray(data.branches)) throw new Error('提交历史格式不兼容')
+        if (live) setGitHistory(data)
+      })
+      .catch((reason: Error) => { if (live) setHistoryError(reason.message) })
+    return () => { live = false }
+  }, [historyOpen, gitHistory, historyError])
 
   const load = () => fetch('./files.json')
     .then((response) => response.ok ? response.json() : Promise.reject(new Error(`清单加载失败 (${response.status})`)))
@@ -62,6 +80,14 @@ function App() {
   useEffect(() => { void load() }, [])
   useEffect(() => {
     const onHash = () => {
+      if (location.hash === '#history') {
+        setHistoryOpen(true)
+        setSelectedPath('')
+        setBrowsing(false)
+        setMobileView('list')
+        return
+      }
+      setHistoryOpen(false)
       const path = hashPath()
       setSelectedPath(path)
       setBrowsing(Boolean(path))
@@ -77,6 +103,7 @@ function App() {
     location.hash = `file=${encodeURIComponent(path)}`
     setSelectedPath(path)
     setBrowsing(true)
+    setHistoryOpen(false)
     setMobileView('viewer')
     requestAnimationFrame(() => {
       const readerBody = document.querySelector<HTMLElement>('.reader-body')
@@ -93,23 +120,43 @@ function App() {
       : Date.parse(a.updatedAt) - Date.parse(b.updatedAt) || fileNameCollator.compare(a.name, b.name))
   }, [manifest, filter, query, sortOrder])
   const selected = manifest?.files.find((file) => file.path === selectedPath) ?? null
+  const openHome = () => {
+    history.pushState(null, '', location.pathname + location.search)
+    setSelectedPath('')
+    setBrowsing(false)
+    setHistoryOpen(false)
+    setMobileView('list')
+    readerScrollTopRef.current = 0
+    setReaderScrollRestoreTop(0)
+  }
+  const openBrowser = () => {
+    history.pushState(null, '', location.pathname + location.search)
+    setSelectedPath('')
+    setBrowsing(true)
+    setHistoryOpen(false)
+    setMobileView('list')
+  }
+  const openHistory = () => {
+    history.pushState(null, '', '#history')
+    setSelectedPath('')
+    setBrowsing(false)
+    setHistoryOpen(true)
+    setMobileView('list')
+  }
 
   return <main className="app-shell" data-theme={theme}>
-    <ArchiveTopbar count={manifest?.count} theme={theme} onHome={() => {
-      history.pushState(null, '', location.pathname + location.search)
-      setSelectedPath('')
-      setBrowsing(false)
-      setMobileView('list')
-      readerScrollTopRef.current = 0
-      setReaderScrollRestoreTop(0)
-    }} onToggleTheme={() => {
+    <ArchiveTopbar count={manifest?.count} theme={theme} view={historyOpen ? 'history' : browsing ? 'files' : 'home'} onHome={openHome} onBrowse={openBrowser} onHistory={openHistory} onToggleTheme={() => {
       const next = theme === 'dark' ? 'light' : 'dark'
       localStorage.setItem('archive-theme', next)
       setTheme(next)
     }} />
-    {error
+    {historyOpen
+      ? historyError ? <section className="error-card" role="alert"><p>{historyError}</p><button onClick={() => setHistoryError('')}>重试加载</button></section>
+        : gitHistory ? <Suspense fallback={<div className="history-state">正在准备提交图…</div>}><GitHistory data={gitHistory} /></Suspense>
+          : <div className="history-state">正在读取提交历史…</div>
+      : error
       ? <section className="error-card" role="alert"><p>{error}</p><button onClick={() => void load()}>重试加载</button></section>
-      : !browsing ? <ArchiveLanding manifest={manifest} onBrowse={() => setBrowsing(true)} onSelect={select} />
+      : !browsing ? <ArchiveLanding manifest={manifest} onBrowse={openBrowser} onSelect={select} />
       : <div className="workspace">
         <FileBrowser
           files={files}
@@ -136,12 +183,16 @@ function App() {
   </main>
 }
 
-function ArchiveTopbar({ count, theme, onHome, onToggleTheme }: { count?: number; theme: CodeTheme; onHome: () => void; onToggleTheme: () => void }) {
+function ArchiveTopbar({ count, theme, view, onHome, onBrowse, onHistory, onToggleTheme }: { count?: number; theme: CodeTheme; view: 'home' | 'files' | 'history'; onHome: () => void; onBrowse: () => void; onHistory: () => void; onToggleTheme: () => void }) {
   return <header className="topbar">
     <div className="brand-lockup">
       <h1 className="brand-name"><button onClick={onHome} title="返回档案首页">算法档案</button></h1>
       <p className="brand-cn">tangyixiao / 代码与题解</p>
     </div>
+    <nav className="site-nav" aria-label="站点导航">
+      <button className={view === 'files' ? 'active' : ''} aria-current={view === 'files' ? 'page' : undefined} onClick={onBrowse}>文件</button>
+      <button className={view === 'history' ? 'active' : ''} aria-current={view === 'history' ? 'page' : undefined} onClick={onHistory}>Git 历程</button>
+    </nav>
     <div className="topbar-meta">
       <p className="archive-status">{count ? `收录 ${count.toLocaleString()} 个文件` : '正在加载文件清单'}</p>
       <button className="theme-toggle" onClick={onToggleTheme} aria-label={`切换为${theme === 'dark' ? '浅色' : '深色'}模式`}>

@@ -20,6 +20,19 @@ const manifest = JSON.stringify({
     { name: '题目 #1.md', path: '题目 #1.md', type: 'md', size: 30, updatedAt: '2026-09-27T09:00:00+08:00', lastCommit: commit },
   ],
 });
+const historyData = JSON.stringify({
+  schemaVersion: 1,
+  generatedAt: '2026-09-29T02:00:00Z',
+  buildCommit: commit,
+  pushEvent: true,
+  remoteMain: commit,
+  branches: [{ name: 'origin/main', sha: commit, remote: true }, { name: 'main', sha: commit, remote: false }],
+  rows: [
+    { graph: '* ', sha: commit, parents: ['b'.repeat(40)], committedAt: '2026-09-29T02:00:00Z', author: 'Test', subject: 'update archive' },
+    { graph: '|\\' },
+    { graph: '* ', sha: 'b'.repeat(40), parents: [], committedAt: '2026-09-28T02:00:00Z', author: 'Test', subject: 'initial commit' },
+  ],
+});
 
 function listen(server) {
   return new Promise((resolve) => server.listen(Number(process.env.SITE_PORT || 18765), '127.0.0.1', () => resolve(server.address().port)));
@@ -36,6 +49,11 @@ async function main() {
     if (pathname === '/Code/files.json') {
       response.setHeader('content-type', 'application/json; charset=utf-8');
       response.end(manifest);
+      return;
+    }
+    if (pathname === '/Code/history.json') {
+      response.setHeader('content-type', 'application/json; charset=utf-8');
+      response.end(historyData);
       return;
     }
     if (pathname === '/Code/favicon.ico') {
@@ -167,6 +185,16 @@ async function main() {
     assert.equal(await page.locator('.reader-body').evaluate((element) => element.scrollTop), expectedReaderScroll);
     assert.equal(await page.locator('.reader-body').evaluate((element) => element.scrollTop), expectedReaderScroll);
     assert.match(await page.locator('#viewer').textContent(), /题目/);
+    await page.getByRole('button', { name: 'Git 历程' }).click();
+    await page.getByRole('heading', { name: 'Git 历程' }).waitFor();
+    assert.equal(await page.locator('.commit-row').count(), 2);
+    assert.match(await page.locator('.history-push').textContent(), /本次由 main 推送触发/);
+    await page.locator('.commit-row').last().click();
+    assert.match(await page.locator('.history-detail').textContent(), /initial commit/);
+    await page.getByRole('button', { name: /origin\/main/ }).click();
+    assert.match(await page.locator('.history-detail').textContent(), /update archive/);
+    await page.getByRole('button', { name: '文件', exact: true }).click();
+    await page.getByLabel('文件排序').waitFor();
     assert.deepEqual(pageErrors, []);
 
     const mobile = await browser.newPage({ viewport: { width: 390, height: 844 } });
