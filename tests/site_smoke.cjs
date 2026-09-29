@@ -135,7 +135,7 @@ async function main() {
     assert.match(desktop.url(), /#dir=src$/);
     await desktop.getByLabel('其他语言与文件类型').selectOption('tsx');
     await desktop.getByRole('button', { name: 'TSX src/App.tsx' }).click();
-    await desktop.locator('.code .hljs-keyword').first().waitFor();
+    await desktop.locator('.code .shiki span[style]').first().waitFor();
     await desktop.getByRole('button', { name: '仓库' }).click();
     await desktop.getByRole('button', { name: '全部', exact: true }).click();
 
@@ -166,8 +166,10 @@ async function main() {
     await desktop.getByPlaceholder('搜索文件名或路径').fill('P1241 括号序列');
     await desktop.getByRole('button', { name: /C\+\+ P1241 括号序列\.cpp/ }).click();
     await desktop.locator('.code-gutter').waitFor();
-    assert.ok(await desktop.locator('.code .hljs-comment').count() > 0);
-    assert.ok(await desktop.locator('.code .hljs-string').count() > 0);
+    await desktop.locator('.code .shiki span[style]').first().waitFor();
+    const codeColors = await desktop.locator('.code .shiki span[style]').evaluateAll((elements) => elements.map((element) => getComputedStyle(element).color));
+    assert.ok(codeColors.includes('rgb(106, 153, 85)'), 'C++ comments use VS Code Dark+ colors');
+    assert.ok(codeColors.includes('rgb(206, 145, 120)'), 'C++ strings use VS Code Dark+ colors');
     await desktop.getByRole('button', { name: '查看题解' }).click();
     await desktop.locator('#meta-name').getByText('P1241 括号序列.md', { exact: true }).waitFor();
     await desktop.locator('#viewer .markdown-body, #viewer .markdown-fallback').waitFor();
