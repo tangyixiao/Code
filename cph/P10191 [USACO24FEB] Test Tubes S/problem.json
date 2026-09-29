@@ -1,0 +1,31 @@
+{
+  "name": "P10191 [USACO24FEB] Test Tubes S", 
+  "tests": [
+    {
+      "input": "6\n4 1\n1221\n2211\n4 2\n1221\n2211\n4 3\n1221\n2211\n6 3\n222222\n111112\n4 3\n1121\n1222\n4 2\n1121\n1222\n", 
+      "output": "4\n4\n1 2\n1 3\n2 1\n3 2\n4\n1 2\n1 3\n2 1\n3 2\n1\n2 1\n5\n2 3\n1 2\n1 3\n1 2\n3 1\n6\n2 3\n1 2\n1 3\n1 2\n2 1\n3 2\n"
+    }
+  ], 
+  "group": "Luogu", 
+  "timeLimit": 2000, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P10191", 
+  "interactive": false, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P10191USACO24FEBTestTubesS"
+    }
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "batch": {
+    "id": "80e2b96f-6e24-426b-844d-1fab15e2b8b9", 
+    "size": 1
+  }, 
+  "testType": "single", 
+  "memoryLimit": 256
+}
