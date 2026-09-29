@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import DOMPurify from 'dompurify'
 import hljs from 'highlight.js/lib/common'
 import renderMathInElement from 'katex/contrib/auto-render'
@@ -41,6 +41,34 @@ function App() {
   const [mobileView, setMobileView] = useState<'list' | 'viewer'>(() => hashPath() ? 'viewer' : 'list')
   const [readerScrollRestoreTop, setReaderScrollRestoreTop] = useState(0)
   const readerScrollTopRef = useRef(0)
+  const [sidebarWidth, setSidebarWidth] = useState(() => {
+    const saved = Number(localStorage.getItem('archive-sidebar-width'))
+    return Number.isFinite(saved) && saved >= 240 ? saved : 296
+  })
+  const workspaceRef = useRef<HTMLDivElement>(null)
+  const resizeWidthRef = useRef(sidebarWidth)
+  const sidebarLimit = () => Math.max(240, (workspaceRef.current?.clientWidth ?? window.innerWidth) - 320)
+  const setWorkspaceWidth = (width: number) => {
+    const next = Math.max(240, Math.min(sidebarLimit(), width))
+    resizeWidthRef.current = next
+    workspaceRef.current?.style.setProperty('--sidebar-width', `${next}px`)
+    workspaceRef.current?.querySelector('.pane-resizer')?.setAttribute('aria-valuenow', String(Math.round(next)))
+  }
+  const finishResize = () => {
+    setSidebarWidth(resizeWidthRef.current)
+    localStorage.setItem('archive-sidebar-width', String(Math.round(resizeWidthRef.current)))
+  }
+  useEffect(() => {
+    if (!browsing) return
+    const clampToViewport = () => {
+      if (window.innerWidth <= 760 || resizeWidthRef.current <= sidebarLimit()) return
+      setWorkspaceWidth(resizeWidthRef.current)
+      finishResize()
+    }
+    clampToViewport()
+    addEventListener('resize', clampToViewport)
+    return () => removeEventListener('resize', clampToViewport)
+  }, [browsing])
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme
@@ -157,7 +185,7 @@ function App() {
       : error
       ? <section className="error-card" role="alert"><p>{error}</p><button onClick={() => void load()}>重试加载</button></section>
       : !browsing ? <ArchiveLanding manifest={manifest} onBrowse={openBrowser} onSelect={select} />
-      : <div className="workspace">
+      : <div className="workspace" ref={workspaceRef} style={{ '--sidebar-width': `${sidebarWidth}px` } as CSSProperties}>
         <FileBrowser
           files={files}
           total={manifest?.count ?? 0}
@@ -169,6 +197,17 @@ function App() {
           onFilter={setFilter}
           onSortOrder={setSortOrder}
           onSelect={select}
+        />
+        <div className="pane-resizer" role="separator" tabIndex={0} aria-label="调整文件列表宽度" aria-orientation="vertical" aria-valuemin={240} aria-valuemax={sidebarLimit()} aria-valuenow={sidebarWidth}
+          onPointerDown={(event) => { if (event.button === 0) event.currentTarget.setPointerCapture(event.pointerId) }}
+          onPointerMove={(event) => { if (event.currentTarget.hasPointerCapture(event.pointerId)) setWorkspaceWidth(event.clientX - (workspaceRef.current?.getBoundingClientRect().left ?? 0)) }}
+          onPointerUp={(event) => { if (event.currentTarget.hasPointerCapture(event.pointerId)) { event.currentTarget.releasePointerCapture(event.pointerId); finishResize() } }}
+          onPointerCancel={finishResize}
+          onDoubleClick={() => { setWorkspaceWidth(296); finishResize() }}
+          onKeyDown={(event) => {
+            const next = event.key === 'ArrowLeft' ? sidebarWidth - 24 : event.key === 'ArrowRight' ? sidebarWidth + 24 : event.key === 'Home' ? 240 : event.key === 'End' ? sidebarLimit() : null
+            if (next !== null) { event.preventDefault(); setWorkspaceWidth(next); finishResize() }
+          }}
         />
         <ReaderPane
           manifest={manifest}

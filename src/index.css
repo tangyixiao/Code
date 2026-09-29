@@ -86,7 +86,10 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 .preview-name { overflow: hidden; font-size: .8rem; text-overflow: ellipsis; white-space: nowrap; }
 .preview-loading { margin: 16px 10px; color: var(--muted); font-size: .8rem; }
 .preview-note { margin: 0; padding: 14px 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: .7rem; }
-.workspace { display: grid; grid-template-columns: clamp(310px, 29vw, 400px) minmax(0, 1fr); min-height: 0; overflow: hidden; animation: workspace-enter .22s ease-out both; }
+.workspace { display: grid; grid-template-columns: var(--sidebar-width, 296px) 8px minmax(0, 1fr); min-height: 0; overflow: hidden; animation: workspace-enter .22s ease-out both; }
+.pane-resizer { position: relative; z-index: 2; cursor: col-resize; border-right: 1px solid var(--line); background: var(--panel-soft); touch-action: none; }
+.pane-resizer::before { content: ""; position: absolute; top: 50%; left: 3px; width: 2px; height: 30px; transform: translateY(-50%); border-radius: 2px; background: var(--line-strong); transition: background-color .15s ease, height .15s ease; }
+.pane-resizer:hover::before, .pane-resizer:focus-visible::before { height: 46px; background: var(--accent); }
 @keyframes workspace-enter { from { opacity: .45; } to { opacity: 1; } }
 .sidebar { display: grid; grid-template-rows: auto minmax(0, 1fr); min-width: 0; min-height: 0; overflow: hidden; border-right: 1px solid var(--line); background: var(--panel-soft); }
 .browser-head { padding: 25px 20px 16px; border-bottom: 1px solid var(--line); }
@@ -248,6 +251,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
   .landing-actions { margin-top: 29px; }
   .landing-preview { margin-top: 48px; }
   .workspace { display: block; min-height: 0; height: 100%; }
+  .pane-resizer { display: none; }
   .sidebar { height: 100%; border-right: 0; }
   .browser-head { padding: 19px 14px 13px; }
   .browser-title { margin-bottom: 14px; }
