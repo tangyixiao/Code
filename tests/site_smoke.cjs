@@ -85,6 +85,8 @@ async function main() {
     await desktop.getByText(`显示 ${manifest.count} / ${manifest.count} 个文件`).waitFor();
     assert.equal(await desktop.locator('.app-shell').getAttribute('data-theme'), 'dark');
     assert.equal(await desktop.locator('.file-row').count(), manifest.count);
+    assert.equal(await desktop.getByLabel('文件排序').inputValue(), 'recent');
+    assert.match(await desktop.locator('.file-row').first().textContent(), new RegExp(manifest.files[0].name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
 
     await desktop.getByPlaceholder('搜索题目编号或文件名').fill('260509练习赛①#A. 三投');
     await desktop.getByRole('button', { name: /260509练习赛①#A\. 三投\.cpp/ }).click();

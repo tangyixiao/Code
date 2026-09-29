@@ -115,6 +115,13 @@ async function main() {
     assert.equal(await page.locator('.reader').getAttribute('data-code-theme'), 'light', 'manual selection should survive reload');
     assert.equal(await page.locator('.file-row').count(), 3);
     assert.equal(await page.locator('.file-row').first().evaluate((element) => element.tagName), 'BUTTON');
+    assert.equal(await page.getByLabel('文件排序').inputValue(), 'recent');
+    await page.getByLabel('文件排序').selectOption('oldest');
+    await page.locator('.file-row').first().getByText('题目 #1.md').waitFor();
+    await page.getByLabel('文件排序').selectOption('name');
+    await page.locator('.file-row').first().getByText('A.cpp').waitFor();
+    await page.getByLabel('文件排序').selectOption('recent');
+    await page.locator('.file-row').first().getByText('A.cpp').waitFor();
     const desktopLayout = await page.evaluate(() => ({
       viewportHeight: innerHeight,
       documentHeight: document.documentElement.scrollHeight,

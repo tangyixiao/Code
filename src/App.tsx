@@ -7,10 +7,12 @@ import { renderMarkdown } from './markdown'
 
 type Kind = 'cpp' | 'md'
 type CodeTheme = 'dark' | 'light'
+type SortOrder = 'recent' | 'oldest' | 'name'
 type Entry = { name: string; path: string; type: Kind; size: number; updatedAt: string; lastCommit: string }
 type Manifest = { schemaVersion: 2; commit: string; generatedAt: string; count: number; files: Entry[] }
 
 const RAW = 'https://raw.githubusercontent.com/tangyixiao/Code/'
+const fileNameCollator = new Intl.Collator('en', { numeric: true, sensitivity: 'base' })
 const rawPath = (path: string) => path.split('/').map(encodeURIComponent).join('/')
 const counterpart = (path: string, files: Entry[]) => files.find((file) => file.path === path.replace(/\.(cpp|md)$/i, (_, ext) => ext === 'cpp' ? '.md' : '.cpp'))
 const hashPath = () => {
@@ -27,6 +29,7 @@ function App() {
   const [error, setError] = useState('')
   const [query, setQuery] = useState('')
   const [filter, setFilter] = useState<'all' | Kind>('all')
+  const [sortOrder, setSortOrder] = useState<SortOrder>('recent')
   const [selectedPath, setSelectedPath] = useState(hashPath)
   const [browsing, setBrowsing] = useState(() => Boolean(hashPath()))
   const [mobileView, setMobileView] = useState<'list' | 'viewer'>(() => hashPath() ? 'viewer' : 'list')
@@ -80,9 +83,15 @@ function App() {
       if (readerBody) readerBody.scrollTop = readerScrollTop
     })
   }
-  const files = useMemo(() => manifest?.files.filter((file) =>
-    (filter === 'all' || file.type === filter) && file.name.toLocaleLowerCase().includes(query.toLocaleLowerCase())
-  ) ?? [], [manifest, filter, query])
+  const files = useMemo(() => {
+    const matching = manifest?.files.filter((file) =>
+      (filter === 'all' || file.type === filter) && file.name.toLocaleLowerCase().includes(query.toLocaleLowerCase())
+    ) ?? []
+    if (sortOrder === 'recent') return matching
+    return matching.sort((a, b) => sortOrder === 'name'
+      ? fileNameCollator.compare(a.name, b.name)
+      : Date.parse(a.updatedAt) - Date.parse(b.updatedAt) || fileNameCollator.compare(a.name, b.name))
+  }, [manifest, filter, query, sortOrder])
   const selected = manifest?.files.find((file) => file.path === selectedPath) ?? null
 
   return <main className="app-shell" data-theme={theme}>
@@ -108,8 +117,10 @@ function App() {
           selectedPath={selectedPath}
           query={query}
           filter={filter}
+          sortOrder={sortOrder}
           onQuery={setQuery}
           onFilter={setFilter}
+          onSortOrder={setSortOrder}
           onSelect={select}
         />
         <ReaderPane
@@ -176,12 +187,14 @@ type BrowserProps = {
   selectedPath: string
   query: string
   filter: 'all' | Kind
+  sortOrder: SortOrder
   onQuery: (value: string) => void
   onFilter: (value: 'all' | Kind) => void
+  onSortOrder: (value: SortOrder) => void
   onSelect: (path: string) => void
 }
 
-function FileBrowser({ files, total, selectedPath, query, filter, onQuery, onFilter, onSelect }: BrowserProps) {
+function FileBrowser({ files, total, selectedPath, query, filter, sortOrder, onQuery, onFilter, onSortOrder, onSelect }: BrowserProps) {
   return <aside className="sidebar" aria-label="文件列表">
     <div className="browser-head">
       <div className="browser-title"><div><p className="utility-label">浏览目录</p><h2>文件</h2></div><span>{total.toLocaleString()}</span></div>
@@ -191,7 +204,16 @@ function FileBrowser({ files, total, selectedPath, query, filter, onQuery, onFil
         <button className={filter === 'cpp' ? 'active' : ''} onClick={() => onFilter('cpp')}>C++</button>
         <button className={filter === 'md' ? 'active' : ''} onClick={() => onFilter('md')}>Markdown</button>
       </div>
-      <p className="count">显示 {files.length} / {total} 个文件 · 最近提交在前</p>
+      <div className="list-meta">
+        <p className="count">显示 {files.length} / {total} 个文件</p>
+        <label className="sort-label">排序
+          <select aria-label="文件排序" value={sortOrder} onChange={(event) => onSortOrder(event.target.value as SortOrder)}>
+            <option value="recent">最近提交</option>
+            <option value="oldest">最早提交</option>
+            <option value="name">文件名</option>
+          </select>
+        </label>
+      </div>
     </div>
     <div className="file-list">
       {files.length === 0 && total > 0 ? <p className="empty-list">没有找到匹配的文件</p> : null}
@@ -271,7 +293,7 @@ function ReaderPane({ manifest, selected, codeTheme, scrollRestoreTop, onReaderS
       readerScrollRef.current = event.currentTarget.scrollTop
       onReaderScroll(event.currentTarget.scrollTop)
     }}>
-      {selected && manifest ? <div key={selected.path} className="reader-document"><Source entry={selected} commit={manifest.commit} onReady={scrollRestoreTop > 0 ? restoreReaderScroll : undefined} /></div> : <div className="reader-empty">从左侧选择一个文件</div>}
+      {selected && manifest ? <div key={selected.path} className={`reader-document ${selected.type === 'cpp' ? 'reader-code-document' : ''}`}><Source entry={selected} commit={manifest.commit} onReady={scrollRestoreTop > 0 ? restoreReaderScroll : undefined} /></div> : <div className="reader-empty">从左侧选择一个文件</div>}
     </div>
   </section>
 }
