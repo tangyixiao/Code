@@ -19,12 +19,10 @@ const hashPath = () => {
 }
 
 function App() {
-  const [themeChoice, setThemeChoice] = useState<CodeTheme | 'system'>(() => {
+  const [theme, setTheme] = useState<CodeTheme>(() => {
     const saved = localStorage.getItem('archive-theme')
-    return saved === 'dark' || saved === 'light' ? saved : 'system'
+    return saved === 'light' ? 'light' : 'dark'
   })
-  const [systemTheme, setSystemTheme] = useState<CodeTheme>(() => window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-  const theme = themeChoice === 'system' ? systemTheme : themeChoice
   const [manifest, setManifest] = useState<Manifest | null>(null)
   const [error, setError] = useState('')
   const [query, setQuery] = useState('')
@@ -35,12 +33,6 @@ function App() {
   const [readerScrollRestoreTop, setReaderScrollRestoreTop] = useState(0)
   const readerScrollTopRef = useRef(0)
 
-  useEffect(() => {
-    const preference = window.matchMedia('(prefers-color-scheme: dark)')
-    const syncTheme = () => setSystemTheme(preference.matches ? 'dark' : 'light')
-    preference.addEventListener('change', syncTheme)
-    return () => preference.removeEventListener('change', syncTheme)
-  }, [])
   useEffect(() => {
     document.documentElement.dataset.theme = theme
     document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#11161c' : '#f6f7f9')
@@ -99,10 +91,12 @@ function App() {
       setSelectedPath('')
       setBrowsing(false)
       setMobileView('list')
+      readerScrollTopRef.current = 0
+      setReaderScrollRestoreTop(0)
     }} onToggleTheme={() => {
       const next = theme === 'dark' ? 'light' : 'dark'
       localStorage.setItem('archive-theme', next)
-      setThemeChoice(next)
+      setTheme(next)
     }} />
     {error
       ? <section className="error-card" role="alert"><p>{error}</p><button onClick={() => void load()}>重试加载</button></section>
@@ -148,7 +142,9 @@ function ArchiveTopbar({ count, theme, onHome, onToggleTheme }: { count?: number
 }
 
 function ArchiveLanding({ manifest, onBrowse, onSelect }: { manifest: Manifest | null; onBrowse: () => void; onSelect: (path: string) => void }) {
-  const preview = manifest?.files.slice(0, 4) ?? []
+  const featured = ['P1001 A+B Problem.cpp', 'P1241 括号序列.cpp', 'P1241 括号序列.md', 'P9709 [KMOI R1] 军事行动.md']
+  const matched = manifest ? featured.map((path) => manifest.files.find((file) => file.path === path)).filter((file): file is Entry => Boolean(file)) : []
+  const preview = matched.length ? matched : manifest?.files.slice(0, 4) ?? []
   return <section className="landing" aria-labelledby="landing-title">
     <div className="landing-copy">
       <p className="landing-label">TANGYIXIAO / CODE ARCHIVE</p>

@@ -78,7 +78,7 @@ async function main() {
     assert.equal(await desktop.locator('.reader').count(), 0, 'the root URL should open on the archive landing page');
     await desktop.getByRole('button', { name: /浏览文件/ }).click();
     await desktop.getByText(`显示 ${manifest.count} / ${manifest.count} 个文件`).waitFor();
-    assert.equal(await desktop.locator('.app-shell').getAttribute('data-theme'), 'light');
+    assert.equal(await desktop.locator('.app-shell').getAttribute('data-theme'), 'dark');
     assert.equal(await desktop.locator('.file-row').count(), manifest.count);
 
     await desktop.getByPlaceholder('搜索题目编号或文件名').fill('260509练习赛①#A. 三投');
@@ -118,6 +118,8 @@ async function main() {
     mobile.on('console', (message) => { if (message.type() === 'error') pageErrors.push(message.text()); });
     await mockRawSources(mobile);
     await mobile.goto(new URL('./', siteUrl).href, { waitUntil: 'domcontentloaded' });
+    await mobile.getByRole('heading', { name: /代码与题解/ }).waitFor();
+    await saveScreenshot(mobile, process.env.MOBILE_LANDING_SCREENSHOT);
     await mobile.getByRole('button', { name: /浏览文件/ }).click();
     await mobile.getByText(`显示 ${manifest.count} / ${manifest.count} 个文件`).waitFor();
     assert.equal(await mobile.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
