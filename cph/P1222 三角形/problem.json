@@ -1,0 +1,31 @@
+{
+  "name": "P1222 三角形", 
+  "tests": [
+    {
+      "input": "5\n-5 -3 6\n-1 -2 3\n0 0 2\n-2 2 1\n-4 -1 2\n", 
+      "output": "24.5\n"
+    }
+  ], 
+  "group": "Luogu", 
+  "timeLimit": 1000, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P1222", 
+  "interactive": false, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P1222"
+    }
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "batch": {
+    "id": "52d528da-e1d4-46c2-8ef1-09fc1b40278c", 
+    "size": 1
+  }, 
+  "testType": "single", 
+  "memoryLimit": 125
+}
