@@ -240,6 +240,11 @@ async function main() {
     assert.equal(await page.locator('.commit-row .git-node').count(), 2);
     assert.ok(await page.locator('.commit-connector .git-rail').count() >= 2);
     assert.equal(await page.locator('.git-graph').first().evaluate((element) => element.tagName.toLowerCase()), 'svg');
+    const graphLefts = await page.locator('.commit-list').evaluate((element) => [
+      element.querySelector('.commit-row .git-graph').getBoundingClientRect().left,
+      element.querySelector('.commit-connector .git-graph').getBoundingClientRect().left,
+    ]);
+    assert.deepEqual(graphLefts[0], graphLefts[1], 'commit and connector rails must share the same origin');
     assert.match(await page.locator('.history-push').textContent(), /本次由 main 推送触发/);
     await page.getByText('部署成功').first().waitFor();
     assert.equal(await page.locator('.commit-ref-list .push-ref').count(), 1);
