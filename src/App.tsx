@@ -3,7 +3,6 @@ import DOMPurify from 'dompurify'
 import renderMathInElement from 'katex/contrib/auto-render'
 import 'katex/dist/katex.min.css'
 import { renderMarkdown } from './markdown'
-import { getSyntaxHighlighter, highlightLines, markdownLanguages } from './syntax'
 import type { GitHistoryData } from './GitHistory'
 
 type Kind = string
@@ -553,8 +552,11 @@ function CodeSource({ source, language }: { source: string; language: string }) 
   useEffect(() => {
     let live = true
     setHtml('')
-    getSyntaxHighlighter([language])
-      .then((highlighter) => { if (live) setHtml(highlightLines(highlighter, source, language).join('\n')) })
+    import('./syntax')
+      .then(async ({ getSyntaxHighlighter, highlightLines }) => {
+        const highlighter = await getSyntaxHighlighter([language])
+        if (live) setHtml(highlightLines(highlighter, source, language).join('\n'))
+      })
       .catch(() => { if (live) setHtml(source.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')) })
     return () => { live = false }
   }, [source, language])
@@ -570,8 +572,15 @@ function Markdown({ source, onReady }: { source: string; onReady?: () => void })
   useEffect(() => {
     let live = true
     setHtml('')
-    getSyntaxHighlighter(markdownLanguages(source))
-      .then((highlighter) => DOMPurify.sanitize(renderMarkdown(source, (code, language) => highlightLines(highlighter, code, language))))
+    if (!/^[ \t]*(?:`{3,}|~{3,})/m.test(source)) {
+      setHtml(DOMPurify.sanitize(renderMarkdown(source, (code) => code.split('\n'))))
+      return () => { live = false }
+    }
+    import('./syntax')
+      .then(async ({ getSyntaxHighlighter, highlightLines, markdownLanguages }) => {
+        const highlighter = await getSyntaxHighlighter(markdownLanguages(source))
+        return DOMPurify.sanitize(renderMarkdown(source, (code, language) => highlightLines(highlighter, code, language)))
+      })
       .then((result) => { if (live) setHtml(result) })
       .catch(() => { if (live) setHtml(DOMPurify.sanitize(renderMarkdown(source, (code) => code.split('\n')))) })
     return () => { live = false }

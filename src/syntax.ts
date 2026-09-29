@@ -69,7 +69,17 @@ export function highlightLines(highlighter: Highlighter, source: string, languag
 }
 
 export function markdownLanguages(source: string) {
-  return ['cpp', ...[...source.matchAll(/^[ \t]*(`{3,}|~{3,})([^\n]*)$/gm)]
-    .map((match) => match[2].trim().split(/\s+/)[0])
-    .filter(Boolean)]
+  const result: string[] = []
+  let fence = ''
+  for (const match of source.matchAll(/^ {0,3}(`{3,}|~{3,})([^\n]*)$/gm)) {
+    const marker = match[1]
+    const info = match[2].trim()
+    if (fence) {
+      if (marker[0] === fence[0] && marker.length >= fence.length && !info) fence = ''
+    } else {
+      fence = marker
+      result.push(info.split(/\s+/)[0] || 'cpp')
+    }
+  }
+  return result
 }
