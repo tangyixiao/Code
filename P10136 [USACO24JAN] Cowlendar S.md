@@ -66,3 +66,64 @@ $L$ 的可能值为 $1$，$2$，$3$，$4$，$6$ 和 $7$。例如，$L=6$ 是合�
 
 ---
 
+# P10136 [USACO24JAN] Cowlendar S
+
+## 题目描述
+
+Bessie has woken up on a strange planet.  In this planet, there are $N$ ($1\le N\le 10^4$) months, with $a_1, \ldots, a_N$ days, respectively ($1\leq a_i \leq 4 \cdot 10^9$, all $a_i$ are integers). In addition, on the planet, there are also weeks, where each week is $L$ days, with $L$ being a positive integer. Interestingly, Bessie knows the following: 
+-  For the correct $L$, each month is at least $4$ weeks long. 
+-  For the correct $L$,  there are at most $3$ distinct values of $a_i\bmod L$.  
+
+Unfortunately, Bessie has forgotten what $L$ is! Help her by printing the sum of all possible values of $L$.  
+
+**Note that the large size of integers involved in this problem may require the use of 64-bit integer data types (e.g. a "long long" in C/C++).**
+
+## 输入格式
+
+The first line contains a single integer $N$. The second line contains $N$ space-separated integers, $a_1, \ldots, a_N$.
+
+## 输出格式
+
+A single integer, the sum of all possible values of $L$.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+12
+31 28 31 30 31 30 31 31 30 31 30 31
+```
+
+### 输出 #1
+
+```
+28
+```
+
+## 输入输出样例 #2
+
+### 输入 #2
+
+```
+4
+31 35 28 29
+```
+
+### 输出 #2
+
+```
+23
+```
+
+## 说明/提示
+
+##### For Sample 1:
+The possible values of $L$ are 1, 2, 3, 4, 5, 6, and 7.  For example, $L=7$ is valid because each month is at least length $4 \cdot 7 = 28$ days long, and each month is either 0, 2, or 3 mod 7.   
+
+##### For Sample 2:
+The possible values of $L$ are 1, 2, 3, 4, 6, and 7. For example, $L=6$ is valid because each month is at least length $4 \cdot 6 = 24$ days long, and each month is either 1, 4, or 5 mod 6.   
+
+#### SCORING:
+- Inputs 3-4: $1 \leq a_i \leq 10^6$
+- Inputs 5-14: No additional constraints
