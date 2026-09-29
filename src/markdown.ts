@@ -234,7 +234,161 @@ const cuteTableExtension = {
   },
 }
 
-export const renderMarkdown = (source: string, highlight: (source: string, language: string) => string[]) => new Marked({
-  extensions: [directiveExtension, cuteTableExtension],
-  renderer: { code: (token) => renderCode(token, highlight) },
-}).parse(source) as string
+export const renderMarkdown = (source: string, highlight: (source: string, language: string) => string[]) => {
+  const { text, math, stem } = protectMath(source)
+  const html = new Marked({
+    extensions: [directiveExtension, cuteTableExtension],
+    renderer: { code: (token) => renderCode(token, highlight) },
+  }).parse(text) as string
+  return restoreMath(html, math, stem)
+}
+
+// KaTeX formulas must never be parsed by marked: emphasis markers (_x_), backslash escapes
+// (\{, \\) and Setext underlines (= on its own line) all corrupt LaTeX. Math spans are
+// replaced by plain-word placeholders before parsing and restored afterwards, so the
+// auto-render pass in App.tsx always sees the original delimiters intact.
+const mathPlaceholder = 'katexprotectedmathplaceholder'
+
+const escapeMath = (value: string) => value
+  .replaceAll('&', '&amp;')
+  .replaceAll('<', '&lt;')
+  .replaceAll('>', '&gt;')
+
+function protectMath(source: string) {
+  let stem = mathPlaceholder
+  while (source.includes(stem)) stem += 'x'
+  const math: string[] = []
+  // strip trailing \r so CRLF sources still match the fence and delimiter rules
+  const lines = source.split('\n').map((line) => line.replace(/\r$/, ''))
+  let fence: { marker: string; length: number } | null = null
+  let pending: { closer: string; content: string } | null = null
+  let out = ''
+  for (let lineIndex = 0; lineIndex < lines.length; lineIndex += 1) {
+    const line = lines[lineIndex]
+    const newline = lineIndex < lines.length - 1 ? '\n' : ''
+    if (fence) {
+      if (new RegExp(`^ {0,3}${fence.marker}{${fence.length},}[ \\t]*$`).test(line)) fence = null
+      out += line + newline
+      continue
+    }
+    const opening = /^ {0,3}(`{3,}|~{3,})/.exec(line)
+    if (opening) {
+      fence = { marker: opening[1][0], length: opening[1].length }
+      out += line + newline
+      continue
+    }
+    if (pending) {
+      if (pending.closer === '$' && !line.trim()) {
+        // inline math cannot cross a blank line: give up and keep the text verbatim
+        out += pending.content
+        pending = null
+      } else {
+        const end = findInlineCloser(line, pending.closer)
+        if (end >= 0) {
+          const closerLength = pending.closer.length
+          math.push(pending.content + line.slice(0, end + closerLength))
+          out += `${stem}${math.length - 1}${stem}`
+          pending = null
+          const rest = protectMathInline(line.slice(end + closerLength), stem, math)
+          out += rest.output
+          if (rest.open) pending = rest.open
+          continue
+        }
+        pending.content += line + '\n'
+        continue
+      }
+    }
+    const inline = protectMathInline(line, stem, math)
+    out += inline.output + newline
+    if (inline.open) pending = inline.open
+  }
+  if (pending) out += pending.content
+  return { text: out, math, stem }
+}
+
+// closers are the first unescaped occurrence, matching how KaTeX auto-render pairs delimiters
+function findInlineCloser(line: string, closer: string) {
+  let index = line.indexOf(closer)
+  while (index >= 0) {
+    if (line[index - 1] !== '\\') return index
+    index = line.indexOf(closer, index + closer.length)
+  }
+  return -1
+}
+
+function protectMathInline(line: string, stem: string, math: string[]): { output: string; open?: { closer: string; content: string } } {
+  let out = ''
+  let index = 0
+  while (index < line.length) {
+    const char = line[index]
+    if (char === '\\' && (line[index + 1] === '(' || line[index + 1] === '[')) {
+      const closer = line[index + 1] === '[' ? '\\]' : '\\)'
+      const end = findInlineCloser(line.slice(index + 2), closer)
+      if (end >= 0) {
+        math.push(line.slice(index, index + 2 + end + closer.length))
+        out += `${stem}${math.length - 1}${stem}`
+        index += 2 + end + closer.length
+        continue
+      }
+      // \[ blocks may span lines, but only when the opener starts its own line
+      if (line[index + 1] === '[' && line.slice(0, index).trim() === '') {
+        return { output: out, open: { closer, content: line.slice(index) + '\n' } }
+      }
+    }
+    if (char === '\\' && line[index + 1] === '$') {
+      out += '\\$'
+      index += 2
+      continue
+    }
+    if (char === '`') {
+      const run = /`+/.exec(line.slice(index))![0]
+      const closing = line.indexOf(run, index + run.length)
+      if (closing >= 0) {
+        out += line.slice(index, closing + run.length)
+        index = closing + run.length
+        continue
+      }
+      out += run
+      index += run.length
+      continue
+    }
+    if (char === '$') {
+      if (line[index + 1] === '$') {
+        const end = findInlineCloser(line.slice(index + 2), '$$')
+        if (end >= 0) {
+          math.push(line.slice(index, index + 2 + end + 2))
+          out += `${stem}${math.length - 1}${stem}`
+          index += 2 + end + 2
+          continue
+        }
+        // same rule for $$ blocks: only a line-start opener may continue onto the next line,
+        // so sequences like "$$$" in prose never swallow the rest of the document
+        if (line.slice(0, index).trim() === '') {
+          return { output: out, open: { closer: '$$', content: line.slice(index) + '\n' } }
+        }
+        out += '$$'
+        index += 2
+        continue
+      }
+      const end = findInlineCloser(line.slice(index + 1), '$')
+      if (end >= 0) {
+        math.push(line.slice(index, index + 1 + end + 1))
+        out += `${stem}${math.length - 1}${stem}`
+        index += 1 + end + 1
+        continue
+      }
+      // inline math may continue onto the next line of the same paragraph
+      return { output: out, open: { closer: '$', content: line.slice(index) + '\n' } }
+    }
+    out += char
+    index += 1
+  }
+  return { output: out }
+}
+
+function restoreMath(html: string, math: string[], stem: string) {
+  return html.replace(new RegExp(`${stem}(\\d+)${stem}`, 'g'), (match, index) => {
+    const value = math[Number(index)]
+    return value === undefined ? match : escapeMath(value)
+  })
+}

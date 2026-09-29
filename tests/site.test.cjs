@@ -103,7 +103,7 @@ async function main() {
     await page.route('https://raw.githubusercontent.com/**', async (route) => {
       const decoded = decodeURIComponent(route.request().url());
       const body = decoded.endsWith('.py') ? 'def answer():\n    return 42\n' : decoded.endsWith('.md')
-        ? `# 题目\n\n\`\`\`cpp\n/* first line\nstill a comment */\nint answer = 42;\n\`\`\`\n\n${'内容保留滚动位置。\n\n'.repeat(80)}<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" onerror="document.body.dataset.xss=1">\n`
+        ? `# 题目\n\n\`\`\`cpp\n/* first line\nstill a comment */\nint answer = 42;\n\`\`\`\n\n${'内容保留滚动位置。\n\n'.repeat(80)}<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" onerror="document.body.dataset.xss=1">\n\n试管 $1$ 放颜色 $1$，设还剩 $K$ 段，满足 $K>1$。\n\n$$\nM=\n\\begin{cases}\nK,&K\\le 1,\\\\\nK+1,&K>1.\n\\end{cases}\n$$\n\n$$\n\\operatorname{dis}(u,v)\n=\ndep_u+dep_v-2dep_{\\operatorname{LCA}(u,v)}\n$$\n`
         : `${'int main(){}\n'.repeat(120)}`;
       await route.fulfill({ status: 200, contentType: 'text/plain; charset=utf-8', body });
     });
@@ -118,6 +118,10 @@ async function main() {
     assert.equal(await page.locator('#meta-name').textContent(), '题目 #1.md');
     assert.equal(await page.locator('body').getAttribute('data-xss'), null);
     assert.match(await page.locator('#viewer').textContent(), /题目/);
+    await page.locator('#viewer .markdown-body .katex-display').first().waitFor();
+    assert.equal(await page.locator('#viewer .markdown-body .katex-display').count(), 2, 'display math must render even when a "=" Setext trap or subscripts appear inside');
+    assert.equal(await page.locator('#viewer .markdown-body .katex').count() >= 6, true, 'inline math like $K$ must render');
+    assert.doesNotMatch(await page.locator('#viewer .markdown-body').innerText(), /\$\$|dep_u|\\operatorname/);
     await page.locator('#viewer .markdown-code-block .code-line[data-line="2"] .line-content span[style]').waitFor();
     assert.equal(await page.locator('.reader').getAttribute('data-code-theme'), 'dark');
     assert.equal(await page.locator('#viewer .markdown-code-block').evaluate((element) => getComputedStyle(element).backgroundColor), 'rgb(30, 30, 30)');
