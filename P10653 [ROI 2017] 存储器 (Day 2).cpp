@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: fe7ec7c1-04e7-4f30-9f0f-2f0295ff27b5
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -20,7 +20,7 @@ Copyright (C) 2026 TangYixiao
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
 #define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
 #define FILE_INDEX 1                      // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -596,9 +596,85 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
+
+const int N = 1e6 + 5;
+
+int n, m, head, tail;
+int len[N], pre[N], nxt[N], que[N];
+bool use[N], alive[N], inq[N];
+
+inline void push(int x) {
+    if (!x || !alive[x] || !use[x] || inq[x]) {
+        return;
+    }
+    if (max(len[pre[x]], len[nxt[x]]) > len[x]) {
+        inq[x] = true, que[++tail] = x;
+    }
+}
+
 inline void solve(int Task_Id) {
-    // do something here
+    string s, t;
+    cin >> s >> t;
+    n = s.size(), s = " " + s, t = " " + t, m = head = tail = 0, len[0] = 0;
+    for (int i = 1; i <= n;) {
+        int j = i;
+        while (j < n && s[j + 1] == s[i]) {
+            j++;
+        }
+        for (int k = i; k <= j; k++) {
+            if (t[k] != t[i]) {
+                cout << "No\n";
+                return;
+            }
+        }
+        m++, len[m] = j - i + 1, use[m] = s[i] != t[i], alive[m] = true, inq[m] = false;
+        i = j + 1;
+    }
+    for (int i = 1; i <= m; i++) {
+        pre[i] = i - 1, nxt[i] = i == m ? 0 : i + 1;
+    }
+    for (int i = 1; i <= m; i++) {
+        push(i);
+    }
+    while (head < tail) {
+        int k = que[++head];
+        if (!alive[k] || !use[k]) {
+            continue;
+        }
+        int l = pre[k], r = nxt[k];
+        if (max(len[l], len[r]) <= len[k]) {
+            continue;
+        }
+        if ((l && use[l]) || (r && use[r])) {
+            cout << "No\n";
+            return;
+        }
+        if (l && r) {
+            int nr = nxt[r];
+            len[l] += len[k] + len[r], alive[k] = alive[r] = false, use[k] = use[r] = false;
+            nxt[l] = nr;
+            if (nr) {
+                pre[nr] = l;
+            }
+            push(pre[l]), push(nr);
+        } else if (l) {
+            len[l] += len[k], alive[k] = false, use[k] = false, nxt[l] = 0;
+            push(pre[l]);
+        } else if (r) {
+            len[r] += len[k], alive[k] = false, use[k] = false, pre[r] = 0;
+            push(nxt[r]);
+        }
+    }
+    for (int i = 1; i <= m; i++) {
+        if (alive[i] && use[i]) {
+            cout << "No\n";
+            return;
+        }
+    }
+    cout << "Yes\n";
     return;
 }
+
 } // namespace TANGYIXIAO
