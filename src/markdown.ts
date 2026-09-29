@@ -1,5 +1,4 @@
-import { marked, type Tokens } from 'marked'
-import hljs from 'highlight.js/lib/common'
+import { Marked, type Tokens } from 'marked'
 
 const escapeHtml = (value: string) => value
   .replaceAll('&', '&amp;')
@@ -163,7 +162,7 @@ function renderTable(parser: { parseInline: (tokens: Tokens.Generic[]) => string
   return `<table class="cute-table ${className}"${tableAttrs}><thead><tr>${header}</tr></thead><tbody>${body}</tbody></table>`
 }
 
-function renderCode({ text, lang }: Tokens.Code) {
+function renderCode({ text, lang }: Tokens.Code, highlight: (source: string, language: string) => string[]) {
   const languageAndMeta = (lang ?? '').trim().match(/^(\S+)?(?:\s+(.+))?$/)
   const language = languageAndMeta?.[1] || 'cpp'
   const meta = languageAndMeta?.[2] ?? ''
@@ -175,15 +174,15 @@ function renderCode({ text, lang }: Tokens.Code) {
     for (let line = start; line <= end; line += 1) highlighted.add(line)
   })
 
+  const renderedLines = highlight(text, language)
   const lines = text.split('\n').map((line, index) => {
     const lineNumber = index + 1
-    const source = line || ' '
-    const code = hljs.getLanguage(language) ? hljs.highlight(source, { language }).value : escapeHtml(source)
+    const code = renderedLines[index] || (line ? escapeHtml(line) : ' ')
     const active = highlighted.has(lineNumber) ? ' data-highlighted="true"' : ''
     return `<span class="code-line" data-line="${lineNumber}"${active}><span class="line-number" aria-hidden="true">${lineNumber}</span><span class="line-content">${code}</span></span>`
   }).join('')
 
-  return `<pre class="markdown-code-block" data-language="${escapeHtml(language)}"><code class="hljs">${lines}</code></pre>`
+  return `<pre class="markdown-code-block" data-language="${escapeHtml(language)}"><code class="shiki">${lines}</code></pre>`
 }
 
 const directiveExtension = {
@@ -235,9 +234,7 @@ const cuteTableExtension = {
   },
 }
 
-marked.use({
+export const renderMarkdown = (source: string, highlight: (source: string, language: string) => string[]) => new Marked({
   extensions: [directiveExtension, cuteTableExtension],
-  renderer: { code: renderCode },
-})
-
-export const renderMarkdown = (source: string) => marked.parse(source) as string
+  renderer: { code: (token) => renderCode(token, highlight) },
+}).parse(source) as string
