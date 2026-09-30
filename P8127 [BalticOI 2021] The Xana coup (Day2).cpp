@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 1a879e19-a7b9-491a-b25f-d928b6cb5f00
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,59 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+
+constexpr int N = 1e5 + 5, INF = 1e8;
+int n, a[N], h[N], to[N << 1], nxt[N << 1], cnt, fa[N], ord[N], dp[N][2][2];
+
+inline void add(int u, int v) { to[++cnt] = v, nxt[cnt] = h[u], h[u] = cnt; }
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n;
+    for (int i = 1, u, v; i < n; i++) {
+        cin >> u >> v, add(u, v), add(v, u);
+    }
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i];
+    }
+
+    ord[1] = 1;
+    for (int l = 1, r = 1; l <= r; l++) {
+        int u = ord[l];
+        for (int i = h[u], v; i; i = nxt[i]) {
+            v = to[i];
+            if (v == fa[u]) {
+                continue;
+            }
+            fa[v] = u, ord[++r] = v;
+        }
+    }
+
+    for (int i = n; i; i--) {
+        int u = ord[i];
+        for (int s = 0; s < 2; s++) {
+            int g0 = s, g1 = INF;
+            for (int j = h[u], v, x, y; j; j = nxt[j]) {
+                v = to[j];
+                if (v == fa[u]) {
+                    continue;
+                }
+                x = min(g0 + dp[v][s][0], g1 + dp[v][s][1]);
+                y = min(g1 + dp[v][s][0], g0 + dp[v][s][1]);
+                g0 = x, g1 = y;
+            }
+            for (int p = 0; p < 2; p++) {
+                dp[u][p][s] = (a[u] ^ p ^ s) ? g1 : g0;
+            }
+        }
+    }
+
+    int ans = min(dp[1][0][0], dp[1][0][1]);
+    if (ans >= INF) {
+        cout << "impossible\n";
+    } else {
+        cout << ans << "\n";
+    }
     return;
 }
+
 } // namespace TANGYIXIAO
