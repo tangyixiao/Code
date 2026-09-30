@@ -1,0 +1,31 @@
+{
+  "memoryLimit": 256, 
+  "testType": "single", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "batch": {
+    "id": "98c73246-da50-4ecf-b6c5-566681ac608b", 
+    "size": 1
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "interactive": false, 
+  "url": "https://codeforces.com/problemset/problem/1790/E", 
+  "name": "E. Vlad and a Pair of Numbers", 
+  "tests": [
+    {
+      "input": "6\n2\n5\n10\n6\n18\n36\n", 
+      "output": "3 1\n-1\n13 7\n-1\n25 11\n50 22\n"
+    }
+  ], 
+  "timeLimit": 1000, 
+  "group": "Codeforces - Codeforces Round 847 (Div. 3)", 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "EVladAndAPairOfNumbers"
+    }
+  }
+}
