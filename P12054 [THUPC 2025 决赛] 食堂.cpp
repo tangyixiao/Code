@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 769fff70-6684-4555-b253-ab2dd94efe60
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,111 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-inline void solve(int Task_Id) {
-    // do something here
+
+const int N = 5e5 + 5, M = 3335, INF = 1e9;
+struct Seat {
+    int d, x, y;
+    inline bool operator<(const Seat &b) const { return d != b.d ? d < b.d : x != b.x ? x < b.x
+                                                                                      : y < b.y; }
+};
+struct Node {
+    Seat p;
+    int id, v;
+};
+struct Cmp {
+    inline bool operator()(const Node &a, const Node &b) const { return b.p < a.p; }
+};
+
+int q, tot, cnt, id[M][M], a[N], b[N], s[N], v[N], cur[3];
+Seat bs[N];
+DATA_STRUCTURE::Heap<Node, N, Cmp> h[3];
+const int adj[4] = {6, 9, 9, 6};
+
+inline Seat make(int x, int y, int p) {
+    return {3 * x + 3 * y + p / 2 + p % 2 + 2 + (p == 3) * 2, 3 * x + p / 2 + 1, 3 * y + p % 2 + 1};
+}
+
+inline Seat best(int x, int y, int st, int o) {
+    if (!o) {
+        return st ? Seat{INF, INF, INF} : make(x, y, 0);
+    }
+    for (int p = 0; p < 4; p++) {
+        if (!(st >> p & 1) && (o == 2 || !(st & adj[p]))) {
+            return make(x, y, p);
+        }
+    }
+    return {INF, INF, INF};
+}
+
+inline int pos(int x, int y) { return (x % 3 - 1) * 2 + y % 3 - 1; }
+
+inline void push(int x) {
+    for (int o = 0; o < 3; o++) {
+        Seat p = best(a[x], b[x], s[x], o);
+        if (p.x != INF) {
+            h[o].push({p, x, v[x]});
+        }
+    }
     return;
 }
+
+inline int add(int x, int y, int st) {
+    id[x][y] = ++tot, a[tot] = x, b[tot] = y, s[tot] = st, v[tot] = 1;
+    push(tot);
+    return tot;
+}
+
+inline void clean(int o) {
+    for (; !h[o].empty() && h[o].top().v != v[h[o].top().id]; h[o].pop()) {
+    }
+    return;
+}
+
+inline Seat get(int o) {
+    for (; cur[o] <= cnt; cur[o]++) {
+        if (!id[(bs[cur[o]].x - 1) / 3][(bs[cur[o]].y - 1) / 3]) {
+            return bs[cur[o]];
+        }
+    }
+    return {INF, INF, INF};
+}
+
+inline void solve(int Task_Id) {
+    cin >> q;
+    for (int z = 0; cnt < q + 3; z++) {
+        for (int x = 0; x <= z && cnt < q + 3; x++) {
+            bs[++cnt] = make(x, z - x, 0);
+        }
+    }
+    cur[0] = cur[1] = cur[2] = 1;
+
+    for (int i = 1, t, o, x, y, z, k; i <= q; i++) {
+        cin >> t;
+        if (t == 1) {
+            cin >> o, clean(o);
+            Seat p = get(o);
+            if (!h[o].empty() && h[o].top().p < p) {
+                Node u = h[o].top();
+                h[o].pop();
+                z = u.id, k = pos(u.p.x, u.p.y), v[z]++, s[z] |= 1 << k, push(z);
+                cout << u.p.x << ' ' << u.p.y << "\n";
+            } else {
+                x = (p.x - 1) / 3, y = (p.y - 1) / 3;
+                add(x, y, 1 << pos(p.x, p.y)), cur[o]++;
+                cout << p.x << ' ' << p.y << "\n";
+            }
+        } else {
+            cin >> x >> y;
+            z = id[(x - 1) / 3][(y - 1) / 3], k = pos(x, y);
+            if (!z) {
+                add((x - 1) / 3, (y - 1) / 3, 1 << k), cout << "in\n";
+            } else {
+                o = s[z] >> k & 1, v[z]++, s[z] ^= 1 << k, push(z);
+                cout << (o ? "out\n" : "in\n");
+            }
+        }
+    }
+    return;
+}
+
 } // namespace TANGYIXIAO
