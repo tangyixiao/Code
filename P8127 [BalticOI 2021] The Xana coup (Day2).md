@@ -92,3 +92,96 @@ $a_i=0$ 为黑色，$a_i=1$ 为白色。
 
 ---
 
+# P8127 [BalticOI 2021] The Xana coup (Day2)
+
+## 题目描述
+
+You are given a tree with $N$ vertices. Vertex $i$ has a value $a_i$, where $a_i \in \{0,1\}$.
+
+You may perform toggle operations:
+
+- Toggling vertex $i$ will flip the values of vertex $i$ and all vertices **directly connected** to it.
+
+Here, “directly connected” means that there is exactly one edge between the two vertices.
+
+Find the minimum number of toggle operations needed to make the values of all vertices equal to $0$.
+
+## 输入格式
+
+The first line contains an integer $N$, the number of vertices in the tree.
+
+The next $N-1$ lines each contain two integers, describing an edge of the tree.
+
+The $(N+1)$-th line contains $N$ integers $a_i$, representing the value of vertex $i$.
+
+## 输出格式
+
+If a solution exists, output one line with one integer, the answer.
+
+If there is no solution, output `impossible`.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+5
+1 2
+1 3
+2 4
+2 5
+0 1 0 1 1
+```
+
+### 输出 #1
+
+```
+4
+```
+
+## 输入输出样例 #2
+
+### 输入 #2
+
+```
+5
+1 2
+2 3
+3 4
+4 5
+0 1 1 1 1
+```
+
+### 输出 #2
+
+```
+impossible
+```
+
+## 说明/提示
+
+#### Explanation for Sample 1
+
+![](https://cdn.luogu.com.cn/upload/image_hosting/qyej3711.png)
+
+$a_i=0$ is colored black, and $a_i=1$ is colored white.
+
+By toggling vertices $4,5,3,1$, you can make the values of all vertices equal to $0$.
+
+#### Constraints
+
+**This problem uses bundled testdata.**
+
+- Subtask 1 (5 pts): $N \le 20$.
+- Subtask 2 (15 pts): $N \le 40$.
+- Subtask 3 (10 pts): If vertices $u$ and $v$ satisfy $|u-v|=1$, then there is an edge between them.
+- Subtask 4 (40 pts): Each vertex is connected to at most $3$ vertices.
+- Subtask 5 (30 pts): No special restrictions.
+
+For $100\%$ of the testdata, $3 \le N \le 10^5$.
+
+#### Note
+
+Translated from [BalticOI 2021 Day2 C The Xana coup](https://boi.cses.fi/files/boi2021_day2.pdf).
+
+Translated by ChatGPT 5
