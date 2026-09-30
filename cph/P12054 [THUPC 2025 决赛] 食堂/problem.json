@@ -1,0 +1,31 @@
+{
+  "memoryLimit": 1024, 
+  "testType": "single", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "batch": {
+    "id": "769fff70-6684-4555-b253-ab2dd94efe60", 
+    "size": 1
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "interactive": false, 
+  "url": "https://www.luogu.com.cn/problem/P12054", 
+  "name": "P12054 [THUPC 2025 决赛] 食堂", 
+  "tests": [
+    {
+      "input": "10\n1 0\n1 0\n2 1 1\n2 2 2\n1 0\n1 1\n1 2\n1 2\n1 2\n1 1\n", 
+      "output": "1 1\n1 4\nout\nin\n4 1\n1 1\n1 2\n2 1\n1 5\n1 7\n"
+    }
+  ], 
+  "timeLimit": 3000, 
+  "group": "Luogu", 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P12054THUPC2025"
+    }
+  }
+}
