@@ -89,3 +89,6 @@ $a_i=0$ 为黑色，$a_i=1$ 为白色。
 #### 说明
 
 翻译自 [BalticOI 2021 Day2 C The Xana coup](https://boi.cses.fi/files/boi2021_day2.pdf)。
+
+---
+
