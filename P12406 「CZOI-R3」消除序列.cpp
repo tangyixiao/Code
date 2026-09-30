@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 7a7ae42b-8f7e-432b-9a9f-6113a40deafc
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,10 +597,43 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-inline void solve(int Task_Id) {
-    // do something here
+
+constexpr int N = 1e6 + 5;
+int n, p[N], t[N];
+ll x, y, z;
+
+inline int sum(int x) {
+    int s = 0;
+    for (; x; x -= lowbit(x)) {
+        s += t[x];
+    }
+    return s;
+}
+
+inline void add(int x) {
+    for (; x <= n; x += lowbit(x)) {
+        t[x]--;
+    }
     return;
 }
+
+inline void solve(int Task_Id) {
+    cin >> n >> x >> y >> z;
+    for (int i = 1, v; i <= n; i++) {
+        cin >> v, p[v] = i, t[i] = lowbit(i);
+    }
+    ll f0 = 0, f1 = z, g0, g1;
+    for (int i = 1, v, l, r, cur = 1; i <= n; i++) {
+        cin >> v, v = p[v];
+        l = cur <= v ? sum(v - 1) - sum(cur - 1) : sum(n) - sum(cur - 1) + sum(v - 1);
+        r = (i == 1 ? n : n - i) - l;
+        g0 = min(f0, f1 + z) + min(l * x, r * y);
+        g1 = min(f1, f0 + z) + min(l * y, r * x);
+        f0 = g0, f1 = g1, add(v), cur = v;
+    }
+    cout << min(f0, f1) << "\n";
+    return;
+}
+
 } // namespace TANGYIXIAO
 /* #include <bits/stdc++.h> #define int long long using namespace std; namespace TANGYIXIAO { const int N = 1e6 + 5, inf = 1e18; int n, a[N], b[N], x, y, z, ans = inf; /* map<vector<int>,pair<int,int> > mp; inline bool check() { for(int i=1; i<=n; i++) { if(a[i]) { return false; } } return true; } inline void dfs(int st,int sum,int f,int id) { if(st>=10) { return; } if(sum>=ans) { return; } for(int i=1; i<=n; i++) { cout<<a[i]<<" "; } cout<<"..."<<st<<" "<<sum; cout<<"\n"; if(id==n+1) { ans=min(sum,ans); return; } vector<int> v; for(int i=1; i<=n; i++) { v.push_back(a[i]); } if(!mp.count(v)) { mp[v]= {st,sum}; } else { if(mp[v].first<=st && mp[v].second<=sum) { return; } } if(a[1]==b[id]) { int tr=a[1]; a[1]=0; dfs(st+1,sum,4,id+1); // a[1]=tr; } //if(f!=2) { for(int i=0; i<=n-1; i++) { a[i]=a[i+1]; } a[n]=a[0]; if(a[n]) { dfs(st+1,sum+y,1,id); } else { dfs(st+1,sum,1,id); } for(int i=n; i>=1; i--) { a[i+1]=a[i]; } a[1]=a[n+1]; // } //if(f!=1) { for(int i=n; i>=1; i--) { a[i+1]=a[i]; } a[1]=a[n+1]; if(a[2]) { dfs(st+1,sum+x,2,id); } else { dfs(st+1,sum,2,id); } //} for(int i=0; i<=n-1; i++) { a[i]=a[i+1]; } a[n]=a[0]; //if(f!=3) { swap(x,y); dfs(st+1,sum+z,3,id); //} return; } inline void solve() { cin >> n >> x >> y >> z; for (int i = 1; i <= n; i++) { cin >> a[i]; } for (int i = 1; i <= n; i++) { cin >> b[i]; } ans = 0; if (x == y && y == z) { for (int i = 1; i <= n; i++) { } return; } dfs(1,0,-1,1); cout << min(x, y) << "\n"; return; } } // namespace TANGYIXIAO using namespace TANGYIXIAO; signed main() { ios::sync_with_stdio(0); cin.tie(0); freopen("note.in", "r", stdin); freopen("note.out", "w", stdout); solve(); return 0; } */
-
