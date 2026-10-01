@@ -21,7 +21,7 @@ Copyright (C) 2026 TangYixiao
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
 #define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
 #define FILE_INDEX 1                      // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -598,8 +598,50 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = (1 << 20) + 5;
+string s;
+int n, z[N], cnt[27], pre[N];
+
+inline void get_z() {
+    z[1] = n;
+    for (int i = 2, l = 0, r = 0; i <= n; i++) {
+        if (i <= r) {
+            z[i] = min(r - i + 1, z[i - l + 1]);
+        }
+        while (i + z[i] <= n && s[z[i] + 1] == s[i + z[i]]) {
+            z[i]++;
+        }
+        if (i + z[i] - 1 > r) {
+            l = i, r = i + z[i] - 1;
+        }
+    }
+}
+
 inline void solve(int Task_Id) {
-    // do something here
-    return;
+    cin >> s;
+    n = s.size(), s = " " + s;
+    for (int i = 0; i <= n; i++) {
+        z[i] = pre[i] = 0;
+    }
+    for (int i = 0; i <= 26; i++) {
+        cnt[i] = 0;
+    }
+    get_z();
+    for (int i = 1; i <= n; i++) {
+        pre[i] = pre[i - 1] ^ (1 << (s[i] - 'a'));
+    }
+    int all = __builtin_popcount(pre[n]);
+    long long ans = 0;
+    for (int len = 2; len < n; len++) {
+        int x = __builtin_popcount(pre[len - 1]);
+        for (int j = x; j <= 26; j++) {
+            cnt[j]++;
+        }
+        int mx = min(1 + z[len + 1] / len, (n - 1) / len);
+        int odd = __builtin_popcount(pre[n] ^ pre[len]);
+        ans += 1LL * ((mx + 1) / 2) * cnt[odd];
+        ans += 1LL * (mx / 2) * cnt[all];
+    }
+    cout << ans << "\n";
 }
 } // namespace TANGYIXIAO
