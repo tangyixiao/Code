@@ -598,8 +598,52 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 1000005;
+const long long mod[3] = {1000000007, 1000000009, 998244353};
+
+string s;
+int n, m;
+long long Base;
+long long h[3][N], p[3][N];
+
+inline long long get_hash(int id, int l, int r) {
+    return (h[id][r] - h[id][l - 1] * p[id][r - l + 1] % mod[id] + mod[id]) % mod[id];
+}
+
+inline bool check(int l1, int r1, int l2, int r2) {
+    if (r1 - l1 != r2 - l2) {
+        return false;
+    }
+    for (int id = 0; id < 3; id++) {
+        if (get_hash(id, l1, r1) != get_hash(id, l2, r2)) {
+            return false;
+        }
+    }
+    return true;
+}
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> s;
+    n = s.size();
+    s = " " + s;
+
+    mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+    Base = uniform_int_distribution<int>(256, 1000000)(rng);
+
+    for (int id = 0; id < 3; id++) {
+        p[id][0] = 1;
+        for (int i = 1; i <= n; i++) {
+            p[id][i] = p[id][i - 1] * Base % mod[id];
+            h[id][i] = (h[id][i - 1] * Base + s[i] - 'a' + 1) % mod[id];
+        }
+    }
+
+    cin >> m;
+    for (int i = 1; i <= m; i++) {
+        int l1, r1, l2, r2;
+        cin >> l1 >> r1 >> l2 >> r2;
+        cout << (check(l1, r1, l2, r2) ? "Yes\n" : "No\n");
+    }
     return;
 }
 } // namespace TANGYIXIAO
