@@ -38,3 +38,46 @@ cabcabca
 #### 规模与约定
 
 对于全部的测试点，保证 $1\le L \le 10^6$。
+
+---
+
+# P4391 [BalticOI 2009] Radio Transmission
+
+## 题目描述
+
+You are given a string $s_1$ that is formed by repeatedly concatenating some string $s_2$ (guaranteed to repeat at least $2$ times). However, $s_2$ is unknown. You only need to determine the shortest possible length of $s_2$.
+
+## 输入格式
+
+The first line contains an integer $L$, which is the length of the given string.
+
+The second line contains a substring of $s_1$, consisting entirely of lowercase letters.
+
+## 输出格式
+
+Output a single line containing the shortest length of $s_2$.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+8
+cabcabca
+```
+
+### 输出 #1
+
+```
+3
+```
+
+## 说明/提示
+
+#### Explanation for Sample Input/Output 1
+For the sample, we can obtain $\texttt{abcabcabcabc}$ by repeatedly concatenating $\texttt{abc}$. The input $\texttt{cabcabca}$ is its substring.
+
+#### Constraints
+For all test points, it is guaranteed that $1 \le L \le 10^6$.
+
+Translated by ChatGPT 5
