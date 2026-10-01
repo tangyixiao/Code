@@ -591,7 +591,7 @@ inline void solve(int Task_Id) {
     for (int i = 1; i <= n; i++) {
         cin >> s[i], s[i] = " " + s[i];
     }
-    for (l = 1, ans = st = 0; l <= m;) {
+    for (l = 1, ans = 0; l <= m;) {
         for (int i = 1; i <= n; i++) {
             id[i] = flag = 0;
         }
