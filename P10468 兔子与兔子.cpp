@@ -1,3 +1,19 @@
+//  Author: Tangyixiao
+//  Time: 2026-10-01 18:56:09
+//  Problem: P10468 兔子与兔子
+//  Contest: Luogu
+//  URL: https://www.luogu.com.cn/problem/P10468
+//  Memory Limit: 512 MB
+//  Time Limit: 1000 ms
+//  Interactive: false
+//  Test Type: single
+//
+//  Algorithm:
+//  Complexity: O()
+//  Note:
+//
+//  Powered by Visual Studio Code + CPH (Competitive Programming Helper)
+
 #include <bits/stdc++.h>
 #define int unsigned long long
 using namespace std;

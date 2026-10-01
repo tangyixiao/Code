@@ -1,0 +1,31 @@
+{
+  "name": "P10468 兔子与兔子",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P10468",
+  "interactive": false,
+  "memoryLimit": 512,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "aabbaabb\n3\n1 3 5 7\n1 3 6 8\n1 2 1 2\n",
+      "output": "Yes\nNo\nYes\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P10468"
+    }
+  },
+  "batch": {
+    "id": "50eb1680-602a-4bc9-99d9-c0643c6e87d7",
+    "size": 1
+  }
+}
