@@ -596,6 +596,7 @@ inline void solve(int Task_Id) {
     }
     if (y >= (n << 1)) {
         cout << ((1 << n) * a) << "\n";
+        return;
     }
     if (n > 3000) {
         cout << "-1\n";
