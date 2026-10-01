@@ -1,0 +1,35 @@
+{
+  "memoryLimit": 512, 
+  "testType": "single", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "batch": {
+    "id": "7a7ae42b-8f7e-432b-9a9f-6113a40deafc", 
+    "size": 1
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "interactive": false, 
+  "url": "https://www.luogu.com.cn/problem/P12406", 
+  "name": "P12406 「CZOI-R3」消除序列", 
+  "tests": [
+    {
+      "input": "2 1 1 1\n1 2\n2 1\n", 
+      "output": "1\n"
+    }, 
+    {
+      "input": "5 4 3 2\n1 4 3 2 5\n5 1 4 2 3\n", 
+      "output": "3\n"
+    }
+  ], 
+  "timeLimit": 1000, 
+  "group": "Luogu", 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P12406CZOIR3"
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "memoryLimit": 512, 
+  "testType": "single", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "batch": {
+    "id": "1a879e19-a7b9-491a-b25f-d928b6cb5f00", 
+    "size": 1
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "interactive": false, 
+  "url": "https://www.luogu.com.cn/problem/P8127", 
+  "name": "P8127 [BalticOI 2021] The Xana coup (Day2)", 
+  "tests": [
+    {
+      "input": "5\n1 2\n1 3\n2 4\n2 5\n0 1 0 1 1\n", 
+      "output": "4\n"
+    }, 
+    {
+      "input": "5\n1 2\n2 3\n3 4\n4 5\n0 1 1 1 1\n", 
+      "output": "impossible\n"
+    }
+  ], 
+  "timeLimit": 1000, 
+  "group": "Luogu", 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P8127BalticOI2021TheXanaCoupDay2"
+    }
+  }
+}
