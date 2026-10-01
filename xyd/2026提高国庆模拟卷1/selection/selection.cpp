@@ -3,12 +3,12 @@ Copyright (C) 2026 TangYixiao
 */
 #define PRAGMA_TYPE 0                     // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
-#define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
+#define JUDGE_TYPE 2                      // 0 for online judge, 1 for judge file, 2 for local file
 #define FILE_INDEX 1                      // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
-#define FILE_NAME ""
+#define FILE_NAME "selection"
 // #define BITS_NOT_ALLOWED
 // #define PD_DS_USED
 // #define TESTLIB
