@@ -4,7 +4,7 @@ Copyright (C) 2026 TangYixiao
 #define PRAGMA_TYPE 0                     // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
 #define JUDGE_TYPE 2                      // 0 for online judge, 1 for judge file, 2 for local file
-#define FILE_INDEX 3                      // the index of the file in the local file system
+#define FILE_INDEX 4                      // the index of the file in the local file system
 #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
@@ -587,6 +587,7 @@ const ll inf = 4e18;
 struct edge {
     int v, w;
 };
+bool Subtask10_13;
 int n, m, k, cnt[N], a[N];
 vector<edge> g[N];
 ll dis[N];
@@ -612,13 +613,16 @@ inline void dijskra() {
     return;
 }
 inline void solve(int Task_Id) {
-    cin >> n >> m >> k;
+    cin >> n >> m >> k, Subtask10_13 = true;
     for (int i = 1; i <= n; i++) {
         g[i].clear(), dis[i] = inf, cnt[i] = 0;
     }
     for (int i = 1, u, v, w; i <= m; i++) {
         cin >> u >> v >> w;
         g[u].push_back({v, w}), g[v].push_back({u, w});
+        if (w != 1) {
+            Subtask10_13 = false;
+        }
     }
     for (int i = 1, c, d; i <= k; i++) {
         cin >> c >> d;
