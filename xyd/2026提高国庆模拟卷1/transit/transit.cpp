@@ -5,7 +5,7 @@ Copyright (C) 2026 TangYixiao
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
 #define JUDGE_TYPE 2                      // 0 for online judge, 1 for judge file, 2 for local file
 #define FILE_INDEX 1                      // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME "transit"
@@ -582,8 +582,62 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 2e5 + 5, mod = 1e9 + 7;
+const ll inf = 4e18;
+struct edge {
+    int v, w;
+};
+int n, m, k, cnt[N], a[N];
+vector<edge> g[N];
+ll dis[N];
+inline void dijskra() {
+    priority_queue<pair<ll, int>, vector<pair<ll, int>>, greater<pair<ll, int>>> q;
+    dis[1] = 0, cnt[1] = 1, q.push({0, 1});
+    for (; !q.empty();) {
+        auto [d, u] = q.top();
+        q.pop();
+        if (dis[u] == d) {
+            for (auto [v, w] : g[u]) {
+                ll nd = d + w;
+                if (nd < dis[v]) {
+                    dis[v] = nd, cnt[v] = cnt[u], q.push({nd, v});
+                } else {
+                    if (nd == dis[v]) {
+                        cnt[v] = (cnt[v] + cnt[u]) % mod;
+                    }
+                }
+            }
+        }
+    }
+    return;
+}
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> m >> k;
+    for (int i = 1; i <= n; i++) {
+        g[i].clear(), dis[i] = inf, cnt[i] = 0;
+    }
+    for (int i = 1, u, v, w; i <= m; i++) {
+        cin >> u >> v >> w;
+        g[u].push_back({v, w}), g[v].push_back({u, w});
+    }
+    for (int i = 1, c, d; i <= k; i++) {
+        cin >> c >> d;
+        for (int j = 1; j <= d; j++) {
+            cin >> a[j];
+        }
+        for (int x = 1; x <= d; x++) {
+            for (int y = x + 1; y <= d; y++) {
+                g[a[x]].push_back({a[y], c}), g[a[y]].push_back({a[x], c});
+            }
+        }
+    }
+    dijskra();
+    if (dis[n] == inf) {
+        cout << "-1\n";
+        return;
+    } else {
+        cout << dis[n] << " " << cnt[n] << "\n";
+    }
     return;
 }
 } // namespace TANGYIXIAO
