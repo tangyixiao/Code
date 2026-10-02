@@ -2,955 +2,955 @@
   {
     "problem": "notch",
     "case": "sample1",
-    "seconds": 0.0914,
+    "seconds": 0.0487,
     "checked": true
   },
   {
     "problem": "notch",
     "case": "sample2",
-    "seconds": 0.0101,
+    "seconds": 0.01,
     "checked": true
   },
   {
     "problem": "notch",
     "case": "random0",
-    "seconds": 0.0096,
+    "seconds": 0.008,
     "checked": true
   },
   {
     "problem": "notch",
     "case": "random1",
-    "seconds": 0.0144,
-    "checked": true
-  },
-  {
-    "problem": "notch",
-    "case": "random2",
-    "seconds": 0.0133,
-    "checked": true
-  },
-  {
-    "problem": "notch",
-    "case": "random3",
-    "seconds": 0.0163,
-    "checked": true
-  },
-  {
-    "problem": "notch",
-    "case": "random4",
-    "seconds": 0.0094,
-    "checked": true
-  },
-  {
-    "problem": "notch",
-    "case": "random5",
-    "seconds": 0.0113,
-    "checked": true
-  },
-  {
-    "problem": "notch",
-    "case": "random6",
-    "seconds": 0.0138,
-    "checked": true
-  },
-  {
-    "problem": "notch",
-    "case": "random7",
-    "seconds": 0.0183,
-    "checked": true
-  },
-  {
-    "problem": "notch",
-    "case": "random8",
-    "seconds": 0.0151,
-    "checked": true
-  },
-  {
-    "problem": "notch",
-    "case": "random9",
-    "seconds": 0.0109,
-    "checked": true
-  },
-  {
-    "problem": "notch",
-    "case": "random10",
-    "seconds": 0.011,
-    "checked": true
-  },
-  {
-    "problem": "notch",
-    "case": "random11",
-    "seconds": 0.0109,
-    "checked": true
-  },
-  {
-    "problem": "notch",
-    "case": "random12",
-    "seconds": 0.0215,
-    "checked": true
-  },
-  {
-    "problem": "notch",
-    "case": "random13",
-    "seconds": 0.0106,
-    "checked": true
-  },
-  {
-    "problem": "notch",
-    "case": "random14",
-    "seconds": 0.0216,
-    "checked": true
-  },
-  {
-    "problem": "notch",
-    "case": "random15",
-    "seconds": 0.0151,
-    "checked": true
-  },
-  {
-    "problem": "notch",
-    "case": "random16",
-    "seconds": 0.023,
-    "checked": true
-  },
-  {
-    "problem": "notch",
-    "case": "random17",
-    "seconds": 0.018,
-    "checked": true
-  },
-  {
-    "problem": "notch",
-    "case": "random18",
-    "seconds": 0.0155,
-    "checked": true
-  },
-  {
-    "problem": "notch",
-    "case": "random19",
-    "seconds": 0.0261,
-    "checked": true
-  },
-  {
-    "problem": "notch",
-    "case": "random20",
-    "seconds": 0.0244,
-    "checked": true
-  },
-  {
-    "problem": "notch",
-    "case": "random21",
-    "seconds": 0.028,
-    "checked": true
-  },
-  {
-    "problem": "notch",
-    "case": "random22",
-    "seconds": 0.0198,
-    "checked": true
-  },
-  {
-    "problem": "notch",
-    "case": "random23",
-    "seconds": 0.0241,
-    "checked": true
-  },
-  {
-    "problem": "notch",
-    "case": "random24",
-    "seconds": 0.0156,
-    "checked": true
-  },
-  {
-    "problem": "notch",
-    "case": "random25",
     "seconds": 0.0141,
     "checked": true
   },
   {
     "problem": "notch",
+    "case": "random2",
+    "seconds": 0.0077,
+    "checked": true
+  },
+  {
+    "problem": "notch",
+    "case": "random3",
+    "seconds": 0.0084,
+    "checked": true
+  },
+  {
+    "problem": "notch",
+    "case": "random4",
+    "seconds": 0.0108,
+    "checked": true
+  },
+  {
+    "problem": "notch",
+    "case": "random5",
+    "seconds": 0.0091,
+    "checked": true
+  },
+  {
+    "problem": "notch",
+    "case": "random6",
+    "seconds": 0.0091,
+    "checked": true
+  },
+  {
+    "problem": "notch",
+    "case": "random7",
+    "seconds": 0.0111,
+    "checked": true
+  },
+  {
+    "problem": "notch",
+    "case": "random8",
+    "seconds": 0.0092,
+    "checked": true
+  },
+  {
+    "problem": "notch",
+    "case": "random9",
+    "seconds": 0.0067,
+    "checked": true
+  },
+  {
+    "problem": "notch",
+    "case": "random10",
+    "seconds": 0.0088,
+    "checked": true
+  },
+  {
+    "problem": "notch",
+    "case": "random11",
+    "seconds": 0.0091,
+    "checked": true
+  },
+  {
+    "problem": "notch",
+    "case": "random12",
+    "seconds": 0.0075,
+    "checked": true
+  },
+  {
+    "problem": "notch",
+    "case": "random13",
+    "seconds": 0.009,
+    "checked": true
+  },
+  {
+    "problem": "notch",
+    "case": "random14",
+    "seconds": 0.0119,
+    "checked": true
+  },
+  {
+    "problem": "notch",
+    "case": "random15",
+    "seconds": 0.0103,
+    "checked": true
+  },
+  {
+    "problem": "notch",
+    "case": "random16",
+    "seconds": 0.008,
+    "checked": true
+  },
+  {
+    "problem": "notch",
+    "case": "random17",
+    "seconds": 0.0092,
+    "checked": true
+  },
+  {
+    "problem": "notch",
+    "case": "random18",
+    "seconds": 0.0091,
+    "checked": true
+  },
+  {
+    "problem": "notch",
+    "case": "random19",
+    "seconds": 0.0097,
+    "checked": true
+  },
+  {
+    "problem": "notch",
+    "case": "random20",
+    "seconds": 0.0084,
+    "checked": true
+  },
+  {
+    "problem": "notch",
+    "case": "random21",
+    "seconds": 0.0097,
+    "checked": true
+  },
+  {
+    "problem": "notch",
+    "case": "random22",
+    "seconds": 0.0077,
+    "checked": true
+  },
+  {
+    "problem": "notch",
+    "case": "random23",
+    "seconds": 0.0101,
+    "checked": true
+  },
+  {
+    "problem": "notch",
+    "case": "random24",
+    "seconds": 0.01,
+    "checked": true
+  },
+  {
+    "problem": "notch",
+    "case": "random25",
+    "seconds": 0.009,
+    "checked": true
+  },
+  {
+    "problem": "notch",
     "case": "random26",
-    "seconds": 0.0291,
+    "seconds": 0.0079,
     "checked": true
   },
   {
     "problem": "notch",
     "case": "random27",
-    "seconds": 0.0239,
+    "seconds": 0.0095,
     "checked": true
   },
   {
     "problem": "notch",
     "case": "random28",
-    "seconds": 0.0261,
+    "seconds": 0.0087,
     "checked": true
   },
   {
     "problem": "notch",
     "case": "random29",
-    "seconds": 0.0188,
+    "seconds": 0.0089,
     "checked": true
   },
   {
     "problem": "notch",
     "case": "random30",
-    "seconds": 0.0189,
+    "seconds": 0.0092,
     "checked": true
   },
   {
     "problem": "notch",
     "case": "random31",
-    "seconds": 0.0339,
+    "seconds": 0.0087,
     "checked": true
   },
   {
     "problem": "notch",
     "case": "random32",
-    "seconds": 0.0323,
+    "seconds": 0.0092,
     "checked": true
   },
   {
     "problem": "notch",
     "case": "random33",
-    "seconds": 0.0199,
+    "seconds": 0.0107,
     "checked": true
   },
   {
     "problem": "notch",
     "case": "random34",
-    "seconds": 0.0139,
+    "seconds": 0.0105,
     "checked": true
   },
   {
     "problem": "notch",
     "case": "ascending",
-    "seconds": 0.0602,
+    "seconds": 0.0534,
     "checked": true
   },
   {
     "problem": "notch",
     "case": "descending",
-    "seconds": 0.0581,
+    "seconds": 0.0575,
     "checked": true
   },
   {
     "problem": "vine",
     "case": "sample1",
-    "seconds": 0.072,
+    "seconds": 0.0985,
     "checked": true
   },
   {
     "problem": "vine",
     "case": "sample2",
-    "seconds": 0.0158,
+    "seconds": 0.0202,
     "checked": true
   },
   {
     "problem": "vine",
     "case": "random0",
-    "seconds": 0.0166,
+    "seconds": 0.019,
     "checked": true
   },
   {
     "problem": "vine",
     "case": "random1",
-    "seconds": 0.0125,
+    "seconds": 0.0171,
     "checked": true
   },
   {
     "problem": "vine",
     "case": "random2",
-    "seconds": 0.0169,
+    "seconds": 0.0126,
     "checked": true
   },
   {
     "problem": "vine",
     "case": "random3",
-    "seconds": 0.0174,
+    "seconds": 0.0107,
     "checked": true
   },
   {
     "problem": "vine",
     "case": "random4",
-    "seconds": 0.0199,
+    "seconds": 0.0131,
     "checked": true
   },
   {
     "problem": "vine",
     "case": "random5",
-    "seconds": 0.017,
+    "seconds": 0.0199,
     "checked": true
   },
   {
     "problem": "vine",
     "case": "random6",
-    "seconds": 0.0191,
-    "checked": true
-  },
-  {
-    "problem": "vine",
-    "case": "random7",
-    "seconds": 0.0313,
-    "checked": true
-  },
-  {
-    "problem": "vine",
-    "case": "random8",
-    "seconds": 0.0183,
-    "checked": true
-  },
-  {
-    "problem": "vine",
-    "case": "random9",
-    "seconds": 0.0234,
-    "checked": true
-  },
-  {
-    "problem": "vine",
-    "case": "random10",
-    "seconds": 0.0143,
-    "checked": true
-  },
-  {
-    "problem": "vine",
-    "case": "random11",
-    "seconds": 0.0284,
-    "checked": true
-  },
-  {
-    "problem": "vine",
-    "case": "random12",
-    "seconds": 0.0284,
-    "checked": true
-  },
-  {
-    "problem": "vine",
-    "case": "random13",
-    "seconds": 0.0196,
-    "checked": true
-  },
-  {
-    "problem": "vine",
-    "case": "random14",
-    "seconds": 0.0286,
-    "checked": true
-  },
-  {
-    "problem": "vine",
-    "case": "random15",
-    "seconds": 0.033,
-    "checked": true
-  },
-  {
-    "problem": "vine",
-    "case": "random16",
-    "seconds": 0.0203,
-    "checked": true
-  },
-  {
-    "problem": "vine",
-    "case": "random17",
-    "seconds": 0.0302,
-    "checked": true
-  },
-  {
-    "problem": "vine",
-    "case": "random18",
-    "seconds": 0.0361,
-    "checked": true
-  },
-  {
-    "problem": "vine",
-    "case": "random19",
-    "seconds": 0.0215,
-    "checked": true
-  },
-  {
-    "problem": "vine",
-    "case": "random20",
-    "seconds": 0.0317,
-    "checked": true
-  },
-  {
-    "problem": "vine",
-    "case": "random21",
-    "seconds": 0.0313,
-    "checked": true
-  },
-  {
-    "problem": "vine",
-    "case": "random22",
-    "seconds": 0.0274,
-    "checked": true
-  },
-  {
-    "problem": "vine",
-    "case": "random23",
-    "seconds": 0.019,
-    "checked": true
-  },
-  {
-    "problem": "vine",
-    "case": "random24",
-    "seconds": 0.0326,
-    "checked": true
-  },
-  {
-    "problem": "vine",
-    "case": "random25",
-    "seconds": 0.019,
-    "checked": true
-  },
-  {
-    "problem": "vine",
-    "case": "random26",
-    "seconds": 0.0223,
-    "checked": true
-  },
-  {
-    "problem": "vine",
-    "case": "random27",
-    "seconds": 0.0183,
-    "checked": true
-  },
-  {
-    "problem": "vine",
-    "case": "random28",
-    "seconds": 0.0143,
-    "checked": true
-  },
-  {
-    "problem": "vine",
-    "case": "random29",
-    "seconds": 0.0187,
-    "checked": true
-  },
-  {
-    "problem": "vine",
-    "case": "random30",
-    "seconds": 0.0224,
-    "checked": true
-  },
-  {
-    "problem": "vine",
-    "case": "random31",
-    "seconds": 0.0183,
-    "checked": true
-  },
-  {
-    "problem": "vine",
-    "case": "random32",
     "seconds": 0.0182,
     "checked": true
   },
   {
     "problem": "vine",
+    "case": "random7",
+    "seconds": 0.0135,
+    "checked": true
+  },
+  {
+    "problem": "vine",
+    "case": "random8",
+    "seconds": 0.0127,
+    "checked": true
+  },
+  {
+    "problem": "vine",
+    "case": "random9",
+    "seconds": 0.0127,
+    "checked": true
+  },
+  {
+    "problem": "vine",
+    "case": "random10",
+    "seconds": 0.0091,
+    "checked": true
+  },
+  {
+    "problem": "vine",
+    "case": "random11",
+    "seconds": 0.014,
+    "checked": true
+  },
+  {
+    "problem": "vine",
+    "case": "random12",
+    "seconds": 0.013,
+    "checked": true
+  },
+  {
+    "problem": "vine",
+    "case": "random13",
+    "seconds": 0.0159,
+    "checked": true
+  },
+  {
+    "problem": "vine",
+    "case": "random14",
+    "seconds": 0.0127,
+    "checked": true
+  },
+  {
+    "problem": "vine",
+    "case": "random15",
+    "seconds": 0.0121,
+    "checked": true
+  },
+  {
+    "problem": "vine",
+    "case": "random16",
+    "seconds": 0.0117,
+    "checked": true
+  },
+  {
+    "problem": "vine",
+    "case": "random17",
+    "seconds": 0.0089,
+    "checked": true
+  },
+  {
+    "problem": "vine",
+    "case": "random18",
+    "seconds": 0.0124,
+    "checked": true
+  },
+  {
+    "problem": "vine",
+    "case": "random19",
+    "seconds": 0.0139,
+    "checked": true
+  },
+  {
+    "problem": "vine",
+    "case": "random20",
+    "seconds": 0.0162,
+    "checked": true
+  },
+  {
+    "problem": "vine",
+    "case": "random21",
+    "seconds": 0.0113,
+    "checked": true
+  },
+  {
+    "problem": "vine",
+    "case": "random22",
+    "seconds": 0.0092,
+    "checked": true
+  },
+  {
+    "problem": "vine",
+    "case": "random23",
+    "seconds": 0.0108,
+    "checked": true
+  },
+  {
+    "problem": "vine",
+    "case": "random24",
+    "seconds": 0.0084,
+    "checked": true
+  },
+  {
+    "problem": "vine",
+    "case": "random25",
+    "seconds": 0.0092,
+    "checked": true
+  },
+  {
+    "problem": "vine",
+    "case": "random26",
+    "seconds": 0.0105,
+    "checked": true
+  },
+  {
+    "problem": "vine",
+    "case": "random27",
+    "seconds": 0.0127,
+    "checked": true
+  },
+  {
+    "problem": "vine",
+    "case": "random28",
+    "seconds": 0.0125,
+    "checked": true
+  },
+  {
+    "problem": "vine",
+    "case": "random29",
+    "seconds": 0.0116,
+    "checked": true
+  },
+  {
+    "problem": "vine",
+    "case": "random30",
+    "seconds": 0.0106,
+    "checked": true
+  },
+  {
+    "problem": "vine",
+    "case": "random31",
+    "seconds": 0.0179,
+    "checked": true
+  },
+  {
+    "problem": "vine",
+    "case": "random32",
+    "seconds": 0.0113,
+    "checked": true
+  },
+  {
+    "problem": "vine",
     "case": "random33",
-    "seconds": 0.0137,
+    "seconds": 0.011,
     "checked": true
   },
   {
     "problem": "vine",
     "case": "random34",
-    "seconds": 0.0277,
+    "seconds": 0.0237,
     "checked": true
   },
   {
     "problem": "vine",
     "case": "chain",
-    "seconds": 0.0977,
+    "seconds": 0.1139,
     "checked": true
   },
   {
     "problem": "vine",
     "case": "star",
-    "seconds": 0.0985,
+    "seconds": 0.1166,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "sample1",
-    "seconds": 0.1448,
+    "seconds": 0.1456,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "sample2",
-    "seconds": 0.1206,
+    "seconds": 0.0975,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "sample3",
-    "seconds": 0.13,
+    "seconds": 0.1039,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "random0",
-    "seconds": 0.0146,
+    "seconds": 0.016,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "random1",
-    "seconds": 0.032,
+    "seconds": 0.0244,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "random2",
-    "seconds": 0.0207,
+    "seconds": 0.0114,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "random3",
-    "seconds": 0.0204,
+    "seconds": 0.0136,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "random4",
-    "seconds": 0.0164,
+    "seconds": 0.0158,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "random5",
-    "seconds": 0.0168,
+    "seconds": 0.0233,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "random6",
-    "seconds": 0.0249,
+    "seconds": 0.0147,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "random7",
-    "seconds": 0.0125,
+    "seconds": 0.0153,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "random8",
-    "seconds": 0.0232,
+    "seconds": 0.0152,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "random9",
-    "seconds": 0.0173,
+    "seconds": 0.0153,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "random10",
-    "seconds": 0.0253,
+    "seconds": 0.014,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "random11",
-    "seconds": 0.0142,
+    "seconds": 0.0136,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "random12",
-    "seconds": 0.0268,
+    "seconds": 0.0134,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "random13",
-    "seconds": 0.0245,
+    "seconds": 0.013,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "random14",
-    "seconds": 0.0312,
+    "seconds": 0.0144,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "random15",
-    "seconds": 0.0363,
+    "seconds": 0.0122,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "random16",
-    "seconds": 0.0208,
+    "seconds": 0.0188,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "random17",
-    "seconds": 0.0372,
+    "seconds": 0.0097,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "random18",
-    "seconds": 0.04,
+    "seconds": 0.0256,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "random19",
-    "seconds": 0.0212,
+    "seconds": 0.0139,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "random20",
-    "seconds": 0.0203,
+    "seconds": 0.015,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "random21",
-    "seconds": 0.0319,
+    "seconds": 0.0129,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "random22",
-    "seconds": 0.0202,
+    "seconds": 0.0228,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "random23",
-    "seconds": 0.0187,
+    "seconds": 0.014,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "random24",
-    "seconds": 0.031,
+    "seconds": 0.0111,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "random25",
-    "seconds": 0.0199,
+    "seconds": 0.0109,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "random26",
-    "seconds": 0.0205,
+    "seconds": 0.0128,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "random27",
-    "seconds": 0.0215,
-    "checked": true
-  },
-  {
-    "problem": "isogeny",
-    "case": "random28",
-    "seconds": 0.022,
-    "checked": true
-  },
-  {
-    "problem": "isogeny",
-    "case": "random29",
     "seconds": 0.0168,
     "checked": true
   },
   {
     "problem": "isogeny",
-    "case": "random30",
+    "case": "random28",
     "seconds": 0.0164,
     "checked": true
   },
   {
     "problem": "isogeny",
+    "case": "random29",
+    "seconds": 0.0109,
+    "checked": true
+  },
+  {
+    "problem": "isogeny",
+    "case": "random30",
+    "seconds": 0.0229,
+    "checked": true
+  },
+  {
+    "problem": "isogeny",
     "case": "random31",
-    "seconds": 0.0281,
+    "seconds": 0.0317,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "random32",
-    "seconds": 0.0172,
+    "seconds": 0.0118,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "random33",
-    "seconds": 0.0174,
+    "seconds": 0.0083,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "random34",
-    "seconds": 0.0281,
+    "seconds": 0.0292,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "n3_large_m",
-    "seconds": 0.0608,
+    "seconds": 0.0453,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "equal_upper",
-    "seconds": 0.139,
+    "seconds": 0.1129,
     "checked": true
   },
   {
     "problem": "isogeny",
     "case": "many_divisors_upper",
-    "seconds": 0.1209,
+    "seconds": 0.1006,
     "checked": true
   },
   {
     "problem": "epigraphy",
     "case": "sample1",
-    "seconds": 0.0948,
+    "seconds": 0.0637,
     "checked": true
   },
   {
     "problem": "epigraphy",
     "case": "sample2",
-    "seconds": 0.0127,
+    "seconds": 0.0152,
     "checked": true
   },
   {
     "problem": "epigraphy",
     "case": "random0",
-    "seconds": 0.0393,
+    "seconds": 0.0097,
     "checked": true
   },
   {
     "problem": "epigraphy",
     "case": "random1",
-    "seconds": 0.0214,
+    "seconds": 0.019,
     "checked": true
   },
   {
     "problem": "epigraphy",
     "case": "random2",
-    "seconds": 0.0287,
+    "seconds": 0.014,
     "checked": true
   },
   {
     "problem": "epigraphy",
     "case": "random3",
-    "seconds": 0.0211,
-    "checked": true
-  },
-  {
-    "problem": "epigraphy",
-    "case": "random4",
-    "seconds": 0.0191,
-    "checked": true
-  },
-  {
-    "problem": "epigraphy",
-    "case": "random5",
-    "seconds": 0.0188,
-    "checked": true
-  },
-  {
-    "problem": "epigraphy",
-    "case": "random6",
-    "seconds": 0.026,
-    "checked": true
-  },
-  {
-    "problem": "epigraphy",
-    "case": "random7",
-    "seconds": 0.0144,
-    "checked": true
-  },
-  {
-    "problem": "epigraphy",
-    "case": "random8",
-    "seconds": 0.0315,
-    "checked": true
-  },
-  {
-    "problem": "epigraphy",
-    "case": "random9",
-    "seconds": 0.0297,
-    "checked": true
-  },
-  {
-    "problem": "epigraphy",
-    "case": "random10",
-    "seconds": 0.0261,
-    "checked": true
-  },
-  {
-    "problem": "epigraphy",
-    "case": "random11",
-    "seconds": 0.0148,
-    "checked": true
-  },
-  {
-    "problem": "epigraphy",
-    "case": "random12",
-    "seconds": 0.0178,
-    "checked": true
-  },
-  {
-    "problem": "epigraphy",
-    "case": "random13",
-    "seconds": 0.0186,
-    "checked": true
-  },
-  {
-    "problem": "epigraphy",
-    "case": "random14",
-    "seconds": 0.0194,
-    "checked": true
-  },
-  {
-    "problem": "epigraphy",
-    "case": "random15",
-    "seconds": 0.0282,
-    "checked": true
-  },
-  {
-    "problem": "epigraphy",
-    "case": "random16",
-    "seconds": 0.0186,
-    "checked": true
-  },
-  {
-    "problem": "epigraphy",
-    "case": "random17",
-    "seconds": 0.0216,
-    "checked": true
-  },
-  {
-    "problem": "epigraphy",
-    "case": "random18",
-    "seconds": 0.0323,
-    "checked": true
-  },
-  {
-    "problem": "epigraphy",
-    "case": "random19",
     "seconds": 0.0206,
     "checked": true
   },
   {
     "problem": "epigraphy",
+    "case": "random4",
+    "seconds": 0.0152,
+    "checked": true
+  },
+  {
+    "problem": "epigraphy",
+    "case": "random5",
+    "seconds": 0.013,
+    "checked": true
+  },
+  {
+    "problem": "epigraphy",
+    "case": "random6",
+    "seconds": 0.0149,
+    "checked": true
+  },
+  {
+    "problem": "epigraphy",
+    "case": "random7",
+    "seconds": 0.0124,
+    "checked": true
+  },
+  {
+    "problem": "epigraphy",
+    "case": "random8",
+    "seconds": 0.0182,
+    "checked": true
+  },
+  {
+    "problem": "epigraphy",
+    "case": "random9",
+    "seconds": 0.015,
+    "checked": true
+  },
+  {
+    "problem": "epigraphy",
+    "case": "random10",
+    "seconds": 0.0188,
+    "checked": true
+  },
+  {
+    "problem": "epigraphy",
+    "case": "random11",
+    "seconds": 0.0097,
+    "checked": true
+  },
+  {
+    "problem": "epigraphy",
+    "case": "random12",
+    "seconds": 0.0088,
+    "checked": true
+  },
+  {
+    "problem": "epigraphy",
+    "case": "random13",
+    "seconds": 0.0122,
+    "checked": true
+  },
+  {
+    "problem": "epigraphy",
+    "case": "random14",
+    "seconds": 0.0186,
+    "checked": true
+  },
+  {
+    "problem": "epigraphy",
+    "case": "random15",
+    "seconds": 0.0177,
+    "checked": true
+  },
+  {
+    "problem": "epigraphy",
+    "case": "random16",
+    "seconds": 0.0113,
+    "checked": true
+  },
+  {
+    "problem": "epigraphy",
+    "case": "random17",
+    "seconds": 0.0109,
+    "checked": true
+  },
+  {
+    "problem": "epigraphy",
+    "case": "random18",
+    "seconds": 0.0173,
+    "checked": true
+  },
+  {
+    "problem": "epigraphy",
+    "case": "random19",
+    "seconds": 0.0094,
+    "checked": true
+  },
+  {
+    "problem": "epigraphy",
     "case": "random20",
-    "seconds": 0.0171,
+    "seconds": 0.0132,
     "checked": true
   },
   {
     "problem": "epigraphy",
     "case": "random21",
-    "seconds": 0.0196,
-    "checked": true
-  },
-  {
-    "problem": "epigraphy",
-    "case": "random22",
-    "seconds": 0.0201,
-    "checked": true
-  },
-  {
-    "problem": "epigraphy",
-    "case": "random23",
-    "seconds": 0.0201,
-    "checked": true
-  },
-  {
-    "problem": "epigraphy",
-    "case": "random24",
-    "seconds": 0.0336,
-    "checked": true
-  },
-  {
-    "problem": "epigraphy",
-    "case": "random25",
-    "seconds": 0.0393,
-    "checked": true
-  },
-  {
-    "problem": "epigraphy",
-    "case": "random26",
-    "seconds": 0.0201,
-    "checked": true
-  },
-  {
-    "problem": "epigraphy",
-    "case": "random27",
-    "seconds": 0.0374,
-    "checked": true
-  },
-  {
-    "problem": "epigraphy",
-    "case": "random28",
-    "seconds": 0.037,
-    "checked": true
-  },
-  {
-    "problem": "epigraphy",
-    "case": "random29",
-    "seconds": 0.0232,
-    "checked": true
-  },
-  {
-    "problem": "epigraphy",
-    "case": "random30",
-    "seconds": 0.0223,
-    "checked": true
-  },
-  {
-    "problem": "epigraphy",
-    "case": "random31",
-    "seconds": 0.0185,
-    "checked": true
-  },
-  {
-    "problem": "epigraphy",
-    "case": "random32",
-    "seconds": 0.0198,
-    "checked": true
-  },
-  {
-    "problem": "epigraphy",
-    "case": "random33",
-    "seconds": 0.0193,
-    "checked": true
-  },
-  {
-    "problem": "epigraphy",
-    "case": "random34",
     "seconds": 0.0208,
     "checked": true
   },
   {
     "problem": "epigraphy",
+    "case": "random22",
+    "seconds": 0.0155,
+    "checked": true
+  },
+  {
+    "problem": "epigraphy",
+    "case": "random23",
+    "seconds": 0.0089,
+    "checked": true
+  },
+  {
+    "problem": "epigraphy",
+    "case": "random24",
+    "seconds": 0.0161,
+    "checked": true
+  },
+  {
+    "problem": "epigraphy",
+    "case": "random25",
+    "seconds": 0.0116,
+    "checked": true
+  },
+  {
+    "problem": "epigraphy",
+    "case": "random26",
+    "seconds": 0.0145,
+    "checked": true
+  },
+  {
+    "problem": "epigraphy",
+    "case": "random27",
+    "seconds": 0.0101,
+    "checked": true
+  },
+  {
+    "problem": "epigraphy",
+    "case": "random28",
+    "seconds": 0.0204,
+    "checked": true
+  },
+  {
+    "problem": "epigraphy",
+    "case": "random29",
+    "seconds": 0.0136,
+    "checked": true
+  },
+  {
+    "problem": "epigraphy",
+    "case": "random30",
+    "seconds": 0.0151,
+    "checked": true
+  },
+  {
+    "problem": "epigraphy",
+    "case": "random31",
+    "seconds": 0.0086,
+    "checked": true
+  },
+  {
+    "problem": "epigraphy",
+    "case": "random32",
+    "seconds": 0.041,
+    "checked": true
+  },
+  {
+    "problem": "epigraphy",
+    "case": "random33",
+    "seconds": 0.017,
+    "checked": true
+  },
+  {
+    "problem": "epigraphy",
+    "case": "random34",
+    "seconds": 0.0125,
+    "checked": true
+  },
+  {
+    "problem": "epigraphy",
     "case": "full_upper",
-    "seconds": 0.2027,
+    "seconds": 0.1232,
     "checked": true
   },
   {
     "problem": "epigraphy",
     "case": "late_upper",
-    "seconds": 0.1602,
+    "seconds": 0.1124,
     "checked": true
   },
   {
     "problem": "epigraphy",
     "case": "last_day_empty",
-    "seconds": 0.1467,
+    "seconds": 0.1057,
     "checked": true
   }
 ]
