@@ -1,0 +1,35 @@
+{
+  "name": "P1330 封锁阳光大学",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P1330",
+  "interactive": false,
+  "memoryLimit": 125,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "3 3\n1 2\n1 3\n2 3\n",
+      "output": "Impossible\n"
+    },
+    {
+      "input": "3 2\n1 2\n2 3\n",
+      "output": "1\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P1330"
+    }
+  },
+  "batch": {
+    "id": "8c0b0bf8-76b7-47c7-8028-e16e7b1d075c",
+    "size": 1
+  }
+}

@@ -1,4 +1,20 @@
 //  Author: Tangyixiao
+//  Time: 2026-10-02 20:23:40
+//  Problem: P1330 封锁阳光大学
+//  Contest: Luogu
+//  URL: https://www.luogu.com.cn/problem/P1330
+//  Memory Limit: 125 MB
+//  Time Limit: 1000 ms
+//  Interactive: false
+//  Test Type: single
+//
+//  Algorithm:
+//  Complexity: O()
+//  Note:
+//
+//  Powered by Visual Studio Code + CPH (Competitive Programming Helper)
+
+//  Author: Tangyixiao
 // Time: 2026-07-02 15:49:45
 //  Problem: P1330 封锁阳光大学
 //  Contest: Luogu
