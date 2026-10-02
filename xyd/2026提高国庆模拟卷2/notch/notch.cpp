@@ -588,21 +588,31 @@ long long v, ans[N];
 
 inline void solve(int Task_Id) {
     cin >> n;
-    for (int i = 1; i <= n; i++) cin >> a[i], p[a[i]] = i;
+    for (int i = 1; i <= n; i++)
+        cin >> a[i], p[a[i]] = i;
     t = 0;
     for (int i = 1; i <= n; i++) {
-        while (t && a[st[t]] > a[i]) r[st[t--]] = i;
+        for (; t && a[st[t]] > a[i];) {
+            r[st[t--]] = i;
+        }
         l[i] = t ? st[t] : 0, st[++t] = i;
     }
-    while (t) r[st[t--]] = n + 1;
-    for (int i = 1; i <= n; i++) if (a[i]) ans[a[i]] += 1LL * (i - l[i]) * (r[i] - i);
+    for (; t;) {
+        r[st[t--]] = n + 1;
+    }
+    for (int i = 1; i <= n; i++) {
+        if (a[i]) {
+            ans[a[i]] += 1LL * (i - l[i]) * (r[i] - i);
+        }
+    }
     x = y = p[0], v = 1LL * x * (n - y + 1);
     for (int k = 1; k < n; k++) {
         x = min(x, p[k]), y = max(y, p[k]);
         ans[k] += v - 1LL * x * (n - y + 1), v = 1LL * x * (n - y + 1);
     }
     ans[n] += v;
-    for (int k = 1; k <= n; k++) cout << ans[k] << (k == n ? '\n' : ' ');
+    for (int k = 1; k <= n; k++)
+        cout << ans[k] << (k == n ? '\n' : ' ');
     return;
 }
 } // namespace TANGYIXIAO
