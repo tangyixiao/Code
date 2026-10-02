@@ -1,0 +1,18 @@
+{
+  "notch": {
+    "template": "e582733841d0b71da1d2da751c0d6d947186522555ac546605a664016faf17c3",
+    "before": "27ef66c6b85c7d3c17f524c4fe08ff6c55b7289fcb97fc28ddcb42a238d02919"
+  },
+  "vine": {
+    "template": "9a52966736a7fc6b6821ce775e4a124585861d38a82e5fc58d27fee9afcf7ec0",
+    "before": "42df84a459c02e5c0e26aee22f529e615d17cf89ea252814f6b9b38c6a0cc5cc"
+  },
+  "isogeny": {
+    "template": "6dcd58771bf41bef5bda2e0145bf4e94179e7c960e3c029f2472d2522950984e",
+    "before": "31030eeb6591079b10f45e545fa2ed4d6d1361c928c93eadece9447900c0d340"
+  },
+  "epigraphy": {
+    "template": "6aa0384c2ca6563de37d9a7fe579f7a4f09a52f0478901e606ebea213800404a",
+    "before": "7c6062e5cbb5186825db5311098677b4d4d1f871d00dbb61ebf8c767505df3a4"
+  }
+}

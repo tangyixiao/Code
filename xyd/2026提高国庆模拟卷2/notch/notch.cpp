@@ -582,45 +582,27 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 200005;
-int n, a[N], pos[N], st[N], left_pos[N], right_pos[N];
-long long ans[N];
+const int N = 2e5 + 5;
+int n, t, lo, hi, a[N], p[N], st[N], l[N], r[N];
+long long prev, ans[N];
 
 inline void solve(int Task_Id) {
     cin >> n;
+    for (int i = 1; i <= n; i++) cin >> a[i], p[a[i]] = i;
+    t = 0;
     for (int i = 1; i <= n; i++) {
-        cin >> a[i];
-        pos[a[i]] = i;
+        while (t && a[st[t]] > a[i]) r[st[t--]] = i;
+        l[i] = t ? st[t] : 0, st[++t] = i;
     }
-    int top = 0;
-    for (int i = 1; i <= n; i++) {
-        while (top && a[st[top]] > a[i]) {
-            right_pos[st[top--]] = i;
-        }
-        left_pos[i] = top ? st[top] : 0;
-        st[++top] = i;
-    }
-    while (top) {
-        right_pos[st[top--]] = n + 1;
-    }
-    for (int i = 1; i <= n; i++) {
-        if (a[i] > 0) {
-            ans[a[i]] += 1LL * (i - left_pos[i]) * (right_pos[i] - i);
-        }
-    }
-    int lo = pos[0], hi = pos[0];
-    long long prev = 1LL * lo * (n - hi + 1);
+    while (t) r[st[t--]] = n + 1;
+    for (int i = 1; i <= n; i++) if (a[i]) ans[a[i]] += 1LL * (i - l[i]) * (r[i] - i);
+    lo = hi = p[0], prev = 1LL * lo * (n - hi + 1);
     for (int k = 1; k < n; k++) {
-        lo = min(lo, pos[k]);
-        hi = max(hi, pos[k]);
-        long long cur = 1LL * lo * (n - hi + 1);
-        ans[k] += prev - cur;
-        prev = cur;
+        lo = min(lo, p[k]), hi = max(hi, p[k]);
+        ans[k] += prev - 1LL * lo * (n - hi + 1), prev = 1LL * lo * (n - hi + 1);
     }
     ans[n] += prev;
-    for (int k = 1; k <= n; k++) {
-        cout << ans[k] << (k == n ? '\n' : ' ');
-    }
+    for (int k = 1; k <= n; k++) cout << ans[k] << (k == n ? '\n' : ' ');
     return;
 }
 } // namespace TANGYIXIAO

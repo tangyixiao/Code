@@ -582,60 +582,35 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 200005;
-const int L = 20;
-int n, q, dep[N], up[L][N];
+const int N = 2e5 + 5, L = 2e1;
+int n, q, d[N], f[L][N], a, b, c, x, y, z;
 
 inline int lca(int x, int y) {
-    if (dep[x] < dep[y]) {
-        swap(x, y);
-    }
-    int d = dep[x] - dep[y];
-    for (int j = 0; j < L; j++) {
-        if (d >> j & 1) {
-            x = up[j][x];
-        }
-    }
-    if (x == y) {
-        return x;
-    }
-    for (int j = L - 1; j >= 0; j--) {
-        if (up[j][x] != up[j][y]) {
-            x = up[j][x], y = up[j][y];
-        }
-    }
-    return up[0][x];
+    if (d[x] < d[y]) swap(x, y);
+    z = d[x] - d[y];
+    for (int j = 0; j < L; j++) if (z >> j & 1) x = f[j][x];
+    if (x == y) return x;
+    for (int j = L - 1; j >= 0; j--) if (f[j][x] != f[j][y]) x = f[j][x], y = f[j][y];
+    return f[0][x];
 }
 
 inline void solve(int Task_Id) {
     cin >> n >> q;
-    dep[1] = 0;
+    d[1] = 0;
     for (int i = 2; i <= n; i++) {
-        cin >> up[0][i];
-        dep[i] = dep[up[0][i]] + 1;
-        for (int j = 1; j < L; j++) up[j][i] = up[j - 1][up[j - 1][i]];
+        cin >> f[0][i], d[i] = d[f[0][i]] + 1;
+        for (int j = 1; j < L; j++) f[j][i] = f[j - 1][f[j - 1][i]];
     }
     while (q--) {
-        int a, b;
         cin >> a >> b;
-        int c = lca(a, b);
-        int x = dep[a] - dep[c], y = dep[b] - dep[c];
-        int moves;
+        c = lca(a, b), x = d[a] - d[c], y = d[b] - d[c];
         if (!x || !y) {
-            int d = max(x, y);
-            if (d == 1) {
-                cout << "Second 0\n";
-            } else {
-                cout << "First 1\n";
-            }
+            if (max(x, y) == 1) cout << "Second 0\n";
+            else cout << "First 1\n";
             continue;
         }
-        if (x == y && x >= 2) {
-            cout << "Second 0\n";
-            continue;
-        }
-        moves = (x == 1 && y == 1) ? 2 : 1;
-        cout << "First " << moves << '\n';
+        if (x == y && x >= 2) cout << "Second 0\n";
+        else cout << "First " << ((x == 1 && y == 1) ? 2 : 1) << '\n';
     }
     return;
 }
