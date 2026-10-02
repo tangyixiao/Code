@@ -584,11 +584,11 @@ signed main() {
 namespace TANGYIXIAO {
 const int N = 2e5 + 5, M = 1e6 + 5, mod = 9.98244353e8;
 int a[N], b[N], p[M], f[M], ans[M], cnt[M], c[M], s[M], v[M], u[M], vis[M];
-int n, q, g, A, B, U, V, pc, sz, d, t, H, k, w, x, y, e, old, mul, pr[M], dv[1000], ep[16], pp[16];
+int n, q, g, A, B, U, V, pc, sz, d, t, H, k, w, x, y, e, old, mul, r, pr[M], dv[1000], ep[16], pp[16];
 long long h, choose;
 
 inline int qpow(int x, int y) {
-    int r = 1;
+    r = 1;
     for (; y; y >>= 1, x = (long long)x * x % mod) { if (y & 1) { r = (long long)r * x % mod; } }
     return r;
 }

@@ -607,10 +607,7 @@ inline void solve(int) {
     c[0][0] = 1;
     for (int r = 1; r <= m; r++) {
         for (int s = 0; s < lim; s++) for (int k = 0; k < r; k++) f[s][k] = pc[s] < r ? c[s][k] : 0;
-        for (int x = 0; x < m; x++) for (int s = 0; s < lim; s++) if (s >> x & 1) for (int k = 0; k < r; k++) {
-            f[s][k] += f[s ^ (1 << x)][k];
-            if (f[s][k] >= mod) f[s][k] -= mod;
-        }
+        for (int x = 0; x < m; x++) for (int s = 0; s < lim; s++) if (s >> x & 1) for (int k = 0; k < r; k++) { f[s][k] += f[s ^ (1 << x)][k]; if (f[s][k] >= mod) f[s][k] -= mod; }
         for (int s = 1; s < lim; s++) if (pc[s] == r && vis[s] && d[s] <= n) {
             for (int k = 0; k < r; k++) c[s][k + 1] = f[s][k];
             long long z = 0;

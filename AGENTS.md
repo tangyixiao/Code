@@ -14,7 +14,9 @@ This monorepo contains independent competitive-programming solutions and support
 
 ## Coding Style and Naming
 
-C++ uses 4-space indentation, K&R braces, `#include <bits/stdc++.h>`, fast iostream setup, and `signed main()`. Prefer concise lowercase function names and problem-oriented filenames such as `P1234 ...cpp`, `CF...cpp`, or `ABC...cpp`. Use `.clang-format` for formatting; it is LLVM-based with a 4-space indent and no column limit. Preserve existing historical boilerplate, but do not copy it into new solutions. Keep frontend TypeScript/React changes localized to `src/` and follow the surrounding module style.
+C++ uses 4-space indentation, K&R braces, `#include <bits/stdc++.h>`, fast iostream setup, and `signed main()`. For competitive-programming implementation, especially `solve`, compress simple loop/conditional bodies and related assignments onto one line, using comma expressions where appropriate. Avoid unnecessary temporary variables; prefer global declarations for necessary working variables and arrays, while keeping function parameters and loop indices scoped where needed. Use short function, variable, and array names. Write numeric constants in scientific notation, such as `N = 2e5 + 5` and `M = 1e6 + 5`, preserving their exact values and integer types. Never compress input-dependent work into a `for` update expression that changes its evaluation order.
+
+Prefer concise lowercase function names and problem-oriented filenames such as `P1234 ...cpp`, `CF...cpp`, or `ABC...cpp`. Follow `.clang-format` for indentation; it is LLVM-based with a 4-space indent and no column limit, but preserve intentional implementation line compression. Preserve existing historical boilerplate, but do not copy it into new solutions. Keep frontend TypeScript/React changes localized to `src/` and follow the surrounding module style.
 
 ## Testing Guidelines
 

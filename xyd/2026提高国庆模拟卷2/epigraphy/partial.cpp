@@ -37,15 +37,11 @@ signed main() {
     dp[0] = 1;
     for (int day = 1; day <= n; day++) {
         for (int s = 0; s < lim; s++) f[s] = dp[s];
-        for (int b = 0; b < m; b++) for (int s = 0; s < lim; s++) if (s >> b & 1) {
-            f[s] += f[s ^ (1 << b)];
-            if (f[s] >= mod) f[s] -= mod;
-        }
+        for (int b = 0; b < m; b++) for (int s = 0; s < lim; s++) if (s >> b & 1) { f[s] += f[s ^ (1 << b)]; if (f[s] >= mod) f[s] -= mod; }
         ans = 0;
         for (int s = 0; s < lim; s++) {
             dp[s] = vis[s] && d[s] <= day && (s & a[day]) == s ? f[s] : 0;
-            ans += dp[s];
-            if (ans >= mod) ans -= mod;
+            ans += dp[s], ans >= mod && (ans -= mod);
         }
     }
     cout << ans << '\n';
