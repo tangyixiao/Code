@@ -581,15 +581,16 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+// clang-format off
 namespace TANGYIXIAO {
 const int N = 2e5 + 5;
 int n, t, x, y, a[N], p[N], st[N], l[N], r[N];
 long long v, ans[N];
-
 inline void solve(int Task_Id) {
     cin >> n;
-    for (int i = 1; i <= n; i++)
+    for (int i = 1; i <= n; i++) {
         cin >> a[i], p[a[i]] = i;
+    }
     t = 0;
     for (int i = 1; i <= n; i++) {
         for (; t && a[st[t]] > a[i];) {
@@ -616,3 +617,4 @@ inline void solve(int Task_Id) {
     return;
 }
 } // namespace TANGYIXIAO
+// clang-format on

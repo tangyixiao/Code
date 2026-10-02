@@ -581,8 +581,9 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+// clang-format off
 namespace TANGYIXIAO {
-const int N = 2e5 + 5, L = 2e1;
+const int N = 2e5 + 5, L = 2.5e1;
 int n, q, d[N], f[L][N], a, b, c, x, y, z;
 
 inline int lca(int x, int y) {
@@ -610,3 +611,4 @@ inline void solve(int Task_Id) {
     return;
 }
 } // namespace TANGYIXIAO
+// clang-format on

@@ -581,6 +581,7 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+// clang-format off
 namespace TANGYIXIAO {
 const int N = 2e5 + 5, M = 1e6 + 5, mod = 9.98244353e8;
 int a[N], b[N], p[M], f[M], ans[M], cnt[M], c[M], s[M], v[M], u[M], vis[M];
@@ -655,3 +656,4 @@ inline void solve(int Task_Id) {
     return;
 }
 } // namespace TANGYIXIAO
+// clang-format on

@@ -12,3 +12,9 @@ ContinuationIndentWidth: 4
 
 # 列限制：每行字符数限制（LLVM 默认 80）。
 ColumnLimit: 0
+
+# 竞赛实现压行：保留简短的分支、循环、函数和语句块。
+AllowShortIfStatementsOnASingleLine: AllIfsAndElse
+AllowShortLoopsOnASingleLine: true
+AllowShortFunctionsOnASingleLine: All
+AllowShortBlocksOnASingleLine: Always
