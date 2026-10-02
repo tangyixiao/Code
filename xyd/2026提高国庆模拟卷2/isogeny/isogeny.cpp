@@ -582,8 +582,85 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int MOD = 998244353;
+const int LIM = 1000000;
+int a[200005], query_m[200005], spf[LIM + 1], tau3[LIM + 1];
+int best[LIM + 1], ways[LIM + 1], freq[LIM + 1], divisible[LIM + 1];
+int cand[LIM + 1];
+int value_list[LIM + 1];
+
+inline int mod_pow(int a, int e) {
+    int r = 1;
+    for (; e; e >>= 1, a = (long long)a * a % MOD) { if (e & 1) { r = (long long)r * a % MOD; } }
+    return r;
+}
+
+inline void make_sieve(int n) {
+    static int primes[LIM + 1], pc = 0;
+    for (int i = 2; i <= n; i++) {
+        if (!spf[i]) { spf[i] = i, primes[++pc] = i; }
+        for (int j = 1; j <= pc && primes[j] <= spf[i] && (long long)i * primes[j] <= n; j++) { spf[i * primes[j]] = primes[j]; }
+    }
+    tau3[1] = 1;
+    for (int i = 2; i <= n; i++) {
+        int p = spf[i], olde = 0, y = i;
+        while (y % p == 0) { y /= p, olde++; }
+        tau3[i] = (long long)tau3[y] * (olde + 1) * (olde + 2) / 2 % MOD;
+    }
+    return;
+}
+
+inline void get_divisors(int x, int *d, int &sz) {
+    int p[16], e[16], k = 0;
+    while (x > 1) { int v = spf[x], c = 0; while (x % v == 0) { x /= v, c++; } p[k] = v, e[k++] = c; }
+    d[0] = 1, sz = 1;
+    for (int i = 0; i < k; i++) { int old = sz, mul = 1; for (int j = 1; j <= e[i]; j++) { mul *= p[i]; for (int z = 0; z < old; z++) { d[sz++] = d[z] * mul; } } }
+    return;
+}
+
 inline void solve(int Task_Id) {
-    // do something here
+    int n, q;
+    cin >> n >> q;
+    int g = 0, maxb = 1, maxm = 1;
+    for (int i = 1; i <= n; i++) { cin >> a[i], g = MATH::gcd(g, a[i]); }
+    for (int i = 1; i <= q; i++) { cin >> query_m[i], maxm = max(maxm, query_m[i]); }
+    int value_count = 0;
+    for (int i = 1; i <= n; i++) { a[i] /= g, maxb = max(maxb, a[i]), freq[a[i]]++; if (freq[a[i]] == 1) { value_list[++value_count] = a[i]; } }
+    make_sieve(max(maxb, maxm));
+    for (int d = 1; d <= maxb; d++) { for (int x = d; x <= maxb; x += d) { divisible[d] += freq[x]; } }
+    int cc = 0;
+    if (n == 3) { for (int d = 1; d <= maxm; d++) { cand[cc++] = d; } }
+    else {
+        int ds[1000], sz = 0;
+        for (int i = 1; i <= min(n, 4); i++) {
+            get_divisors(a[i], ds, sz);
+            for (int j = 0; j < sz; j++) { int d = ds[j]; if (d <= maxm && divisible[d] >= n - 3) { bool seen = false; for (int z = 0; z < cc; z++) { if (cand[z] == d) { seen = true; break; } } if (!seen) { cand[cc++] = d; } } }
+        }
+    }
+    for (int z = 0; z < cc; z++) {
+        int d = cand[z], t = 0;
+        long long hprod = 1;
+        for (int i = 1; i <= value_count; i++) {
+            int b = value_list[i], h = d / MATH::gcd(d, b), c = freq[b];
+            if (h > 1) {
+                t += c;
+                if (t > 3) { break; }
+                for (int j = 0; j < c; j++) { if (hprod > maxm / h) { hprod = (long long)maxm + 1; break; } hprod *= h; }
+                if (hprod > maxm) { break; }
+            }
+        }
+        if (t > 3 || hprod > maxm) { continue; }
+        int H = (int)hprod;
+        long long choose = 1;
+        int k = 3 - t;
+        for (int i = 0; i < k; i++) { choose = choose * (n - t - i) % MOD; }
+        choose = choose * mod_pow(k == 3 ? 6 : (k == 2 ? 2 : 1), MOD - 2) % MOD;
+        int baseways = (long long)6 * choose % MOD;
+        for (int m = H; m <= maxm; m += H) {
+            if (best[m] < d) { best[m] = d, ways[m] = (long long)baseways * tau3[m / H] % MOD; }
+        }
+    }
+    for (int i = 1; i <= q; i++) { int m = query_m[i]; cout << (long long)g * best[m] << ' ' << ways[m] << '\n'; }
     return;
 }
 } // namespace TANGYIXIAO

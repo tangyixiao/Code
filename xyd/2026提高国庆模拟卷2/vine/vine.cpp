@@ -582,8 +582,61 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 200005;
+const int L = 20;
+int n, q, dep[N], up[L][N];
+
+inline int lca(int x, int y) {
+    if (dep[x] < dep[y]) {
+        swap(x, y);
+    }
+    int d = dep[x] - dep[y];
+    for (int j = 0; j < L; j++) {
+        if (d >> j & 1) {
+            x = up[j][x];
+        }
+    }
+    if (x == y) {
+        return x;
+    }
+    for (int j = L - 1; j >= 0; j--) {
+        if (up[j][x] != up[j][y]) {
+            x = up[j][x], y = up[j][y];
+        }
+    }
+    return up[0][x];
+}
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> q;
+    dep[1] = 0;
+    for (int i = 2; i <= n; i++) {
+        cin >> up[0][i];
+        dep[i] = dep[up[0][i]] + 1;
+        for (int j = 1; j < L; j++) up[j][i] = up[j - 1][up[j - 1][i]];
+    }
+    while (q--) {
+        int a, b;
+        cin >> a >> b;
+        int c = lca(a, b);
+        int x = dep[a] - dep[c], y = dep[b] - dep[c];
+        int moves;
+        if (!x || !y) {
+            int d = max(x, y);
+            if (d == 1) {
+                cout << "Second 0\n";
+            } else {
+                cout << "First 1\n";
+            }
+            continue;
+        }
+        if (x == y && x >= 2) {
+            cout << "Second 0\n";
+            continue;
+        }
+        moves = (x == 1 && y == 1) ? 2 : 1;
+        cout << "First " << moves << '\n';
+    }
     return;
 }
 } // namespace TANGYIXIAO

@@ -582,8 +582,101 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int mod = 998244353;
+int a[200005], last[16], rel[1 << 16], cnt[1 << 16];
+int c[1 << 16][17], tmp[1 << 16][17], comb[200005][17];
+bool has[1 << 16];
+
 inline void solve(int Task_Id) {
-    // do something here
+    int n, m, q;
+    cin >> n >> m >> q;
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i];
+    }
+    int lim = 1 << m;
+    memset(rel, 0x3f, sizeof(rel));
+    has[0] = true;
+    for (int s = 1; s < lim; s++) {
+        cnt[s] = cnt[s >> 1] + (s & 1);
+    }
+    for (int i = 1; i <= n; i++) {
+        int miss = (lim - 1) ^ a[i];
+        for (int b = 0; b < m; b++) {
+            if (miss >> b & 1) {
+                last[b] = i;
+            }
+        }
+    }
+    for (int j = 0, s, d; j < q; j++) {
+        cin >> s >> d;
+        has[s] = true;
+        rel[s] = d;
+    }
+    rel[0] = 1;
+    for (int s = 1; s < lim; s++) {
+        int mx = 0;
+        for (int b = 0; b < m; b++) {
+            if (s >> b & 1) {
+                mx = max(mx, last[b]);
+            }
+        }
+        rel[s] = max(rel[s], mx + 1);
+    }
+    for (int i = 0; i <= n; i++) {
+        comb[i][0] = 1;
+        for (int k = 1; k <= m; k++) {
+            comb[i][k] = i ? (comb[i - 1][k] + comb[i - 1][k - 1]) % mod : 0;
+        }
+    }
+    c[0][0] = 1;
+    for (int r = 1; r <= m; r++) {
+        for (int s = 0; s < lim; s++) {
+            if (cnt[s] < r) {
+                for (int k = 0; k < r; k++) {
+                    tmp[s][k] = c[s][k];
+                }
+            } else {
+                for (int k = 0; k < r; k++) {
+                    tmp[s][k] = 0;
+                }
+            }
+        }
+        for (int b = 0; b < m; b++) {
+            for (int s = 0; s < lim; s++) {
+                if (s >> b & 1) {
+                    for (int k = 0; k < r; k++) {
+                        tmp[s][k] += tmp[s ^ (1 << b)][k];
+                        if (tmp[s][k] >= mod) {
+                            tmp[s][k] -= mod;
+                        }
+                    }
+                }
+            }
+        }
+        for (int s = 1; s < lim; s++) {
+            if (cnt[s] != r || !has[s] || rel[s] > n) {
+                continue;
+            }
+            for (int k = 0; k < r; k++) {
+                c[s][k + 1] = tmp[s][k];
+            }
+            long long v = 0;
+            for (int k = 1; k <= r; k++) {
+                v = (v + 1LL * c[s][k] * comb[rel[s] - 1][k]) % mod;
+            }
+            c[s][0] = (mod - v) % mod;
+        }
+    }
+    long long ans = 0;
+    for (int s = 0; s < lim; s++) {
+        if (!has[s] || rel[s] > n) {
+            continue;
+        }
+        for (int k = 0; k <= cnt[s]; k++) {
+            ans = (ans + 1LL * c[s][k] * comb[n][k]) % mod;
+        }
+    }
+    cout << ans << '\n';
     return;
 }
 } // namespace TANGYIXIAO

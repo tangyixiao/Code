@@ -582,8 +582,45 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 200005;
+int n, a[N], pos[N], st[N], left_pos[N], right_pos[N];
+long long ans[N];
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n;
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i];
+        pos[a[i]] = i;
+    }
+    int top = 0;
+    for (int i = 1; i <= n; i++) {
+        while (top && a[st[top]] > a[i]) {
+            right_pos[st[top--]] = i;
+        }
+        left_pos[i] = top ? st[top] : 0;
+        st[++top] = i;
+    }
+    while (top) {
+        right_pos[st[top--]] = n + 1;
+    }
+    for (int i = 1; i <= n; i++) {
+        if (a[i] > 0) {
+            ans[a[i]] += 1LL * (i - left_pos[i]) * (right_pos[i] - i);
+        }
+    }
+    int lo = pos[0], hi = pos[0];
+    long long prev = 1LL * lo * (n - hi + 1);
+    for (int k = 1; k < n; k++) {
+        lo = min(lo, pos[k]);
+        hi = max(hi, pos[k]);
+        long long cur = 1LL * lo * (n - hi + 1);
+        ans[k] += prev - cur;
+        prev = cur;
+    }
+    ans[n] += prev;
+    for (int k = 1; k <= n; k++) {
+        cout << ans[k] << (k == n ? '\n' : ' ');
+    }
     return;
 }
 } // namespace TANGYIXIAO
