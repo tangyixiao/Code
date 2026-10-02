@@ -582,7 +582,7 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 2e5 + 5, L = 2e1;
+const int N = 2e5 + 5, L = 25;
 int n, q, d[N], f[L][N], a, b, c, x, y, z;
 
 inline int lca(int x, int y) {
@@ -604,12 +604,7 @@ inline void solve(int Task_Id) {
     while (q--) {
         cin >> a >> b;
         c = lca(a, b), x = d[a] - d[c], y = d[b] - d[c];
-        if (!x || !y) {
-            if (max(x, y) == 1) cout << "Second 0\n";
-            else cout << "First 1\n";
-            continue;
-        }
-        if (x == y && x >= 2) cout << "Second 0\n";
+        if (((!x || !y) && max(x, y) == 1) || (x == y && x >= 2)) cout << "Second 0\n";
         else cout << "First " << ((x == 1 && y == 1) ? 2 : 1) << '\n';
     }
     return;

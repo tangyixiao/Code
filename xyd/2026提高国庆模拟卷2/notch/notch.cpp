@@ -583,8 +583,8 @@ signed main() {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 const int N = 2e5 + 5;
-int n, t, lo, hi, a[N], p[N], st[N], l[N], r[N];
-long long prev, ans[N];
+int n, t, x, y, a[N], p[N], st[N], l[N], r[N];
+long long v, ans[N];
 
 inline void solve(int Task_Id) {
     cin >> n;
@@ -596,12 +596,12 @@ inline void solve(int Task_Id) {
     }
     while (t) r[st[t--]] = n + 1;
     for (int i = 1; i <= n; i++) if (a[i]) ans[a[i]] += 1LL * (i - l[i]) * (r[i] - i);
-    lo = hi = p[0], prev = 1LL * lo * (n - hi + 1);
+    x = y = p[0], v = 1LL * x * (n - y + 1);
     for (int k = 1; k < n; k++) {
-        lo = min(lo, p[k]), hi = max(hi, p[k]);
-        ans[k] += prev - 1LL * lo * (n - hi + 1), prev = 1LL * lo * (n - hi + 1);
+        x = min(x, p[k]), y = max(y, p[k]);
+        ans[k] += v - 1LL * x * (n - y + 1), v = 1LL * x * (n - y + 1);
     }
-    ans[n] += prev;
+    ans[n] += v;
     for (int k = 1; k <= n; k++) cout << ans[k] << (k == n ? '\n' : ' ');
     return;
 }

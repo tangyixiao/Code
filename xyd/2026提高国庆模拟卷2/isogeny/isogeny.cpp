@@ -582,9 +582,10 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 200005, M = 1000005, mod = 9.98244353e8;
-int a[N], b[N], p[M], f[M], ans[M], cnt[M], c[M], s[M], v[M], u[M];
-int n, q, g, A, B, U, V, pr[M], pc, dv[1000], ep[16], pp[16];
+const int N = 2e5 + 5, M = 1e6 + 5, mod = 9.98244353e8;
+int a[N], b[N], p[M], f[M], ans[M], cnt[M], c[M], s[M], v[M], u[M], vis[M];
+int n, q, g, A, B, U, V, pc, sz, d, t, H, k, w, x, y, e, old, mul, pr[M], dv[1000], ep[16], pp[16];
+long long h, choose;
 
 inline int qpow(int x, int y) {
     int r = 1;
@@ -599,7 +600,7 @@ inline void init(int lim) {
     }
     f[1] = 1;
     for (int i = 2; i <= lim; i++) {
-        int x = i, e = 0;
+        x = i, e = 0;
         while (x % p[i] == 0) { x /= p[i], e++; }
         f[i] = (long long)f[x] * (e + 1) * (e + 2) / 2 % mod;
     }
@@ -607,41 +608,35 @@ inline void init(int lim) {
 }
 
 inline void get(int x, int &sz) {
-    int k = 0;
-    while (x > 1) { int y = p[x], e = 0; while (x % y == 0) { x /= y, e++; } pp[k] = y, ep[k++] = e; }
+    k = 0;
+    while (x > 1) { y = p[x], e = 0; while (x % y == 0) { x /= y, e++; } pp[k] = y, ep[k++] = e; }
     dv[0] = 1, sz = 1;
-    for (int i = 0; i < k; i++) { int old = sz, mul = 1; for (int j = 1; j <= ep[i]; j++) { mul *= pp[i]; for (int z = 0; z < old; z++) { dv[sz++] = dv[z] * mul; } } }
+    for (int i = 0; i < k; i++) { old = sz, mul = 1; for (int j = 1; j <= ep[i]; j++) { mul *= pp[i]; for (int z = 0; z < old; z++) { dv[sz++] = dv[z] * mul; } } }
     return;
 }
 
 inline void solve(int Task_Id) {
     cin >> n >> q;
-    g = 0, A = B = 1;
+    g = 0, A = B = 1, U = V = 0;
     for (int i = 1; i <= n; i++) { cin >> a[i], g = MATH::gcd(g, a[i]); }
     for (int i = 1; i <= q; i++) { cin >> b[i], B = max(B, b[i]); }
-    for (int i = 1; i <= n; i++) { a[i] /= g, A = max(A, a[i]), c[a[i]]++; if (c[a[i]] == 1) { u[++U] = a[i]; } }
+    for (int i = 1; i <= n; i++) { a[i] /= g, A = max(A, a[i]), c[a[i]]++; if (c[a[i]] == 1) { u[U++] = a[i]; } }
     init(max(A, B));
-    for (int d = 1; d <= A; d++) { for (int x = d; x <= A; x += d) { s[d] += c[x]; } }
-    if (n == 3) { for (int d = 1; d <= B; d++) { v[++V] = d; } }
+    for (int d0 = 1; d0 <= A; d0++) { for (int x0 = d0; x0 <= A; x0 += d0) { s[d0] += c[x0]; } }
+    if (n == 3) { for (int d0 = 1; d0 <= B; d0++) { v[V++] = d0; } }
     else {
-        int sz = 0;
         for (int i = 1; i <= min(n, 4); i++) {
             get(a[i], sz);
             for (int j = 0; j < sz; j++) {
-                int d = dv[j];
-                if (d <= B && s[d] >= n - 3) {
-                    bool found = false;
-                    for (int k = 0; k < V; k++) { if (v[k] == d) { found = true; break; } }
-                    if (!found) { v[V++] = d; }
-                }
+                d = dv[j];
+                if (d <= B && s[d] >= n - 3 && !vis[d]) { vis[d] = 1, v[V++] = d; }
             }
         }
     }
     for (int z = 0; z < V; z++) {
-        int d = v[z], t = 0;
-        long long h = 1;
-        for (int i = 1; i <= U; i++) {
-            int x = u[i], y = d / MATH::gcd(d, x), k = c[x];
+        d = v[z], t = 0, h = 1;
+        for (int i = 0; i < U; i++) {
+            x = u[i], y = d / MATH::gcd(d, x), k = c[x];
             if (y > 1) {
                 t += k;
                 if (t > 3) { break; }
@@ -650,14 +645,13 @@ inline void solve(int Task_Id) {
             }
         }
         if (t > 3 || h > B) { continue; }
-        int H = h, k = 3 - t;
-        long long choose = 1;
+        H = h, k = 3 - t, choose = 1;
         for (int i = 0; i < k; i++) { choose = choose * (n - t - i) % mod; }
         choose = choose * qpow(k == 3 ? 6 : (k == 2 ? 2 : 1), mod - 2) % mod;
-        int w = (long long)6 * choose % mod;
+        w = (long long)6 * choose % mod;
         for (int m = H; m <= B; m += H) { if (ans[m] < d) { ans[m] = d, cnt[m] = (long long)w * f[m / H] % mod; } }
     }
-    for (int i = 1; i <= q; i++) { int m = b[i]; cout << (long long)g * ans[m] << ' ' << cnt[m] << '\n'; }
+    for (int i = 1; i <= q; i++) { x = b[i], cout << (long long)g * ans[x] << ' ' << cnt[x] << '\n'; }
     return;
 }
 } // namespace TANGYIXIAO
