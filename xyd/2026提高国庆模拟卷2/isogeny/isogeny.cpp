@@ -583,9 +583,8 @@ signed main() {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 const int N = 2e5 + 5, M = 1e6 + 5, mod = 9.98244353e8;
-int a[N], b[N], p[M], f[M], ans[M], cnt[M], c[M], s[M], v[M], u[M], vis[M];
-int n, q, g, A, B, U, V, pc, sz, d, t, H, k, w, x, y, e, old, mul, r, pr[M], dv[1000], ep[16], pp[16];
-long long h, choose;
+int a[N], b[N], p[M], f[M], ans[M], cnt[M], c[M], s[M], v[M], u[M], vis[M], n, q, g, A, B, U, V, pc, sz, d, t, H, k, w, x, y, e, old, mul, r, pr[M], dv[1000], ep[16], pp[16];
+long long h, ch;
 
 inline int qpow(int x, int y) {
     r = 1;
@@ -669,10 +668,10 @@ inline void solve(int Task_Id) {
             }
         }
         if (t > 3 || h > B) { continue; }
-        H = h, k = 3 - t, choose = 1;
-        for (int i = 0; i < k; i++) { choose = choose * (n - t - i) % mod; }
-        choose = choose * qpow(k == 3 ? 6 : (k == 2 ? 2 : 1), mod - 2) % mod;
-        w = (long long)6 * choose % mod;
+        H = h, k = 3 - t, ch = 1;
+        for (int i = 0; i < k; i++) { ch = ch * (n - t - i) % mod; }
+        ch = ch * qpow(k == 3 ? 6 : (k == 2 ? 2 : 1), mod - 2) % mod;
+        w = (long long)6 * ch % mod;
         for (int m = H; m <= B; m += H) {
             if (ans[m] < d) { ans[m] = d, cnt[m] = (long long)w * f[m / H] % mod; }
         }
