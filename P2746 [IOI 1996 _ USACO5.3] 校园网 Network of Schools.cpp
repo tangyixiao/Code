@@ -1,3 +1,19 @@
+//  Author: Tangyixiao
+//  Time: 2026-10-03 21:44:25
+//  Problem: P2746 [IOI 1996 / USACO5.3] 校园网 Network of Schools
+//  Contest: Luogu
+//  URL: https://www.luogu.com.cn/problem/P2746
+//  Memory Limit: 125 MB
+//  Time Limit: 1000 ms
+//  Interactive: false
+//  Test Type: single
+//
+//  Algorithm:
+//  Complexity: O()
+//  Note:
+//
+//  Powered by Visual Studio Code + CPH (Competitive Programming Helper)
+
 
 /*
 Copyright (C) 2026 TangYixiao

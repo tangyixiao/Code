@@ -1,0 +1,31 @@
+{
+  "name": "P2746 [IOI 1996 / USACO5.3] 校园网 Network of Schools",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P2746",
+  "interactive": false,
+  "memoryLimit": 125,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "5\n2 4 3 0\n4 5 0\n0\n0\n1 0\n",
+      "output": "1\n2\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P2746IOI1996USACO53NetworkOfSchools"
+    }
+  },
+  "batch": {
+    "id": "5bd011ec-e69b-4d35-a5da-b886f01f46d1",
+    "size": 1
+  }
+}
