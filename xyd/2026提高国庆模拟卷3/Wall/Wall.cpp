@@ -4,7 +4,7 @@ Copyright (C) 2026 TangYixiao
 #define PRAGMA_TYPE 0                     // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
 #define JUDGE_TYPE 2                      // 0 for online judge, 1 for judge file, 2 for local file
-#define FILE_INDEX 1                      // the index of the file in the local file system
+#define FILE_INDEX 3                      // the index of the file in the local file system
 // #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
@@ -808,14 +808,13 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
-
 namespace TANGYIXIAO {
-const int N = 4005;
+const int N = 5005;
 const int dx[4] = {-1, 1, 0, 0}, dy[4] = {0, 0, -1, 1};
 struct node {
     long long x, y, u, v;
 } a[N];
-long long x[N], y[N];
+long long x[N << 1], y[N << 1];
 bool sx[N][N], sy[N][N], vis[N][N];
 
 inline void solve(int Task_Id) {
@@ -869,7 +868,5 @@ inline void solve(int Task_Id) {
         }
     }
     cout << ans << "\n";
-    return;
 }
-
 } // namespace TANGYIXIAO
