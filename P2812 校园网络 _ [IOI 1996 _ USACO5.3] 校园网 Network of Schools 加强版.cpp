@@ -598,8 +598,81 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 105;
+vector<int> g[N];
+int dfn[N], low[N], sid[N], ssz[N], st, scnt, d[N], o[N];
+bool f[N];
+stack<int> stk;
+
+void tarjan(int u) {
+    dfn[u] = low[u] = ++st;
+    stk.push(u);
+    f[u] = true;
+    for (int v : g[u]) {
+        if (!dfn[v]) {
+            tarjan(v);
+            low[u] = min(low[u], low[v]);
+        } else if (f[v]) {
+            low[u] = min(low[u], dfn[v]);
+        }
+    }
+    if (dfn[u] == low[u]) {
+        ++scnt;
+        int v;
+        do {
+            v = stk.top();
+            stk.pop();
+            f[v] = false;
+            sid[v] = scnt;
+            ++ssz[scnt];
+        } while (v != u);
+    }
+}
+
 inline void solve(int Task_Id) {
-    // do something here
+
+    int n;
+    cin >> n;
+    for (int i = 1; i <= n; ++i) {
+        int x;
+        while (cin >> x, x) {
+            g[i].push_back(x);
+        }
+    }
+
+    for (int i = 1; i <= n; ++i) {
+        if (!dfn[i]) {
+            tarjan(i);
+        }
+    }
+
+    if (scnt == 1) {
+        cout << "1\n0\n";
+        return;
+    }
+
+    for (int u = 1; u <= n; ++u) {
+        for (int v : g[u]) {
+            if (sid[u] != sid[v]) {
+                ++o[sid[u]];
+                ++d[sid[v]];
+            }
+        }
+    }
+
+    int zin = 0, zout = 0;
+    for (int i = 1; i <= scnt; ++i) {
+        if (d[i] == 0) {
+            ++zin;
+        }
+        if (o[i] == 0) {
+            ++zout;
+        }
+    }
+
+    cout << zin << '\n';
+    cout << max(zin, zout) << '\n';
+
     return;
 }
 } // namespace TANGYIXIAO
