@@ -1,0 +1,31 @@
+{
+  "name": "P2812 校园网络 / [IOI 1996 / USACO5.3] 校园网 Network of Schools 加强版",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P2812",
+  "interactive": false,
+  "memoryLimit": 128,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "5\n2 0\n4 0\n5 0\n1 0\n0\n",
+      "output": "2\n2\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P2812IOI1996USACO53NetworkOfSchools"
+    }
+  },
+  "batch": {
+    "id": "35daee70-1324-4cf7-84b6-e5837bad41ef",
+    "size": 1
+  }
+}
