@@ -5,7 +5,7 @@ Copyright (C) 2026 TangYixiao
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
 #define JUDGE_TYPE 1                      // 0 for online judge, 1 for judge file, 2 for local file
 #define FILE_INDEX 1                      // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME "Cards"
@@ -810,7 +810,7 @@ signed main() {
 #pragma endregion PREPROCESSOR
 
 namespace TANGYIXIAO {
-const int N = 1000005;
+const int N = 1e6 + 5;
 struct Node {
     long long a, b;
 } c[N];
@@ -846,9 +846,7 @@ inline void solve(int Task_Id) {
         }
     }
 
-    while (!q.empty()) {
-        q.pop();
-    }
+    for (; !q.empty(); q.pop());
 
     s = 0;
     long long ans = LLONG_MIN;
