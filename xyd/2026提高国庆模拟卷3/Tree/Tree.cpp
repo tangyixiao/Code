@@ -3,7 +3,7 @@ Copyright (C) 2026 TangYixiao
 */
 #define PRAGMA_TYPE 0                     // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
-#define JUDGE_TYPE 2                      // 0 for online judge, 1 for judge file, 2 for local file
+#define JUDGE_TYPE 1                      // 0 for online judge, 1 for judge file, 2 for local file
 #define FILE_INDEX 1                      // the index of the file in the local file system
 // #define MULTIPLE_TEST
 // #define DEBUG
@@ -808,67 +808,3 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
-
-namespace TANGYIXIAO {
-const int N = 4005;
-const int dx[4] = {-1, 1, 0, 0}, dy[4] = {0, 0, -1, 1};
-struct node {
-    long long x, y, u, v;
-} a[N];
-long long x[N], y[N];
-bool sx[N][N], sy[N][N], vis[N][N];
-
-inline void solve(int Task_Id) {
-    long long n, m, ans = 0, s;
-    int k, X = 0, Y = 0, p, l, r, u, v, nu, nv;
-    cin >> n >> m >> k;
-    x[X++] = 0, x[X++] = n, y[Y++] = 0, y[Y++] = m;
-    for (int i = 1; i <= k; i++) {
-        cin >> a[i].x >> a[i].y >> a[i].u >> a[i].v;
-        x[X++] = a[i].x, x[X++] = a[i].u;
-        y[Y++] = a[i].y, y[Y++] = a[i].v;
-    }
-    sort(x, x + X), X = unique(x, x + X) - x;
-    sort(y, y + Y), Y = unique(y, y + Y) - y;
-    for (int i = 1; i <= k; i++) {
-        if (a[i].x == a[i].u) {
-            p = lower_bound(x, x + X, a[i].x) - x;
-            l = lower_bound(y, y + Y, min(a[i].y, a[i].v)) - y;
-            r = lower_bound(y, y + Y, max(a[i].y, a[i].v)) - y;
-            for (int j = l; j < r; j++) {
-                sx[p][j] = 1;
-            }
-        } else {
-            p = lower_bound(y, y + Y, a[i].y) - y;
-            l = lower_bound(x, x + X, min(a[i].x, a[i].u)) - x;
-            r = lower_bound(x, x + X, max(a[i].x, a[i].u)) - x;
-            for (int j = l; j < r; j++) {
-                sy[j][p] = 1;
-            }
-        }
-    }
-    queue<int> q;
-    for (int i = 0; i < X - 1; i++) {
-        for (int j = 0; j < Y - 1; j++) {
-            if (!vis[i][j]) {
-                s = 0, vis[i][j] = 1, q.push(i * (Y - 1) + j);
-                for (; q.size();) {
-                    u = q.front() / (Y - 1), v = q.front() % (Y - 1), q.pop();
-                    s += (x[u + 1] - x[u]) * (y[v + 1] - y[v]);
-                    for (int d = 0; d < 4; d++) {
-                        nu = u + dx[d], nv = v + dy[d];
-                        if (nu >= 0 && nu < X - 1 && nv >= 0 && nv < Y - 1 && !vis[nu][nv]) {
-                            if ((d < 2 && !sx[u + (d == 1)][v]) || (d >= 2 && !sy[u][v + (d == 3)])) {
-                                vis[nu][nv] = 1, q.push(nu * (Y - 1) + nv);
-                            }
-                        }
-                    }
-                }
-                ans = max(ans, s);
-            }
-        }
-    }
-    cout << ans << "\n";
-    return;
-}
-} // namespace TANGYIXIAO
