@@ -8,7 +8,7 @@ Copyright (C) 2026 TangYixiao
 // #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
-#define FILE_NAME ""
+#define FILE_NAME "Cards"
 // #define BITS_NOT_ALLOWED
 // #define PD_DS_USED
 // #define TESTLIB
@@ -808,8 +808,61 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
+const int N = 1000005;
+struct Node {
+    long long a, b;
+} c[N];
+int k, n, m;
+long long g[N];
+
+inline bool cmp(Node x, Node y) {
+    return x.b > y.b;
+}
+
 inline void solve(int Task_Id) {
-    return;
+    cin >> k;
+    for (int i = 1; i <= k; i++) {
+        cin >> c[i].a;
+    }
+    for (int i = 1; i <= k; i++) {
+        cin >> c[i].b;
+    }
+    cin >> n >> m;
+    sort(c + 1, c + k + 1, cmp);
+
+    priority_queue<long long, vector<long long>, greater<long long>> q;
+    long long s = 0;
+    for (int i = k; i >= 1; i--) {
+        q.push(c[i].a);
+        s += c[i].a;
+        if ((int)q.size() > n) {
+            s -= q.top();
+            q.pop();
+        }
+        if ((int)q.size() == n) {
+            g[i] = s;
+        }
+    }
+
+    while (!q.empty()) {
+        q.pop();
+    }
+
+    s = 0;
+    long long ans = LLONG_MIN;
+    for (int i = 1; i <= k; i++) {
+        q.push(c[i].a + c[i].b);
+        s += c[i].a + c[i].b;
+        if ((int)q.size() > m) {
+            s -= q.top();
+            q.pop();
+        }
+        if ((int)q.size() == m && i <= k - n) {
+            ans = max(ans, s + g[i + 1]);
+        }
+    }
+    cout << ans << "\n";
 }
 } // namespace TANGYIXIAO
