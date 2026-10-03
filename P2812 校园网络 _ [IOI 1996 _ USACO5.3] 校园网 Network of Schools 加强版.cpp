@@ -598,7 +598,7 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 105;
+const int N = 1e4 + 5;
 vector<int> g[N];
 int dfn[N], low[N], sid[N], ssz[N], st, scnt, d[N], o[N];
 bool f[N];
