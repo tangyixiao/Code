@@ -1,10 +1,10 @@
 //  Author: Tangyixiao
-//  Time: 2026-10-03 19:10:37
-//  Problem: D. Paths on the Tree
-//  Contest: Codeforces - Codeforces Global Round 23
-//  URL: https://codeforces.com/problemset/problem/1746/D
-//  Memory Limit: 256 MB
-//  Time Limit: 3000 ms
+//  Time: 2026-10-03 19:52:49
+//  Problem: F. Maximizing Root
+//  Contest: Codeforces - Codeforces Round 848 (Div. 2)
+//  URL: https://codeforces.com/problemset/problem/1778/F
+//  Memory Limit: 1024 MB
+//  Time Limit: 2000 ms
 //  Interactive: false
 //  Test Type: single
 //
@@ -598,50 +598,8 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 200005;
-vector<int> e[N];
-long long s[N], f[N][2];
-
-inline void dfs(int u, long long x) {
-    f[u][0] = x * s[u];
-    f[u][1] = (x + 1) * s[u];
-    int m = e[u].size();
-    if (!m) {
-        return;
-    }
-    long long q = x / m;
-    int r = x % m;
-    vector<long long> d;
-    for (int i = 0; i < m; i++) {
-        int v = e[u][i];
-        dfs(v, q);
-        f[u][0] += f[v][0];
-        f[u][1] += f[v][0];
-        d.push_back(f[v][1] - f[v][0]);
-    }
-    sort(d.begin(), d.end(), greater<long long>());
-    for (int i = 0; i < r; i++) {
-        f[u][0] += d[i];
-        f[u][1] += d[i];
-    }
-    f[u][1] += d[r];
-}
-
 inline void solve(int Task_Id) {
-    int n;
-    long long k;
-    cin >> n >> k;
-    for (int i = 1; i <= n; i++) {
-        e[i].clear();
-    }
-    for (int i = 2, p; i <= n; i++) {
-        cin >> p;
-        e[p].push_back(i);
-    }
-    for (int i = 1; i <= n; i++) {
-        cin >> s[i];
-    }
-    dfs(1, k);
-    cout << f[1][0] << "\n";
+    // do something here
+    return;
 }
 } // namespace TANGYIXIAO

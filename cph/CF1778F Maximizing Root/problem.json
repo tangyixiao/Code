@@ -1,0 +1,31 @@
+{
+  "name": "F. Maximizing Root",
+  "group": "Codeforces - Codeforces Round 848 (Div. 2)",
+  "url": "https://codeforces.com/problemset/problem/1778/F",
+  "interactive": false,
+  "memoryLimit": 1024,
+  "timeLimit": 2000,
+  "tests": [
+    {
+      "input": "2\n5 2\n24 12 24 6 12\n1 2\n1 3\n2 4\n2 5\n5 3\n24 12 24 6 12\n1 2\n1 3\n2 4\n2 5\n",
+      "output": "288\n576\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "FMaximizingRoot"
+    }
+  },
+  "batch": {
+    "id": "ccb6fb45-cfb1-4ed7-b08d-c98be90a9c9c",
+    "size": 1
+  }
+}
