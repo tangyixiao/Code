@@ -1,0 +1,39 @@
+{
+  "name": "P6346 [CCO 2017] 专业网络",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P6346",
+  "interactive": false,
+  "memoryLimit": 256,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "4\n3 3\n1 2\n0 5\n3 4\n",
+      "output": "3\n"
+    },
+    {
+      "input": "5\n0 9\n1 8\n2 7\n3 6\n4 5\n",
+      "output": "0\n"
+    },
+    {
+      "input": "3\n0 6\n2 7\n3 8\n",
+      "output": "8\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P6346CCO2017"
+    }
+  },
+  "batch": {
+    "id": "14fa6cc5-39c2-4009-8d41-e8ef52d68c7c",
+    "size": 1
+  }
+}
