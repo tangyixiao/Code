@@ -640,31 +640,31 @@ signed main(int argc, char *argv[]) {
 namespace TANGYIXIAO {
 const int N = 105;
 vector<int> g[N];
-int dfn[N], low[N], scc_id[N], scc_sz[N], timestamp, scc_cnt;
-bool in_stack[N];
+int dfn[N], low[N], sid[N], ssz[N], st, scnt, d[N], o[N];
+bool f[N];
 stack<int> stk;
 
 void tarjan(int u) {
-    dfn[u] = low[u] = ++timestamp;
+    dfn[u] = low[u] = ++st;
     stk.push(u);
-    in_stack[u] = true;
+    f[u] = true;
     for (int v : g[u]) {
         if (!dfn[v]) {
             tarjan(v);
             low[u] = min(low[u], low[v]);
-        } else if (in_stack[v]) {
+        } else if (f[v]) {
             low[u] = min(low[u], dfn[v]);
         }
     }
     if (dfn[u] == low[u]) {
-        ++scc_cnt;
+        ++scnt;
         int v;
         do {
             v = stk.top();
             stk.pop();
-            in_stack[v] = false;
-            scc_id[v] = scc_cnt;
-            ++scc_sz[scc_cnt];
+            f[v] = false;
+            sid[v] = scnt;
+            ++ssz[scnt];
         } while (v != u);
     }
 }
@@ -685,31 +685,31 @@ inline void solve(int Task_Id) {
             tarjan(i);
     }
 
-    if (scc_cnt == 1) {
+    if (scnt == 1) {
         cout << "1\n0\n";
         return;
     }
 
-    vector<int> indeg(scc_cnt + 1, 0), outdeg(scc_cnt + 1, 0);
+    
     for (int u = 1; u <= n; ++u) {
         for (int v : g[u]) {
-            if (scc_id[u] != scc_id[v]) {
-                ++outdeg[scc_id[u]];
-                ++indeg[scc_id[v]];
+            if (sid[u] != sid[v]) {
+                ++o[sid[u]];
+                ++d[sid[v]];
             }
         }
     }
 
-    int zero_in = 0, zero_out = 0;
-    for (int i = 1; i <= scc_cnt; ++i) {
-        if (indeg[i] == 0)
-            ++zero_in;
-        if (outdeg[i] == 0)
-            ++zero_out;
+    int zin = 0, zout = 0;
+    for (int i = 1; i <= scnt; ++i) {
+        if (d[i] == 0)
+            ++zin;
+        if (o[i] == 0)
+            ++zout;
     }
 
-    cout << zero_in << '\n';
-    cout << max(zero_in, zero_out) << '\n';
+    cout << zin << '\n';
+    cout << max(zin, zout) << '\n';
 
     return;
 }
