@@ -8,7 +8,7 @@ Copyright (C) 2026 TangYixiao
 // #define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
-#define FILE_NAME ""
+#define FILE_NAME "Wall"
 // #define BITS_NOT_ALLOWED
 // #define PD_DS_USED
 // #define TESTLIB
