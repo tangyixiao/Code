@@ -808,3 +808,93 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+namespace TANGYIXIAO {
+const int N = 1000005;
+int q, n = 1, op[N], x[N], fa[N], dep[N], siz[N], son[N], top[N], pre[N], lst[N], dfn[N], rev[N];
+bool a[N];
+
+inline int lca(int x, int y) {
+    for (; top[x] != top[y];) {
+        if (dep[top[x]] < dep[top[y]]) {
+            swap(x, y);
+        }
+        x = fa[top[x]];
+    }
+    return dep[x] < dep[y] ? x : y;
+}
+
+inline void solve(int Task_Id) {
+    cin >> q;
+    dep[1] = 1;
+    for (int i = 1; i <= q; i++) {
+        cin >> op[i] >> x[i];
+        if (op[i] == 1) {
+            n++;
+            fa[n] = x[i], dep[n] = dep[x[i]] + 1;
+            pre[n] = lst[x[i]], lst[x[i]] = n;
+        }
+    }
+
+    for (int i = 1; i <= n; i++) {
+        siz[i] = 1;
+    }
+    for (int i = n; i >= 2; i--) {
+        if (siz[i] > siz[son[fa[i]]]) {
+            son[fa[i]] = i;
+        }
+        siz[fa[i]] += siz[i];
+    }
+
+    dfn[1] = rev[1] = top[1] = 1;
+    for (int i = 2; i <= n; i++) {
+        if (son[fa[i]] == i) {
+            top[i] = top[fa[i]];
+        } else {
+            top[i] = i;
+        }
+        if (pre[i]) {
+            dfn[i] = dfn[pre[i]] + siz[pre[i]];
+        } else {
+            dfn[i] = dfn[fa[i]] + 1;
+        }
+        rev[dfn[i]] = i;
+    }
+
+    set<int> s;
+    s.insert(1), a[1] = 1;
+    int tot = 1, u, v;
+    for (int i = 1; i <= q; i++) {
+        if (op[i] == 1) {
+            tot++, a[tot] = 1, s.insert(dfn[tot]);
+        }
+        if (op[i] == 2) {
+            if (a[x[i]]) {
+                s.erase(dfn[x[i]]);
+            } else {
+                s.insert(dfn[x[i]]);
+            }
+            a[x[i]] ^= 1;
+        }
+        if (op[i] == 3) {
+            if (s.empty()) {
+                cout << -1 << "\n";
+            } else {
+                auto it = s.lower_bound(dfn[x[i]]);
+                u = v = 0;
+                if (it != s.end()) {
+                    u = lca(x[i], rev[*it]);
+                }
+                if (it != s.begin()) {
+                    it--;
+                    v = lca(x[i], rev[*it]);
+                }
+                if (dep[u] < dep[v]) {
+                    u = v;
+                }
+                it = s.lower_bound(dfn[u]);
+                cout << rev[*it] << "\n";
+            }
+        }
+    }
+}
+} // namespace TANGYIXIAO
