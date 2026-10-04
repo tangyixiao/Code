@@ -598,8 +598,35 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+long long n, l, r;
+
+inline long long len(long long x) {
+    if (x <= 1) {
+        return 1;
+    }
+    return len(x / 2) * 2 + 1;
+}
+
+inline long long calc(long long x, long long p) {
+    if (p <= 0 || x == 0) {
+        return 0;
+    }
+    if (x == 1) {
+        return 1;
+    }
+    long long m = len(x / 2);
+    if (p <= m) {
+        return calc(x / 2, p);
+    }
+    if (p == m + 1) {
+        return x / 2 + x % 2;
+    }
+    return x / 2 + x % 2 + calc(x / 2, p - m - 1);
+}
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> l >> r;
+    cout << calc(n, r) - calc(n, l - 1) << "\n";
     return;
 }
 } // namespace TANGYIXIAO
