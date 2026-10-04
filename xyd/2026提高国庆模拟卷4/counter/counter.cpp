@@ -892,5 +892,6 @@ inline void solve(int Task_Id) {
         y -= dep[x], x = jump(x, dep[x]);
         cout << cyc[cs[bel[x]] + (pos[x] + y % cl[bel[x]]) % cl[bel[x]]] << "\n";
     }
+    return;
 }
 } // namespace TANGYIXIAO
