@@ -21,7 +21,7 @@ Copyright (C) 2026 TangYixiao
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
 #define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
 #define FILE_INDEX 1                      // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -598,8 +598,37 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 1e5 + 5;
+int n, q, a[N];
+long long s[N];
+set<long long> st;
+
+inline void dfs(int l, int r) {
+    st.insert(s[r] - s[l - 1]);
+    if (a[l] == a[r]) {
+        return;
+    }
+    int mid = (a[l] + a[r]) / 2, p = upper_bound(a + l, a + r + 1, mid) - a - 1;
+    dfs(l, p);
+    dfs(p + 1, r);
+}
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> q;
+    st.clear();
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i];
+    }
+    sort(a + 1, a + n + 1);
+    for (int i = 1; i <= n; i++) {
+        s[i] = s[i - 1] + a[i];
+    }
+    dfs(1, n);
+    for (int i = 1; i <= q; i++) {
+        long long x;
+        cin >> x;
+        cout << (st.count(x) ? "Yes" : "No") << "\n";
+    }
     return;
 }
 } // namespace TANGYIXIAO
