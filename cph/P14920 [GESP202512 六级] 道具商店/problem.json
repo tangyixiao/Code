@@ -1,0 +1,35 @@
+{
+  "name": "P14920 [GESP202512 六级] 道具商店",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P14920",
+  "interactive": false,
+  "memoryLimit": 512,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "3 5\n99 1\n33 2\n11 3\n",
+      "output": "132\n"
+    },
+    {
+      "input": "4 100\n10 1\n20 11\n40 33\n100 99\n",
+      "output": "110\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P14920GESP202512"
+    }
+  },
+  "batch": {
+    "id": "100dfd8a-9fc5-464a-ab32-c3897893398a",
+    "size": 1
+  }
+}
