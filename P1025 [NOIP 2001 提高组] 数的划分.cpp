@@ -1,3 +1,19 @@
+//  Author: Tangyixiao
+//  Time: 2026-10-04 23:09:33
+//  Problem: P1025 [NOIP 2001 提高组] 数的划分
+//  Contest: Luogu
+//  URL: https://www.luogu.com.cn/problem/P1025
+//  Memory Limit: 125 MB
+//  Time Limit: 1000 ms
+//  Interactive: false
+//  Test Type: single
+//
+//  Algorithm:
+//  Complexity: O()
+//  Note:
+//
+//  Powered by Visual Studio Code + CPH (Competitive Programming Helper)
+
 #pragma G++ optimize("O3", "unroll-loops", "omit-frame-pointer", "inline")
 #include <bits/stdc++.h>
 using namespace std;
