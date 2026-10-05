@@ -80,3 +80,77 @@ $A$ 中奇数位置元素的总和为 $A_1 + A_3 + A_5 + A_7 = 3 + 4 + 5 + 2 = 1
 
 ---
 
+# AT_abc403_a [ABC403A] Odd Position Sum
+
+## 题目描述
+
+You are given a sequence of positive integers of length  $ N $ :  $ A=(A_1,A_2,\dots,A_N) $ .
+
+Find the sum of the odd-indexed elements of  $ A $ . That is, find  $ A_1 + A_3 + A_5 + \dots + A_m $ , where  $ m $  is the largest odd number not exceeding  $ N $ .
+
+## 输入格式
+
+The input is given from Standard Input in the following format:
+
+> $ N $   $ A_1 $   $ A_2 $   $ \dots $   $ A_N $
+
+## 输出格式
+
+Print the answer.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+7
+3 1 4 1 5 9 2
+```
+
+### 输出 #1
+
+```
+14
+```
+
+## 输入输出样例 #2
+
+### 输入 #2
+
+```
+1
+100
+```
+
+### 输出 #2
+
+```
+100
+```
+
+## 输入输出样例 #3
+
+### 输入 #3
+
+```
+14
+100 10 1 10 100 10 1 10 100 10 1 10 100 10
+```
+
+### 输出 #3
+
+```
+403
+```
+
+## 说明/提示
+
+### Sample Explanation 1
+
+The sum of the odd-indexed elements of  $ A $  is  $ A_1+A_3+A_5+A_7=3+4+5+2=14 $ .
+
+### Constraints
+
+- $ 1 \le N \le 100 $
+- $ 1 \le A_i \le 100 $
+- All input values are integers.
