@@ -168,3 +168,7 @@ The sequence  $ A $  may already satisfy the condition.
 - $ 0 \le D \le 10^6 $
 - $ 0 \le A_i \le 10^6 $
 - All input values are integers.
+
+---
+
+
