@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 4f2792e0-2db8-48ce-91a3-082ffde5c829
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -20,7 +20,7 @@ Copyright (C) 2026 TangYixiao
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
 #define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
 #define FILE_INDEX 1                      // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -597,8 +597,43 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+int M, X;
+long long C[20][20];
+long double P;
+
+inline long double dfs(int m, int k) {
+    if (!k) {
+        return 0;
+    }
+    if (k == (1 << m)) {
+        return 1;
+    }
+    int h = 1 << (m - 1);
+    if (k <= h) {
+        return P * dfs(m - 1, k);
+    }
+    return P + (1 - P) * dfs(m - 1, k - h);
+}
+
 inline void solve(int Task_Id) {
-    // do something here
-    return;
+    cin >> M >> P >> X;
+    int k = 1LL * X * (1 << M) / 1000000;
+    long double ans = 0;
+    if (P <= 0.5) {
+        ans = dfs(M, k);
+    } else {
+        for (int i = 0; i <= M; i++) {
+            C[i][0] = C[i][i] = 1;
+            for (int j = 1; j < i; j++) {
+                C[i][j] = C[i - 1][j - 1] + C[i - 1][j];
+            }
+        }
+        for (int w = M; w >= 0 && k; w--) {
+            int t = min<long long>(k, C[M][w]);
+            ans += t * powl(P, w) * powl(1 - P, M - w);
+            k -= t;
+        }
+    }
+    cout << "Case #" << Task_Id << ": " << fixed << setprecision(10) << ans << "\n";
 }
 } // namespace TANGYIXIAO
