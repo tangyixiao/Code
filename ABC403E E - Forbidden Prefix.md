@@ -195,3 +195,6 @@ The counts after processing the queries for  $ i=1,2,3,4 $  are as follows.
 - $ T_i \in \{1,2\} $
 - Each  $ S_i $  is a string of length between  $ 1 $  and  $ 5\times 10^5 $ , inclusive, consisting of lowercase English letters.
 - $ \displaystyle \sum_{i=1}^Q |S_i| \leq 5 \times 10^5 $
+
+---
+
