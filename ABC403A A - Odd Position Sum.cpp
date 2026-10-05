@@ -603,7 +603,7 @@ inline void solve(int Task_Id) {
     cin >> n;
     for (int i = 1; i <= n; i++) {
         cin >> a[i];
-        if (!(a[i] & 1)) {
+        if (i & 1) {
             ans += a[i];
         }
     }
