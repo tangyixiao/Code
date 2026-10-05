@@ -87,3 +87,83 @@ Yes
 ---
 
 
+# AT_abc403_b [ABC403B] Four Hidden
+
+## 题目描述
+
+You are given a string  $ T $  consisting of lowercase English letters and `?`, and a string  $ U $  consisting of lowercase English letters.
+
+The string  $ T $  is obtained by taking some lowercase-only string  $ S $  and replacing exactly four of its characters with `?`.
+
+Determine whether it is possible that the original string  $ S $  contained  $ U $  as a contiguous substring.
+
+## 输入格式
+
+The input is given from Standard Input in the following format:
+
+> $ T $  $ U $
+
+## 输出格式
+
+Print `Yes` if it is possible that the original string  $ S $  contained  $ U $  as a contiguous substring; otherwise, print `No`.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+tak??a?h?
+nashi
+```
+
+### 输出 #1
+
+```
+Yes
+```
+
+## 输入输出样例 #2
+
+### 输入 #2
+
+```
+??e??e
+snuke
+```
+
+### 输出 #2
+
+```
+No
+```
+
+## 输入输出样例 #3
+
+### 输入 #3
+
+```
+????
+aoki
+```
+
+### 输出 #3
+
+```
+Yes
+```
+
+## 说明/提示
+
+### Sample Explanation 1
+
+For example, if  $ S $  is `takanashi`, it contains `nashi` as a contiguous substring.
+
+### Sample Explanation 2
+
+No matter what characters replace the `?`s in  $ T $ ,  $ S $  cannot contain `snuke` as a contiguous substring.
+
+### Constraints
+
+- $ T $  is a string of length between  $ 4 $  and  $ 10 $ , inclusive, consisting of lowercase letters and `?`.
+- $ T $  contains exactly four occurrences of `?`.
+- $ U $  is a string of length between  $ 1 $  and  $ |T| $ , inclusive, consisting of lowercase letters.
