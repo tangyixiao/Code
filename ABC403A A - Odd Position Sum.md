@@ -154,3 +154,6 @@ The sum of the odd-indexed elements of  $ A $  is  $ A_1+A_3+A_5+A_7=3+4+5+2=14 
 - $ 1 \le N \le 100 $
 - $ 1 \le A_i \le 100 $
 - All input values are integers.
+
+---
+
