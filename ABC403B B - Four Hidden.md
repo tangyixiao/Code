@@ -167,3 +167,6 @@ No matter what characters replace the `?`s in  $ T $ ,  $ S $  cannot contain `s
 - $ T $  is a string of length between  $ 4 $  and  $ 10 $ , inclusive, consisting of lowercase letters and `?`.
 - $ T $  contains exactly four occurrences of `?`.
 - $ U $  is a string of length between  $ 1 $  and  $ |T| $ , inclusive, consisting of lowercase letters.
+
+---
+
