@@ -602,18 +602,19 @@ string t, u;
 int n, m;
 inline void solve(int Task_Id) {
     cin >> t >> u, n = t.size(), m = u.size(), t = " " + t, u = " " + u;
-    for (int i = 0; i <= n - m; i++, flag = false) {
+    for (int i = 0; i <= n - m; i++) {
+        flag = true;
         for (int j = 1; j <= m; j++) {
-            if (t[i + j] != '?' && t[i + j] != u[j]) {
-                flag = true;
+            flag = (t[i + j] == '?' || t[i + j] == u[j]);
+            if (!flag) {
                 break;
             }
         }
-        if (!flag) {
+        if (flag) {
             break;
         }
     }
-    cout << (flag ? "No\n" : "Yes\n");
+    cout << (flag ? "Yes\n" : "No\n");
     return;
 }
 } // namespace TANGYIXIAO
