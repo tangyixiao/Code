@@ -1,0 +1,39 @@
+{
+  "testType": "single", 
+  "batch": {
+    "size": 1, 
+    "id": "62789d2e-1fbf-443a-9609-2a46fbf448d1"
+  }, 
+  "tests": [
+    {
+      "output": "1\n", 
+      "input": "5 2\n3 1 4 1 5\n"
+    }, 
+    {
+      "output": "0\n", 
+      "input": "4 3\n1 6 1 8\n"
+    }, 
+    {
+      "output": "2\n", 
+      "input": "10 3\n1 6 2 10 2 3 2 10 6 4\n"
+    }
+  ], 
+  "output": {
+    "type": "stdout"
+  }, 
+  "url": "https://atcoder.jp/contests/abc403/tasks/abc403_d", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "interactive": false, 
+  "name": "D - Forbidden Difference", 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "DForbiddenDifference"
+    }
+  }, 
+  "timeLimit": 2000, 
+  "group": "AtCoder - AtCoder Beginner Contest 403", 
+  "memoryLimit": 1024
+}
