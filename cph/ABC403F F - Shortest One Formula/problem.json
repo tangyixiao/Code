@@ -1,0 +1,39 @@
+{
+  "testType": "single", 
+  "batch": {
+    "size": 1, 
+    "id": "53a9c87a-4f5c-4592-9f34-623b7a27ada5"
+  }, 
+  "tests": [
+    {
+      "output": "(1+1+1)*(1+1+1)\n", 
+      "input": "9\n"
+    }, 
+    {
+      "output": "11\n", 
+      "input": "11\n"
+    }, 
+    {
+      "output": "1+(1+1+1)*(1+11+11+111)\n", 
+      "input": "403\n"
+    }
+  ], 
+  "output": {
+    "type": "stdout"
+  }, 
+  "url": "https://atcoder.jp/contests/abc403/tasks/abc403_f", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "interactive": false, 
+  "name": "F - Shortest One Formula", 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "FShortestOneFormula"
+    }
+  }, 
+  "timeLimit": 2000, 
+  "group": "AtCoder - AtCoder Beginner Contest 403", 
+  "memoryLimit": 1024
+}
