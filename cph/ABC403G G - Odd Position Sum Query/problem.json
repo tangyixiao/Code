@@ -1,0 +1,35 @@
+{
+  "testType": "single", 
+  "batch": {
+    "size": 1, 
+    "id": "69e57c3e-2583-4967-9eaf-e8baf457000a"
+  }, 
+  "tests": [
+    {
+      "output": "2\n2\n8\n6\n1000000006\n", 
+      "input": "5\n1\n3\n1\n999999994\n999999993\n"
+    }, 
+    {
+      "output": "105282054\n105282054\n905798931\n599798602\n995656103\n891549225\n1652393438\n1652393438\n", 
+      "input": "8\n105282053\n695234822\n468007124\n120710491\n568831200\n700753895\n765188109\n262666319\n"
+    }
+  ], 
+  "output": {
+    "type": "stdout"
+  }, 
+  "url": "https://atcoder.jp/contests/abc403/tasks/abc403_g", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "interactive": false, 
+  "name": "G - Odd Position Sum Query", 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "GOddPositionSumQuery"
+    }
+  }, 
+  "timeLimit": 4000, 
+  "group": "AtCoder - AtCoder Beginner Contest 403", 
+  "memoryLimit": 1024
+}
