@@ -108,3 +108,109 @@ BNF 语法定义如下：
 ---
 
 
+# AT_abc403_f [ABC403F] Shortest One Formula
+
+## 题目描述
+
+You are given a positive integer  $ N $ .
+
+Among all valid arithmetic expressions consisting of the characters `1`, `+`, `*`, `(`, and `)`, find one of the minimum length whose value is  $ N $ .
+
+More formally, among the strings  $ S $  satisfying all of the following conditions, find one of the minimum length:
+
+- $ S $  conforms to the symbol `<expr>` in the [BNF](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form) below.
+- The value of the expression represented by  $ S $  is  $ N $ .
+ 
+ ```
+<expr>   ::= <term> | <expr> "+" <term>
+<term>   ::= <factor> | <term> "*" <factor>
+<factor> ::= <number> | "(" <expr> ")"
+<number> ::= "1" | "1" <number>
+```
+
+Strings that conform to `<expr>` include:
+
+- `1111+111` representing  $ 1111+111 $ .
+- `(1+1)*(1+1)` representing  $ (1+1)\times(1+1) $ .
+- `(11+(1+1)*(1+1))+1` representing  $ (11+(1+1)\times(1+1))+1 $ .
+ 
+Strings that do not conform to `<expr>` include:
+
+- `(1+1)(1+1)`
+- `1+2`
+- `1-1`
+- `1/1`
+- `)1(`
+- `1++1`
+- `+1`
+- `(+1)`
+- `1*+1`
+
+## 输入格式
+
+The input is given from Standard Input in the following format:
+
+> $ N $
+
+## 输出格式
+
+Print a solution.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+9
+```
+
+### 输出 #1
+
+```
+(1+1+1)*(1+1+1)
+```
+
+## 输入输出样例 #2
+
+### 输入 #2
+
+```
+11
+```
+
+### 输出 #2
+
+```
+11
+```
+
+## 输入输出样例 #3
+
+### 输入 #3
+
+```
+403
+```
+
+### 输出 #3
+
+```
+1+(1+1+1)*(1+11+11+111)
+```
+
+## 说明/提示
+
+### Sample Explanation 1
+
+Expressions whose value is  $ 9 $  include:
+
+- `(1+1+1)*(1+1+1)`
+- `1+1+1+1+1+1+1+1+1`
+- `(1+1)*(1+1)*(1+1)+1`
+ 
+Among them, a shortest is `(1+1+1)*(1+1+1)`.
+
+### Constraints
+
+- $ 1 \le N \le 2000 $
+- All input values are integers.
