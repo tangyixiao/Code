@@ -214,3 +214,6 @@ Among them, a shortest is `(1+1+1)*(1+1+1)`.
 
 - $ 1 \le N \le 2000 $
 - All input values are integers.
+
+---
+
