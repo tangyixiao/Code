@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 69765c71-6236-4017-8d62-ca146e5e0788
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,31 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 2e5 + 5;
+map<pair<int, int>, bool> mp;
+map<int, bool> pm;
+int n, m, q;
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> m >> q;
+    for (int _ = 1, op, x, y; _ <= q; _++) {
+        cin >> op >> x;
+        if (op & 1) {
+            cin >> y;
+        }
+        if (op == 1) {
+            mp[{x, y}] = true;
+        } else {
+            if (op == 2) {
+                pm[x] = true;
+            } else {
+                if (pm.count(x) || mp.count({x, y})) {
+                    cout << "Yes\n";
+                } else {
+                    cout << "No\n";
+                }
+            }
+        }
+    }
     return;
 }
 } // namespace TANGYIXIAO
