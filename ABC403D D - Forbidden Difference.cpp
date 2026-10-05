@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 62789d2e-1fbf-443a-9609-2a46fbf448d1
 //
-//  Algorithm: 
-//  Complexity: O()
-//  Note: 
+//  Algorithm: Frequency Counting + Weighted Independent Set on Paths
+//  Complexity: O(N + max(A) + D) Time, O(1e6) Space
+//  Note: Handle D = 0 separately.
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,21 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 1e6 + 5;
+int n, d, m, c[N], ans;
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> d, ans = n;
+    for (int i = 1, x; i <= n; i++) {
+        cin >> x, c[x]++, m = max(m, x);
+    }
+    if (d) {
+        for (int r = 0, f = 0, g = 0; r < d && r <= m; r++, ans -= max(f, g), f = g = 0) {
+            for (int x = r, h; x <= m; h = max(f, g), g = f + c[x], f = h, x += d);
+        }
+    } else {
+        for (int x = 0; x <= m; ans -= c[x++] > 0);
+    }
+    cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO
