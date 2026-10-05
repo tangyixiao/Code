@@ -105,3 +105,101 @@ Yes
 
 ---
 
+# AT_abc403_c [ABC403C] 403 Forbidden
+
+## 题目描述
+
+There are  $ N $  users on WAtCoder, numbered from  $ 1 $  to  $ N $ , and  $ M $  contest pages, numbered from  $ 1 $  to  $ M $ . Initially, no user has view permission for any contest page.
+
+You are given  $ Q $  queries to process in order. Each query is of one of the following three types:
+
+- `1 X Y`: Grant user  $ X $  view permission for contest page  $ Y $ .
+- `2 X`: Grant user  $ X $  view permission for all contest pages.
+- `3 X Y`: Answer whether user  $ X $  can view contest page  $ Y $ .
+
+It is possible for a user to be granted permission for the same contest page multiple times.
+
+## 输入格式
+
+The input is given from Standard Input in the following format:
+
+> $ N $   $ M $   $ Q $  $ \mathrm{query}_1 $  $ \mathrm{query}_2 $  $ \vdots $  $ \mathrm{query}_Q $
+
+Each  $ \mathrm{query}_i $  is in one of the following formats:
+
+> $ 1 $   $ X $   $ Y $
+
+> $ 2 $   $ X $
+
+> $ 3 $   $ X $   $ Y $
+
+## 输出格式
+
+For each query of the third type, print `Yes` if user  $ X $  can view contest page  $ Y $ , otherwise print `No`, each on its own line.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+2 3 5
+1 1 2
+3 1 1
+3 1 2
+2 2
+3 2 3
+```
+
+### 输出 #1
+
+```
+No
+Yes
+Yes
+```
+
+## 输入输出样例 #2
+
+### 输入 #2
+
+```
+5 5 10
+2 2
+3 4 4
+1 1 1
+1 4 1
+1 4 2
+1 4 4
+1 2 4
+3 3 2
+3 5 4
+3 2 1
+```
+
+### 输出 #2
+
+```
+No
+No
+No
+Yes
+```
+
+## 说明/提示
+
+### Sample Explanation 1
+
+- In the first query, user  $ 1 $  is granted permission to view contest page  $ 2 $ .
+- At the second query, user  $ 1 $  can view only page  $ 2 $ ; they cannot view page  $ 1 $ , so print `No`.
+- At the third query, user  $ 1 $  can view page  $ 2 $ , so print `Yes`.
+- In the fourth query, user  $ 2 $  is granted permission to view all pages.
+- At the fifth query, user  $ 2 $  can view pages  $ 1,2,3 $ ; they can view page  $ 3 $ , so print `Yes`.
+
+### Constraints
+
+- $ 1 \le N \le 2\times 10^5 $
+- $ 1 \le M \le 2\times 10^5 $
+- $ 1 \le Q \le 2\times 10^5 $
+- $ 1 \le X \le N $
+- $ 1 \le Y \le M $
+- All input values are integers.
