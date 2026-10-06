@@ -597,22 +597,22 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 1e3 + 5, M = 1e6 + 5, mod = 1004535809;
-int n, pw[M], c[N][N], f[N];
+const long long N = 1e3 + 5, M = 1e6 + 5, mod = 1004535809;
+long long n, pw[M], c[N][N], f[N];
 inline void solve(int Task_Id) {
     cin >> n, pw[0] = 1;
     for (int i = 1; i <= n * n; i++) {
-        pw[i] = (pw[i - 1] << 1) % mod;
+        pw[i] = (pw[i - 1] << 1LL) % mod;
     }
     for (int i = 0; i <= n; i++) {
         for (int j = 0; j <= i; j++) {
-            c[i][j] = j ? (c[i - 1][j] + c[i - 1][j - 1]) % mod : 1;
+            c[i][j] = j ? (c[i - 1][j] + c[i - 1][j - 1]) % mod : 1LL;
         }
     }
     for (int i = 1; i <= n; i++) {
-        f[i] = pw[(i * (i - 1)) >> 1];
+        f[i] = pw[(i * (i - 1)) >> 1LL];
         for (int j = 1; j < i; j++) {
-            f[i] = (f[i] - f[j] * c[i - 1][j - 1] % mod * pw[((i - j) * (i - j - 1)) >> 1] % mod + mod) % mod;
+            f[i] = (f[i] - f[j] * c[i - 1][j - 1] % mod * pw[((i - j) * (i - j - 1)) >> 1LL] % mod + mod) % mod;
         }
     }
     cout << f[n];
