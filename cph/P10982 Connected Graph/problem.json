@@ -1,0 +1,35 @@
+{
+  "interactive": false, 
+  "batch": {
+    "size": 1, 
+    "id": "bea0cfda-2a0a-45fc-afa8-3b8229b3b702"
+  }, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P10982", 
+  "tests": [
+    {
+      "output": "4\n", 
+      "input": "3\n"
+    }, 
+    {
+      "output": "38\n", 
+      "input": "4\n"
+    }
+  ], 
+  "timeLimit": 1000, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P10982ConnectedGraph"
+    }
+  }, 
+  "testType": "single", 
+  "memoryLimit": 512, 
+  "name": "P10982 Connected Graph", 
+  "group": "Luogu"
+}
