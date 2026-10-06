@@ -50,3 +50,54 @@
 
 ---
 
+# P10982 Connected Graph
+
+## 题目背景
+
+This problem is a simplified version of P4841 [CTT Homework 2013] City Planning, with the polynomial part from the original problem removed.
+
+## 题目描述
+
+Find the number of labeled undirected connected graphs with $n$ vertices.
+
+## 输入格式
+
+Input one positive integer $n$.
+
+## 输出格式
+
+Output the answer modulo $1004535809$ ( $479 \times 2 ^{21} + 1$ ).
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+3
+```
+
+### 输出 #1
+
+```
+4
+```
+
+## 输入输出样例 #2
+
+### 输入 #2
+
+```
+4
+```
+
+### 输出 #2
+
+```
+38
+```
+
+## 说明/提示
+
+Constraints: $1\leq n \leq 1000$.
+
+Translated by ChatGPT 5
