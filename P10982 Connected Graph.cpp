@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: bea0cfda-2a0a-45fc-afa8-3b8229b3b702
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,25 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 1e3 + 5, M = 1e6 + 5, mod = 1004535809LL;
+int n, pw[M], c[N][N], f[N];
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n, pw[0] = 1;
+    for (int i = 1; i <= n * n; i++) {
+        pw[i] = (pw[i - 1] << 1) % mod;
+    }
+    for (int i = 0; i <= n; i++) {
+        for (int j = 0; j <= i; j++) {
+            c[i][j] = j ? (c[i - 1][j] + c[i - 1][j - 1]) % mod : 1;
+        }
+    }
+    for (int i = 1; i <= n; i++) {
+        f[i] = pw[(i * (i - 1)) >> 1];
+        for (int j = 1; j < i; j++) {
+            f[i] = (f[i] - f[j] * c[i - 1][j - 1] % mod * pw[((i - j) * (i - j - 1)) >> 1] % mod + mod) % mod;
+        }
+    }
+    cout << f[n];
     return;
 }
 } // namespace TANGYIXIAO
