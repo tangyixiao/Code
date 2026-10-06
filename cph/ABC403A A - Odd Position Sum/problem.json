@@ -1,0 +1,39 @@
+{
+  "testType": "single", 
+  "batch": {
+    "size": 1, 
+    "id": "646f2344-ab4f-4268-9b9a-4be330285f93"
+  }, 
+  "tests": [
+    {
+      "output": "14\n", 
+      "input": "7\n3 1 4 1 5 9 2\n"
+    }, 
+    {
+      "output": "100\n", 
+      "input": "1\n100\n"
+    }, 
+    {
+      "output": "403\n", 
+      "input": "14\n100 10 1 10 100 10 1 10 100 10 1 10 100 10\n"
+    }
+  ], 
+  "output": {
+    "type": "stdout"
+  }, 
+  "url": "https://atcoder.jp/contests/abc403/tasks/abc403_a", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "interactive": false, 
+  "name": "A - Odd Position Sum", 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "AOddPositionSum"
+    }
+  }, 
+  "timeLimit": 2000, 
+  "group": "AtCoder - AtCoder Beginner Contest 403", 
+  "memoryLimit": 1024
+}

@@ -1,0 +1,31 @@
+{
+  "timeLimit": 10000, 
+  "batch": {
+    "size": 1, 
+    "id": "4f2792e0-2db8-48ce-91a3-082ffde5c829"
+  }, 
+  "tests": [
+    {
+      "input": "2\n1 0.5 500000\n3 0.75 600000\n", 
+      "output": "Case #1: 0.500000\nCase #2: 0.843750\n"
+    }
+  ], 
+  "output": {
+    "type": "stdout"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P13476", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "testType": "single", 
+  "interactive": false, 
+  "group": "Luogu", 
+  "memoryLimit": 1024, 
+  "name": "P13476 [GCJ 2008 APAC SemiFinal] Millionaire", 
+  "languages": {
+    "java": {
+      "taskClass": "P13476GCJ2008APACSemiFinalMillionaire", 
+      "mainClass": "Main"
+    }
+  }
+}

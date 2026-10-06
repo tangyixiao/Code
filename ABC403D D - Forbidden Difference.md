@@ -1,0 +1,255 @@
+# AT_abc403_d [ABC403D] Forbidden Difference
+
+## 题目描述
+
+[problemUrl]: https://atcoder.jp/contests/abc403/tasks/abc403_d
+
+给定一个长度为 $N$ 的整数序列 $A=(A_1,A_2,\dots,A_N)$ 和一个非负整数 $D$。我们需要通过删除 $A$ 中的若干元素，得到一个新序列 $B$，使其满足以下条件：
+
+- 对于所有 $i,j\ \ (1 \leq i < j \leq |B|)$，都有 $|B_i - B_j| \neq D$。
+
+求最少需要删除多少个元素才能满足条件。
+
+## 输入格式
+
+输入通过标准输入给出，格式如下：
+
+> $N$ $D$  
+> $A_1$ $A_2$ $\dots$ $A_N$
+
+## 输出格式
+
+输出需要删除的最少元素数量。
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+5 2
+3 1 4 1 5
+```
+
+### 输出 #1
+
+```
+1
+```
+
+## 输入输出样例 #2
+
+### 输入 #2
+
+```
+4 3
+1 6 1 8
+```
+
+### 输出 #2
+
+```
+0
+```
+
+## 输入输出样例 #3
+
+### 输入 #3
+
+```
+10 3
+1 6 2 10 2 3 2 10 6 4
+```
+
+### 输出 #3
+
+```
+2
+```
+
+## 说明/提示
+
+### 约束条件
+
+- $1 \leq N \leq 2 \times 10^5$
+- $0 \leq D \leq 10^6$
+- $0 \leq A_i \leq 10^6$
+- 输入中的所有值均为整数
+
+### 样例解释 #1
+
+删除 $A_1=3$，得到 $B=(1,4,1,5)$，此时对于所有 $i<j$，都有 $|B_i - B_j| \neq 2$。
+
+### 样例解释 #2
+
+原始序列 $A$ 已经满足条件，因此不需要删除任何元素。
+
+翻译由 DeepSeek V3 完成
+
+---
+
+# AT_abc403_d [ABC403D] Forbidden Difference
+
+## 题目描述
+
+You are given a length- $ N $  integer sequence  $ A=(A_1,A_2,\dots,A_N) $  and a non-negative integer  $ D $ . We wish to delete as few elements as possible from  $ A $  to obtain a sequence  $ B $  that satisfies the following condition:
+
+- $ |B_i - B_j|\neq D $  for all  $ i,j \; (1 \leq i < j \leq |B|) $ .
+
+Find the minimum number of deletions required.
+
+## 输入格式
+
+The input is given from Standard Input in the following format:
+
+> $ N $   $ D $  $ A_1 $   $ A_2 $   $ \dots $   $ A_N $
+
+## 输出格式
+
+Print the answer.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+5 2
+3 1 4 1 5
+```
+
+### 输出 #1
+
+```
+1
+```
+
+## 输入输出样例 #2
+
+### 输入 #2
+
+```
+4 3
+1 6 1 8
+```
+
+### 输出 #2
+
+```
+0
+```
+
+## 输入输出样例 #3
+
+### 输入 #3
+
+```
+10 3
+1 6 2 10 2 3 2 10 6 4
+```
+
+### 输出 #3
+
+```
+2
+```
+
+## 说明/提示
+
+### Sample Explanation 1
+
+Deleting  $ A_1=3 $  yields  $ B=(1,4,1,5) $ , which satisfies  $ |B_i - B_j|\neq 2 $  for all  $ i<j $ .
+
+### Sample Explanation 2
+
+The sequence  $ A $  may already satisfy the condition.
+
+### Constraints
+
+- $ 1 \le N \le 2\times 10^5 $
+- $ 0 \le D \le 10^6 $
+- $ 0 \le A_i \le 10^6 $
+- All input values are integers.
+
+---
+
+
+# AT_abc403_d [ABC403D] Forbidden Difference
+
+## 题目描述
+
+長さ  $ N $  の整数列  $ A=(A_1,A_2,\dots,A_N) $  と非負整数  $ D $  が与えられます。  $ A $  の要素をいくつか削除して、以下の条件を満たす数列  $ B $  を得たいです。
+
+- すべての  $ i,j \; (1 \leq i < j \leq |B|) $  について、 $ |B_i-B_j| \neq D $
+
+最小でいくつの要素を削除すればよいか求めてください。
+
+## 输入格式
+
+入力は以下の形式で標準入力から与えられる。
+
+> $ N $   $ D $  $ A_1 $   $ A_2 $   $ \dots $   $ A_N $
+
+## 输出格式
+
+答えを出力せよ。
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+5 2
+3 1 4 1 5
+```
+
+### 输出 #1
+
+```
+1
+```
+
+## 输入输出样例 #2
+
+### 输入 #2
+
+```
+4 3
+1 6 1 8
+```
+
+### 输出 #2
+
+```
+0
+```
+
+## 输入输出样例 #3
+
+### 输入 #3
+
+```
+10 3
+1 6 2 10 2 3 2 10 6 4
+```
+
+### 输出 #3
+
+```
+2
+```
+
+## 说明/提示
+
+### Sample Explanation 1
+
+$ A_1=3 $  を削除して  $ B=(1,4,1,5) $  とすることで、すべての  $ i<j $  について  $ |B_i-B_j|\neq 2 $  となります。
+
+### Sample Explanation 2
+
+$ A $  がすでに条件を満たしていることもあります。
+
+### Constraints
+
+- $ 1 \leq N \leq 2 \times 10^5 $
+- $ 0 \leq D \leq 10^6 $
+- $ 0 \leq A_i \leq 10^6 $
+- 入力はすべて整数

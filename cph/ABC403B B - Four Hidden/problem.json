@@ -1,0 +1,39 @@
+{
+  "testType": "single", 
+  "batch": {
+    "size": 1, 
+    "id": "455bf26a-76da-4f54-9e6b-d9654788546e"
+  }, 
+  "tests": [
+    {
+      "output": "Yes\n", 
+      "input": "tak??a?h?\nnashi\n"
+    }, 
+    {
+      "output": "No\n", 
+      "input": "??e??e\nsnuke\n"
+    }, 
+    {
+      "output": "Yes\n", 
+      "input": "????\naoki\n"
+    }
+  ], 
+  "output": {
+    "type": "stdout"
+  }, 
+  "url": "https://atcoder.jp/contests/abc403/tasks/abc403_b", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "interactive": false, 
+  "name": "B - Four Hidden", 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "BFourHidden"
+    }
+  }, 
+  "timeLimit": 2000, 
+  "group": "AtCoder - AtCoder Beginner Contest 403", 
+  "memoryLimit": 1024
+}
