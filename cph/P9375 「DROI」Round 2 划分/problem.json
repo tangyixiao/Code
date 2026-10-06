@@ -1,0 +1,35 @@
+{
+  "name": "P9375 「DROI」Round 2 划分",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P9375",
+  "interactive": false,
+  "memoryLimit": 128,
+  "timeLimit": 2000,
+  "tests": [
+    {
+      "input": "6\n2 1 4899 4 1 4\n1 1 1 0 0 0\n",
+      "output": "9\n"
+    },
+    {
+      "input": "10\n1 1 1 2 4 3 3 3 8 8\n2 1 2 0 0 0 0 0 0 0\n",
+      "output": "24\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P9375DROIRound2"
+    }
+  },
+  "batch": {
+    "id": "684fa8a9-826f-46fc-82dc-edd79721ee01",
+    "size": 1
+  }
+}
