@@ -610,9 +610,9 @@ inline void solve(int Task_Id) {
     if (flag) {
         flag = false, cout << "NO\n";
     } else {
-        cout << "YES\n51\n";
-        for (int i = 0; i <= 50; i++) {
-            cout << i << " \n"[i == 50];
+        cout << "YES\n101\n";
+        for (int i = 0; i <= 100; i++) {
+            cout << i << " \n"[i == 100];
         }
     }
     return;
