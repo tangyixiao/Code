@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 3a122913-05bc-4278-b214-9832ca24b906
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,117 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+int Q, mp[10][9], turn, over;
+string name[8] = {"", "captain", "guard", "elephant", "horse", "car", "duck", "soldier"};
+
+inline int side(int x) {
+    return x > 0 ? 0 : 1;
+}
+
+inline int sgn(int x) {
+    return (x > 0) - (x < 0);
+}
+
+inline bool can(int sx, int sy, int tx, int ty) {
+    int p = mp[sx][sy], dx = tx - sx, dy = ty - sy, x = abs(dx), y = abs(dy);
+    if (!p || (mp[tx][ty] && side(mp[tx][ty]) == side(p))) {
+        return false;
+    }
+    if (abs(p) == 1) {
+        return x + y == 1;
+    }
+    if (abs(p) == 2) {
+        return x == 1 && y == 1;
+    }
+    if (abs(p) == 3) {
+        return x == 2 && y == 2 && !mp[sx + sgn(dx)][sy + sgn(dy)];
+    }
+    if (abs(p) == 4) {
+        if (x == 2 && y == 1) {
+            return !mp[sx + sgn(dx)][sy];
+        }
+        if (x == 1 && y == 2) {
+            return !mp[sx][sy + sgn(dy)];
+        }
+        return false;
+    }
+    if (abs(p) == 5) {
+        if ((dx && dy) || (!dx && !dy)) {
+            return false;
+        }
+        for (int i = sx + sgn(dx), j = sy + sgn(dy); i != tx || j != ty; i += sgn(dx), j += sgn(dy)) {
+            if (mp[i][j]) {
+                return false;
+            }
+        }
+        return true;
+    }
+    if (abs(p) == 6) {
+        if (x == 3 && y == 2) {
+            return !mp[sx + sgn(dx)][sy] && !mp[sx + 2 * sgn(dx)][sy + sgn(dy)];
+        }
+        if (x == 2 && y == 3) {
+            return !mp[sx][sy + sgn(dy)] && !mp[sx + sgn(dx)][sy + 2 * sgn(dy)];
+        }
+        return false;
+    }
+    return max(x, y) == 1;
+}
+
+inline bool check() {
+    int x[2] = {-1, -1}, y[2] = {-1, -1};
+    for (int i = 0; i < 10; i++) {
+        for (int j = 0; j < 9; j++) {
+            if (mp[i][j] && abs(mp[i][j]) == 1) {
+                x[side(mp[i][j])] = i, y[side(mp[i][j])] = j;
+            }
+        }
+    }
+    for (int i = 0; i < 10; i++) {
+        for (int j = 0; j < 9; j++) {
+            if (mp[i][j]) {
+                int c = side(mp[i][j]) ^ 1;
+                if (x[c] != -1 && can(i, j, x[c], y[c])) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+inline string piece(int x) {
+    return string(x > 0 ? "red " : "blue ") + name[abs(x)];
+}
+
+inline void init() {
+    int a[9] = {5, 4, 3, 2, 1, 2, 3, 4, 5};
+    for (int i = 0; i < 9; i++) {
+        mp[0][i] = a[i], mp[9][i] = -a[i];
+    }
+    mp[2][0] = mp[2][8] = 6;
+    mp[7][0] = mp[7][8] = -6;
+    for (int i = 0; i < 9; i += 2) {
+        mp[3][i] = 7, mp[6][i] = -7;
+    }
+}
+
 inline void solve(int Task_Id) {
-    // do something here
-    return;
+    init();
+    cin >> Q;
+    for (int _ = 1, sx, sy, tx, ty; _ <= Q; _++) {
+        cin >> sx >> sy >> tx >> ty;
+        if (over || !mp[sx][sy] || side(mp[sx][sy]) != turn || !can(sx, sy, tx, ty)) {
+            cout << "Invalid command\n";
+            continue;
+        }
+        int p = mp[sx][sy], q = mp[tx][ty];
+        mp[tx][ty] = p, mp[sx][sy] = 0;
+        if (q && abs(q) == 1) {
+            over = 1;
+        }
+        cout << piece(p) << ";" << (q ? piece(q) : "NA") << ";" << (!over && check() ? "yes" : "no") << ";" << (over ? "yes" : "no") << "\n";
+        turn ^= 1;
+    }
 }
 } // namespace TANGYIXIAO
