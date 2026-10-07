@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 2c92cb28-df5e-45f8-812b-98fb52d84714
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -596,3 +596,54 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+namespace TANGYIXIAO {
+const int N = 5e3 + 5, MOD = 998244353;
+int n;
+long long a[N], f[N];
+string s;
+
+inline void solve(int Task_Id) {
+    cin >> n;
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i];
+    }
+    cin >> s;
+    s = " " + s;
+    for (int i = 1; i <= n; i++) {
+        f[i] = 0;
+    }
+    f[1] = 1 + (s[1] == '1');
+    for (int i = 2; i <= n; i++) {
+        long long pw = 1, sum = 1, sf = 0, del = 0;
+        for (int j = i - 1; j >= 1; j--) {
+            sf += f[j];
+            if (sf >= MOD) {
+                sf -= MOD;
+            }
+            f[j] = f[j] * sum % MOD;
+            del += f[j];
+            if (del >= MOD) {
+                del -= MOD;
+            }
+            pw = pw * a[i] % MOD;
+            sum += pw;
+            if (sum >= MOD) {
+                sum -= MOD;
+            }
+        }
+        f[i] = (sf * sum % MOD - del + MOD) % MOD;
+        if (s[i] == '1') {
+            f[i] = f[i] * 2 % MOD;
+        }
+    }
+    long long ans = 0;
+    for (int i = 1; i <= n; i++) {
+        ans += f[i];
+        if (ans >= MOD) {
+            ans -= MOD;
+        }
+    }
+    cout << ans << "\n";
+    return;
+}
+} // namespace TANGYIXIAO
