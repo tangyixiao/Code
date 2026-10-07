@@ -1,0 +1,31 @@
+{
+  "interactive": false, 
+  "batch": {
+    "size": 1, 
+    "id": "c7829720-e624-470f-aefb-6909f26a08b0"
+  }, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "url": "https://codeforces.com/contest/1536/problem/C", 
+  "tests": [
+    {
+      "output": "1 2 1\n1 2 3 4 5 6\n1 1 1 2\n1\n1 1 1 2 1 2 1 1 3\n", 
+      "input": "5\n3\nDDK\n6\nDDDDDD\n4\nDKDK\n1\nD\n9\nDKDKDDDDK\n"
+    }
+  ], 
+  "timeLimit": 2000, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "CDilucAndKaeya"
+    }
+  }, 
+  "testType": "single", 
+  "memoryLimit": 256, 
+  "name": "C. Diluc and Kaeya", 
+  "group": "Codeforces - Codeforces Round 724 (Div. 2)"
+}
