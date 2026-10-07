@@ -602,14 +602,12 @@ string s, t;
 inline void solve(int Task_Id) {
     map<string, int> mp;
     cin >> n >> s, s = " " + s;
-    for (int i = 1; i <= n; i++) {
-        t = "";
+    for (int i = 1; i <= n; i++, t = "") {
         for (int k = 0; k <= 6; k++) {
             t += s[i + k], mp[t] = 1;
         }
     }
-    for (int i = 1; i <= 7; i++) {
-        t = "";
+    for (int i = 1; i <= 7; i++, t = "") {
         for (int k = 1; k <= i; k++) {
             t += "a";
         }
