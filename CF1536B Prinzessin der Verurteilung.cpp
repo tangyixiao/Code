@@ -598,32 +598,30 @@ signed main() {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 int n;
-string s;
+string s, t;
 inline void solve(int Task_Id) {
-    set<string> mp;
-    cin >> n >> s;
-    for (int i = 0; i < n; i++) {
-        string t;
-        for (int k = 0; k < 3 && i + k < n; k++) {
-            t += s[i + k];
-            mp.insert(t);
+    map<string, int> mp;
+    cin >> n >> s, s = " " + s;
+    for (int i = 1; i <= n; i++, t = "") {
+        for (int k = 0; k <= 6 && i + k <= n; k++) {
+            t += s[i + k], mp[t] = 1;
         }
     }
-    for (int len = 1; len <= 3; len++) {
-        string t(len, 'a');
-        for (;;) {
+    for (int i = 1; i <= 7; i++, t = "") {
+        for (int k = 1; k <= i; k++) {
+            t += "a";
+        }
+        for (int id = i - 1;; t[id]++, id = i - 1) {
             if (!mp.count(t)) {
                 cout << t << "\n";
                 return;
             }
-            int id = len - 1;
-            for (; id >= 0 && t[id] == 'z'; id--) {
-                t[id] = 'a';
+            for (; id >= 0 && t[id] == 'z';) {
+                t[id--] = 'a';
             }
             if (id < 0) {
                 break;
             }
-            t[id]++;
         }
     }
     return;
