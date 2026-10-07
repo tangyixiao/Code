@@ -1,0 +1,31 @@
+{
+  "interactive": false, 
+  "batch": {
+    "size": 1, 
+    "id": "8f2a22af-86c7-4046-a8f4-f3ed1ae054f3"
+  }, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/T756605?contestId=358583", 
+  "tests": [
+    {
+      "output": "1 1 2 3 5\n", 
+      "input": ""
+    }
+  ], 
+  "timeLimit": 1000, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "T756605ICPC2019YinchuanRFibonacciSequence"
+    }
+  }, 
+  "testType": "single", 
+  "memoryLimit": 512, 
+  "name": "T756605 [ICPC 2019 Yinchuan R] Fibonacci Sequence", 
+  "group": "Luogu - [ICPC2019 Yinchuan R] ICPC 2019 区域赛银川站重现赛"
+}
