@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 9b077047-d6e1-46a8-8608-595c74150bf7
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,203 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 55, M = 205;
+const int dx[4] = {-1, 0, 1, 0}, dy[4] = {0, 1, 0, -1};
+int L, R, m, n, K, P, Limit, Time, cur, cnt, wp, mp[N][N], num[N][N];
+bool hit[N][N];
+
+struct Mouse {
+    int x, y, d, g, age, sleep, birth, turn;
+    bool preg, dead;
+} a[M], tmp[M];
+
+struct Weapon {
+    int type, t, x, y;
+    inline bool operator<(const Weapon &o) const {
+        return t < o.t;
+    }
+} w[105];
+
+inline int getdir(char c) {
+    if (c == 'N') {
+        return 0;
+    }
+    if (c == 'E') {
+        return 1;
+    }
+    if (c == 'S') {
+        return 2;
+    }
+    return 3;
+}
+
+inline void clear_dead() {
+    int k = 0;
+    for (int i = 1; i <= cnt; i++) {
+        if (!a[i].dead) {
+            tmp[++k] = a[i];
+        }
+    }
+    cnt = k;
+    for (int i = 1; i <= cnt; i++) {
+        a[i] = tmp[i];
+    }
+}
+
+inline void weapon(Weapon b) {
+    if (b.type == 1) {
+        memset(hit, 0, sizeof(hit));
+        hit[b.x][b.y] = 1;
+        for (int d = 0; d < 4; d++) {
+            int x = b.x, y = b.y;
+            for (int k = 1; k <= L; k++) {
+                if (!(mp[x][y] & (1 << d))) {
+                    break;
+                }
+                x += dx[d], y += dy[d];
+                hit[x][y] = 1;
+            }
+        }
+        for (int i = 1; i <= cnt; i++) {
+            if (hit[a[i].x][a[i].y]) {
+                a[i].dead = 1;
+            }
+        }
+    } else if (b.type == 2) {
+        for (int i = 1; i <= cnt; i++) {
+            int x = a[i].x - b.x, y = a[i].y - b.y;
+            if (x * x + y * y <= R * R) {
+                a[i].sleep += 3;
+                if (a[i].birth > cur) {
+                    a[i].birth += 3;
+                }
+            }
+        }
+    } else if (b.type == 3) {
+        for (int i = 1; i <= cnt; i++) {
+            if (a[i].x == b.x && a[i].y == b.y) {
+                a[i].dead = 1;
+            }
+        }
+    } else {
+        for (int i = 1; i <= cnt; i++) {
+            if (a[i].x == b.x && a[i].y == b.y) {
+                a[i].g ^= 1;
+            }
+        }
+    }
+}
+
+inline bool breed() {
+    memset(num, 0, sizeof(num));
+    for (int i = 1; i <= cnt; i++) {
+        num[a[i].x][a[i].y]++;
+    }
+    for (int i = 1; i <= cnt; i++) {
+        for (int j = i + 1; j <= cnt; j++) {
+            if (a[i].x == a[j].x && a[i].y == a[j].y && num[a[i].x][a[i].y] == 2 && a[i].g != a[j].g && a[i].age >= 5 && a[j].age >= 5 && !a[i].sleep && !a[j].sleep && !a[i].birth && !a[j].birth && !a[i].preg && !a[j].preg) {
+                a[i].birth = a[j].birth = cur + 2;
+                a[i].sleep = a[j].sleep = 3;
+                if (a[i].g) {
+                    a[i].preg = 1;
+                } else {
+                    a[j].preg = 1;
+                }
+            }
+        }
+    }
+    int old = cnt;
+    for (int i = 1; i <= old; i++) {
+        if (a[i].preg && a[i].birth == cur) {
+            for (int d = 0; d < 4; d++) {
+                if (mp[a[i].x][a[i].y] & (1 << d)) {
+                    cnt++;
+                    a[cnt] = {a[i].x, a[i].y, d, d & 1, 0, 0, 0, 0, 0, 0};
+                    if (cnt > Limit) {
+                        return false;
+                    }
+                }
+            }
+            a[i].preg = 0;
+        }
+    }
+    return true;
+}
+
+inline void move_mouse() {
+    for (int i = 1; i <= cnt; i++) {
+        if (a[i].sleep) {
+            a[i].sleep--;
+        } else {
+            if (a[i].age < 5) {
+                a[i].age++;
+            }
+            a[i].birth = 0;
+            int l = (a[i].d + 3) % 4, r = (a[i].d + 1) % 4;
+            if (mp[a[i].x][a[i].y] & (1 << a[i].d)) {
+                a[i].x += dx[a[i].d], a[i].y += dy[a[i].d];
+            } else if ((mp[a[i].x][a[i].y] & (1 << l)) && (mp[a[i].x][a[i].y] & (1 << r))) {
+                a[i].turn++;
+                if (a[i].turn & 1) {
+                    a[i].d = l;
+                } else {
+                    a[i].d = r;
+                }
+            } else if (mp[a[i].x][a[i].y] & (1 << l)) {
+                a[i].d = l;
+            } else if (mp[a[i].x][a[i].y] & (1 << r)) {
+                a[i].d = r;
+            } else {
+                a[i].d = r;
+            }
+        }
+    }
+}
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> L >> R >> m >> n;
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= n; j++) {
+            cin >> mp[i][j];
+        }
+    }
+    cin >> K;
+    cnt = K;
+    for (int i = 1; i <= K; i++) {
+        char d, g;
+        cin >> a[i].x >> a[i].y >> d >> g;
+        a[i].d = getdir(d);
+        a[i].g = (g == 'Y');
+        a[i].age = 5;
+        a[i].sleep = a[i].birth = a[i].turn = 0;
+        a[i].preg = a[i].dead = 0;
+    }
+    cin >> P >> Limit;
+    for (int i = 1; i <= P; i++) {
+        cin >> w[i].type >> w[i].t >> w[i].x >> w[i].y;
+        if (w[i].type == 3) {
+            w[i].t += 3;
+        }
+    }
+    sort(w + 1, w + P + 1);
+    cin >> Time;
+    if (cnt > Limit) {
+        cout << -1 << "\n";
+        return;
+    }
+    wp = 1;
+    for (cur = 0; cur <= Time; cur++) {
+        for (; wp <= P && w[wp].t == cur; wp++) {
+            weapon(w[wp]);
+        }
+        clear_dead();
+        if (!breed()) {
+            cout << -1 << "\n";
+            return;
+        }
+        move_mouse();
+    }
+    cout << cnt << "\n";
     return;
 }
 } // namespace TANGYIXIAO
