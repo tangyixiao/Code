@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 1e5e459b-d2ad-4caf-91a2-d72947514670
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,24 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+int m, n, ans;
+inline void dfs(int a, int b) {
+    if (a < 0 || a > n || b > m) {
+        return;
+    }
+    if (a == n && b == m) {
+        ans++;
+        return;
+    }
+    dfs(a + 1, b + 2), dfs(a - 1, b + 2);
+    dfs(a + 2, b + 1), dfs(a - 2, b + 1);
+    return;
+}
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> m;
+    dfs(0, 0);
+    cout << ans;
     return;
 }
 } // namespace TANGYIXIAO
