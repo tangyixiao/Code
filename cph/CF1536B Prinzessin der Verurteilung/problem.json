@@ -1,0 +1,31 @@
+{
+  "interactive": false, 
+  "batch": {
+    "size": 1, 
+    "id": "efdb6d15-d2a7-40e7-b653-20637c83cff9"
+  }, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "url": "https://codeforces.com/contest/1536/problem/B", 
+  "tests": [
+    {
+      "output": "ac\nf\nb\n", 
+      "input": "3\n28\nqaabzwsxedcrfvtgbyhnujmiklop\n13\ncleanairactbd\n10\naannttoonn\n"
+    }
+  ], 
+  "timeLimit": 2000, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "BPrinzessinDerVerurteilung"
+    }
+  }, 
+  "testType": "single", 
+  "memoryLimit": 256, 
+  "name": "B. Prinzessin der Verurteilung", 
+  "group": "Codeforces - Codeforces Round 724 (Div. 2)"
+}
