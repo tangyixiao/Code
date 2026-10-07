@@ -1,0 +1,31 @@
+{
+  "interactive": false, 
+  "batch": {
+    "size": 1, 
+    "id": "3a122913-05bc-4278-b214-9832ca24b906"
+  }, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P5380", 
+  "tests": [
+    {
+      "output": "Invalid command\nInvalid command\nInvalid command\nInvalid command\nred guard;NA;no;no\nInvalid command\nblue captain;NA;no;no\nred soldier;NA;no;no\nInvalid command\nInvalid command\nblue elephant;NA;no;no\nred duck;NA;no;no\nblue horse;NA;no;no\nred duck;blue soldier;no;no\nInvalid command\nblue captain;NA;yes;no\nred duck;blue captain;no;yes\nInvalid command\n", 
+      "input": "18\n0 0 7 0\n9 0 8 0\n0 1 1 3\n0 2 2 0\n0 3 1 2\n0 4 0 3\n9 4 8 4\n3 2 2 3\n7 0 4 2\n7 0 5 3\n9 2 7 4\n2 0 4 3\n9 1 8 3\n4 3 6 6\n7 4 9 2\n8 4 9 4\n6 6 9 4\n9 8 8 8\n"
+    }
+  ], 
+  "timeLimit": 1000, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P5380THUPC2019"
+    }
+  }, 
+  "testType": "single", 
+  "memoryLimit": 500, 
+  "name": "P5380 [THUPC 2019] 鸭棋", 
+  "group": "Luogu"
+}
