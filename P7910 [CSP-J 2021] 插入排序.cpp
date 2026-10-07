@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 029a5ada-777c-4a68-8119-310e3192c9d9
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,53 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 8e3 + 5;
+struct Node {
+    int val, id;
+};
+int n, Q, a[N], pos[N];
+Node b[N];
+bool cmp(const Node &u, const Node &v) {
+    if (u.val != v.val) {
+        return u.val < v.val;
+    }
+    return u.id < v.id;
+}
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> Q;
+    for (int i = 1; i <= n; ++i) {
+        cin >> a[i];
+        b[i] = {a[i], i};
+    }
+    sort(b + 1, b + n + 1, cmp);
+    for (int i = 1; i <= n; ++i) { pos[b[i].id] = i; }
+    while (Q--) {
+        int op;
+        cin >> op;
+        if (op == 1) {
+            int x, v;
+            cin >> x >> v;
+            a[x] = v;
+            int p = pos[x];
+            b[p].val = v;
+            while (p > 1 && cmp(b[p], b[p - 1])) {
+                swap(b[p], b[p - 1]);
+                pos[b[p].id] = p;
+                pos[b[p - 1].id] = p - 1;
+                --p;
+            }
+            while (p < n && cmp(b[p + 1], b[p])) {
+                swap(b[p], b[p + 1]);
+                pos[b[p].id] = p;
+                pos[b[p + 1].id] = p + 1;
+                ++p;
+            }
+        } else {
+            int x;
+            cin >> x;
+            cout << pos[x] << '\n';
+        }
+    }
     return;
 }
 } // namespace TANGYIXIAO
