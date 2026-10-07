@@ -1,0 +1,31 @@
+{
+  "interactive": false, 
+  "batch": {
+    "size": 1, 
+    "id": "82114092-5dac-4a61-a161-e5e3439c7ad2"
+  }, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P17222", 
+  "tests": [
+    {
+      "output": "3\n20\n119\n", 
+      "input": "3\n1\n4\n21\n"
+    }
+  ], 
+  "timeLimit": 1000, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P17222ICPC2017NanningRTwiceEquation"
+    }
+  }, 
+  "testType": "single", 
+  "memoryLimit": 512, 
+  "name": "P17222 [ICPC 2017 Nanning R] Twice Equation", 
+  "group": "Luogu"
+}
