@@ -1,0 +1,31 @@
+{
+  "interactive": false, 
+  "batch": {
+    "size": 1, 
+    "id": "c2319082-071b-4e08-876b-6332b30266a3"
+  }, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P14221", 
+  "tests": [
+    {
+      "output": "5\n3\n", 
+      "input": "2\n6 2\n5 3 13 8 10 555\n3 0\n3 6 9\n"
+    }
+  ], 
+  "timeLimit": 3000, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P14221ICPC2024KunmingI"
+    }
+  }, 
+  "testType": "single", 
+  "memoryLimit": 1024, 
+  "name": "P14221 [ICPC 2024 Kunming I] 学而时习之", 
+  "group": "Luogu"
+}
