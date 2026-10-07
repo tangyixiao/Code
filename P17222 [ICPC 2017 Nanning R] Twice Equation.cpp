@@ -9,18 +9,18 @@
 //  Test Type: single
 //  Batch ID: 82114092-5dac-4a61-a161-e5e3439c7ad2
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
 */
-#define PRAGMA_TYPE 0 // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
+#define PRAGMA_TYPE 0                     // 0 for no pragma, 1 for O3, 2 for extended optimize, 3 for compiler options
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
-#define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file, 2 for local file
-#define FILE_INDEX 1 // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
+#define FILE_INDEX 1                      // the index of the file in the local file system
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -643,8 +643,33 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 1e3 + 5;
+BigInt a[N];
+int cnt;
+
 inline void solve(int Task_Id) {
-    
+    if (!cnt) {
+        a[0] = 0, a[1] = 3, cnt = 1;
+        BigInt lim = 1;
+        for (int i = 1; i <= 191; i++) {
+            lim *= 10;
+        }
+        for (; a[cnt] < lim; cnt++) {
+            a[cnt + 1] = a[cnt] * 6 - a[cnt - 1] + 2;
+        }
+    }
+    BigInt x;
+    cin >> x;
+    int l = 1, r = cnt, ans = cnt;
+    for (; l <= r;) {
+        int mid = (l + r) >> 1;
+        if (a[mid] >= x) {
+            ans = mid, r = mid - 1;
+        } else {
+            l = mid + 1;
+        }
+    }
+    cout << a[ans] << "\n";
     return;
 }
 } // namespace TANGYIXIAO
