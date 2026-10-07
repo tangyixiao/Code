@@ -1,0 +1,31 @@
+{
+  "interactive": false, 
+  "batch": {
+    "size": 1, 
+    "id": "122990e8-9a41-4af9-b415-885dbffa8751"
+  }, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P7196", 
+  "tests": [
+    {
+      "output": "1\n", 
+      "input": "1 1 3 3\n6 14 12\n7 15 13\n3 11 9\n3\n1 3 W X\n1 2 W X\n3 3 S X\n3 100\n1 1 2 2\n3 1 3 1\n2 2 3 2\n10\n"
+    }
+  ], 
+  "timeLimit": 1000, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P7196CTSC2002"
+    }
+  }, 
+  "testType": "single", 
+  "memoryLimit": 256, 
+  "name": "P7196 [CTSC2002] 灭鼠行动", 
+  "group": "Luogu"
+}
