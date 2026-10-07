@@ -1,0 +1,31 @@
+{
+  "interactive": false, 
+  "batch": {
+    "size": 1, 
+    "id": "99b965bf-2a6a-43d2-9831-419625d14299"
+  }, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "url": "https://codeforces.com/contest/1536/problem/A", 
+  "tests": [
+    {
+      "output": "yes\n4\n6 0 3 9\nyEs\n5\n5 3 1 2 4\nNO\nYes\n6\n8 12 6 2 4 10\n", 
+      "input": "4\n3\n3 0 9\n2\n3 4\n5\n-7 3 13 -2 8\n4\n4 8 12 6\n"
+    }
+  ], 
+  "timeLimit": 2000, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "AOmkarAndBadStory"
+    }
+  }, 
+  "testType": "single", 
+  "memoryLimit": 256, 
+  "name": "A. Omkar and Bad Story", 
+  "group": "Codeforces - Codeforces Round 724 (Div. 2)"
+}
