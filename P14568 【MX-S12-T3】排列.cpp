@@ -597,7 +597,7 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 5e3 + 5;
+const int N = 5e3 + 5, MOD = 998244353;
 int n, op[N], a[N], b[N], pa[N], pb[N], f[N], na, nb;
 
 inline void solve(int Task_Id) {
@@ -662,6 +662,9 @@ inline void solve(int Task_Id) {
             }
             if (j && (op[b[j]] == 3 || pa[i] < b[j])) {
                 x += f[j - 1];
+                if (x >= MOD) {
+                    x -= MOD;
+                }
             }
             f[j] = x;
         }
