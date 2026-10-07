@@ -1,0 +1,31 @@
+{
+  "group": "Luogu", 
+  "tests": [
+    {
+      "output": "37\n", 
+      "input": "4 8\n"
+    }
+  ], 
+  "input": {
+    "type": "stdin"
+  }, 
+  "name": "P1644 跳马问题", 
+  "url": "https://www.luogu.com.cn/problem/P1644", 
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P1644"
+    }
+  }, 
+  "interactive": false, 
+  "batch": {
+    "size": 1, 
+    "id": "1e5e459b-d2ad-4caf-91a2-d72947514670"
+  }, 
+  "memoryLimit": 125, 
+  "output": {
+    "type": "stdout"
+  }
+}
