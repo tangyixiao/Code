@@ -38,3 +38,36 @@
 
 ---
 
+# T756605 [ICPC 2019 Yinchuan R] Fibonacci Sequence
+
+## 题目描述
+
+The Fibonacci sequence is a sequence of natural numbers, and is defined as follows:
+
+- $F_1=1$;
+- $F_2=1$; and
+- $F_n=F_{n-1}+F_{n-2}$ for $n>2$.
+
+Write a program to output the first $5$ numbers in the Fibonacci sequence.
+
+## 输入格式
+
+There is no input for this problem.
+
+## 输出格式
+
+Output $5$ integers indicating the first $5$ numbers in the Fibonacci sequence. Any two adjacent numbers in the output are separated by exactly one space.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+
+```
+
+### 输出 #1
+
+```
+1 1 2 3 5
+```
