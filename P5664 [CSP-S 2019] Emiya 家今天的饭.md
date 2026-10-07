@@ -126,3 +126,129 @@ Emiya 必须至少做 $2$ 道菜。
 
 ---
 
+# P5664 [CSP-S 2019] Emiya’s Meal Today
+
+## 题目描述
+
+Emiya is a high school student who is good at cooking. He has mastered $n$ kinds of **cooking methods**, and uses $m$ kinds of **main ingredients**. For convenience, we number cooking methods from $1$ to $n$, and main ingredients from $1$ to $m$.
+
+Every dish Emiya makes will use **exactly one** cooking method and **exactly one** main ingredient. More specifically, Emiya can make $a_{i,j}$ different dishes that use cooking method $i$ and main ingredient $j$ ($1 \leq i \leq n$, $1 \leq j \leq m$). This also means Emiya can make a total of $\sum\limits_{i=1}^{n} \sum\limits_{j=1}^{m} a_{i,j}$ different dishes.
+
+Today, Emiya is going to prepare a meal to treat his good friends Yazid and Rin. However, the three of them have different requirements for how the dishes are combined. More specifically, for a plan (a selection) that contains $k$ dishes:
+- Emiya will not let everyone go hungry, so he will make **at least one dish**, i.e. $k \geq 1$.
+- Rin wants to taste dishes made with different cooking methods, so she requires that the **cooking methods of all dishes are pairwise different**.
+- Yazid does not want to taste too many dishes made from the same ingredient, so he requires that each **main ingredient** is used in at most **half** of the dishes (i.e. at most $\lfloor \frac{k}{2} \rfloor$ dishes).
+
+Here, $\lfloor x \rfloor$ is the floor function, meaning the greatest integer not exceeding $x$.
+
+These requirements are not hard for Emiya, but he wants to know how many different plans satisfy them. Two plans are different if and only if there exists at least one dish that appears in one plan but not in the other.
+
+Emiya asks you for help. Please compute the number of valid plans, and output the result modulo the prime $998,244,353$.
+
+## 输入格式
+
+The first line contains two integers $n, m$ separated by a single space.
+
+Lines $2$ to $n + 1$ each contain $m$ integers separated by single spaces. On line $i + 1$, the $m$ numbers are $a_{i,1}, a_{i,2}, \cdots, a_{i,m}$ in order.
+
+## 输出格式
+
+Output a single integer: the number of valid plans modulo $998,244,353$.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+2 3 
+1 0 1
+0 1 1
+```
+
+### 输出 #1
+
+```
+3
+```
+
+## 输入输出样例 #2
+
+### 输入 #2
+
+```
+3 3
+1 2 3
+4 5 0
+6 0 0
+```
+
+### 输出 #2
+
+```
+190
+```
+
+## 输入输出样例 #3
+
+### 输入 #3
+
+```
+5 5
+1 0 0 1 1
+0 1 0 1 0
+1 1 1 1 0
+1 0 1 0 1
+0 1 1 0 1
+```
+
+### 输出 #3
+
+```
+742
+```
+
+## 说明/提示
+
+[Sample 1 Explanation]
+
+In this sample, for every pair $i, j$, Emiya can make at most one dish, so we directly describe a dish by giving the indices of its cooking method and main ingredient.
+
+Valid plans include:
+- Make one dish using cooking method $1$ and main ingredient $1$, and one dish using cooking method $2$ and main ingredient $2$.
+- Make one dish using cooking method $1$ and main ingredient $1$, and one dish using cooking method $2$ and main ingredient $3$.
+- Make one dish using cooking method $1$ and main ingredient $3$, and one dish using cooking method $2$ and main ingredient $2$.
+
+Therefore the output is $3 \bmod 998,244,353 = 3$. Note that all plans that contain only one dish are invalid, because the only main ingredient appears in more than half of the dishes, which does not satisfy Yazid’s requirement.
+
+[Sample 2 Explanation]
+
+Emiya must make at least $2$ dishes.
+
+The number of valid plans with $2$ dishes is $100$.
+
+The number of valid plans with $3$ dishes is $90$.
+
+Therefore the total number of valid plans is $100 + 90 = 190$.
+
+[Constraints]
+
+::cute-table{tuack}
+
+| Test Point ID | $n=$ | $m=$ | $a_{i,j}<$ |
+|:-:|:-:|:-:|:-:|
+| $1$ | $2$ | $2$ | $2$ |
+| $2$ | ^ | $3$ | ^ |
+| $3$ | $5$ | $2$ | ^ |
+| $4$ | ^ | $3$ | ^ |
+| $5$ | $10$ | $2$ | ^ |
+| $6$ | ^ | $3$ | ^ |
+| $7$ | $10$ | $2$ | $1000$ |
+| $8$ | ^ | $3$ | ^ |
+| $9\sim 12$ | $40$ | $2$ | ^ |
+| $13\sim16$ | ^ | $3$ | ^ |
+| $17\sim21$ | ^ | $500$ | ^ |
+| $22\sim25$ | $100$ | $2000$ | $998,244,353$ |
+
+For all test points, it is guaranteed that $1 \leq n \leq 100$, $1 \leq m \leq 2000$, $0 \leq a_{i,j} \lt 998,244,353$.
+
+Translated by ChatGPT 5
