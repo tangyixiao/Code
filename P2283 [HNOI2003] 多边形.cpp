@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: ef35f736-78e9-4415-8777-16e70830d3ea
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,74 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 3005;
+const long double EPS = 1e-12;
+int n, cnt, tot, dir;
+
+struct Pnt {
+    long double x, y;
+} p[N], q[N], r[N];
+
+inline long double cross(Pnt a, Pnt b, Pnt c) {
+    return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
+}
+
+inline Pnt inter(Pnt a, Pnt b, Pnt u, Pnt v) {
+    long double x = cross(a, b, u), y = cross(a, b, v), t = x / (x - y);
+    return {u.x + (v.x - u.x) * t, u.y + (v.y - u.y) * t};
+}
+
+inline bool inside(Pnt a, Pnt b, Pnt x) {
+    return cross(a, b, x) * dir >= -EPS;
+}
+
+inline void cut(Pnt a, Pnt b) {
+    tot = 0;
+    for (int i = 0; i < cnt; i++) {
+        Pnt u = q[i], v = q[(i + 1) % cnt];
+        bool x = inside(a, b, u), y = inside(a, b, v);
+        if (x && y) {
+            r[tot++] = v;
+        } else if (x && !y) {
+            r[tot++] = inter(a, b, u, v);
+        } else if (!x && y) {
+            r[tot++] = inter(a, b, u, v);
+            r[tot++] = v;
+        }
+    }
+    cnt = tot;
+    for (int i = 0; i < cnt; i++) {
+        q[i] = r[i];
+    }
+}
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n;
+    long double s = 0;
+    for (int i = 0; i < n; i++) {
+        cin >> p[i].x >> p[i].y;
+    }
+    for (int i = 0; i < n; i++) {
+        s += p[i].x * p[(i + 1) % n].y - p[i].y * p[(i + 1) % n].x;
+    }
+    dir = s > 0 ? 1 : -1;
+    q[0] = {-10000, -10000};
+    q[1] = {10000, -10000};
+    q[2] = {10000, 10000};
+    q[3] = {-10000, 10000};
+    cnt = 4;
+    for (int i = 0; i < n && cnt; i++) {
+        cut(p[i], p[(i + 1) % n]);
+    }
+    long double ans = 0;
+    for (int i = 0; i < cnt; i++) {
+        ans += q[i].x * q[(i + 1) % cnt].y - q[i].y * q[(i + 1) % cnt].x;
+    }
+    ans = fabsl(ans) / 2;
+    if (ans < EPS) {
+        ans = 0;
+    }
+    cout << fixed << setprecision(2) << (double)ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO
