@@ -1,0 +1,31 @@
+{
+  "interactive": false, 
+  "batch": {
+    "size": 1, 
+    "id": "3c60ca7d-1ead-45fa-bf96-2febfddc6ae8"
+  }, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P11156", 
+  "tests": [
+    {
+      "output": "114 514\n2005 1130\n59001 897\n", 
+      "input": "3\n3 1\n3 2\n6 3\n"
+    }
+  ], 
+  "timeLimit": 2000, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P11156MXX6T2"
+    }
+  }, 
+  "testType": "single", 
+  "memoryLimit": 512, 
+  "name": "P11156 【MX-X6-T2】もしも", 
+  "group": "Luogu"
+}
