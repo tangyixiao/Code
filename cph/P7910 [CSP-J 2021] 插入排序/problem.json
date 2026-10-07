@@ -1,0 +1,31 @@
+{
+  "interactive": false, 
+  "batch": {
+    "size": 1, 
+    "id": "029a5ada-777c-4a68-8119-310e3192c9d9"
+  }, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P7910", 
+  "tests": [
+    {
+      "output": "1\n1\n2\n", 
+      "input": "3 4\n3 2 1\n2 3\n1 3 2\n2 2\n2 3\n"
+    }
+  ], 
+  "timeLimit": 1000, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P7910CSPJ2021"
+    }
+  }, 
+  "testType": "single", 
+  "memoryLimit": 512, 
+  "name": "P7910 [CSP-J 2021] 插入排序", 
+  "group": "Luogu"
+}
