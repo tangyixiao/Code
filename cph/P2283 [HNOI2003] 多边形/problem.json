@@ -1,0 +1,31 @@
+{
+  "interactive": false, 
+  "batch": {
+    "size": 1, 
+    "id": "ef35f736-78e9-4415-8777-16e70830d3ea"
+  }, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P2283", 
+  "tests": [
+    {
+      "output": "9.00\n", 
+      "input": "5\n0 0\n0 6\n6 6\n6 0\n3 3\n"
+    }
+  ], 
+  "timeLimit": 1000, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P2283HNOI2003"
+    }
+  }, 
+  "testType": "single", 
+  "memoryLimit": 125, 
+  "name": "P2283 [HNOI2003] 多边形", 
+  "group": "Luogu"
+}
