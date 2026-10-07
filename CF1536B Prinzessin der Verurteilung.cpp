@@ -143,7 +143,7 @@ using namespace FAST_IO;
 namespace FILE_IO {
 const string Insuffix = ".in", Outsuffix = ".out", Anssuffix = ".ans";
 inline void Judge_File(const string &name) { freopen((name + Insuffix).c_str(), "r", stdin), freopen((name + Outsuffix).c_str(), "w", stdout); return; }
-inline void Local_File(const string &name, int idx) { freopen((name + to_string(idx) + Insuffix).c_str(), "r", stdin), freopen((name + to_string(idx) + Outsuffix).c_str(), "w", stdout); return; }
+inline void Local_File(const string &name, int id) { freopen((name + to_string(id) + Insuffix).c_str(), "r", stdin), freopen((name + to_string(id) + Outsuffix).c_str(), "w", stdout); return; }
 } // namespace FILE_IO
 using namespace FILE_IO;
 #pragma endregion FILE_IO
@@ -606,6 +606,25 @@ inline void solve(int Task_Id) {
         t = "";
         for (int k = 0; k <= 6; k++) {
             t += s[i + k], mp[t] = 1;
+        }
+    }
+    for (int i = 1; i <= 7; i++) {
+        t = "";
+        for (int k = 1; k <= i; k++) {
+            t += "a";
+        }
+        for (int id = i - 1;; id = i - 1) {
+            if (!mp.count(t)) {
+                cout << t << "\n";
+                return;
+            }
+            for (; id >= 0 && t[id] == 'z';) {
+                t[id--] = 'a';
+            }
+            if (id < 0) {
+                break;
+            }
+            t[id]++;
         }
     }
     return;
