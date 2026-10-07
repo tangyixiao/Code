@@ -37,3 +37,35 @@
 
 ---
 
+# P17222 [ICPC 2017 Nanning R] Twice Equation
+
+## 题目描述
+
+For given $L$, find the smallest $n$ no smaller than $L$ for which there exists an positive integer $m$ for which $2m(m + 1) = n(n + 1)$.
+
+## 输入格式
+
+This problem contains multiple test cases. The first line of a multiple input is an integer $T (1 \le T < 1000)$ followed by $T$ input lines. Each line contains an integer $L (1 \le L < 10^{190})$.
+
+## 输出格式
+
+For each given $L$, output the smallest $n$. If available $n$ does not exist, output $-1$.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+3
+1
+4
+21
+```
+
+### 输出 #1
+
+```
+3
+20
+119
+```
