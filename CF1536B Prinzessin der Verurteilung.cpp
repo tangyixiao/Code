@@ -613,7 +613,7 @@ inline void solve(int Task_Id) {
         for (int k = 1; k <= i; k++) {
             t += "a";
         }
-        for (int id = i - 1;; id = i - 1) {
+        for (int id = i - 1;; t[id]++, id = i - 1) {
             if (!mp.count(t)) {
                 cout << t << "\n";
                 return;
@@ -624,7 +624,6 @@ inline void solve(int Task_Id) {
             if (id < 0) {
                 break;
             }
-            t[id]++;
         }
     }
     return;
