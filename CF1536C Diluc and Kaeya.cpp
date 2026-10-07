@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: c7829720-e624-470f-aefb-6909f26a08b0
 //
-//  Algorithm: 
-//  Complexity: O()
-//  Note: 
+//  Algorithm: Count each prefix's reduced D:K ratio
+//  Complexity: O(n log n)
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -20,7 +20,7 @@ Copyright (C) 2026 TangYixiao
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
 #define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
 #define FILE_INDEX 1                      // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -597,8 +597,20 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+int n, d, k;
 inline void solve(int Task_Id) {
-    // do something here
+    string s;
+    map<pair<int, int>, int> mp;
+    cin >> n >> s, d = k = 0;
+    for (char c : s) {
+        if (c == 'D') {
+            d++;
+        } else {
+            k++;
+        }
+        cout << ++mp[{d / gcd(d, k), k / gcd(d, k)}] << " ";
+    }
+    cout << "\n";
     return;
 }
 } // namespace TANGYIXIAO
