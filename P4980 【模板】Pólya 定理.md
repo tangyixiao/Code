@@ -46,3 +46,50 @@
 
 ---
 
+# P4980 [Template] Pólya Theorem
+
+## 题目描述
+
+Given a cycle with $n$ vertices and $n$ edges, there are $n$ colors. Color each vertex, and ask how many **essentially different** coloring schemes there are. Output the answer modulo $10^9+7$.
+
+Note that in this problem, “essentially different” is defined as: it **only needs to be different up to rotation**, i.e., two colorings are considered the same if one can be obtained from the other by rotation.
+
+## 输入格式
+
+The first line contains an integer $t$, meaning there are $t$ test cases.
+
+Starting from the second line, there are $t$ lines in total. Each line contains an integer $n$, with the meaning as described above.
+
+## 输出格式
+
+There are $t$ lines in total. Each line contains one number, representing the number of coloring schemes modulo $10^9+7$.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+5
+1 
+2 
+3 
+4 
+5 
+```
+
+### 输出 #1
+
+```
+1
+3
+11
+70
+629
+```
+
+## 说明/提示
+
+$$n \leq 10^9$$
+$$t \leq 10^3$$
+
+Translated by ChatGPT 5
