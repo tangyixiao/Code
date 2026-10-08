@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 02d887ef-a832-4a69-90aa-33b7edc68c1b
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,111 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-inline void solve(int Task_Id) {
-    // do something here
+const int N = 1e5 + 5, M = 2e5 + 5, E = M << 1;
+const long long INF = 4e18;
+struct edge {
+    int v;
+    long long w;
+};
+struct Node {
+    long long d;
+    int u;
+};
+int n, m, s, t, u, v, a[M], b[M], in[N], q[N], hs, l, r;
+long long c[M], ds[N], dt[N], du[N], dv[N], mu[N], mv[N], D, ans;
+vector<edge> g[N];
+vector<int> h[N];
+Node hp[E];
+inline void ins(long long d, int u) {
+    hp[++hs] = {d, u};
+    for (int i = hs; i > 1 && hp[i].d < hp[i >> 1].d; i >>= 1) {
+        swap(hp[i], hp[i >> 1]);
+    }
+    return;
+}
+inline Node del() {
+    Node z = hp[1];
+    hp[1] = hp[hs--];
+    for (int i = 1; (i << 1) <= hs;) {
+        int j = i << 1;
+        if (j < hs && hp[j + 1].d < hp[j].d) {
+            j++;
+        }
+        if (hp[i].d <= hp[j].d) {
+            break;
+        }
+        swap(hp[i], hp[j]);
+        i = j;
+    }
+    return z;
+}
+inline void dij(int st, long long d[]) {
+    for (int i = 1; i <= n; i++) {
+        d[i] = INF;
+    }
+    hs = 0;
+    d[st] = 0;
+    ins(0, st);
+    for (; hs > 0;) {
+        Node z = del();
+        int x = z.u;
+        if (z.d != d[x]) {
+            continue;
+        }
+        for (auto e : g[x]) {
+            int y = e.v;
+            long long nd = d[x] + e.w;
+            if (nd < d[y]) {
+                d[y] = nd;
+                ins(nd, y);
+            }
+        }
+    }
+    return;
+}
+inline void solve(int) {
+    cin >> n >> m >> s >> t >> u >> v;
+    for (int i = 1; i <= m; i++) {
+        cin >> a[i] >> b[i] >> c[i];
+        g[a[i]].push_back({b[i], c[i]});
+        g[b[i]].push_back({a[i], c[i]});
+    }
+    dij(s, ds), dij(t, dt), dij(u, du), dij(v, dv);
+    D = ds[t], ans = du[v];
+    for (int i = 1; i <= m; i++) {
+        if (ds[a[i]] + c[i] + dt[b[i]] == D) {
+            h[a[i]].push_back(b[i]);
+            in[b[i]]++;
+        }
+        if (ds[b[i]] + c[i] + dt[a[i]] == D) {
+            h[b[i]].push_back(a[i]);
+            in[a[i]]++;
+        }
+    }
+    l = 1, r;
+    for (int i = 1; i <= n; i++) {
+        mu[i] = du[i];
+        mv[i] = dv[i];
+        if (in[i] == 0) {
+            q[++r] = i;
+        }
+    }
+    for (; l <= r; l++) {
+        int x = q[l];
+        for (int y : h[x]) {
+            mu[y] = min(mu[y], mu[x]);
+            mv[y] = min(mv[y], mv[x]);
+            if (--in[y] == 0) {
+                q[++r] = y;
+            }
+        }
+    }
+    for (int i = 1; i <= n; i++) {
+        if (ds[i] + dt[i] == D) {
+            ans = min(ans, min(mu[i] + dv[i], mv[i] + du[i]));
+        }
+    }
+    cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO
