@@ -1,0 +1,39 @@
+{
+  "name": "B. Word Cut", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "memoryLimit": 256, 
+  "url": "https://codeforces.com/problemset/problem/176/B", 
+  "timeLimit": 2000, 
+  "testType": "single", 
+  "tests": [
+    {
+      "output": "1\n", 
+      "input": "ab\nab\n2\n"
+    }, 
+    {
+      "output": "2\n", 
+      "input": "ababab\nababab\n1\n"
+    }, 
+    {
+      "output": "0\n", 
+      "input": "ab\nba\n2\n"
+    }
+  ], 
+  "interactive": false, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "BWordCut"
+    }
+  }, 
+  "group": "Codeforces - Croc Champ 2012 - Round 2", 
+  "batch": {
+    "id": "05cdecb8-a76a-40a2-a3de-3774e327088c", 
+    "size": 1
+  }
+}
