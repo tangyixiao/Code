@@ -648,8 +648,70 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+using ll = long long;
+const int N = 300005, K = 250005;
+const ll INF = (1LL << 62);
+int c, n, m, k, d[N], beg[N], fr[N], to[N];
+ll v[K], w[K], sw[K], z[N], dis[N], ans[N];
+priority_queue<pair<ll, int>, vector<pair<ll, int>>, greater<pair<ll, int>>> q;
+inline void relax(int u, ll val) {
+    if (dis[u] > val) {
+        dis[u] = val;
+        q.push({val, u});
+    }
+}
 inline void solve(int Task_Id) {
-    // do something here
-    return;
+    cin >> c >> n >> m >> k;
+    for (int i = 1; i < k; i++) {
+        cin >> v[i];
+    }
+    for (int i = 2; i <= k; i++) {
+        cin >> w[i];
+        sw[i] = sw[i - 1] + w[i];
+    }
+    for (int i = 1, tot = 0; i <= n; i++) {
+        cin >> d[i];
+        beg[i] = tot;
+        for (int j = 1; j <= d[i]; j++) {
+            ++tot;
+            fr[tot] = i;
+            cin >> to[tot] >> z[tot];
+        }
+    }
+    for (int i = 1; i <= m; i++) {
+        dis[i] = INF;
+    }
+    for (int i = 1; i <= n; i++) {
+        ans[i] = INF;
+    }
+    ans[1] = 0;
+    if (d[1] > 0) {
+        relax(1, 0);
+    }
+    while (!q.empty()) {
+        ll val = q.top().first;
+        int u = q.top().second;
+        q.pop();
+        if (val == dis[u]) {
+            int x = fr[u], p = u - beg[x], y = to[u];
+            ll nd = val + z[u];
+            ans[y] = min(ans[y], nd);
+            if (d[y] > 0) {
+                if (p > d[y]) {
+                    nd += sw[p] - sw[d[y]];
+                }
+                relax(beg[y] + min(p, d[y]), nd);
+            }
+            if (p > 1) {
+                relax(u - 1, val + w[p]);
+            }
+            if (p < d[x]) {
+                relax(u + 1, val + v[p]);
+            }
+        }
+    }
+    for (int i = 1; i <= n; i++) {
+        cout << (ans[i] == INF ? -1 : ans[i]) << (i == n ? '\n' : ' ');
+    }
 }
 } // namespace TANGYIXIAO
