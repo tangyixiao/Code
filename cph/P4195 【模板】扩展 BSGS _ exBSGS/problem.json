@@ -1,0 +1,31 @@
+{
+  "name": "P4195 【模板】扩展 BSGS / exBSGS", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "memoryLimit": 128, 
+  "url": "https://www.luogu.com.cn/problem/P4195", 
+  "timeLimit": 3000, 
+  "testType": "single", 
+  "tests": [
+    {
+      "output": "9\nNo Solution\n", 
+      "input": "5 58 33\n2 4 3\n0 0 0\n"
+    }
+  ], 
+  "interactive": false, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P4195BSGSExBSGS"
+    }
+  }, 
+  "group": "Luogu", 
+  "batch": {
+    "id": "748a3d5b-5bc6-4465-af6f-39a4d1e9e472", 
+    "size": 1
+  }
+}
