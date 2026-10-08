@@ -1,0 +1,31 @@
+{
+  "name": "P4980 【模板】Pólya 定理", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "memoryLimit": 125, 
+  "url": "https://www.luogu.com.cn/problem/P4980", 
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "tests": [
+    {
+      "output": "1\n3\n11\n70\n629\n", 
+      "input": "5\n1\n2\n3\n4\n5\n"
+    }
+  ], 
+  "interactive": false, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P4980Plya"
+    }
+  }, 
+  "group": "Luogu", 
+  "batch": {
+    "id": "75f17565-22f6-4386-9dbf-2205a1f6ee21", 
+    "size": 1
+  }
+}
