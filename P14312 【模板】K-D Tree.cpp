@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: a93f46bd-a47a-4a22-ab4d-d19f46176ab9
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,172 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+using ll = long long;
+const int N = 150005, M = 20;
+int k, m, tot, rt[M], id[N], cnt, dim;
+ll lst, L[3], R[3];
+struct Node {
+    ll x[3], mn[3], mx[3], val, sum, tag;
+    int ls, rs, siz;
+} tr[N];
+inline void pushup(int u) {
+    tr[u].siz = 1;
+    tr[u].sum = tr[u].val;
+    for (int j = 0; j < k; j++) {
+        tr[u].mn[j] = tr[u].mx[j] = tr[u].x[j];
+    }
+    for (int t : {tr[u].ls, tr[u].rs}) {
+        if (t) {
+            tr[u].siz += tr[t].siz;
+            tr[u].sum += tr[t].sum;
+            for (int j = 0; j < k; j++) {
+                tr[u].mn[j] = min(tr[u].mn[j], tr[t].mn[j]);
+                tr[u].mx[j] = max(tr[u].mx[j], tr[t].mx[j]);
+            }
+        }
+    }
+}
+inline void apply(int u, ll v) {
+    if (u) {
+        tr[u].val += v;
+        tr[u].sum += v * tr[u].siz;
+        tr[u].tag += v;
+    }
+}
+inline void pushdown(int u) {
+    if (tr[u].tag) {
+        apply(tr[u].ls, tr[u].tag);
+        apply(tr[u].rs, tr[u].tag);
+        tr[u].tag = 0;
+    }
+}
+inline void flatten(int u) {
+    if (u) {
+        pushdown(u);
+        id[++cnt] = u;
+        flatten(tr[u].ls);
+        flatten(tr[u].rs);
+    }
+}
+inline int build(int l, int r, int dep) {
+    if (l > r) {
+        return 0;
+    }
+    int mid = (l + r) >> 1;
+    dim = dep % k;
+    nth_element(id + l, id + mid, id + r + 1, [](int x, int y) {
+        return tr[x].x[dim] < tr[y].x[dim];
+    });
+    int u = id[mid];
+    tr[u].ls = build(l, mid - 1, dep + 1);
+    tr[u].rs = build(mid + 1, r, dep + 1);
+    pushup(u);
+    return u;
+}
+inline int judge(int u) {
+    if (!u) {
+        return 0;
+    }
+    for (int j = 0; j < k; j++) {
+        if (tr[u].mx[j] < L[j] || R[j] < tr[u].mn[j]) {
+            return 0;
+        }
+    }
+    for (int j = 0; j < k; j++) {
+        if (tr[u].mn[j] < L[j] || R[j] < tr[u].mx[j]) {
+            return 1;
+        }
+    }
+    return 2;
+}
+inline bool inside(int u) {
+    for (int j = 0; j < k; j++) {
+        if (tr[u].x[j] < L[j] || tr[u].x[j] > R[j]) {
+            return false;
+        }
+    }
+    return true;
+}
+inline void modify(int u, ll v) {
+    int state = judge(u);
+    if (state == 2) {
+        apply(u, v);
+    } else if (state == 1) {
+        pushdown(u);
+        if (inside(u)) {
+            tr[u].val += v;
+        }
+        modify(tr[u].ls, v);
+        modify(tr[u].rs, v);
+        pushup(u);
+    }
+}
+inline ll query(int u) {
+    int state = judge(u);
+    if (state == 2) {
+        return tr[u].sum;
+    }
+    if (state == 0) {
+        return 0;
+    }
+    pushdown(u);
+    ll res = inside(u) ? tr[u].val : 0;
+    res += query(tr[u].ls) + query(tr[u].rs);
+    return res;
+}
 inline void solve(int Task_Id) {
-    // do something here
-    return;
+    cin >> k >> m;
+    for (int i = 1, op; i <= m; i++) {
+        cin >> op;
+        if (op == 1) {
+            ++tot;
+            for (int j = 0; j < k; j++) {
+                cin >> tr[tot].x[j];
+                tr[tot].x[j] ^= lst;
+            }
+            cin >> tr[tot].val;
+            tr[tot].val ^= lst;
+            tr[tot].sum = tr[tot].val;
+            tr[tot].siz = 1;
+            cnt = 0;
+            id[++cnt] = tot;
+            for (int j = 0; j < M; j++) {
+                if (rt[j]) {
+                    flatten(rt[j]);
+                    rt[j] = 0;
+                } else {
+                    rt[j] = build(1, cnt, 0);
+                    break;
+                }
+            }
+        } else {
+            for (int j = 0; j < k; j++) {
+                cin >> L[j];
+                L[j] ^= lst;
+            }
+            for (int j = 0; j < k; j++) {
+                cin >> R[j];
+                R[j] ^= lst;
+            }
+            if (op == 2) {
+                ll v;
+                cin >> v;
+                v ^= lst;
+                for (int j = 0; j < M; j++) {
+                    if (rt[j]) {
+                        modify(rt[j], v);
+                    }
+                }
+            } else {
+                lst = 0;
+                for (int j = 0; j < M; j++) {
+                    if (rt[j]) {
+                        lst += query(rt[j]);
+                    }
+                }
+                cout << lst << '\n';
+            }
+        }
+    }
 }
 } // namespace TANGYIXIAO
