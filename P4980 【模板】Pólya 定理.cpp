@@ -602,7 +602,7 @@ const int MOD = 1000000007, N = 32000;
 int n, cnt, tot, prime[N], p[15], e[15];
 bool vis[N];
 ll ans;
-inline int qpow(ll a, int b) {
+inline int modpow(ll a, int b) {
     ll res = 1;
     for (; b; b >>= 1, a = a * a % MOD) {
         if (b & 1) {
@@ -626,7 +626,7 @@ inline void init() {
 }
 inline void dfs(int u, ll d, ll phi) {
     if (u > cnt) {
-        ans = (ans + phi * qpow(n, n / d)) % MOD;
+        ans = (ans + phi * modpow(n, n / d)) % MOD;
         return;
     }
     dfs(u + 1, d, phi);
@@ -659,7 +659,7 @@ inline void solve(int Task_Id) {
     }
     ans = 0;
     dfs(1, 1, 1);
-    cout << ans * qpow(n, MOD - 2) % MOD << '\n';
+    cout << ans * modpow(n, MOD - 2) % MOD << '\n';
     return;
 }
 } // namespace TANGYIXIAO
