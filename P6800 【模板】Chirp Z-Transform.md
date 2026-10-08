@@ -34,3 +34,38 @@
 
 ---
 
+# P6800 [Template] Chirp Z-Transform
+
+## 题目描述
+
+Given an $n$-term polynomial $P(x)$ and $c, m$, compute $P(c^0), P(c^1), \dots, P(c^{m-1})$. All answers are taken modulo $998244353$.
+
+## 输入格式
+
+The first line contains three positive integers $n, c, m$.  
+The second line contains $n$ non-negative integers $a_0, a_1, \dots, a_{n-1}$, representing the coefficients of $P(x)$ from low degree to high degree.
+
+## 输出格式
+
+Output one line with $m$ positive integers. The $i$-th number represents $P(c^{i-1})$.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+3 3 3
+3 3 3
+```
+
+### 输出 #1
+
+```
+9 39 273
+```
+
+## 说明/提示
+
+For $100\%$ of the testdata, $1 \le n, m \le 10^6$, $0 \le c, a_i < 998244353$.
+
+Translated by ChatGPT 5
