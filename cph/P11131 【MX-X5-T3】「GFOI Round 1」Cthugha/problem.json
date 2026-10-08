@@ -1,0 +1,51 @@
+{
+  "name": "P11131 【MX-X5-T3】「GFOI Round 1」Cthugha", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "memoryLimit": 512, 
+  "url": "https://www.luogu.com.cn/problem/P11131", 
+  "timeLimit": 2000, 
+  "testType": "single", 
+  "tests": [
+    {
+      "output": "5\n", 
+      "input": "3 3 1\n1 2 3\n4 5 6\n7 8 9\n2 2\n"
+    }, 
+    {
+      "output": "15\n", 
+      "input": "3 3 2\n1 2 3\n4 5 6\n7 8 9\n2 2\n3 3\n"
+    }, 
+    {
+      "output": "10\n", 
+      "input": "3 3 3\n1 4 -3\n4 -1 4\n7 8 9\n1 1\n2 2\n3 3\n"
+    }, 
+    {
+      "output": "11\n", 
+      "input": "3 3 9\n1 4 -3\n4 -1 4\n7 8 9\n1 1\n1 2\n1 3\n2 1\n2 2\n2 3\n3 1\n3 2\n3 3\n"
+    }, 
+    {
+      "output": "-1\n", 
+      "input": "3 3 3\n-1 4 4\n4 -1 4\n7 8 -1\n1 1\n1 1\n1 1\n"
+    }, 
+    {
+      "output": "No\n", 
+      "input": "3 3 3\n1 4 -5\n4 -1 4\n7 8 9\n1 1\n2 2\n3 3\n"
+    }
+  ], 
+  "interactive": false, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P11131MXX5T3GFOIRound1Cthugha"
+    }
+  }, 
+  "group": "Luogu", 
+  "batch": {
+    "id": "1d523ba7-d92a-4f15-b6fd-3adc1f4fc62e", 
+    "size": 1
+  }
+}
