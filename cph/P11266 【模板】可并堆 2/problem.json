@@ -1,0 +1,31 @@
+{
+  "name": "P11266 【模板】可并堆 2", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "memoryLimit": 512, 
+  "url": "https://www.luogu.com.cn/problem/P11266", 
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "tests": [
+    {
+      "output": "3\n4\n", 
+      "input": "5 5\n1 2 3 4 4\n2 4 5\n3 4 5 3\n1 4\n0 4 5\n1 4\n"
+    }
+  ], 
+  "interactive": false, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P112662"
+    }
+  }, 
+  "group": "Luogu", 
+  "batch": {
+    "id": "5256a10a-7e4f-4a94-988a-72aeba393e1a", 
+    "size": 1
+  }
+}
