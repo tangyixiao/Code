@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 1d523ba7-d92a-4f15-b6fd-3adc1f4fc62e
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,78 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+using ll = long long;
+const int N = 100005;
+const ll INF = (1LL << 62);
+const int dx[4] = {1, -1, 0, 0}, dy[4] = {0, 0, 1, -1};
+int n, m, q, s[55];
+ll a[N], dis[N], mx[N];
+bool used[N];
 inline void solve(int Task_Id) {
-    // do something here
-    return;
+    cin >> n >> m >> q;
+    int tot = n * m, cnt = 0;
+    bool bad = false;
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= m; j++) {
+            int u = (i - 1) * m + j;
+            cin >> a[u];
+            if (i > 1 && a[u] + a[u - m] < 0) {
+                bad = true;
+            }
+            if (j > 1 && a[u] + a[u - 1] < 0) {
+                bad = true;
+            }
+        }
+    }
+    for (int i = 1, x, y; i <= q; i++) {
+        cin >> x >> y;
+        int u = (x - 1) * m + y;
+        if (!used[u]) {
+            used[u] = true;
+            s[++cnt] = u;
+        }
+    }
+    if (bad) {
+        cout << "No\n";
+        return;
+    }
+    for (int i = 1; i <= tot; i++) {
+        mx[i] = -INF;
+    }
+    for (int i = 1; i <= cnt; i++) {
+        for (int j = 1; j <= tot; j++) {
+            dis[j] = INF;
+        }
+        priority_queue<pair<ll, int>, vector<pair<ll, int>>, greater<pair<ll, int>>> pq;
+        dis[s[i]] = 0;
+        pq.push({0, s[i]});
+        while (!pq.empty()) {
+            ll val = pq.top().first;
+            int u = pq.top().second;
+            pq.pop();
+            if (val == dis[u]) {
+                int x = (u - 1) / m + 1, y = (u - 1) % m + 1;
+                for (int j = 0; j < 4; j++) {
+                    int xx = x + dx[j], yy = y + dy[j];
+                    if (xx >= 1 && xx <= n && yy >= 1 && yy <= m) {
+                        int v = (xx - 1) * m + yy;
+                        ll nd = val + a[u] + a[v];
+                        if (dis[v] > nd) {
+                            dis[v] = nd;
+                            pq.push({nd, v});
+                        }
+                    }
+                }
+            }
+        }
+        for (int j = 1; j <= tot; j++) {
+            mx[j] = max(mx[j], dis[j] + a[s[i]]);
+        }
+    }
+    ll ans = INF;
+    for (int i = 1; i <= tot; i++) {
+        ans = min(ans, (mx[i] + a[i]) / 2);
+    }
+    cout << ans << '\n';
 }
 } // namespace TANGYIXIAO
