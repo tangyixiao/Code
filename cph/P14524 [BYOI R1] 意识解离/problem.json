@@ -1,0 +1,31 @@
+{
+  "name": "P14524 [BYOI R1] 意识解离", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "memoryLimit": 512, 
+  "url": "https://www.luogu.com.cn/problem/P14524", 
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "tests": [
+    {
+      "output": "Yes\nYes\nNo\n", 
+      "input": "3\n6\n6 4 3 5 4 4\n3\n3 2 1\n4\n1 3 4 2\n"
+    }
+  ], 
+  "interactive": false, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P14524BYOIR1"
+    }
+  }, 
+  "group": "Luogu", 
+  "batch": {
+    "id": "2cb56b88-5c41-4910-ac68-5611160057d3", 
+    "size": 1
+  }
+}
