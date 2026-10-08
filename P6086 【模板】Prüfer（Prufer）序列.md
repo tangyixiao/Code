@@ -85,3 +85,89 @@ $f = \{4\ 6\ 6\ 5\ 2\}$。
 
 ---
 
+# P6086 [Template] Prüfer (Prufer) Sequence
+
+## 题目背景
+
+The Prüfer sequence is also written as the Prufer sequence.
+
+## 题目描述
+
+Please implement the conversion between a Prüfer sequence and an unrooted tree.
+
+To make implementation easier, although the tree is unrooted, when reading the input we still treat $n$ as its root.
+
+For an unrooted tree, let $f_{1 \dots n-1}$ be its **parent sequence** ($f_i$ denotes the parent of node $i$ when rooting the tree at $n$), and let $p_{1 \dots n-2}$ be its **Prüfer sequence**.
+
+In addition, for a sequence $a_{1 \dots m}$ of length $m$, define its **value** as $\operatorname{xor}_{i = 1}^m i \times a_i$.
+
+## 输入格式
+
+The first line contains two integers $n, m$, representing the number of nodes in the tree and the conversion type.
+
+If $m = 1$, the second line contains $n - 1$ integers, representing the parent sequence.  
+If $m = 2$, the second line contains $n - 2$ integers, representing the Prüfer sequence.
+
+## 输出格式
+
+If $m = 1$, output one integer on a single line, representing the value of the Prüfer sequence corresponding to the given parent sequence.  
+If $m = 2$, output one integer on a single line, representing the value of the parent sequence corresponding to the given Prüfer sequence.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+6 1
+3 6 4 6 1
+```
+
+### 输出 #1
+
+```
+29
+```
+
+## 输入输出样例 #2
+
+### 输入 #2
+
+```
+6 2
+4 6 5 2
+```
+
+### 输出 #2
+
+```
+4
+```
+
+## 说明/提示
+
+**[Sample 1 Explanation]**
+
+$p = \{6\ 1\ 3\ 4\}$.
+
+**[Sample 2 Explanation]**
+
+$f = \{4\ 6\ 6\ 5\ 2\}$.
+
+---
+
+**[Constraints]**
+
+| Test Point ID | $2 \le n \le $  | $m = $ |
+| :-----------: | :-------------: | :----: |
+|     $1$       |     $10^3$      |  $1$   |
+|     $2$       |     $10^5$      |  $1$   |
+|     $3$       |     $10^5$      |  $1$   |
+|     $4$       | $5 \times 10^6$ |  $1$   |
+|     $5$       | $5 \times 10^6$ |  $1$   |
+|     $6$       |     $10^3$      |  $2$   |
+|     $7$       |     $10^5$      |  $2$   |
+|     $8$       |     $10^5$      |  $2$   |
+|     $9$       | $5 \times 10^6$ |  $2$   |
+|     $10$      | $5 \times 10^6$ |  $2$   |
+
+Translated by ChatGPT 5
