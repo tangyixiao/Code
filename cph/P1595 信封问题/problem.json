@@ -1,0 +1,35 @@
+{
+  "group": "Luogu", 
+  "tests": [
+    {
+      "output": "1\n", 
+      "input": "2\n"
+    }, 
+    {
+      "output": "2\n", 
+      "input": "3\n"
+    }
+  ], 
+  "input": {
+    "type": "stdin"
+  }, 
+  "name": "P1595 信封问题", 
+  "url": "https://www.luogu.com.cn/problem/P1595", 
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P1595"
+    }
+  }, 
+  "interactive": false, 
+  "batch": {
+    "size": 1, 
+    "id": "b8a6db55-8912-461f-894a-1cf5319dccb8"
+  }, 
+  "memoryLimit": 125, 
+  "output": {
+    "type": "stdout"
+  }
+}

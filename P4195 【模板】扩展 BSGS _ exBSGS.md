@@ -1,0 +1,99 @@
+# P4195 【模板】扩展 BSGS / exBSGS
+
+## 题目背景
+
+题目来源：SPOJ3105 Mod
+
+## 题目描述
+
+给定 $a,p,b$，求满足 $a^x≡b \pmod p$ 的最小自然数 $x$ 。
+
+## 输入格式
+
+每个测试文件中包含若干组测试数据，保证 $\sum \sqrt p\le 5\times 10^6$。
+
+每组数据中，每行包含 $3$ 个正整数 $a,p,b$ 。
+
+当 $a=p=b=0$ 时，表示测试数据读入结束。
+
+## 输出格式
+
+对于每组数据，输出一行。
+
+如果无解，输出 `No Solution`，否则输出最小自然数解。
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+5 58 33
+2 4 3
+0 0 0
+```
+
+### 输出 #1
+
+```
+9
+No Solution
+```
+
+## 说明/提示
+
+对于 $100\%$ 的数据，$1\le a,p,b≤10^9$ 或 $a=p=b=0$。
+
+2021/5/14 加强 by [SSerxhs](https://www.luogu.com.cn/user/29826)。  
+2021/7/1 新添加[一组 Hack 数据](https://www.luogu.com.cn/discuss/391666)。
+
+---
+
+# P4195 [Template] Extended BSGS / exBSGS
+
+## 题目背景
+
+Source: SPOJ3105 Mod.
+
+## 题目描述
+
+Given $a,p,b$, find the smallest non-negative integer $x$ such that $a^x≡b \pmod p$.
+
+## 输入格式
+
+Each test file contains several test cases, with the guarantee that $\sum \sqrt p\le 5\times 10^6$.
+
+Each test case consists of one line with $3$ positive integers $a,p,b$.
+
+When $a=p=b=0$, it indicates the end of input.
+
+## 输出格式
+
+For each test case, output one line.
+
+If there is no solution, output `No Solution`. Otherwise, output the smallest non-negative integer solution.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+5 58 33
+2 4 3
+0 0 0
+```
+
+### 输出 #1
+
+```
+9
+No Solution
+```
+
+## 说明/提示
+
+For $100\%$ of the testdata, $1\le a,p,b\le 10^9$ or $a=p=b=0$.
+
+2021/5/14 strengthened by [SSerxhs](https://www.luogu.com.cn/user/29826).  
+2021/7/1 added [a set of hack testdata](https://www.luogu.com.cn/discuss/391666).
+
+Translated by ChatGPT 5

@@ -1,0 +1,31 @@
+{
+  "name": "P7884 【模板】Meissel-Lehmer", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "memoryLimit": 512, 
+  "url": "https://www.luogu.com.cn/problem/P7884", 
+  "timeLimit": 5000, 
+  "testType": "single", 
+  "tests": [
+    {
+      "output": "4\n", 
+      "input": "10\n"
+    }
+  ], 
+  "interactive": false, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P7884MeisselLehmer"
+    }
+  }, 
+  "group": "Luogu", 
+  "batch": {
+    "id": "c2b1e930-03a5-4db3-a4b3-9fad094b4a48", 
+    "size": 1
+  }
+}

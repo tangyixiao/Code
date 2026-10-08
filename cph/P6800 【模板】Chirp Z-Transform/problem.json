@@ -1,0 +1,31 @@
+{
+  "name": "P6800 【模板】Chirp Z-Transform", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "memoryLimit": 512, 
+  "url": "https://www.luogu.com.cn/problem/P6800", 
+  "timeLimit": 3000, 
+  "testType": "single", 
+  "tests": [
+    {
+      "output": "9 39 273\n", 
+      "input": "3 3 3\n3 3 3\n"
+    }
+  ], 
+  "interactive": false, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P6800ChirpZTransform"
+    }
+  }, 
+  "group": "Luogu", 
+  "batch": {
+    "id": "a3f7302b-dc17-42d2-a528-01e7cc5fa4b5", 
+    "size": 1
+  }
+}

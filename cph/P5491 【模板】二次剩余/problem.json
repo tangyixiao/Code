@@ -1,0 +1,31 @@
+{
+  "name": "P5491 【模板】二次剩余", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "memoryLimit": 125, 
+  "url": "https://www.luogu.com.cn/problem/P5491", 
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "tests": [
+    {
+      "output": "383008016 616991993\n2 1000000007\n0\n", 
+      "input": "3\n5 1000000009\n4 1000000009\n0 19260817\n"
+    }
+  ], 
+  "interactive": false, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P5491"
+    }
+  }, 
+  "group": "Luogu", 
+  "batch": {
+    "id": "2582d6ec-7f37-49ff-b244-57775cc80714", 
+    "size": 1
+  }
+}
