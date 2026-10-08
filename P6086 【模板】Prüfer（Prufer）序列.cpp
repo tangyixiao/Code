@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: ec48df75-b293-4909-a13f-b9b886de5ddb
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,48 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+using ll = long long;
+const int N = 5000005;
+int n, m, a[N], deg[N];
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> m;
+    if (m == 1) {
+        for (int i = 1; i < n; i++) {
+            cin >> a[i];
+            ++deg[a[i]];
+        }
+    } else {
+        for (int i = 1; i <= n - 2; i++) {
+            cin >> a[i];
+            ++deg[a[i]];
+        }
+    }
+    ll ans = 0;
+    for (int i = 1, j = 1; i <= n - 2; j++) {
+        for (; deg[j] != 0; j++) {}
+        int u = j;
+        for (;;) {
+            int v = m == 1 ? a[u] : a[i];
+            ans ^= 1LL * (m == 1 ? i : u) * v;
+            deg[u] = -1;
+            --deg[v];
+            ++i;
+            if (i <= n - 2 && deg[v] == 0 && v < j) {
+                u = v;
+            } else {
+                break;
+            }
+        }
+    }
+    if (m == 2) {
+        for (int i = 1; i < n; i++) {
+            if (deg[i] == 0) {
+                ans ^= 1LL * i * n;
+                break;
+            }
+        }
+    }
+    cout << ans << '\n';
     return;
 }
 } // namespace TANGYIXIAO
