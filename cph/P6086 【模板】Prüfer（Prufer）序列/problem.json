@@ -1,0 +1,35 @@
+{
+  "name": "P6086 【模板】Prüfer（Prufer）序列", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "memoryLimit": 500, 
+  "url": "https://www.luogu.com.cn/problem/P6086", 
+  "timeLimit": 2000, 
+  "testType": "single", 
+  "tests": [
+    {
+      "output": "29\n", 
+      "input": "6 1\n3 6 4 6 1\n"
+    }, 
+    {
+      "output": "4\n", 
+      "input": "6 2\n4 6 5 2\n"
+    }
+  ], 
+  "interactive": false, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P6086PrferPrufer"
+    }
+  }, 
+  "group": "Luogu", 
+  "batch": {
+    "id": "ec48df75-b293-4909-a13f-b9b886de5ddb", 
+    "size": 1
+  }
+}
