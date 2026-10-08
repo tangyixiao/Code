@@ -617,13 +617,12 @@ inline void solve(int) {
         if (j == n) {
             c += (i - n + 1 < n), j = p[j - 1];
         }
-        a = c, b = n - c, x = (c - 1 + mod) % mod, y = (n - c - 1 + mod) % mod;
-        for (int i = 0; i < k; i++) {
-            g0 = (f1 * a + f0 * x) % mod, g1 = (f0 * b + f1 * y) % mod, f0 = g0, f1 = g1;
-        }
-        cout << f0 << "\n";
     }
+    a = c, b = n - c, x = (c - 1 + mod) % mod, y = (n - c - 1 + mod) % mod;
+    for (int i = 0; i < k; i++) {
+        g0 = (f1 * a + f0 * x) % mod, g1 = (f0 * b + f1 * y) % mod, f0 = g0, f1 = g1;
+    }
+    cout << f0 << "\n";
     return;
 }
 } // namespace TANGYIXIAO
-
