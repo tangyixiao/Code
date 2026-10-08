@@ -7,7 +7,7 @@ Copyright (C) 2026 TangYixiao
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -631,49 +631,66 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-typedef long long ll;
-const ll MOD = 1e9 + 7;
-ll modpow(ll a, ll e) {
+using ll = long long;
+const int MOD = 1000000007, N = 32000;
+int n, cnt, tot, prime[N], p[15], e[15];
+bool vis[N];
+ll ans;
+inline int qpow(ll a, int b) {
     ll res = 1;
-    a %= MOD;
-    while (e) {
-        if (e & 1)
+    for (; b; b >>= 1, a = a * a % MOD) {
+        if (b & 1) {
             res = res * a % MOD;
-        a = a * a % MOD;
-        e >>= 1;
+        }
     }
     return res;
 }
-ll inv(ll x) { return modpow(x, MOD - 2); }
-inline void solve(int Task_Id) {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    int t;
-    cin >> t;
-    while (t--) {
-        ll n;
-        cin >> n;
-        vector<pair<ll, int>> fac;
-        ll tmp = n;
-        for (ll i = 2; i * i <= tmp; ++i) {
-            if (tmp % i == 0) {
-                int cnt = 0;
-                while (tmp % i == 0) {
-                    tmp /= i;
-                    ++cnt;
-                }
-                fac.emplace_back(i, cnt);
+inline void init() {
+    for (int i = 2; i < N; i++) {
+        if (!vis[i]) {
+            prime[++tot] = i;
+        }
+        for (int j = 1; j <= tot && (ll)i * prime[j] < N; j++) {
+            vis[i * prime[j]] = true;
+            if (i % prime[j] == 0) {
+                break;
             }
         }
-        if (tmp > 1)
-            fac.emplace_back(tmp, 1);
-        ll ans = 0;
-        function<void(int, ll, ll)> dfs = [&](int idx, ll d, ll phi) {
-if(idx==(int)fac.size()){ans=(ans+phi%MOD*modpow(n,n/d))%MOD;return;}ll p=fac[idx].first;int e=fac[idx].second;ll pd=1;ll phi_mul=1;for(int k=0;k<=e;++k){if(k==0){dfs(idx+1,d,phi);}else{if(k==1)phi_mul=p-1;else phi_mul*=p;dfs(idx+1,d*pd*p,phi*phi_mul);pd*=p;}} };
-        dfs(0, 1, 1);
-        ans = ans * inv(n % MOD) % MOD;
-        cout << ans << '\n';
     }
+}
+inline void dfs(int u, ll d, ll phi) {
+    if (u > cnt) {
+        ans = (ans + phi * qpow(n, n / d)) % MOD;
+        return;
+    }
+    dfs(u + 1, d, phi);
+    ll nd = d, np = phi;
+    for (int i = 1; i <= e[u]; i++) {
+        nd *= p[u];
+        np *= i == 1 ? p[u] - 1 : p[u];
+        dfs(u + 1, nd, np);
+    }
+}
+inline void solve(int Task_Id) {
+    cin >> n;
+    cnt = 0;
+    int x = n;
+    for (int i = 1; i <= tot && (ll)prime[i] * prime[i] <= x; i++) {
+        if (x % prime[i] == 0) {
+            p[++cnt] = prime[i];
+            e[cnt] = 0;
+            for (; x % prime[i] == 0; x /= prime[i]) {
+                ++e[cnt];
+            }
+        }
+    }
+    if (x > 1) {
+        p[++cnt] = x;
+        e[cnt] = 1;
+    }
+    ans = 0;
+    dfs(1, 1, 1);
+    cout << ans * qpow(n, MOD - 2) % MOD << '\n';
     return;
 }
 } // namespace TANGYIXIAO
