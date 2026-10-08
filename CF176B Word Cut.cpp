@@ -600,8 +600,8 @@ namespace TANGYIXIAO {
 const int mod = 1e9 + 7, N = 1e6 + 5;
 string s, t;
 int k, n, p[N];
-long long f0, f1, a, x, y, g0, g1, c;
-inline void solve(int Task_Id) {
+long long f0, f1, a, x, y, g0, g1, c, b;
+inline void solve(int) {
     cin >> s >> t >> k, n = s.size(), f0 = (s == t), f1 = 1 - f0;
     for (int i = 1, j; i < n; i++) {
         j = p[i - 1];
@@ -626,3 +626,4 @@ inline void solve(int Task_Id) {
     return;
 }
 } // namespace TANGYIXIAO
+
