@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: e4c9de5d-bb04-4ac5-9170-d354fd899774
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -20,7 +20,7 @@ Copyright (C) 2026 TangYixiao
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
 #define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
 #define FILE_INDEX 1                      // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -597,8 +597,70 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+using ll = long long;
+const int MOD = 1000000007, N = 32000;
+int n, cnt, tot, prime[N], p[15], e[15];
+bool vis[N];
+ll ans;
+inline int qpow(ll a, int b) {
+    ll res = 1;
+    for (; b; b >>= 1, a = a * a % MOD) {
+        if (b & 1) {
+            res = res * a % MOD;
+        }
+    }
+    return res;
+}
+inline void init() {
+    for (int i = 2; i < N; i++) {
+        if (!vis[i]) {
+            prime[++tot] = i;
+        }
+        for (int j = 1; j <= tot && (ll)i * prime[j] < N; j++) {
+            vis[i * prime[j]] = true;
+            if (i % prime[j] == 0) {
+                break;
+            }
+        }
+    }
+}
+inline void dfs(int u, ll d, ll phi) {
+    if (u > cnt) {
+        ans = (ans + phi * qpow(n, n / d)) % MOD;
+        return;
+    }
+    dfs(u + 1, d, phi);
+    ll nd = d, np = phi;
+    for (int i = 1; i <= e[u]; i++) {
+        nd *= p[u];
+        np *= i == 1 ? p[u] - 1 : p[u];
+        dfs(u + 1, nd, np);
+    }
+}
 inline void solve(int Task_Id) {
-    // do something here
+    if (Task_Id == 1) {
+        init();
+    }
+    cin >> n;
+    cnt = 0;
+    int x = n;
+    for (int i = 1; i <= tot && (ll)prime[i] * prime[i] <= x; i++) {
+        if (x % prime[i] == 0) {
+            p[++cnt] = prime[i];
+            e[cnt] = 0;
+            for (; x % prime[i] == 0; x /= prime[i]) {
+                ++e[cnt];
+            }
+        }
+    }
+    if (x > 1) {
+        p[++cnt] = x;
+        e[cnt] = 1;
+    }
+    ans = 0;
+    dfs(1, 1, 1);
+    cout << ans * qpow(n, MOD - 2) % MOD << '\n';
     return;
 }
+
 } // namespace TANGYIXIAO
