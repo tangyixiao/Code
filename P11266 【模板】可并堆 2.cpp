@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 5256a10a-7e4f-4a94-988a-72aeba393e1a
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,36 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+using ll = long long;
+const int N = 1000005;
+using Heap = __gnu_pbds::priority_queue<ll, greater<ll>, __gnu_pbds::pairing_heap_tag>;
+Heap pq[N];
+Heap::point_iterator it[N];
 inline void solve(int Task_Id) {
-    // do something here
+    int n, m;
+    cin >> n >> m;
+    for (int i = 1; i <= n; i++) {
+        ll x;
+        cin >> x;
+        it[i] = pq[i].push(x);
+    }
+    for (int i = 1; i <= m; i++) {
+        int op, x, y;
+        cin >> op >> x;
+        if (op == 0) {
+            cin >> y;
+            pq[x].erase(it[y]);
+        } else if (op == 1) {
+            cout << pq[x].top() << '\n';
+        } else if (op == 2) {
+            cin >> y;
+            pq[x].join(pq[y]);
+        } else {
+            ll z;
+            cin >> y >> z;
+            pq[x].modify(it[y], z);
+        }
+    }
     return;
 }
 } // namespace TANGYIXIAO
