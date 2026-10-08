@@ -48,3 +48,52 @@ No Solution
 
 ---
 
+# P4195 [Template] Extended BSGS / exBSGS
+
+## 题目背景
+
+Source: SPOJ3105 Mod.
+
+## 题目描述
+
+Given $a,p,b$, find the smallest non-negative integer $x$ such that $a^x≡b \pmod p$.
+
+## 输入格式
+
+Each test file contains several test cases, with the guarantee that $\sum \sqrt p\le 5\times 10^6$.
+
+Each test case consists of one line with $3$ positive integers $a,p,b$.
+
+When $a=p=b=0$, it indicates the end of input.
+
+## 输出格式
+
+For each test case, output one line.
+
+If there is no solution, output `No Solution`. Otherwise, output the smallest non-negative integer solution.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+5 58 33
+2 4 3
+0 0 0
+```
+
+### 输出 #1
+
+```
+9
+No Solution
+```
+
+## 说明/提示
+
+For $100\%$ of the testdata, $1\le a,p,b\le 10^9$ or $a=p=b=0$.
+
+2021/5/14 strengthened by [SSerxhs](https://www.luogu.com.cn/user/29826).  
+2021/7/1 added [a set of hack testdata](https://www.luogu.com.cn/discuss/391666).
+
+Translated by ChatGPT 5
