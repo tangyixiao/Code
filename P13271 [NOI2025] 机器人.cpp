@@ -713,5 +713,6 @@ inline void solve(int Task_Id) {
     for (int i = 1; i <= n; i++) {
         cout << (ans[i] == INF ? -1 : ans[i]) << (i == n ? '\n' : ' ');
     }
+    return;
 }
 } // namespace TANGYIXIAO
