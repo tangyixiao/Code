@@ -163,3 +163,180 @@ $2 \leq N \leq 10^5$，$1 \leq M \leq 2×10^5$，$1 \leq S \leq N$，$1 \leq T \
 
 ---
 
+# P7669 [JOI 2018 Final] Commuter Pass / Monthly Pass Purchase
+
+## 题目描述
+
+JOI lives in a city with $N$ stations, numbered from $1$ to $N$. There are $M$ railways, numbered from $1$ to $M$. Railway $i$ ($1 \leq i \leq M$) connects stations $A_i$ and $B_i$ in both directions, and its fare is $C_i$ yen.
+
+JOI lives near station $S$ and goes to IOI High School near station $T$. He plans to buy a commuter pass connecting these two stations. When buying the commuter pass, he must choose a route of minimum total cost between station $S$ and station $T$. With this commuter pass, he can ride any railway included in the chosen route in either direction without any additional cost.
+
+JOI often visits a bookstore near stations $U$ and $V$. Therefore, he wants to buy a commuter pass so that the cost of traveling from station $U$ to station $V$ is minimized.
+
+When he travels from station $U$ to station $V$, he first chooses a route from station $U$ to station $V$. Then the fare he needs to pay is:
+- $0$ yen if railway $i$ is included in the route chosen when buying the commuter pass, or
+- $C_i$ yen if railway $i$ is not included in the route chosen when buying the commuter pass.
+
+The total of these fares is the cost from station $U$ to station $V$.
+
+He wants to know the minimum possible cost from station $U$ to station $V$ if he chooses an appropriate route when buying the commuter pass.
+
+## 输入格式
+
+The first line contains two space-separated integers $N$ and $M$, meaning the city has $N$ stations and $M$ railways.
+
+The second line contains two space-separated integers $S$ and $T$, meaning JOI plans to buy a commuter pass from station $S$ to station $T$.
+
+The third line contains two space-separated integers $U$ and $V$, meaning JOI wants to minimize the cost from station $U$ to station $V$.
+
+Each of the next $M$ lines, the $i$-th line contains three space-separated integers $A_i$, $B_i$, and $C_i$. Railway $i$ connects stations $A_i$ and $B_i$ in both directions, and its fare is $C_i$ yen.
+
+## 输出格式
+
+Output one integer: the minimum cost from station $U$ to station $V$ if he chooses an appropriate route when buying the commuter pass.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+6 6
+1 6
+1 4
+1 2 1
+2 3 1
+3 5 1
+2 4 3
+4 5 2
+5 6 1
+```
+
+### 输出 #1
+
+```
+2
+```
+
+## 输入输出样例 #2
+
+### 输入 #2
+
+```
+6 5
+1 2
+3 6
+1 2 1000000000 
+2 3 1000000000
+3 4 1000000000
+4 5 1000000000
+5 6 1000000000
+```
+
+### 输出 #2
+
+```
+3000000000
+```
+
+## 输入输出样例 #3
+
+### 输入 #3
+
+```
+8 8
+5 7
+6 8
+1 2 2
+2 3 3
+3 4 4
+1 4 1
+1 5 5
+2 6 6
+3 7 7
+4 8 8
+```
+
+### 输出 #3
+
+```
+15
+```
+
+## 输入输出样例 #4
+
+### 输入 #4
+
+```
+5 5
+1 5
+2 3
+1 2 1
+2 3 10
+2 4 10
+3 5 10
+4 5 10
+```
+
+### 输出 #4
+
+```
+0
+```
+
+## 输入输出样例 #5
+
+### 输入 #5
+
+```
+10 15
+6 8
+7 9
+2 7 12
+8 10 17
+1 3 1
+3 8 14
+5 7 15
+2 3 7
+1 10 14
+3 6 12
+1 5 10
+8 9 1
+2 9 7
+1 4 1  
+1 8 1
+2 4 7
+5 6 16
+```
+
+### 输出 #5
+
+```
+19
+```
+
+## 说明/提示
+
+#### Constraints
+For $100\%$ of the testdata:
+$2 \leq N \leq 10^5$, $1 \leq M \leq 2×10^5$, $1 \leq S \leq N$, $1 \leq T \leq N$, $1 \leq U \leq N$, $1 \leq V \leq N$, $S {=}\mathllap{/\,} T$, $U {=}\mathllap{/\,} V$, $ S{=}\mathllap{/\,} U$ or $T {=}\mathllap{/\,} V$, $1 \leq A_i \leq B_i \leq N$ ($1 \leq i \leq M$). For every $1 \leq i < j \leq M$, $A_i {=}\mathllap{/\,} A_j$ or $B_i {=}\mathllap{/\,} B_j$, $1 \leq C_i \leq 10^9$ ($1 \leq i \leq M$). JOI can travel from any station to any other station by railways.
+- Subtask $1$ ($16$ points): $S=U$.
+- Subtask $2$ ($15$ points): There is a unique minimum-cost route from station $S$ to station $T$.
+- Subtask $3$ ($24$ points): $N \leq 300$.
+- Subtask $4$ ($45$ points): No additional constraints.
+
+#### Sample Explanation
+**For Sample 1**: When buying the commuter pass, JOI can choose only one route: station $1$ → station $2$ → station $3$ → station $5$ → station $6$. To minimize the cost from station $1$ to station $4$, he chooses the route: station $1$ → station $2$ → station $3$ → station $5$ → station $4$. For this route, the fares he needs to pay are:
+- $2$ yen for railway $5$ between station $4$ and station $5$, and
+- $0$ yen for all other railways.
+
+**For Sample 2**: When JOI travels from station $3$ to station $6$, he does not use the commuter pass.
+
+#### Problem Source
+From The 17th Japanese Olympiad in Informatics (JOI 2017/2018) Final Round, [T4: Commuter Pass](https://www.ioi-jp.org/joi/2017/2018-ho/2018-ho-t4-en.pdf).  
+Translated and整理 (pinyin: zhengli, compiled) by @[求学的企鹅](/user/271784).
+
+#### Hack Notes
+[@gaojunqing](https://www.luogu.com.cn/user/536005) provided a set of hack data to the problem setter on November 6, 2021. After multiple checks, it was added to this problem’s testdata on November 7, 2021.  
+To respect the original JOI problem and its intended experience, all added hack data does not change the scoring: the full score is still 100 points. The new hack data is placed separately in Subtask #5 with a score of 0 points. That is, if you pass all original testdata but fail the hack data, you will get 100 points but will not be accepted (AC). You will be accepted (AC) only if you pass all testdata.
+
+Translated by ChatGPT 5
