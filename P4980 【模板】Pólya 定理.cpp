@@ -660,7 +660,5 @@ inline void solve(int Task_Id) {
     ans = 0;
     dfs(1, 1, 1);
     cout << ans * qpow(n, MOD - 2) % MOD << '\n';
-    return;
 }
-
 } // namespace TANGYIXIAO
