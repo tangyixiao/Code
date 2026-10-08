@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: c2b1e930-03a5-4db3-a4b3-9fad094b4a48
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -596,9 +596,87 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
+using ll = long long;
+const int N = 5000000, M = 100000, T = 70;
+int prime[N / 8], cnt, pii[N + 5], f[T + 1][M + 1];
+bool vis[N + 5];
+inline ll isqrt(ll x) {
+    ll y = sqrtl(x);
+    for (; (y + 1) * (y + 1) <= x; y++) {}
+    for (; y * y > x; y--) {}
+    return y;
+}
+inline ll icbrt(ll x) {
+    ll y = cbrtl(x);
+    for (; (y + 1) * (y + 1) * (y + 1) <= x; y++) {}
+    for (; y * y * y > x; y--) {}
+    return y;
+}
+inline void init() {
+    for (int i = 2; i <= N; i++) {
+        if (!vis[i]) {
+            prime[++cnt] = i;
+        }
+        for (int j = 1; j <= cnt && (ll)i * prime[j] <= N; j++) {
+            vis[i * prime[j]] = true;
+            if (i % prime[j] == 0) {
+                break;
+            }
+        }
+        pii[i] = pii[i - 1] + !vis[i];
+    }
+    for (int i = 0; i <= M; i++) {
+        f[0][i] = i;
+    }
+    for (int i = 1; i <= T; i++) {
+        for (int j = 0; j <= M; j++) {
+            f[i][j] = f[i - 1][j] - f[i - 1][j / prime[i]];
+        }
+    }
+}
+inline ll phi(ll x, int s) {
+    if (s == 0) {
+        return x;
+    }
+    if (x <= M && s <= T) {
+        return f[s][x];
+    }
+    if (x <= N) {
+        if (x < prime[s]) {
+            return 1;
+        }
+        if ((ll)prime[s + 1] * prime[s + 1] > x) {
+            return pii[x] - s + 1;
+        }
+    }
+    return phi(x, s - 1) - phi(x / prime[s], s - 1);
+}
+inline ll lehmer(ll x) {
+    if (x <= N) {
+        return pii[x];
+    }
+    int a = lehmer(isqrt(isqrt(x)));
+    int b = lehmer(isqrt(x));
+    int c = lehmer(icbrt(x));
+    ll res = phi(x, a) + (ll)(b + a - 2) * (b - a + 1) / 2;
+    for (int i = a + 1; i <= b; i++) {
+        ll w = x / prime[i];
+        res -= lehmer(w);
+        if (i <= c) {
+            int lim = lehmer(isqrt(w));
+            for (int j = i; j <= lim; j++) {
+                res -= lehmer(w / prime[j]) - j + 1;
+            }
+        }
+    }
+    return res;
+}
 inline void solve(int Task_Id) {
-    // do something here
-    return;
+    ll n;
+    cin >> n;
+    init();
+    cout << lehmer(n) << '\n';
 }
 } // namespace TANGYIXIAO
