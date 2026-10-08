@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 05cdecb8-a76a-40a2-a3de-3774e327088c
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,31 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-inline void solve(int Task_Id) {
-    // do something here
-    return;
-}
+const int mod = 1e9 + 7, N = 1e6 + 5;
+string s, t;
+int k, n, p[N];
+long long f0, f1, a, x, y, g0, g1, c;
+inline void solve(int) {
+    cin >> s >> t >> k, n = s.size(), f0 = (s == t), f1 = 1 - f0;
+    for (int i = 1, j; i < n; i++) {
+        j = p[i - 1];
+        for (; j > 0 && t[i] != t[j]; j = p[j - 1]) {
+        }
+        j += (t[i] == t[j]);
+        p[i] = j;
+    }
+    for (int i = 0, j = 0; i <= (n << 1) - 1; i++) {
+        for (; j > 0 && s[i % n] != t[j]; j = p[j - 1]) {
+        }
+        j += (s[i % n] == t[j]);
+        if (j == n) {
+            c += (i - n + 1 < n), j = p[j - 1];
+        }
+        a = c, b = n - c, x = (c - 1 + mod) % mod, y = (n - c - 1 + mod) % mod;
+        for (int i = 0; i < k; i++) {
+            g0 = (f1 * a + f0 * x) % mod, g1 = (f0 * b + f1 * y) % mod, f0 = g0, f1 = g1;
+        }
+        cout << f0 << "\n";
+        return;
+    }
 } // namespace TANGYIXIAO
