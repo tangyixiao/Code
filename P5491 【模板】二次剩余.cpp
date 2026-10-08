@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 2582d6ec-7f37-49ff-b244-57775cc80714
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -20,7 +20,7 @@ Copyright (C) 2026 TangYixiao
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
 #define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
 #define FILE_INDEX 1                      // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -597,8 +597,51 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+using ll = long long;
+ll p, w;
+struct Node {
+    ll x, y;
+};
+inline ll modpow(ll a, int b, ll mod) {
+    ll res = 1;
+    for (; b; b >>= 1, a = a * a % mod) {
+        if (b & 1) {
+            res = res * a % mod;
+        }
+    }
+    return res;
+}
+inline Node mul(Node a, Node b) {
+    return {(a.x * b.x + a.y * b.y % p * w) % p, (a.x * b.y + a.y * b.x) % p};
+}
+inline Node fpow(Node a, int b) {
+    Node res = {1, 0};
+    for (; b; b >>= 1, a = mul(a, a)) {
+        if (b & 1) {
+            res = mul(res, a);
+        }
+    }
+    return res;
+}
 inline void solve(int Task_Id) {
-    // do something here
-    return;
+    ll n;
+    cin >> n >> p;
+    if (n == 0) {
+        cout << 0 << '\n';
+        return;
+    }
+    if (modpow(n, (p - 1) / 2, p) != 1) {
+        cout << "Hola!\n";
+        return;
+    }
+    ll a = 0;
+    for (;; a++) {
+        w = (a * a - n + p) % p;
+        if (modpow(w, (p - 1) / 2, p) == p - 1) {
+            break;
+        }
+    }
+    ll x = fpow({a, 1}, (p + 1) / 2).x;
+    cout << min(x, p - x) << ' ' << max(x, p - x) << '\n';
 }
 } // namespace TANGYIXIAO
