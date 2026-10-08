@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 748a3d5b-5bc6-4465-af6f-39a4d1e9e472
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,112 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+using ll = long long;
+inline ll gcdll(ll a, ll b) {
+    for (; b;) {
+        ll t = a % b;
+        a = b;
+        b = t;
+    }
+    return a;
+}
+inline ll modpow(ll a, ll b, ll p) {
+    ll res = 1 % p;
+    for (a %= p; b; b >>= 1, a = a * a % p) {
+        if (b & 1) {
+            res = res * a % p;
+        }
+    }
+    return res;
+}
+inline ll exgcd_ext(ll a, ll b, ll &x, ll &y) {
+    if (!b) {
+        x = 1;
+        y = 0;
+        return a;
+    }
+    ll x1, y1, g = exgcd_ext(b, a % b, x1, y1);
+    x = y1;
+    y = x1 - a / b * y1;
+    return g;
+}
+inline ll invmod(ll a, ll p) {
+    ll x, y;
+    exgcd_ext(a, p, x, y);
+    return (x % p + p) % p;
+}
+struct CustomHash {
+    static unsigned long long mix(unsigned long long x) {
+        x += 0x9e3779b97f4a7c15ULL;
+        x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9ULL;
+        x = (x ^ (x >> 27)) * 0x94d049bb133111ebULL;
+        return x ^ (x >> 31);
+    }
+    size_t operator()(ll x) const {
+        return mix((unsigned long long)x);
+    }
+};
+inline ll bsgs(ll a, ll b, ll p, ll k) {
+    ll s = sqrtl(p) + 1;
+    unordered_map<ll, int, CustomHash> mp;
+    mp.max_load_factor(0.7);
+    mp.reserve(s * 2);
+    ll cur = k;
+    for (int i = 0; i < s; i++) {
+        if (mp.find(cur) == mp.end()) {
+            mp[cur] = i;
+        }
+        cur = cur * a % p;
+    }
+    ll step = invmod(modpow(a, s, p), p);
+    cur = b;
+    for (int i = 0; i <= s; i++) {
+        auto it = mp.find(cur);
+        if (it != mp.end()) {
+            return (ll)i * s + it->second;
+        }
+        cur = cur * step % p;
+    }
+    return -1;
+}
+inline ll exbsgs(ll a, ll p, ll b) {
+    if (p == 1) {
+        return 0;
+    }
+    a %= p;
+    b %= p;
+    if (b == 1) {
+        return 0;
+    }
+    ll k = 1, t = 0, g;
+    for (; (g = gcdll(a, p)) > 1;) {
+        if (b % g) {
+            return -1;
+        }
+        b /= g;
+        p /= g;
+        k = k * (a / g) % p;
+        ++t;
+        if (k == b) {
+            return t;
+        }
+    }
+    ll x = bsgs(a, b, p, k);
+    return x == -1 ? -1 : x + t;
+}
 inline void solve(int Task_Id) {
-    // do something here
+    ll a, p, b;
+    for (; cin >> a >> p >> b;) {
+        if (a == 0 && p == 0 && b == 0) {
+            break;
+        }
+        ll ans = exbsgs(a, p, b);
+        if (ans == -1) {
+            cout << "No Solution\n";
+        } else {
+            cout << ans << '\n';
+        }
+    }
     return;
 }
 } // namespace TANGYIXIAO
