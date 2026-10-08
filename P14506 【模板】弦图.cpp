@@ -597,16 +597,11 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 100005, M = 600005;
-int n, m, tot, head[N], to[M], ne[M];
-int bhead[N], pre[N], nxt[N], cnt[N], pos[N], seq[N];
+const int N = 100005;
+int n, m, bhead[N], pre[N], nxt[N], cnt[N], pos[N], seq[N];
 int son[N], sn[N], mark[N];
 bool ban[N];
-inline void add(int u, int v) {
-    to[++tot] = v;
-    ne[tot] = head[u];
-    head[u] = tot;
-}
+vector<int> G[N];
 inline void del(int u) {
     if (pre[u]) {
         nxt[pre[u]] = nxt[u];
@@ -627,15 +622,15 @@ inline void ins(int u) {
 }
 inline void solve(int Task_Id) {
     cin >> n >> m;
-    tot = 0;
     for (int i = 0; i <= n; i++) {
-        head[i] = bhead[i] = cnt[i] = pos[i] = son[i] = mark[i] = 0;
+        G[i].clear();
+        bhead[i] = cnt[i] = pos[i] = son[i] = mark[i] = 0;
         ban[i] = false;
     }
     for (int i = 1, u, v; i <= m; i++) {
         cin >> u >> v;
-        add(u, v);
-        add(v, u);
+        G[u].push_back(v);
+        G[v].push_back(u);
     }
     for (int i = 1; i <= n; i++) {
         ins(i);
@@ -647,8 +642,7 @@ inline void solve(int Task_Id) {
         del(u);
         seq[i] = u;
         pos[u] = i;
-        for (int e = head[u]; e; e = ne[e]) {
-            int v = to[e];
+        for (int v : G[u]) {
             if (!pos[v]) {
                 del(v);
                 ++cnt[v];
@@ -660,8 +654,7 @@ inline void solve(int Task_Id) {
     int omega = 1;
     for (int u = 1; u <= n; u++) {
         int p = 0, num = 0;
-        for (int e = head[u]; e; e = ne[e]) {
-            int v = to[e];
+        for (int v : G[u]) {
             if (pos[v] > pos[u]) {
                 ++num;
                 if (!p || pos[v] < pos[p]) {
@@ -677,14 +670,14 @@ inline void solve(int Task_Id) {
     }
     bool ok = true;
     for (int p = 1; p <= n && ok; p++) {
-        for (int e = head[p]; e; e = ne[e]) {
-            mark[to[e]] = p;
+        for (int v : G[p]) {
+            mark[v] = p;
         }
         for (int u = son[p]; u && ok; u = sn[u]) {
-            for (int e = head[u]; e && ok; e = ne[e]) {
-                int v = to[e];
+            for (int v : G[u]) {
                 if (pos[v] > pos[u] && v != p && mark[v] != p) {
                     ok = false;
+                    break;
                 }
             }
         }
@@ -698,8 +691,8 @@ inline void solve(int Task_Id) {
         int u = seq[i];
         if (!ban[u]) {
             ++alpha;
-            for (int e = head[u]; e; e = ne[e]) {
-                ban[to[e]] = true;
+            for (int v : G[u]) {
+                ban[v] = true;
             }
         }
     }
