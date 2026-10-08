@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: a3f7302b-dc17-42d2-a528-01e7cc5fa4b5
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,97 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+using ll = long long;
+const int MOD = 998244353, N = (1 << 21);
+int n, m, c, A[N], B[N];
+inline int qpow(int x, int y) {
+    int res = 1;
+    for (; y; y >>= 1, x = (ll)x * x % MOD) {
+        if (y & 1) {
+            res = (ll)res * x % MOD;
+        }
+    }
+    return res;
+}
+inline void ntt(int *a, int len, bool inv) {
+    for (int i = 1, j = 0; i < len; i++) {
+        int bit = len >> 1;
+        for (; j & bit; bit >>= 1) {
+            j ^= bit;
+        }
+        j ^= bit;
+        if (i < j) {
+            swap(a[i], a[j]);
+        }
+    }
+    for (int l = 2; l <= len; l <<= 1) {
+        int wn = qpow(3, (MOD - 1) / l);
+        if (inv) {
+            wn = qpow(wn, MOD - 2);
+        }
+        for (int i = 0; i < len; i += l) {
+            int w = 1;
+            for (int j = 0; j < (l >> 1); j++) {
+                int x = a[i + j], y = (ll)w * a[i + j + (l >> 1)] % MOD;
+                a[i + j] = (x + y >= MOD ? x + y - MOD : x + y);
+                a[i + j + (l >> 1)] = (x - y < 0 ? x - y + MOD : x - y);
+                w = (ll)w * wn % MOD;
+            }
+        }
+    }
+    if (inv) {
+        int iv = qpow(len, MOD - 2);
+        for (int i = 0; i < len; i++) {
+            a[i] = (ll)a[i] * iv % MOD;
+        }
+    }
+}
 inline void solve(int Task_Id) {
-    // do something here
-    return;
+    cin >> n >> c >> m;
+    ll sum = 0;
+    for (int i = 0; i < n; i++) {
+        cin >> A[i];
+        sum += A[i];
+    }
+    sum %= MOD;
+    if (c == 0 || c == 1) {
+        for (int i = 0; i < m; i++) {
+            cout << (c == 1 || i == 0 ? sum : A[0]) << (i == m - 1 ? '\n' : ' ');
+        }
+        return;
+    }
+    int len = 1;
+    for (; len < n + m - 1; len <<= 1) {}
+    ll cur = 1, pw = c;
+    for (int i = 0; i < n; i++) {
+        A[i] = A[i] * cur % MOD;
+        cur = cur * pw % MOD;
+        pw = pw * c % MOD;
+    }
+    int ivc = qpow(c, MOD - 2);
+    cur = 1, pw = 1;
+    for (int i = 0; i < m; i++) {
+        B[i] = cur;
+        cur = cur * pw % MOD;
+        pw = pw * ivc % MOD;
+    }
+    cur = 1, pw = ivc;
+    for (int i = 1; i < n; i++) {
+        cur = cur * pw % MOD;
+        B[len - i] = cur;
+        pw = pw * ivc % MOD;
+    }
+    ntt(A, len, false);
+    ntt(B, len, false);
+    for (int i = 0; i < len; i++) {
+        A[i] = (ll)A[i] * B[i] % MOD;
+    }
+    ntt(A, len, true);
+    cur = 1, pw = 1;
+    for (int i = 0; i < m; i++) {
+        cout << A[i] * cur % MOD << (i == m - 1 ? '\n' : ' ');
+        cur = cur * pw % MOD;
+        pw = pw * c % MOD;
+    }
 }
 } // namespace TANGYIXIAO
