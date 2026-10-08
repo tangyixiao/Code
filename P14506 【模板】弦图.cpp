@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 8e38be33-c289-41c6-9505-043695f1bc84
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -20,7 +20,7 @@ Copyright (C) 2026 TangYixiao
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
 #define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
 #define FILE_INDEX 1                      // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -597,8 +597,116 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 100005, M = 600005;
+int n, m, tot, head[N], to[M], ne[M];
+int bhead[N], pre[N], nxt[N], cnt[N], pos[N], seq[N];
+int son[N], sn[N], mark[N];
+bool ban[N];
+inline void add(int u, int v) {
+    to[++tot] = v;
+    ne[tot] = head[u];
+    head[u] = tot;
+}
+inline void del(int u) {
+    if (pre[u]) {
+        nxt[pre[u]] = nxt[u];
+    } else {
+        bhead[cnt[u]] = nxt[u];
+    }
+    if (nxt[u]) {
+        pre[nxt[u]] = pre[u];
+    }
+}
+inline void ins(int u) {
+    pre[u] = 0;
+    nxt[u] = bhead[cnt[u]];
+    if (nxt[u]) {
+        pre[nxt[u]] = u;
+    }
+    bhead[cnt[u]] = u;
+}
 inline void solve(int Task_Id) {
-    // do something here
-    return;
+    cin >> n >> m;
+    tot = 0;
+    for (int i = 0; i <= n; i++) {
+        head[i] = bhead[i] = cnt[i] = pos[i] = son[i] = mark[i] = 0;
+        ban[i] = false;
+    }
+    for (int i = 1, u, v; i <= m; i++) {
+        cin >> u >> v;
+        add(u, v);
+        add(v, u);
+    }
+    for (int i = 1; i <= n; i++) {
+        ins(i);
+    }
+    int mx = 0;
+    for (int i = n; i >= 1; i--) {
+        for (; mx > 0 && !bhead[mx]; mx--) {}
+        int u = bhead[mx];
+        del(u);
+        seq[i] = u;
+        pos[u] = i;
+        for (int e = head[u]; e; e = ne[e]) {
+            int v = to[e];
+            if (!pos[v]) {
+                del(v);
+                ++cnt[v];
+                ins(v);
+                mx = max(mx, cnt[v]);
+            }
+        }
+    }
+    int omega = 1;
+    for (int u = 1; u <= n; u++) {
+        int p = 0, num = 0;
+        for (int e = head[u]; e; e = ne[e]) {
+            int v = to[e];
+            if (pos[v] > pos[u]) {
+                ++num;
+                if (!p || pos[v] < pos[p]) {
+                    p = v;
+                }
+            }
+        }
+        omega = max(omega, num + 1);
+        if (p) {
+            sn[u] = son[p];
+            son[p] = u;
+        }
+    }
+    bool ok = true;
+    for (int p = 1; p <= n && ok; p++) {
+        for (int e = head[p]; e; e = ne[e]) {
+            mark[to[e]] = p;
+        }
+        for (int u = son[p]; u && ok; u = sn[u]) {
+            for (int e = head[u]; e && ok; e = ne[e]) {
+                int v = to[e];
+                if (pos[v] > pos[u] && v != p && mark[v] != p) {
+                    ok = false;
+                }
+            }
+        }
+    }
+    if (!ok) {
+        cout << "No\n";
+        return;
+    }
+    int alpha = 0;
+    for (int i = 1; i <= n; i++) {
+        int u = seq[i];
+        if (!ban[u]) {
+            ++alpha;
+            for (int e = head[u]; e; e = ne[e]) {
+                ban[to[e]] = true;
+            }
+        }
+    }
+    cout << "Yes\n";
+    for (int i = 1; i <= n; i++) {
+        cout << seq[i] << (i == n ? '\n' : ' ');
+    }
+    cout << omega << ' ' << omega << ' ' << alpha << '\n';
 }
 } // namespace TANGYIXIAO
