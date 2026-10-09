@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 6adfbaa3-a1c9-432f-9ed8-5a4fa5fb06e6
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -596,9 +596,100 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
+using ll = long long;
+const int N = (1 << 18) + 5, MOD = 1000000007;
+const int P[3] = {998244353, 1004535809, 469762049};
+int n, a[N], b[N], c[N], d[N], rev[N], f[N], g[N], res[3][N];
+ll inv1, inv2, p12;
+
+inline ll power(ll x, ll y, int mod) {
+    ll ans = 1;
+    for (; y; y >>= 1, x = x * x % mod) {
+        if (y & 1) {
+            ans = ans * x % mod;
+        }
+    }
+    return ans;
+}
+
+inline void ntt(int *a, int len, int mod, bool inv) {
+    for (int i = 1; i < len; i++) {
+        if (i < rev[i]) {
+            swap(a[i], a[rev[i]]);
+        }
+    }
+    for (int k = 2; k <= len; k <<= 1) {
+        int wn = power(3, inv ? mod - 1 - (mod - 1) / k : (mod - 1) / k, mod);
+        for (int i = 0; i < len; i += k) {
+            ll w = 1;
+            for (int j = 0; j < (k >> 1); j++) {
+                int x = a[i + j], y = w * a[i + j + (k >> 1)] % mod;
+                a[i + j] = x + y >= mod ? x + y - mod : x + y;
+                a[i + j + (k >> 1)] = x - y < 0 ? x - y + mod : x - y;
+                w = w * wn % mod;
+            }
+        }
+    }
+    if (inv) {
+        ll t = power(len, mod - 2, mod);
+        for (int i = 0; i < len; i++) {
+            a[i] = a[i] * t % mod;
+        }
+    }
+}
+
+inline void multiply(int *a, int na, int *b, int nb, int *c, int l, int r, int len) {
+    for (int k = 0; k < 3; k++) {
+        for (int i = 0; i < len; i++) {
+            f[i] = i < na ? a[i] % P[k] : 0;
+            g[i] = i < nb ? b[i] % P[k] : 0;
+        }
+        ntt(f, len, P[k], false);
+        ntt(g, len, P[k], false);
+        for (int i = 0; i < len; i++) {
+            f[i] = 1LL * f[i] * g[i] % P[k];
+        }
+        ntt(f, len, P[k], true);
+        for (int i = l; i < r; i++) {
+            res[k][i] = f[i];
+        }
+    }
+    for (int i = l; i < r; i++) {
+        ll x = res[0][i];
+        ll y = (res[1][i] - x + P[1]) * inv1 % P[1];
+        ll z = (res[2][i] - (x + 1LL * P[0] * y) % P[2] + P[2]) * inv2 % P[2];
+        c[i] = ((x + 1LL * P[0] * y) % MOD + p12 * z) % MOD;
+    }
+}
+
 inline void solve(int Task_Id) {
-    // do something here
-    return;
+    cin >> n;
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+    }
+    if (!a[0]) {
+        cout << -1 << '\n';
+        return;
+    }
+    inv1 = power(P[0], P[1] - 2, P[1]);
+    inv2 = power(1LL * P[0] * P[1] % P[2], P[2] - 2, P[2]);
+    p12 = 1LL * P[0] * P[1] % MOD;
+    b[0] = power(a[0], MOD - 2, MOD);
+    for (int k = 1; k < n; k <<= 1) {
+        int len = k << 1, r = min(n, len);
+        for (int i = 1; i < len; i++) {
+            rev[i] = (rev[i >> 1] >> 1) | ((i & 1) ? (len >> 1) : 0);
+        }
+        multiply(a, r, b, k, c, k, r, len);
+        multiply(b, k, c + k, r - k, d, 0, r - k, len);
+        for (int i = k; i < r; i++) {
+            b[i] = d[i - k] ? (MOD - d[i - k]) : 0;
+        }
+    }
+    for (int i = 0; i < n; i++) {
+        cout << b[i] << (i == n - 1 ? '\n' : ' ');
+    }
 }
 } // namespace TANGYIXIAO
