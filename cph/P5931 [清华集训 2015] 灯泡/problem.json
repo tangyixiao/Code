@@ -1,0 +1,31 @@
+{
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "name": "P5931 [清华集训 2015] 灯泡", 
+  "url": "https://www.luogu.com.cn/problem/P5931", 
+  "memoryLimit": 128, 
+  "tests": [
+    {
+      "output": "1.000\n0.750\n4.000\n", 
+      "input": "3\n2 1 0.5\n2 0.5 3\n4 3 4\n"
+    }
+  ], 
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "languages": {
+    "java": {
+      "taskClass": "P59312015", 
+      "mainClass": "Main"
+    }
+  }, 
+  "batch": {
+    "id": "e1f2e426-500d-4b9d-9cd8-4ca28a78c95c", 
+    "size": 1
+  }, 
+  "interactive": false
+}
