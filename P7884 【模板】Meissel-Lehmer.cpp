@@ -596,21 +596,22 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
 using ll = long long;
-const int N = 5000005, M = 100000, S = 100;
-int prime[400000], pc[N], cnt, f[S + 1][M];
-bool vis[N];
+const int N = 5000005, M = 150000, S = 90, W = 510510;
+int prime[400000], pc[N], f[S + 1][M], g[W + 1], cnt;
+bool vis[N], bad[W + 1];
 
 inline ll sqr(ll x) {
-    ll y = sqrtl((long double)x);
+    ll y = sqrt((double)x);
     for (; (__int128)(y + 1) * (y + 1) <= x; y++) {}
     for (; (__int128)y * y > x; y--) {}
     return y;
 }
 
 inline ll cbr(ll x) {
-    ll y = cbrtl((long double)x);
+    ll y = cbrt((double)x);
     for (; (__int128)(y + 1) * (y + 1) * (y + 1) <= x; y++) {}
     for (; (__int128)y * y * y > x; y--) {}
     return y;
@@ -629,6 +630,14 @@ inline void init() {
             }
         }
     }
+    for (int i = 1; i <= 7; i++) {
+        for (int j = prime[i]; j <= W; j += prime[i]) {
+            bad[j] = true;
+        }
+    }
+    for (int i = 1; i <= W; i++) {
+        g[i] = g[i - 1] + !bad[i];
+    }
     for (int i = 0; i < M; i++) {
         f[0][i] = i;
     }
@@ -646,6 +655,9 @@ inline ll phi(ll x, int s) {
     if (s <= S && x < M) {
         return f[s][x];
     }
+    if (s == 7) {
+        return x / W * g[W] + g[x % W];
+    }
     if (x < prime[s]) {
         return 1;
     }
@@ -659,17 +671,15 @@ ll lehmer(ll x) {
     if (x < N) {
         return pc[x];
     }
-    int a = lehmer(sqr(sqr(x)));
-    int b = lehmer(sqr(x));
-    int c = lehmer(cbr(x));
+    int a = pc[sqr(sqr(x))], b = pc[sqr(x)], c = pc[cbr(x)];
     ll ans = phi(x, a) + 1LL * (b + a - 2) * (b - a + 1) / 2;
     for (int i = a + 1; i <= b; i++) {
         ll w = x / prime[i];
         ans -= lehmer(w);
         if (i <= c) {
-            int lim = lehmer(sqr(w));
+            int lim = pc[sqr(w)];
             for (int j = i; j <= lim; j++) {
-                ans -= lehmer(w / prime[j]) - j + 1;
+                ans -= pc[w / prime[j]] - j + 1;
             }
         }
     }
@@ -681,6 +691,5 @@ inline void solve(int Task_Id) {
     ll n;
     cin >> n;
     cout << lehmer(n) << '\n';
-    return;
 }
 } // namespace TANGYIXIAO
