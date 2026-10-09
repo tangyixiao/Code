@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: cee7ebaf-af90-41dd-8d10-49eacbecd624
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,332 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-inline void solve(int Task_Id) {
-    // do something here
-    return;
+using u32 = uint32_t;
+const u32 MS = (1u << 23) - 1;
+const u32 V = 1u << 31, H = 1u << 30, K = 1u << 29, D = 1u << 28;
+const int N = 7000005;
+u32 a[N], pr[N];
+char ib[1 << 16];
+int il = 0, ir = 0;
+inline char gc() {
+    if (il == ir) {
+        ir = fread(ib, 1, sizeof(ib), stdin);
+        il = 0;
+        if (!ir) { return 0; }
+    }
+    return ib[il++];
 }
+inline u32 rd() {
+    u32 x = 0;
+    char c = gc();
+    while (c < '0' || c > '9') { c = gc(); }
+    while (c >= '0' && c <= '9') {
+        x = x * 10 + (c - '0');
+        c = gc();
+    }
+    return x;
+}
+inline u32 fa(u32 x) { return pr[x] & MS; }
+
+int n, q, m, hc;
+u32 *hk, *hv;
+inline int hs(u32 x) {
+    u32 p = x * 2654435761u & (hc - 1);
+    while (hk[p] && hk[p] != x) { p = (p + 1) & (hc - 1); }
+    return p;
+}
+inline void put(u32 x, u32 v) {
+    int p = hs(x);
+    hk[p] = x;
+    hv[p] = v;
+}
+inline int get(u32 x) { return hv[hs(x)]; }
+
+vector<u32> ky;
+vector<int> pa, dep, hd, nx, sz, son, tp, df, rk, ds;
+vector<u32> b, sm, ln, lz;
+int tt;
+
+inline int bel(u32 x) {
+    while (!(pr[x] & (D | K))) { x = fa(x); }
+    return get(x);
+}
+inline u32 anc(u32 x) {
+    while (!(pr[x] & H)) { x = fa(x); }
+    return x;
+}
+void bld(int o, int l, int r) {
+    if (l == r) {
+        int v = rk[l];
+        sm[o] = b[v];
+        ln[o] = ds[v];
+        return;
+    }
+    int mi = (l + r) >> 1;
+    bld(o << 1, l, mi);
+    bld(o << 1 | 1, mi + 1, r);
+    sm[o] = sm[o << 1] + sm[o << 1 | 1];
+    ln[o] = ln[o << 1] + ln[o << 1 | 1];
+}
+inline void ap(int o, u32 v) {
+    sm[o] += ln[o] * v;
+    lz[o] += v;
+}
+inline void pd(int o) {
+    if (lz[o]) {
+        ap(o << 1, lz[o]);
+        ap(o << 1 | 1, lz[o]);
+        lz[o] = 0;
+    }
+}
+void ra(int o, int l, int r, int ql, int qr, u32 v) {
+    if (ql <= l && r <= qr) {
+        ap(o, v);
+        return;
+    }
+    pd(o);
+    int mi = (l + r) >> 1;
+    if (ql <= mi) { ra(o << 1, l, mi, ql, qr, v); }
+    if (qr > mi) { ra(o << 1 | 1, mi + 1, r, ql, qr, v); }
+    sm[o] = sm[o << 1] + sm[o << 1 | 1];
+}
+u32 rs(int o, int l, int r, int ql, int qr) {
+    if (ql <= l && r <= qr) { return sm[o]; }
+    pd(o);
+    int mi = (l + r) >> 1;
+    u32 ans = 0;
+    if (ql <= mi) { ans += rs(o << 1, l, mi, ql, qr); }
+    if (qr > mi) { ans += rs(o << 1 | 1, mi + 1, r, ql, qr); }
+    return ans;
+}
+void pt(int o, int l, int r, int p, u32 v) {
+    if (l == r) {
+        sm[o] += v;
+        return;
+    }
+    pd(o);
+    int mi = (l + r) >> 1;
+    if (p <= mi) {
+        pt(o << 1, l, mi, p, v);
+    } else {
+        pt(o << 1 | 1, mi + 1, r, p, v);
+    }
+    sm[o] = sm[o << 1] + sm[o << 1 | 1];
+}
+u32 tg(int o, int l, int r, int p) {
+    if (l == r) { return lz[o]; }
+    pd(o);
+    int mi = (l + r) >> 1;
+    if (p <= mi) { return tg(o << 1, l, mi, p); }
+    return tg(o << 1 | 1, mi + 1, r, p);
+}
+inline void uv(int x, int f, u32 v) {
+    while (tp[x] != tp[f]) {
+        ra(1, 1, m, df[tp[x]], df[x], v);
+        x = pa[tp[x]];
+    }
+    if (x != f) { ra(1, 1, m, df[f] + 1, df[x], v); }
+}
+inline u32 qv(int x, int f) {
+    u32 ans = 0;
+    while (tp[x] != tp[f]) {
+        ans += rs(1, 1, m, df[tp[x]], df[x]);
+        x = pa[tp[x]];
+    }
+    if (x != f) { ans += rs(1, 1, m, df[f] + 1, df[x]); }
+    return ans;
+}
+inline int lv(int x, int y) {
+    while (tp[x] != tp[y]) {
+        if (dep[tp[x]] < dep[tp[y]]) { swap(x, y); }
+        x = pa[tp[x]];
+    }
+    return dep[x] < dep[y] ? x : y;
+}
+inline u32 lca(u32 x, u32 y) {
+    int g = bel(x), h = bel(y);
+    if (g != h) {
+        int w = lv(g, h);
+        if (w != g && w != h) { return ky[w]; }
+        if (w == h) {
+            swap(g, h);
+            swap(x, y);
+        }
+        return anc(x);
+    }
+    u32 ed = ky[pa[g]], ans = ed;
+    for (u32 p = x; p != ed; p = fa(p)) { pr[p] |= V; }
+    for (u32 p = y; p != ed; p = fa(p)) {
+        if (pr[p] & V) {
+            ans = p;
+            break;
+        }
+    }
+    for (u32 p = x; p != ed; p = fa(p)) { pr[p] &= ~V; }
+    return ans;
+}
+inline void ux(u32 x, u32 f, int g, u32 v) {
+    u32 c = 0;
+    for (u32 p = x; p != f; p = fa(p)) {
+        a[p] += v;
+        c += (pr[p] & H) != 0;
+    }
+    if (c && g != 1) { pt(1, 1, m, df[g], c * v); }
+}
+inline u32 qx(u32 x, u32 f, int g) {
+    u32 ans = 0, t0 = g == 1 ? 0 : tg(1, 1, m, df[g]);
+    for (u32 p = x; p != f; p = fa(p)) {
+        ans += a[p];
+        if (pr[p] & H) { ans += t0; }
+    }
+    return ans;
+}
+inline void ul(u32 f, u32 x, u32 v) {
+    if (f == x) { return; }
+    int g = bel(x), h = bel(f);
+    if (g == h) {
+        ux(x, f, g, v);
+        return;
+    }
+    if (ky[h] != f) { ux(ky[h], f, h, v); }
+    if (ky[g] != x) {
+        ux(x, ky[pa[g]], g, v);
+        g = pa[g];
+    }
+    uv(g, h, v);
+}
+inline u32 ql(u32 f, u32 x) {
+    if (f == x) { return 0; }
+    int g = bel(x), h = bel(f);
+    if (g == h) { return qx(x, f, g); }
+    u32 ans = 0;
+    if (ky[h] != f) { ans += qx(ky[h], f, h); }
+    if (ky[g] != x) {
+        ans += qx(x, ky[pa[g]], g);
+        g = pa[g];
+    }
+    return ans + qv(g, h);
+}
+void init() {
+    ky.clear();
+    ky.push_back(0);
+    ky.push_back(1);
+    pr[1] |= H | K;
+    mt19937 rnd(19260817);
+    int c = max(1, n / 450);
+    for (int i = 0; i < c; i++) {
+        u32 x = rnd() % n + 1;
+        if (!(pr[x] & K)) {
+            pr[x] |= K;
+            ky.push_back(x);
+        }
+    }
+    int t = (int)ky.size();
+    for (int i = 2; i < t; i++) {
+        u32 x = ky[i];
+        while (!(pr[x] & H)) {
+            pr[x] |= H;
+            x = fa(x);
+        }
+        if (!(pr[x] & K)) {
+            pr[x] |= K;
+            ky.push_back(x);
+        }
+    }
+    sort(ky.begin() + 1, ky.end());
+    m = ky.size() - 1;
+    hc = 1;
+    while (hc < m * 4 + 8) { hc <<= 1; }
+    hk = new u32[hc]();
+    hv = new u32[hc]();
+    for (int i = 1; i <= m; i++) { put(ky[i], i); }
+    pa.resize(m + 1);
+    dep.resize(m + 1);
+    hd.resize(m + 1);
+    nx.resize(m + 1);
+    sz.resize(m + 1, 1);
+    son.resize(m + 1);
+    tp.resize(m + 1);
+    df.resize(m + 1);
+    rk.resize(m + 1);
+    ds.resize(m + 1);
+    b.resize(m + 1);
+    for (int i = 2; i <= m; i++) {
+        u32 x = ky[i], c0 = x, s = a[x];
+        int d = 1;
+        while (!(pr[fa(c0)] & K)) {
+            c0 = fa(c0);
+            s += a[c0];
+            d++;
+        }
+        u32 f0 = fa(c0);
+        pa[i] = get(f0);
+        dep[i] = dep[pa[i]] + 1;
+        b[i] = s;
+        ds[i] = d;
+        nx[i] = hd[pa[i]];
+        hd[pa[i]] = i;
+        if (c0 != x) {
+            pr[c0] |= D;
+            put(c0, i);
+        }
+    }
+    for (int i = m; i >= 2; i--) {
+        int f = pa[i];
+        sz[f] += sz[i];
+        if (sz[i] > sz[son[f]]) { son[f] = i; }
+    }
+    vector<int> st;
+    st.reserve(m);
+    st.push_back(1);
+    while (!st.empty()) {
+        int h = st.back();
+        st.pop_back();
+        for (int p = h; p; p = son[p]) {
+            tp[p] = h;
+            df[p] = ++tt;
+            rk[tt] = p;
+            for (int ch = hd[p]; ch; ch = nx[ch]) {
+                if (ch != son[p]) { st.push_back(ch); }
+            }
+        }
+    }
+    sm.resize(m * 4 + 5);
+    ln.resize(m * 4 + 5);
+    lz.resize(m * 4 + 5);
+    bld(1, 1, m);
+}
+inline void solve(int) {
+    rd();
+    n = rd();
+    q = rd();
+    u32 A = rd(), B = rd(), C = rd(), z = rd();
+    for (int i = 1; i <= n; i++) {
+        z = A * z * z + B * z + C;
+        a[i] = z;
+    }
+    for (int i = 2; i <= n; i++) { pr[i] = rd(); }
+    init();
+    u32 ans = 0;
+    for (int i = 1; i <= q; i++) {
+        u32 op = rd(), x = rd(), y = rd();
+        u32 mk = ans & ((1 << 20) - 1);
+        x ^= mk;
+        y ^= mk;
+        if (op == 0) {
+            u32 v = rd() ^ mk;
+            u32 w = lca(x, y);
+            ul(w, x, v);
+            ul(w, y, v);
+            ux(w, fa(w), bel(w), v);
+        } else {
+            u32 w = lca(x, y);
+            ans = ql(w, x) + ql(w, y);
+            ans += a[w];
+            if (pr[w] & H) { ans += tg(1, 1, m, df[bel(w)]); }
+            printf("%u\n", ans);
+        }
+    }
+}
+
 } // namespace TANGYIXIAO
