@@ -1,0 +1,31 @@
+{
+  "timeLimit": 4000, 
+  "testType": "single", 
+  "name": "P4239 【模板】任意模数多项式乘法逆", 
+  "url": "https://www.luogu.com.cn/problem/P4239", 
+  "memoryLimit": 125, 
+  "tests": [
+    {
+      "output": "1 1000000001 33 999999823 1020\n", 
+      "input": "5\n1 6 3 4 9\n"
+    }
+  ], 
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "languages": {
+    "java": {
+      "taskClass": "P4239", 
+      "mainClass": "Main"
+    }
+  }, 
+  "batch": {
+    "id": "6adfbaa3-a1c9-432f-9ed8-5a4fa5fb06e6", 
+    "size": 1
+  }, 
+  "interactive": false
+}
