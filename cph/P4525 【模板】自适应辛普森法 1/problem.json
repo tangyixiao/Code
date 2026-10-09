@@ -1,0 +1,31 @@
+{
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "name": "P4525 【模板】自适应辛普森法 1", 
+  "url": "https://www.luogu.com.cn/problem/P4525", 
+  "memoryLimit": 62, 
+  "tests": [
+    {
+      "output": "2.732937\n", 
+      "input": "1 2 3 4 5 6\n"
+    }
+  ], 
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "languages": {
+    "java": {
+      "taskClass": "P45251", 
+      "mainClass": "Main"
+    }
+  }, 
+  "batch": {
+    "id": "5b188894-de46-4b5f-a286-9226c05a3a83", 
+    "size": 1
+  }, 
+  "interactive": false
+}
