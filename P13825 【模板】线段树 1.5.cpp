@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: c3c02d9c-685a-4e78-aae4-4cbd77d3ffec
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -596,9 +596,65 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
+using ll = long long;
+using i128 = __int128_t;
+const int M = 100005, N = 200005;
+int n, m, tot, op[M], l[M], r[M], xs[N];
+ll k[M], bit1[N];
+i128 bit2[N];
+
+inline void add(int x, ll v) {
+    int p = lower_bound(xs + 1, xs + tot + 1, x) - xs;
+    for (int i = p; i <= tot; i += i & -i) {
+        bit1[i] += v;
+        bit2[i] += (i128)x * v;
+    }
+}
+
+inline i128 query(int x) {
+    int p = upper_bound(xs + 1, xs + tot + 1, x) - xs - 1;
+    ll s = 0;
+    i128 t = 0;
+    for (int i = p; i; i -= i & -i) {
+        s += bit1[i];
+        t += bit2[i];
+    }
+    return (i128)(x + 1) * s - t;
+}
+
+inline void write(i128 x) {
+    if (x < 0) {
+        cout << '-';
+        x = -x;
+    }
+    if (x >= 10) {
+        write(x / 10);
+    }
+    cout << char('0' + x % 10);
+}
+
 inline void solve(int Task_Id) {
-    // do something here
-    return;
+    cin >> n >> m;
+    for (int i = 1; i <= m; i++) {
+        cin >> op[i] >> l[i] >> r[i];
+        if (op[i] == 1) {
+            cin >> k[i];
+            xs[++tot] = l[i];
+            xs[++tot] = r[i] + 1;
+        }
+    }
+    sort(xs + 1, xs + tot + 1);
+    tot = unique(xs + 1, xs + tot + 1) - xs - 1;
+    for (int i = 1; i <= m; i++) {
+        if (op[i] == 1) {
+            add(l[i], k[i]);
+            add(r[i] + 1, -k[i]);
+        } else {
+            write((i128)(l[i] + r[i]) * (r[i] - l[i] + 1) / 2 + query(r[i]) - query(l[i] - 1));
+            cout << '\n';
+        }
+    }
 }
 } // namespace TANGYIXIAO
