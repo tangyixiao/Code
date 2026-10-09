@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 59304451-2678-49ef-9c7a-e0b4ed2d0771
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -596,9 +596,125 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
+const int N = 105;
+const double EPS = 1e-9;
+int n, m, b[N], nb[N];
+double d[N][N], ans[N];
+
+inline void pivot(int r, int s) {
+    double t = 1.0 / d[r][s];
+    for (int i = 1; i <= m + 2; i++) {
+        if (i != r) {
+            for (int j = 1; j <= n + 2; j++) {
+                if (j != s) {
+                    d[i][j] -= d[r][j] * d[i][s] * t;
+                }
+            }
+        }
+    }
+    for (int j = 1; j <= n + 2; j++) {
+        if (j != s) {
+            d[r][j] *= t;
+        }
+    }
+    for (int i = 1; i <= m + 2; i++) {
+        if (i != r) {
+            d[i][s] *= -t;
+        }
+    }
+    d[r][s] = t;
+    swap(b[r], nb[s]);
+}
+
+inline bool simplex(int phase) {
+    int x = phase == 1 ? m + 2 : m + 1;
+    for (;;) {
+        int s = 0, r = 0;
+        for (int j = 1; j <= n + 1; j++) {
+            if (phase == 1 || nb[j] != 0) {
+                if (!s || d[x][j] < d[x][s] - EPS ||
+                    (abs(d[x][j] - d[x][s]) <= EPS && nb[j] < nb[s])) {
+                    s = j;
+                }
+            }
+        }
+        if (!s || d[x][s] >= -EPS) {
+            return true;
+        }
+        for (int i = 1; i <= m; i++) {
+            if (d[i][s] > EPS) {
+                if (!r || d[i][n + 2] / d[i][s] < d[r][n + 2] / d[r][s] - EPS ||
+                    (abs(d[i][n + 2] / d[i][s] - d[r][n + 2] / d[r][s]) <= EPS && b[i] < b[r])) {
+                    r = i;
+                }
+            }
+        }
+        if (!r) {
+            return false;
+        }
+        pivot(r, s);
+    }
+}
+
 inline void solve(int Task_Id) {
-    // do something here
-    return;
+    cin >> n >> m;
+    for (int j = 1; j <= n; j++) {
+        cin >> d[m + 1][j];
+        d[m + 1][j] = -d[m + 1][j];
+        nb[j] = j;
+    }
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= n; j++) {
+            cin >> d[i][j];
+        }
+        cin >> d[i][n + 2];
+        d[i][n + 1] = -1;
+        b[i] = n + i;
+    }
+    nb[n + 1] = 0;
+    d[m + 2][n + 1] = 1;
+    int r = 1;
+    for (int i = 2; i <= m; i++) {
+        if (d[i][n + 2] < d[r][n + 2]) {
+            r = i;
+        }
+    }
+    if (d[r][n + 2] < -EPS) {
+        pivot(r, n + 1);
+        if (!simplex(1) || d[m + 2][n + 2] < -EPS) {
+            cout << "Infeasible\n";
+            return;
+        }
+        for (int i = 1; i <= m; i++) {
+            if (b[i] == 0) {
+                int s = 0;
+                for (int j = 1; j <= n + 1; j++) {
+                    if (nb[j] != 0 && abs(d[i][j]) > EPS) {
+                        if (!s || nb[j] < nb[s]) {
+                            s = j;
+                        }
+                    }
+                }
+                if (s) {
+                    pivot(i, s);
+                }
+            }
+        }
+    }
+    if (!simplex(2)) {
+        cout << "Unbounded\n";
+        return;
+    }
+    for (int i = 1; i <= m; i++) {
+        if (b[i] >= 1 && b[i] <= n) {
+            ans[b[i]] = max(0.0, d[i][n + 2]);
+        }
+    }
+    cout << fixed << setprecision(12) << d[m + 1][n + 2] << '\n';
+    for (int j = 1; j <= n; j++) {
+        cout << ans[j] << (j == n ? '\n' : ' ');
+    }
 }
 } // namespace TANGYIXIAO
