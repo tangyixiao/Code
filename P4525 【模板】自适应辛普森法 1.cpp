@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 5b188894-de46-4b5f-a286-9226c05a3a83
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -596,9 +596,33 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
+using ld = long double;
+const ld EPS = 1e-10L;
+ld a, b, c, d, L, R;
+
+inline ld f(ld x) {
+    return (c * x + d) / (a * x + b);
+}
+
+inline ld simpson(ld l, ld r) {
+    ld mid = (l + r) / 2;
+    return (r - l) * (f(l) + 4 * f(mid) + f(r)) / 6;
+}
+
+ld asr(ld l, ld r, ld ans, ld eps, int dep) {
+    ld mid = (l + r) / 2;
+    ld x = simpson(l, mid), y = simpson(mid, r);
+    if (dep == 0 || abs(x + y - ans) <= 15 * eps) {
+        return x + y + (x + y - ans) / 15;
+    }
+    return asr(l, mid, x, eps / 2, dep - 1) + asr(mid, r, y, eps / 2, dep - 1);
+}
+
 inline void solve(int Task_Id) {
-    // do something here
-    return;
+    cin >> a >> b >> c >> d >> L >> R;
+    cout << fixed << setprecision(6)
+         << asr(L, R, simpson(L, R), EPS, 40) << '\n';
 }
 } // namespace TANGYIXIAO
