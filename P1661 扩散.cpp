@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 31f155a8-4cb9-4421-aa77-13e18b79c74f
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -596,9 +596,35 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
+const int N = 55, INF = 0x7f7f7f7f;
+int n, x[N], y[N], d[N];
+bool vis[N];
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n;
+    for (int i = 1; i <= n; i++) {
+        cin >> x[i] >> y[i];
+        d[i] = INF;
+    }
+    d[1] = 0;
+    int ans = 0;
+    for (int i = 1; i <= n; i++) {
+        int u = 0;
+        for (int j = 1; j <= n; j++) {
+            if (!vis[j] && (!u || d[j] < d[u])) {
+                u = j;
+            }
+        }
+        vis[u] = true;
+        ans = max(ans, d[u]);
+        for (int j = 1; j <= n; j++) {
+            if (!vis[j]) {
+                d[j] = min(d[j], abs(x[u] - x[j]) + abs(y[u] - y[j]));
+            }
+        }
+    }
+    cout << (ans + 1) / 2 << "\n";
     return;
 }
 } // namespace TANGYIXIAO
