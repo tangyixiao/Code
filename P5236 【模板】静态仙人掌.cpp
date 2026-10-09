@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 628855eb-e65d-44be-8892-9e30a661b9f2
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -596,9 +596,126 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
+using ll = long long;
+const int N = 20005, M = 40005, LG = 16;
+int n, m, q, cnt, tot, dfn[N], tim, par[N], pw[N], bel[N], top[N];
+int head[N], to[M], nxt[M], ew[M];
+int hd[N], tt[N], nt[N], ec, dep[N], fa[LG][N];
+ll len[N], pos[N], dis[N], wt[N];
+
+inline void add(int u, int v, int z) {
+    to[++cnt] = v;
+    ew[cnt] = z;
+    nxt[cnt] = head[u];
+    head[u] = cnt;
+}
+
+inline void dfs(int u, int p) {
+    dfn[u] = ++tim;
+    for (int i = head[u]; i; i = nxt[i]) {
+        int v = to[i];
+        if (v != p) {
+            if (!dfn[v]) {
+                par[v] = u;
+                pw[v] = ew[i];
+                dfs(v, u);
+            } else if (dfn[v] < dfn[u]) {
+                int c = ++tot;
+                top[c] = v;
+                len[c] = ew[i];
+                for (int x = u; x != v; x = par[x]) {
+                    len[c] += pw[x];
+                }
+                ll s = len[c] - ew[i];
+                for (int x = u; x != v; x = par[x]) {
+                    bel[x] = c;
+                    pos[x] = s;
+                    s -= pw[x];
+                }
+            }
+        }
+    }
+}
+
+inline void link(int u, int v, ll z) {
+    tt[++ec] = v;
+    wt[ec] = z;
+    nt[ec] = hd[u];
+    hd[u] = ec;
+}
+
+inline void build(int u) {
+    for (int i = 1; i < LG; i++) {
+        fa[i][u] = fa[i - 1][fa[i - 1][u]];
+    }
+    for (int i = hd[u]; i; i = nt[i]) {
+        int v = tt[i];
+        fa[0][v] = u;
+        dep[v] = dep[u] + 1;
+        dis[v] = dis[u] + wt[i];
+        build(v);
+    }
+}
+
+inline int jump(int x, int k) {
+    for (int i = 0; i < LG; i++) {
+        if (k & (1 << i)) {
+            x = fa[i][x];
+        }
+    }
+    return x;
+}
+
+inline int lca(int x, int y) {
+    if (dep[x] < dep[y]) {
+        swap(x, y);
+    }
+    x = jump(x, dep[x] - dep[y]);
+    if (x == y) {
+        return x;
+    }
+    for (int i = LG - 1; i >= 0; i--) {
+        if (fa[i][x] != fa[i][y]) {
+            x = fa[i][x];
+            y = fa[i][y];
+        }
+    }
+    return fa[0][x];
+}
+
 inline void solve(int Task_Id) {
-    // do something here
-    return;
+    cin >> n >> m >> q;
+    for (int i = 1, u, v, w; i <= m; i++) {
+        cin >> u >> v >> w;
+        add(u, v, w);
+        add(v, u, w);
+    }
+    dfs(1, 0);
+    for (int i = 2; i <= n; i++) {
+        if (bel[i]) {
+            link(n + bel[i], i, min(pos[i], len[bel[i]] - pos[i]));
+        } else {
+            link(par[i], i, pw[i]);
+        }
+    }
+    for (int i = 1; i <= tot; i++) {
+        link(top[i], n + i, 0);
+    }
+    dep[1] = 1;
+    build(1);
+    for (int i = 1, u, v; i <= q; i++) {
+        cin >> u >> v;
+        int p = lca(u, v);
+        if (p <= n) {
+            cout << dis[u] + dis[v] - 2 * dis[p] << '\n';
+        } else {
+            int a = jump(u, dep[u] - dep[p] - 1);
+            int b = jump(v, dep[v] - dep[p] - 1);
+            ll d = abs(pos[a] - pos[b]);
+            cout << dis[u] - dis[a] + dis[v] - dis[b] + min(d, len[p - n] - d) << '\n';
+        }
+    }
 }
 } // namespace TANGYIXIAO
