@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: edaefb21-4375-4663-900b-22bab25ca094
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -596,9 +596,177 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
+using u128 = __uint128_t;
+const int N = 800005;
+const u128 INF = (u128)1 << 120;
+int q, n, root, ls[N], rs[N], sz[N], pri[N], mask;
+u128 val[N];
+char s[N];
+unsigned seed = 712367821;
+
+inline unsigned rnd() {
+    seed ^= seed << 13;
+    seed ^= seed >> 17;
+    seed ^= seed << 5;
+    return seed;
+}
+
+inline void pushup(int x) {
+    sz[x] = sz[ls[x]] + sz[rs[x]] + 1;
+}
+
+inline void rebuild(int x, u128 l, u128 r) {
+    if (x) {
+        val[x] = (l + r) / 2;
+        rebuild(ls[x], l, val[x]);
+        rebuild(rs[x], val[x], r);
+    }
+}
+
+inline bool less(int x, int y) {
+    if (s[x] != s[y]) {
+        return s[x] < s[y];
+    }
+    return val[x - 1] < val[y - 1];
+}
+
+inline void zig(int &x, u128 l, u128 r) {
+    int y = ls[x];
+    ls[x] = rs[y];
+    rs[y] = x;
+    pushup(x);
+    pushup(y);
+    x = y;
+    rebuild(x, l, r);
+}
+
+inline void zag(int &x, u128 l, u128 r) {
+    int y = rs[x];
+    rs[x] = ls[y];
+    ls[y] = x;
+    pushup(x);
+    pushup(y);
+    x = y;
+    rebuild(x, l, r);
+}
+
+void insert(int &x, int p, u128 l, u128 r) {
+    if (!x) {
+        x = p;
+        sz[x] = 1;
+        val[x] = (l + r) / 2;
+        return;
+    }
+    if (less(p, x)) {
+        insert(ls[x], p, l, val[x]);
+        if (pri[ls[x]] < pri[x]) {
+            zig(x, l, r);
+        }
+    } else {
+        insert(rs[x], p, val[x], r);
+        if (pri[rs[x]] < pri[x]) {
+            zag(x, l, r);
+        }
+    }
+    pushup(x);
+}
+
+int merge(int x, int y) {
+    if (!x || !y) {
+        return x + y;
+    }
+    if (pri[x] < pri[y]) {
+        rs[x] = merge(rs[x], y);
+        pushup(x);
+        return x;
+    }
+    ls[y] = merge(x, ls[y]);
+    pushup(y);
+    return y;
+}
+
+void erase(int &x, int p, u128 l, u128 r) {
+    if (x == p) {
+        x = merge(ls[x], rs[x]);
+        rebuild(x, l, r);
+        return;
+    }
+    if (less(p, x)) {
+        erase(ls[x], p, l, val[x]);
+    } else {
+        erase(rs[x], p, val[x], r);
+    }
+    pushup(x);
+}
+
+inline void add(char c) {
+    s[++n] = c;
+    ls[n] = rs[n] = 0;
+    pri[n] = rnd();
+    insert(root, n, 0, INF);
+}
+
+inline void decode(string &t) {
+    int p = mask, len = t.size();
+    for (int i = 0; i < len; i++) {
+        p = (1LL * p * 131 + i) % len;
+        swap(t[i], t[p]);
+    }
+}
+
+inline bool less(int p, const string &t, bool upper) {
+    int i = 0, len = t.size();
+    for (; i < len && p; i++, p--) {
+        if (s[p] != t[i]) {
+            return s[p] < t[i];
+        }
+    }
+    return i < len || upper;
+}
+
+inline int rank(const string &t, bool upper) {
+    int x = root, ans = 0;
+    for (; x;) {
+        if (less(x, t, upper)) {
+            ans += sz[ls[x]] + 1;
+            x = rs[x];
+        } else {
+            x = ls[x];
+        }
+    }
+    return ans;
+}
+
 inline void solve(int Task_Id) {
-    // do something here
-    return;
+    cin >> q;
+    string t, op;
+    cin >> t;
+    for (char c : t) {
+        add(c);
+    }
+    for (int i = 1; i <= q; i++) {
+        cin >> op >> t;
+        if (op[0] == 'D') {
+            int k = stoi(t);
+            for (int j = 1; j <= k; j++) {
+                erase(root, n, 0, INF);
+                n--;
+            }
+        } else {
+            decode(t);
+            if (op[0] == 'A') {
+                for (char c : t) {
+                    add(c);
+                }
+            } else {
+                reverse(t.begin(), t.end());
+                int ans = rank(t, true) - rank(t, false);
+                cout << ans << '\n';
+                mask ^= ans;
+            }
+        }
+    }
 }
 } // namespace TANGYIXIAO
