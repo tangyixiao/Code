@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 4bd4d8ea-ae96-48c0-978d-a4a715acf8c9
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -566,6 +566,7 @@ struct Link_Cut_Tree {
 } // namespace DATA_STRUCTURE
 #pragma endregion
 inline void solve(int Task_Id);
+inline int read();
 } // namespace TANGYIXIAO
 using namespace TANGYIXIAO;
 // clang-format on
@@ -581,10 +582,7 @@ signed main() {
 #elif JUDGE_TYPE == 2
     Local_File(FILE_NAME, FILE_INDEX);
 #endif
-    int T = 1;
-#ifdef MULTIPLE_TEST
-    cin >> T;
-#endif
+    int T = read();
     for (int Task_Id = 1; Task_Id <= T; Task_Id++) {
         solve(Task_Id);
     }
@@ -596,9 +594,131 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
+using ll = long long;
+const int N = 105, P = 1000003;
+int n, ind[N], outd[N], a[N][N], id[N], mat[N][N], fac[P];
+char buf[1 << 16];
+int p = 0, len = 0;
+
+inline int gc() {
+    if (p == len) {
+        len = fread(buf, 1, sizeof(buf), stdin);
+        p = 0;
+    }
+    return p < len ? buf[p++] : 0;
+}
+
+inline int read() {
+    int x = 0, c = gc();
+    for (; c < '0' || c > '9'; c = gc()) {}
+    for (; c >= '0' && c <= '9'; c = gc()) {
+        x = x * 10 + c - '0';
+    }
+    return x;
+}
+
+inline int power(int x, int y) {
+    int ans = 1;
+    for (; y; y >>= 1, x = 1LL * x * x % P) {
+        if (y & 1) {
+            ans = 1LL * ans * x % P;
+        }
+    }
+    return ans;
+}
+
+inline int determinant(int s) {
+    int ans = 1;
+    for (int i = 1; i <= s; i++) {
+        int r = i;
+        for (; r <= s && !mat[r][i]; r++) {}
+        if (r > s) {
+            return 0;
+        }
+        if (r != i) {
+            for (int j = i; j <= s; j++) {
+                swap(mat[i][j], mat[r][j]);
+            }
+            ans = (P - ans) % P;
+        }
+        ans = 1LL * ans * mat[i][i] % P;
+        int inv = power(mat[i][i], P - 2);
+        for (int j = i + 1; j <= s; j++) {
+            int t = 1LL * mat[j][i] * inv % P;
+            if (t) {
+                for (int k = i + 1; k <= s; k++) {
+                    mat[j][k] = (mat[j][k] - 1LL * t * mat[i][k] % P + P) % P;
+                }
+                mat[j][i] = 0;
+            }
+        }
+    }
+    return ans;
+}
+
 inline void solve(int Task_Id) {
-    // do something here
-    return;
+    if (Task_Id == 1) {
+        fac[0] = 1;
+        for (int i = 1; i < P; i++) {
+            fac[i] = 1LL * fac[i - 1] * i % P;
+        }
+    }
+    n = read();
+    memset(ind, 0, sizeof(ind));
+    memset(outd, 0, sizeof(outd));
+    memset(a, 0, sizeof(a));
+    memset(id, 0, sizeof(id));
+    int sum = 0;
+    for (int i = 1; i <= n; i++) {
+        outd[i] = read();
+        sum += outd[i];
+        for (int j = 1; j <= outd[i]; j++) {
+            int x = read();
+            ind[x]++;
+            a[i][x]++;
+        }
+    }
+    if (!sum) {
+        cout << 1 << '\n';
+        return;
+    }
+    if (!outd[1]) {
+        cout << 0 << '\n';
+        return;
+    }
+    for (int i = 1; i <= n; i++) {
+        if (ind[i] != outd[i]) {
+            cout << 0 << '\n';
+            return;
+        }
+    }
+    if (outd[1] >= P) {
+        cout << 0 << '\n';
+        return;
+    }
+    int ans = fac[outd[1]], s = 0;
+    for (int i = 2; i <= n; i++) {
+        if (outd[i]) {
+            if (outd[i] > P) {
+                cout << 0 << '\n';
+                return;
+            }
+            ans = 1LL * ans * fac[outd[i] - 1] % P;
+            id[i] = ++s;
+        }
+    }
+    for (int i = 2; i <= n; i++) {
+        if (id[i]) {
+            for (int j = 2; j <= n; j++) {
+                if (id[j]) {
+                    ll x = (i == j ? outd[i] : 0) - a[i][j];
+                    mat[id[i]][id[j]] = (x % P + P) % P;
+                }
+            }
+        }
+    }
+    cout << 1LL * ans * determinant(s) % P << '\n';
 }
 } // namespace TANGYIXIAO
