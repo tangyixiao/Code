@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: e7775b4c-901f-4ef1-a2d8-9c5107d64791
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -596,9 +596,52 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
+using ld = long double;
+const ld EPS = 1e-10L;
+ld a;
+
+inline ld f(ld x) {
+    if (x == 0) {
+        return a == 0 ? 1 : 0;
+    }
+    return expl((a / x - x) * logl(x));
+}
+
+inline ld simpson(ld l, ld r, ld fl, ld fm, ld fr) {
+    return (r - l) * (fl + 4 * fm + fr) / 6;
+}
+
+ld asr(ld l, ld r, ld fl, ld fm, ld fr, ld s, ld eps, int dep) {
+    ld mid = (l + r) / 2;
+    ld lm = (l + mid) / 2, rm = (mid + r) / 2;
+    ld flm = f(lm), frm = f(rm);
+    ld sl = simpson(l, mid, fl, flm, fm);
+    ld sr = simpson(mid, r, fm, frm, fr);
+    if (dep == 0 || fabsl(sl + sr - s) <= 15 * eps) {
+        return sl + sr + (sl + sr - s) / 15;
+    }
+    return asr(l, mid, fl, flm, fm, sl, eps / 2, dep - 1) + asr(mid, r, fm, frm, fr, sr, eps / 2, dep - 1);
+}
+
+inline ld calc(ld l, ld r, ld eps) {
+    ld mid = (l + r) / 2;
+    ld fl = f(l), fm = f(mid), fr = f(r);
+    return asr(l, r, fl, fm, fr, simpson(l, r, fl, fm, fr), eps, 40);
+}
+
 inline void solve(int Task_Id) {
-    // do something here
-    return;
+    cin >> a;
+    if (a < 0) {
+        cout << "orz\n";
+        return;
+    }
+    const ld p[] = {0, 1, 2, 3, 4, 6, 10, 20};
+    ld ans = 0;
+    for (int i = 0; i < 7; i++) {
+        ans += calc(p[i], p[i + 1], EPS / 7);
+    }
+    cout << fixed << setprecision(5) << ans << '\n';
 }
 } // namespace TANGYIXIAO
