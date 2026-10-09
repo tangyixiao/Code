@@ -1,0 +1,31 @@
+{
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "name": "P13825 【模板】线段树 1.5", 
+  "url": "https://www.luogu.com.cn/problem/P13825", 
+  "memoryLimit": 512, 
+  "tests": [
+    {
+      "output": "9\n9\n18\n", 
+      "input": "5 5\n2 2 4\n1 2 3 2\n2 3 4\n1 1 5 1\n2 1 4\n"
+    }
+  ], 
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "languages": {
+    "java": {
+      "taskClass": "P1382515", 
+      "mainClass": "Main"
+    }
+  }, 
+  "batch": {
+    "id": "a4dd19f0-3042-40c9-9a31-b6bed5e0fcfc", 
+    "size": 1
+  }, 
+  "interactive": false
+}
