@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 19f2c1c3-aceb-4483-b3aa-a460ddd5f964
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,85 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+using ll = long long;
+using i128 = __int128_t;
+const int N = (1 << 18) + 5;
+const int P[3] = {998244353, 1004535809, 469762049};
+int n, m, p, lim, rev[N], a[N], b[N], f[N], g[N], res[3][N];
+
+inline ll power(ll x, ll y, int mod) {
+    ll ans = 1;
+    for (; y; y >>= 1, x = x * x % mod) {
+        if (y & 1) {
+            ans = ans * x % mod;
+        }
+    }
+    return ans;
+}
+
+inline void ntt(int *a, int mod, bool inv) {
+    for (int i = 1; i < lim; i++) {
+        if (i < rev[i]) {
+            swap(a[i], a[rev[i]]);
+        }
+    }
+    for (int len = 2; len <= lim; len <<= 1) {
+        ll wn = power(3, inv ? mod - 1 - (mod - 1) / len : (mod - 1) / len, mod);
+        for (int i = 0; i < lim; i += len) {
+            ll w = 1;
+            for (int j = 0; j < (len >> 1); j++) {
+                int x = a[i + j], y = w * a[i + j + (len >> 1)] % mod;
+                a[i + j] = x + y >= mod ? x + y - mod : x + y;
+                a[i + j + (len >> 1)] = x - y < 0 ? x - y + mod : x - y;
+                w = w * wn % mod;
+            }
+        }
+    }
+    if (inv) {
+        ll t = power(lim, mod - 2, mod);
+        for (int i = 0; i < lim; i++) {
+            a[i] = a[i] * t % mod;
+        }
+    }
+}
+
 inline void solve(int Task_Id) {
-    // do something here
-    return;
+    cin >> n >> m >> p;
+    for (int i = 0; i <= n; i++) {
+        cin >> a[i];
+        a[i] %= p;
+    }
+    for (int i = 0; i <= m; i++) {
+        cin >> b[i];
+        b[i] %= p;
+    }
+    lim = 1;
+    for (; lim <= n + m; lim <<= 1) {}
+    for (int i = 1; i < lim; i++) {
+        rev[i] = (rev[i >> 1] >> 1) | ((i & 1) ? (lim >> 1) : 0);
+    }
+    for (int k = 0; k < 3; k++) {
+        for (int i = 0; i < lim; i++) {
+            f[i] = i <= n ? a[i] % P[k] : 0;
+            g[i] = i <= m ? b[i] % P[k] : 0;
+        }
+        ntt(f, P[k], false);
+        ntt(g, P[k], false);
+        for (int i = 0; i < lim; i++) {
+            f[i] = 1LL * f[i] * g[i] % P[k];
+        }
+        ntt(f, P[k], true);
+        for (int i = 0; i <= n + m; i++) {
+            res[k][i] = f[i];
+        }
+    }
+    ll inv1 = power(P[0], P[1] - 2, P[1]);
+    ll inv2 = power(1LL * P[0] * P[1] % P[2], P[2] - 2, P[2]);
+    for (int i = 0; i <= n + m; i++) {
+        ll t1 = (res[1][i] - 1LL * res[0][i] + P[1]) % P[1] * inv1 % P[1];
+        ll t2 = (res[2][i] - (res[0][i] + 1LL * P[0] * t1) % P[2] + P[2]) % P[2] * inv2 % P[2];
+        ll ans = ((i128)res[0][i] + (i128)P[0] * t1 + (i128)P[0] * P[1] * t2) % p;
+        cout << ans << (i == n + m ? '\n' : ' ');
+    }
 }
 } // namespace TANGYIXIAO
