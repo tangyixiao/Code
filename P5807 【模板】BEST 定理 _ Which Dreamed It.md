@@ -183,3 +183,6 @@
 对于 $100\%$ 的数据，$1 \le T \le 15$，$1 \le n \le 100$，$0 \le \sum s \le 3141592$。
 
 2021/5/14 加强 by [SSerxhs](https://www.luogu.com.cn/user/29826)&[滑大稽](https://www.luogu.com.cn/user/203743)
+
+---
+
