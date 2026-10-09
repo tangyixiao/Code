@@ -596,9 +596,6 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
-
-#include <bits/stdc++.h>
-using namespace std;
 namespace TANGYIXIAO {
 using ll = long long;
 const int N = 5000005, M = 100000, S = 100;
