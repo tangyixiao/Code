@@ -597,86 +597,93 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 
+#include <bits/stdc++.h>
+using namespace std;
 namespace TANGYIXIAO {
 using ll = long long;
-const int N = 5000000, M = 100000, T = 70;
-int prime[N / 8], cnt, pii[N + 5], f[T + 1][M + 1];
-bool vis[N + 5];
-inline ll isqrt(ll x) {
-    ll y = sqrtl(x);
-    for (; (y + 1) * (y + 1) <= x; y++) {}
-    for (; y * y > x; y--) {}
+const int N = 5000005, M = 100000, S = 100;
+int prime[400000], pc[N], cnt, f[S + 1][M];
+bool vis[N];
+
+inline ll sqr(ll x) {
+    ll y = sqrtl((long double)x);
+    for (; (__int128)(y + 1) * (y + 1) <= x; y++) {}
+    for (; (__int128)y * y > x; y--) {}
     return y;
 }
-inline ll icbrt(ll x) {
-    ll y = cbrtl(x);
-    for (; (y + 1) * (y + 1) * (y + 1) <= x; y++) {}
-    for (; y * y * y > x; y--) {}
+
+inline ll cbr(ll x) {
+    ll y = cbrtl((long double)x);
+    for (; (__int128)(y + 1) * (y + 1) * (y + 1) <= x; y++) {}
+    for (; (__int128)y * y * y > x; y--) {}
     return y;
 }
+
 inline void init() {
-    for (int i = 2; i <= N; i++) {
+    for (int i = 2; i < N; i++) {
         if (!vis[i]) {
             prime[++cnt] = i;
         }
-        for (int j = 1; j <= cnt && (ll)i * prime[j] <= N; j++) {
-            vis[i * prime[j]] = true;
+        pc[i] = pc[i - 1] + !vis[i];
+        for (int j = 1; j <= cnt && 1LL * i * prime[j] < N; j++) {
+            vis[i * prime[j]] = 1;
             if (i % prime[j] == 0) {
                 break;
             }
         }
-        pii[i] = pii[i - 1] + !vis[i];
     }
-    for (int i = 0; i <= M; i++) {
+    for (int i = 0; i < M; i++) {
         f[0][i] = i;
     }
-    for (int i = 1; i <= T; i++) {
-        for (int j = 0; j <= M; j++) {
-            f[i][j] = f[i - 1][j] - f[i - 1][j / prime[i]];
+    for (int j = 1; j <= S; j++) {
+        for (int i = 0; i < M; i++) {
+            f[j][i] = f[j - 1][i] - f[j - 1][i / prime[j]];
         }
     }
 }
+
 inline ll phi(ll x, int s) {
-    if (s == 0) {
+    if (!s) {
         return x;
     }
-    if (x <= M && s <= T) {
+    if (s <= S && x < M) {
         return f[s][x];
     }
-    if (x <= N) {
-        if (x < prime[s]) {
-            return 1;
-        }
-        if ((ll)prime[s + 1] * prime[s + 1] > x) {
-            return pii[x] - s + 1;
-        }
+    if (x < prime[s]) {
+        return 1;
+    }
+    if (x < N && 1LL * prime[s] * prime[s] > x) {
+        return pc[x] - s + 1;
     }
     return phi(x, s - 1) - phi(x / prime[s], s - 1);
 }
-inline ll lehmer(ll x) {
-    if (x <= N) {
-        return pii[x];
+
+ll lehmer(ll x) {
+    if (x < N) {
+        return pc[x];
     }
-    int a = lehmer(isqrt(isqrt(x)));
-    int b = lehmer(isqrt(x));
-    int c = lehmer(icbrt(x));
-    ll res = phi(x, a) + (ll)(b + a - 2) * (b - a + 1) / 2;
+    int a = lehmer(sqr(sqr(x)));
+    int b = lehmer(sqr(x));
+    int c = lehmer(cbr(x));
+    ll ans = phi(x, a) + 1LL * (b + a - 2) * (b - a + 1) / 2;
     for (int i = a + 1; i <= b; i++) {
         ll w = x / prime[i];
-        res -= lehmer(w);
+        ans -= lehmer(w);
         if (i <= c) {
-            int lim = lehmer(isqrt(w));
+            int lim = lehmer(sqr(w));
             for (int j = i; j <= lim; j++) {
-                res -= lehmer(w / prime[j]) - j + 1;
+                ans -= lehmer(w / prime[j]) - j + 1;
             }
         }
     }
-    return res;
+    return ans;
 }
+
 inline void solve(int Task_Id) {
+    init();
     ll n;
     cin >> n;
-    init();
     cout << lehmer(n) << '\n';
+    return;
 }
 } // namespace TANGYIXIAO
