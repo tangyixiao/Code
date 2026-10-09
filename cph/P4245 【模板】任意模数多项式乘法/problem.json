@@ -1,0 +1,31 @@
+{
+  "timeLimit": 2000, 
+  "testType": "single", 
+  "name": "P4245 【模板】任意模数多项式乘法", 
+  "url": "https://www.luogu.com.cn/problem/P4245", 
+  "memoryLimit": 500, 
+  "tests": [
+    {
+      "output": "7 18 25 19 5 13 12 2 9 22 5 27 6 26\n", 
+      "input": "5 8 28\n19 32 0 182 99 95\n77 54 15 3 98 66 21 20 38\n"
+    }
+  ], 
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "languages": {
+    "java": {
+      "taskClass": "P4245", 
+      "mainClass": "Main"
+    }
+  }, 
+  "batch": {
+    "id": "776f7a95-f1ae-48a8-8ba5-20ac1a88b87d", 
+    "size": 1
+  }, 
+  "interactive": false
+}
