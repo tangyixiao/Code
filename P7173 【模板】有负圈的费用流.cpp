@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 30239814-37e1-408e-8098-a212a234b0ff
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -596,9 +596,198 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
+using ll = long long;
+const int N = 205, M = 10005, E = 22005, INF = 0x3f3f3f3f;
+const ll LINF = 1LL << 60;
+int n, m, s, t, cnt = 1, head[N], to[E], nxt[E], cap[E], cost[E];
+int x[M], y[M], f[M], w[M], level[N], cur[N], bal[N];
+ll dis[N], pot[N];
+
+inline void add(int u, int v, int c, int z) {
+    to[++cnt] = v;
+    cap[cnt] = c;
+    cost[cnt] = z;
+    nxt[cnt] = head[u];
+    head[u] = cnt;
+    to[++cnt] = u;
+    cap[cnt] = 0;
+    cost[cnt] = -z;
+    nxt[cnt] = head[v];
+    head[v] = cnt;
+}
+
+inline bool bfs() {
+    memset(level, 0, sizeof(level));
+    queue<int> q;
+    q.push(s);
+    level[s] = 1;
+    for (; !q.empty();) {
+        int u = q.front();
+        q.pop();
+        for (int i = head[u]; i; i = nxt[i]) {
+            int v = to[i];
+            if (cap[i] && !level[v]) {
+                level[v] = level[u] + 1;
+                q.push(v);
+            }
+        }
+    }
+    return level[t] != 0;
+}
+
+int dfs(int u, int flow) {
+    if (u == t || !flow) {
+        return flow;
+    }
+    int res = 0;
+    for (int &i = cur[u]; i && flow;) {
+        int v = to[i];
+        if (cap[i] && level[v] == level[u] + 1) {
+            int z = dfs(v, min(flow, cap[i]));
+            cap[i] -= z;
+            cap[i ^ 1] += z;
+            flow -= z;
+            res += z;
+        }
+        if (flow || !cap[i]) {
+            i = nxt[i];
+        }
+    }
+    return res;
+}
+
+inline int dinic() {
+    int ans = 0;
+    for (; bfs();) {
+        memcpy(cur, head, sizeof(head));
+        ans += dfs(s, INF);
+    }
+    return ans;
+}
+
+inline bool dijkstra(int ss, int tt) {
+    static bool vis[N];
+    memset(vis, 0, sizeof(vis));
+    for (int i = 1; i <= n + 2; i++) {
+        dis[i] = LINF;
+    }
+    dis[ss] = 0;
+    for (int z = 1; z <= n + 2; z++) {
+        int u = 0;
+        for (int i = 1; i <= n + 2; i++) {
+            if (!vis[i] && (!u || dis[i] < dis[u])) {
+                u = i;
+            }
+        }
+        if (!u || dis[u] == LINF) {
+            break;
+        }
+        vis[u] = true;
+        for (int i = head[u]; i; i = nxt[i]) {
+            int v = to[i];
+            ll nd = dis[u] + cost[i] + pot[u] - pot[v];
+            if (cap[i] && nd < dis[v]) {
+                dis[v] = nd;
+            }
+        }
+    }
+    if (dis[tt] == LINF) {
+        return false;
+    }
+    for (int i = 1; i <= n + 2; i++) {
+        if (dis[i] != LINF) {
+            pot[i] += dis[i];
+        }
+    }
+    return true;
+}
+
+inline bool tight_bfs(int ss, int tt) {
+    memset(level, 0, sizeof(level));
+    queue<int> q;
+    q.push(ss);
+    level[ss] = 1;
+    for (; !q.empty();) {
+        int u = q.front();
+        q.pop();
+        for (int i = head[u]; i; i = nxt[i]) {
+            int v = to[i];
+            if (cap[i] && !level[v] && cost[i] + pot[u] - pot[v] == 0) {
+                level[v] = level[u] + 1;
+                q.push(v);
+            }
+        }
+    }
+    return level[tt] != 0;
+}
+
+int tight_dfs(int u, int tt, int flow) {
+    if (u == tt || !flow) {
+        return flow;
+    }
+    int res = 0;
+    for (int &i = cur[u]; i && flow;) {
+        int v = to[i];
+        if (cap[i] && level[v] == level[u] + 1 && cost[i] + pot[u] - pot[v] == 0) {
+            int z = tight_dfs(v, tt, min(flow, cap[i]));
+            cap[i] -= z;
+            cap[i ^ 1] += z;
+            flow -= z;
+            res += z;
+        }
+        if (flow || !cap[i]) {
+            i = nxt[i];
+        }
+    }
+    return res;
+}
+
+inline ll mcmf(int ss, int tt) {
+    ll ans = 0;
+    for (; dijkstra(ss, tt);) {
+        ll w = pot[tt] - pot[ss];
+        for (; tight_bfs(ss, tt);) {
+            memcpy(cur, head, sizeof(head));
+            int f = tight_dfs(ss, tt, INF);
+            ans += w * f;
+        }
+    }
+    return ans;
+}
+
 inline void solve(int Task_Id) {
-    // do something here
-    return;
+    cin >> n >> m >> s >> t;
+    for (int i = 1; i <= m; i++) {
+        cin >> x[i] >> y[i] >> f[i] >> w[i];
+        add(x[i], y[i], f[i], 0);
+    }
+    int flow = s == t ? 0 : dinic();
+    memset(head, 0, sizeof(head));
+    cnt = 1;
+    bal[t] -= flow;
+    bal[s] += flow;
+    ll ans = 0;
+    for (int i = 1; i <= m; i++) {
+        if (w[i] < 0) {
+            bal[x[i]] -= f[i];
+            bal[y[i]] += f[i];
+            ans += 1LL * f[i] * w[i];
+            add(y[i], x[i], f[i], -w[i]);
+        } else {
+            add(x[i], y[i], f[i], w[i]);
+        }
+    }
+    for (int i = 1; i <= n; i++) {
+        if (bal[i] > 0) {
+            add(n + 1, i, bal[i], 0);
+        }
+        if (bal[i] < 0) {
+            add(i, n + 2, -bal[i], 0);
+        }
+    }
+    ans += mcmf(n + 1, n + 2);
+    cout << flow << ' ' << ans << '\n';
 }
 } // namespace TANGYIXIAO
