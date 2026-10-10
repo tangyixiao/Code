@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 49242d9d-e228-4bff-8f0a-9ac840f49c95
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -20,7 +20,7 @@ Copyright (C) 2026 TangYixiao
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
 #define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
 #define FILE_INDEX 1                      // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -597,8 +597,31 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 5e6 + 5, M = 1e8;
+string s;
+int n, res, r, sum[N], a[N];
+stack<int> st;
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> s, n = s.size(), s = " " + s;
+    for (int i = 1; i <= n; i++) {
+        sum[i] = sum[i - 1] + a[i] + (s[i] - '0');
+    }
+    for (int i = n; i >= 1; i--) {
+        st.push((sum[i] + r) % 10);
+        r = (sum[i] + r) / 10;
+    }
+    for (; r;) {
+        st.push(r % 10);
+        r /= 10;
+    }
+    for (; !st.empty();) {
+        cout << st.top();
+        st.pop();
+    }
+    cout << "\n";
+    for (int i = 1; i <= n + 1; i++) {
+        a[i] = sum[i] = r = 0;
+    }
     return;
 }
 } // namespace TANGYIXIAO
