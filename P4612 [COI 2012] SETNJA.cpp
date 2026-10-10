@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 70201fb9-b3f2-40ab-85ff-d69de58592b9
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -596,9 +596,28 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
+using ll = long long;
+const ll INF = 1LL << 60;
+int n, x, y, p;
+ll f, a = -INF, b = -INF, c = -INF, d = -INF;
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n;
+    for (int i = 1; i <= n; i++) {
+        cin >> x >> y >> p;
+        ll lx = x - p, rx = x + p, ly = y - p, ry = y + p;
+        if (i > 1) {
+            f = max({f, a + lx, b - rx, c + ly, d - ry});
+        }
+        a = max(a, f - rx);
+        b = max(b, f + lx);
+        c = max(c, f - ry);
+        d = max(d, f + ly);
+    }
+    cout << f << "\n";
     return;
 }
 } // namespace TANGYIXIAO
+
