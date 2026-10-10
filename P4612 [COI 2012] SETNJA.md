@@ -65,3 +65,69 @@ Mirko 的起始位置与终点位置都未知。
 
 ---
 
+# P4612 [COI 2012] SETNJA
+
+## 题目背景
+
+Mirko is going to deliver concert tickets to his friends.
+
+## 题目描述
+
+Each friend’s home can be represented on a 2D grid. When Mirko walks, he can move in $8$ directions, always staying on integer coordinates. In each step, he moves one grid unit up, down, left, right, or along one of the $4$ diagonal directions.
+
+Each friend’s home is a point $(x, y)$ on the plane. When Mirko arrives to deliver a ticket, the friend can also walk out to meet him, and can also move in $8$ directions. Therefore, Mirko and the friend can meet at a position up to $P$ steps away from the friend’s home. The value of $P$ may be different for each friend.
+
+Mirko’s starting position and ending position are both unknown.
+
+Find the minimum number of steps Mirko needs to move in order to deliver all tickets.
+
+## 输入格式
+
+The first line contains an integer $N$, the number of Mirko’s friends $(2 \le N \le 200{,}000)$.
+
+The next $N$ lines each contain three numbers $x, y, P\ (0 \le x, y, P \le 200{,}000)$. The friends are given in the order in which Mirko delivers the tickets.
+
+## 输出格式
+
+Output one integer: the minimum number of steps Mirko must walk.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+3
+3 10 2
+8 4 2
+2 5 2
+```
+
+### 输出 #1
+
+```
+4
+```
+
+## 输入输出样例 #2
+
+### 输入 #2
+
+```
+4
+3 3 5
+7 11 5
+20 8 10
+30 18 3
+```
+
+### 输出 #2
+
+```
+19
+```
+
+## 说明/提示
+
+For all testdata, it is guaranteed that $2 \le N \le 200{,}000$ and $0 \le x, y, P \le 200{,}000$.
+
+Translated by ChatGPT 5
