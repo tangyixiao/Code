@@ -1,0 +1,35 @@
+{
+  "memoryLimit": 250, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P4612COI2012SETNJA"
+    }
+  }, 
+  "interactive": false, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "group": "Luogu", 
+  "tests": [
+    {
+      "input": "3\n3 10 2\n8 4 2\n2 5 2\n", 
+      "output": "4\n"
+    }, 
+    {
+      "input": "4\n3 3 5\n7 11 5\n20 8 10\n30 18 3\n", 
+      "output": "19\n"
+    }
+  ], 
+  "input": {
+    "type": "stdin"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P4612", 
+  "testType": "single", 
+  "batch": {
+    "size": 1, 
+    "id": "70201fb9-b3f2-40ab-85ff-d69de58592b9"
+  }, 
+  "name": "P4612 [COI 2012] SETNJA", 
+  "timeLimit": 1000
+}
