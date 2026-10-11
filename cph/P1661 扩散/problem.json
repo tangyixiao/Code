@@ -1,0 +1,31 @@
+{
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "name": "P1661 扩散", 
+  "url": "https://www.luogu.com.cn/problem/P1661", 
+  "memoryLimit": 125, 
+  "tests": [
+    {
+      "output": "5\n", 
+      "input": "2\n1 1\n6 6\n"
+    }
+  ], 
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "languages": {
+    "java": {
+      "taskClass": "P1661", 
+      "mainClass": "Main"
+    }
+  }, 
+  "batch": {
+    "id": "31f155a8-4cb9-4421-aa77-13e18b79c74f", 
+    "size": 1
+  }, 
+  "interactive": false
+}

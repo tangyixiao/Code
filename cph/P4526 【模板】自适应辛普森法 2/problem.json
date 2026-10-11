@@ -1,0 +1,31 @@
+{
+  "timeLimit": 500, 
+  "testType": "single", 
+  "name": "P4526 【模板】自适应辛普森法 2", 
+  "url": "https://www.luogu.com.cn/problem/P4526", 
+  "memoryLimit": 62, 
+  "tests": [
+    {
+      "output": "1.51068\n", 
+      "input": "2.33\n"
+    }
+  ], 
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "languages": {
+    "java": {
+      "taskClass": "P45262", 
+      "mainClass": "Main"
+    }
+  }, 
+  "batch": {
+    "id": "e7775b4c-901f-4ef1-a2d8-9c5107d64791", 
+    "size": 1
+  }, 
+  "interactive": false
+}

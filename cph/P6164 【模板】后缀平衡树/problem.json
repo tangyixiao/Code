@@ -1,0 +1,31 @@
+{
+  "timeLimit": 2000, 
+  "testType": "single", 
+  "name": "P6164 【模板】后缀平衡树", 
+  "url": "https://www.luogu.com.cn/problem/P6164", 
+  "memoryLimit": 128, 
+  "tests": [
+    {
+      "output": "0\n", 
+      "input": "3\nA\nQUERY B\nADD BBABBBBAAB\nDEL 1\n"
+    }
+  ], 
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "languages": {
+    "java": {
+      "taskClass": "P6164", 
+      "mainClass": "Main"
+    }
+  }, 
+  "batch": {
+    "id": "edaefb21-4375-4663-900b-22bab25ca094", 
+    "size": 1
+  }, 
+  "interactive": false
+}

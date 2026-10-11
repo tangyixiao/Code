@@ -1,0 +1,39 @@
+{
+  "memoryLimit": 1024, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "EK010100floorX10k"
+    }
+  }, 
+  "interactive": false, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "group": "AtCoder - AtCoder Beginner Contest 233", 
+  "tests": [
+    {
+      "input": "1225\n", 
+      "output": "1360\n"
+    }, 
+    {
+      "input": "99999\n", 
+      "output": "111105\n"
+    }, 
+    {
+      "input": "314159265358979323846264338327950288419716939937510\n", 
+      "output": "349065850398865915384738153697722542688574377708317\n"
+    }
+  ], 
+  "input": {
+    "type": "stdin"
+  }, 
+  "url": "https://atcoder.jp/contests/abc233/tasks/abc233_e", 
+  "testType": "single", 
+  "batch": {
+    "size": 1, 
+    "id": "49242d9d-e228-4bff-8f0a-9ac840f49c95"
+  }, 
+  "name": "E - Σ[k=0..10^100]floor(X／10^k)", 
+  "timeLimit": 2000
+}

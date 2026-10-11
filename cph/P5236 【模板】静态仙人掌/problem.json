@@ -1,0 +1,35 @@
+{
+  "timeLimit": 300, 
+  "testType": "single", 
+  "name": "P5236 【模板】静态仙人掌", 
+  "url": "https://www.luogu.com.cn/problem/P5236", 
+  "memoryLimit": 125, 
+  "tests": [
+    {
+      "output": "5\n6\n", 
+      "input": "9 10 2\n1 2 1\n1 4 1\n3 4 1\n2 3 1\n3 7 1\n7 8 2\n7 9 2\n1 5 3\n1 6 4\n5 6 1\n1 9\n5 7\n"
+    }, 
+    {
+      "output": "7\n5\n2\n", 
+      "input": "9 10 3\n1 2 1\n2 3 1\n2 4 4\n3 4 2\n4 5 1\n5 6 1\n6 7 2\n7 8 2\n8 9 4\n5 9 2\n1 9\n5 8\n3 4\n"
+    }
+  ], 
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "languages": {
+    "java": {
+      "taskClass": "P5236", 
+      "mainClass": "Main"
+    }
+  }, 
+  "batch": {
+    "id": "628855eb-e65d-44be-8892-9e30a661b9f2", 
+    "size": 1
+  }, 
+  "interactive": false
+}

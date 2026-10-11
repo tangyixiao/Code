@@ -1,0 +1,315 @@
+# P8353 [SDOI/SXOI2022] 无处存储
+
+## 题目背景
+
+滥用本题评测将封号。请注意本题非同寻常的时空限制和数据点个数。
+
+## 题目描述
+
+小 Ω 想出一个数据结构题，于是它先造了一棵点有点权的树：
+
+给定一棵大小为 $n$ 的树，编号 $1$ 到 $n$，第 $i \in [2,n]$  个点的父节点记作 $f_i \in [1, i-1]$。另外，每个点 $i$ 有一个点权 $a_i$，初始点权由输入确定，具体方式见输入格式。
+
+在数据结构题里面，需要有对应的修改和查询的操作，而树上最简单的两种非平凡操作当然是链加、链求和了。
+
+因此你需要支持以下两种操作：
+
+`0 x y v`：将树上从 $x$ 到 $y$ 的简单路径上的点的权值增加 $v$；
+
+`1 x y`：求树上从 $x$ 到 $y$ 的简单路径上的点的权值和；
+
+出完之后小 Ω 拿给小 N 看，小 N 表示：
+
+……这也太简单了，这不是轻重链剖分模板题吗？！！
+
+小 Ω 于是想到在刚刚接触 OI 的时候了解到的时间换空间的原理，因此他决定本题的空间限制为 **64 MB**。
+
+## 输入格式
+
+第一行输入三个正整数 $id$，$n$，$q$，其中 $id$ 为子任务编号，和四个非负整数 $A$，$B$，$C$，$a_0$。
+
+$A$，$B$，$C$，$a_0$ 用于生成点权 $a_1, a_2, \dots, a_n$，具体方法是按照下式进行递推：
+$$a_{i}=\left(A a_{i-1}^{2}+B a_{i-1}+C\right) \bmod 2^{32}$$
+
+接下来一行 $n-1$ 个正整数表示 $f_2, \dots, f_n$。
+
+接下来 $q$ 行，每行若干整数，形如 $0 \ x' \ y' \ v'$ 或者 $1 \ x' \ y'$，表示一次修改或查询。
+
+其中 $x^{\prime}$，$y^{\prime}$，$v^{\prime}$ 用于**强制在线**，实际操作的 $x=x^{\prime} \operatorname{xor} P$，$y=y^{\prime} \operatorname{xor} P$， $v=v^{\prime} \operatorname{xor} P$，其中 $\operatorname{xor}$ 是 `C/C++` 中的按位异或运算符 `^`，$P = \text{lastans} \And \left(2^{20}-1\right)$，其中 $\text{lastans}$ 为上一次询问的答案（没有上次询问则记为 0），$\And$ 为 `C/C++` 中的按位与运算符 `&`。
+
+## 输出格式
+
+若干行，依次输出每个询问的答案对 $2^{32}$ 取模后的结果。
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+0 10 10 935995202 406705156 7034169 418665824
+1 1 1 1 1 1 1 7 2
+0 10 3 781084039
+1 7 5
+0 897574 897583 833116301
+1 897583 897572
+0 886189 886179 123805569
+1 886182 886190
+1 145142 145136
+1 854537 854538
+1 896515 896525
+0 879409 879412 746499584
+```
+
+### 输出 #1
+
+```
+2925376046
+3681387943
+4240586487
+2878147072
+2350755335
+731736886
+```
+
+## 说明/提示
+
+样例 2 ~ 样例 15 数据见下方下载链接。
+
+以上各组样例数据中，每组数据的数据范围符合其输入的子任务编号对应的子任务的数据范围及性质（输入的子任务编号为 0 时除外），并且为了避免可能的常数问题，保证下发样例（子任务编号为 0 时除外）与最终评测所用的该子任务的测试点的数据生成方式强度相同。
+
+| 子任务编号 | 测试点分值 |    $n \leq$     |    $q \leq $    | 树的形态 | 特殊性质 |
+| :--------: | :--------: | :-------------: | :-------------: | :------: | :------: |
+|     1      |     2      |     $3000$      |     $3000$      |    C     |    W     |
+|     2      |     2      | $7 \times 10^6$ | $5 \times 10^4$ |    A     |    W     |
+|     3      |     2      | $1 \times 10^6$ | $5 \times 10^4$ |    B     |    Y     |
+|     4      |     2      | $2 \times 10^6$ | $5 \times 10^4$ |    B     |    Y     |
+|     5      |     2      | $3 \times 10^6$ | $5 \times 10^4$ |    B     |    Y     |
+|     6      |     2      | $4 \times 10^6$ | $5 \times 10^4$ |    B     |    Y     |
+|     7      |     2      | $5 \times 10^6$ | $5 \times 10^4$ |    B     |    Y     |
+|     8      |     2      | $6 \times 10^6$ | $5 \times 10^4$ |    B     |    Y     |
+|     9      |     3      | $7 \times 10^6$ | $5 \times 10^4$ |    B     |    Y     |
+|     10     |     2      | $1 \times 10^6$ | $5 \times 10^4$ |    B     |    W     |
+|     11     |     2      | $2 \times 10^6$ | $5 \times 10^4$ |    B     |    W     |
+|     12     |     2      | $3 \times 10^6$ | $5 \times 10^4$ |    B     |    W     |
+|     13     |     2      | $4 \times 10^6$ | $5 \times 10^4$ |    B     |    W     |
+|     14     |     2      | $5 \times 10^6$ | $5 \times 10^4$ |    B     |    W     |
+|     15     |     2      | $6 \times 10^6$ | $5 \times 10^4$ |    B     |    W     |
+|     16     |     3      | $7 \times 10^6$ | $5 \times 10^4$ |    B     |    W     |
+|     17     |     2      | $1 \times 10^6$ | $5 \times 10^4$ |    C     |    X     |
+|     18     |     2      | $2 \times 10^6$ | $5 \times 10^4$ |    C     |    X     |
+|     19     |     2      | $3 \times 10^6$ | $5 \times 10^4$ |    C     |    X     |
+|     20     |     2      | $4 \times 10^6$ | $5 \times 10^4$ |    C     |    X     |
+|     21     |     2      | $5 \times 10^6$ | $5 \times 10^4$ |    C     |    X     |
+|     22     |     2      | $6 \times 10^6$ | $5 \times 10^4$ |    C     |    X     |
+|     23     |     3      | $7 \times 10^6$ | $5 \times 10^4$ |    C     |    X     |
+|     24     |     2      | $1 \times 10^6$ | $5 \times 10^4$ |    C     |    Y     |
+|     25     |     2      | $2 \times 10^6$ | $5 \times 10^4$ |    C     |    Y     |
+|     26     |     2      | $3 \times 10^6$ | $5 \times 10^4$ |    C     |    Y     |
+|     27     |     2      | $4 \times 10^6$ | $5 \times 10^4$ |    C     |    Y     |
+|     28     |     2      | $5 \times 10^6$ | $5 \times 10^4$ |    C     |    Y     |
+|     29     |     2      | $6 \times 10^6$ | $5 \times 10^4$ |    C     |    Y     |
+|     30     |     3      | $7 \times 10^6$ | $5 \times 10^4$ |    C     |    Y     |
+|     31     |     2      | $1 \times 10^6$ | $5 \times 10^4$ |    C     |    Z     |
+|     32     |     2      | $2 \times 10^6$ | $5 \times 10^4$ |    C     |    Z     |
+|     33     |     2      | $3 \times 10^6$ | $5 \times 10^4$ |    C     |    Z     |
+|     34     |     2      | $4 \times 10^6$ | $5 \times 10^4$ |    C     |    Z     |
+|     35     |     2      | $5 \times 10^6$ | $5 \times 10^4$ |    C     |    Z     |
+|     36     |     2      | $6 \times 10^6$ | $5 \times 10^4$ |    C     |    Z     |
+|     37     |     3      | $7 \times 10^6$ | $5 \times 10^4$ |    C     |    Z     |
+|     38     |     3      | $1 \times 10^6$ | $5 \times 10^4$ |    C     |    W     |
+|     39     |     3      | $2 \times 10^6$ | $5 \times 10^4$ |    C     |    W     |
+|     40     |     3      | $3 \times 10^6$ | $5 \times 10^4$ |    C     |    W     |
+|     41     |     3      | $4 \times 10^6$ | $5 \times 10^4$ |    C     |    W     |
+|     42     |     3      | $5 \times 10^6$ | $5 \times 10^4$ |    C     |    W     |
+|     43     |     3      | $6 \times 10^6$ | $5 \times 10^4$ |    C     |    W     |
+|     44     |     3      | $7 \times 10^6$ | $5 \times 10^4$ |    C     |    W     |
+
+
+上表“树的形态”一栏中，$\texttt{A}$ 代表 $\forall i \in [2,n]$，$f_i$ 在 $[1,i-1]$ 中均匀随机生成；$\texttt{B}$ 代表 $\forall i \in [2,n]$，$f_i=i-1$；$\texttt{C}$ 代表树的形态无特殊限制。
+
+上表“特殊性质”一栏中，$\texttt{X}$ 代表没有修改操作；$\texttt{Y}$ 代表对于每次修改操作 $x=y$；$\texttt{Z}$ 代表每次询问操作 $x=y$；$\texttt{W}$ 代表无特殊性质。
+
+对于 $100\%$ 的数据，$1 \leq n \leq 7 \times 10^6,1 \leq q \leq 5 \times 10^4,1 \leq f_i<i,1 \leq x,y \leq n,0 \leq A,B,C,a_0,v \leq 10^9$。
+
+**【提示】**
+
+关于空间限制的提示与警告：
+
+1. 程序本身可能占用约 2~4MB 的空间（例如包含的 libc 库），请避免使用的空间与空间限制过于接近。
+2. 下发的快速输入模板占用约 1MB 空间，将其中的参数 `S` 调大可以减少对 `fread` 的调用次数（从而加快一点速度），但也会占用更多的空间。如有必要，您可以自由的调整 `S` 的大小，或者使用自己的输入方式。
+3. 需要注意的是，递归调用本身尽管没有显式地占用很多空间，但递归过程中的递归栈仍然可能占用内存（可以简单的理解为程序底层需要记录递归过程的参数和返回值）。例如，传入一个 `int` 类参数、返回值为 `int` 的递归函数递归调用 100 次可能产生等同于定义 200 个 `int` 的空间开销（具体比例系数与编译器实现和优化有关）。由于评测时的“空间限制”实际上是程序运行过程中的内存占用的峰值，因此过深的递归可能导致 MLE。因此请谨慎的使用递归，除非您能确保您的递归深度不会过大。
+4. 由于计算机系统向文件输出的底层实现相关的某些原因（例如在内存中缓存输出），输出本身可能会占用一定空间。对本题的输出规模而言，您可以认为这部分占用的空间不会超过 1MB；但是某些调试输出（例如使用 `cerr` 或者向 `stderr` 输出）可能会产生额外的空间开销（尽管它们本身不会出现在输出文件中，从而不会影响评测的比对结果），因此请确保最终提交的文件不包含过多的调试输出。
+5. 因以上原因超出空间限制的一律后果自负。
+
+本题输入量较大，您可能需要采用高效的输入方式以免因输入效率而超时。出于公平起见，在此提供一份快速输入模板（用法参考下发文件的 fast_input.cpp）。关于该快速输出模板的说明：
+
+1. 下发的快速输入模板占用约 1MB 空间。参数 `S` 越大，速度越快，但占用空间越高，请根据您的实际情况谨慎的确定 `S` 以获得最佳的时空平衡。
+2. 请确保代码中无变量、函数、命名空间等名为 `INPUT_SPACE` 或者 `inn` 以避免命名冲突，否则会导致无法通过编译。同理，某些形如 `#define gc getchar()` 的语句可能会导致和 `INPUT_SPACE` 的内部命名冲突。若发生此类编译错误，您需要更改这些冲突的命名。
+3. 对于本模板，建议从文件进行输入。从键盘输入，可能会产生无法终止的情形，此时需要在输入末尾手动输入作用等同于文件终止符的字符（该字符不能和输入的数字字符直接相邻，建议在新的一行）。例如，在 Windows 下，这个字符是 `Ctrl+Z`。
+4. 对 C 和 C++ 选手，该模板分别需要包含 `stdio.h` 和 `cstdio`（或者 `bits/stdc++.h`）头文件。
+5. 出于效率和码长的考虑，`inn()` 函数仅能用于输入一个无符号 32 位整数类型。
+
+为演示快速输入模板的使用和产生权值的方式，提供一样例程序，见下发文件的 sample.cpp。
+
+---
+
+# P8353 [SDOI/SXOI2022] No Place to Store
+
+## 题目背景
+
+Abusing the judging of this problem will result in account suspension. Please note the unusual time and memory limits and the number of test cases.
+
+## 题目描述
+
+Little $\Omega$ came up with a data structure problem, so it first built a tree with node weights:
+
+Given a tree of size $n$, with nodes numbered from $1$ to $n$, for each node $i \in [2,n]$, its parent is denoted as $f_i \in [1, i-1]$. Also, each node $i$ has a node weight $a_i$, and the initial weights are determined by the input; see the input format for details.
+
+In data structure problems, there should be corresponding update and query operations. On a tree, the simplest two non-trivial operations are of course path add and path sum.
+
+Therefore, you need to support the following two operations:
+
+`0 x y v`: increase the weights of all nodes on the simple path from $x$ to $y$ in the tree by $v$.
+
+`1 x y`: query the sum of weights of all nodes on the simple path from $x$ to $y$ in the tree.
+
+After writing the problem, Little $\Omega$ showed it to Little N, and Little N said:
+
+... This is way too easy. Isn’t this just a heavy-light decomposition template problem?!!
+
+So Little $\Omega$ recalled the idea of trading time for memory when first learning OI, and decided that the memory limit of this problem would be **64 MB**.
+
+## 输入格式
+
+The first line contains three positive integers $id$, $n$, $q$, and four non-negative integers $A$, $B$, $C$, $a_0$.
+
+$A$, $B$, $C$, $a_0$ are used to generate the node weights $a_1, a_2, \dots, a_n$, using the following recurrence:
+$$a_{i}=\left(A a_{i-1}^{2}+B a_{i-1}+C\right) \bmod 2^{32}$$
+
+The next line contains $n-1$ positive integers representing $f_2, \dots, f_n$.
+
+Then there are $q$ lines, each containing several integers in the form `0 x' y' v'` or `1 x' y'`, representing an update or a query.
+
+Here $x^{\prime}$, $y^{\prime}$, $v^{\prime}$ are used to **force online**. The actual operation uses
+$x = x^{\prime} \operatorname{xor} P$,
+$y = y^{\prime} \operatorname{xor} P$,
+$v = v^{\prime} \operatorname{xor} P$,
+where $\operatorname{xor}$ is the bitwise XOR operator `^` in `C/C++`,
+$P = \text{lastans} \And \left(2^{20}-1\right)$,
+$\text{lastans}$ is the answer of the previous query (if there is no previous query, treat it as $0$),
+and $\And$ is the bitwise AND operator `&` in `C/C++`.
+
+## 输出格式
+
+Output several lines. Print, in order, the result of each query modulo $2^{32}$.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+0 10 10 935995202 406705156 7034169 418665824
+1 1 1 1 1 1 1 7 2
+0 10 3 781084039
+1 7 5
+0 897574 897583 833116301
+1 897583 897572
+0 886189 886179 123805569
+1 886182 886190
+1 145142 145136
+1 854537 854538
+1 896515 896525
+0 879409 879412 746499584
+```
+
+### 输出 #1
+
+```
+2925376046
+3681387943
+4240586487
+2878147072
+2350755335
+731736886
+```
+
+## 说明/提示
+
+Sample 2 to Sample 15 testdata can be found in the download link below.
+
+In each group of sample testdata above, the constraints of each group match the constraints and properties of the subtask indicated by its input subtask id (except when the input subtask id is $0$). Also, to avoid possible constant-factor issues, it is guaranteed that the distributed samples (except when the subtask id is $0$) use a data generation strength comparable to the final test points used for judging in that subtask.
+
+| Subtask ID | Points |    $n \leq$     |    $q \leq $    | Tree Shape | Special Property |
+| :--------: | :----: | :-------------: | :-------------: | :--------: | :--------------: |
+|     1      |   2    |     $3000$      |     $3000$      |     C      |        W         |
+|     2      |   2    | $7 \times 10^6$ | $5 \times 10^4$ |     A      |        W         |
+|     3      |   2    | $1 \times 10^6$ | $5 \times 10^4$ |     B      |        Y         |
+|     4      |   2    | $2 \times 10^6$ | $5 \times 10^4$ |     B      |        Y         |
+|     5      |   2    | $3 \times 10^6$ | $5 \times 10^4$ |     B      |        Y         |
+|     6      |   2    | $4 \times 10^6$ | $5 \times 10^4$ |     B      |        Y         |
+|     7      |   2    | $5 \times 10^6$ | $5 \times 10^4$ |     B      |        Y         |
+|     8      |   2    | $6 \times 10^6$ | $5 \times 10^4$ |     B      |        Y         |
+|     9      |   3    | $7 \times 10^6$ | $5 \times 10^4$ |     B      |        Y         |
+|     10     |   2    | $1 \times 10^6$ | $5 \times 10^4$ |     B      |        W         |
+|     11     |   2    | $2 \times 10^6$ | $5 \times 10^4$ |     B      |        W         |
+|     12     |   2    | $3 \times 10^6$ | $5 \times 10^4$ |     B      |        W         |
+|     13     |   2    | $4 \times 10^6$ | $5 \times 10^4$ |     B      |        W         |
+|     14     |   2    | $5 \times 10^6$ | $5 \times 10^4$ |     B      |        W         |
+|     15     |   2    | $6 \times 10^6$ | $5 \times 10^4$ |     B      |        W         |
+|     16     |   3    | $7 \times 10^6$ | $5 \times 10^4$ |     B      |        W         |
+|     17     |   2    | $1 \times 10^6$ | $5 \times 10^4$ |     C      |        X         |
+|     18     |   2    | $2 \times 10^6$ | $5 \times 10^4$ |     C      |        X         |
+|     19     |   2    | $3 \times 10^6$ | $5 \times 10^4$ |     C      |        X         |
+|     20     |   2    | $4 \times 10^6$ | $5 \times 10^4$ |     C      |        X         |
+|     21     |   2    | $5 \times 10^6$ | $5 \times 10^4$ |     C      |        X         |
+|     22     |   2    | $6 \times 10^6$ | $5 \times 10^4$ |     C      |        X         |
+|     23     |   3    | $7 \times 10^6$ | $5 \times 10^4$ |     C      |        X         |
+|     24     |   2    | $1 \times 10^6$ | $5 \times 10^4$ |     C      |        Y         |
+|     25     |   2    | $2 \times 10^6$ | $5 \times 10^4$ |     C      |        Y         |
+|     26     |   2    | $3 \times 10^6$ | $5 \times 10^4$ |     C      |        Y         |
+|     27     |   2    | $4 \times 10^6$ | $5 \times 10^4$ |     C      |        Y         |
+|     28     |   2    | $5 \times 10^6$ | $5 \times 10^4$ |     C      |        Y         |
+|     29     |   2    | $6 \times 10^6$ | $5 \times 10^4$ |     C      |        Y         |
+|     30     |   3    | $7 \times 10^6$ | $5 \times 10^4$ |     C      |        Y         |
+|     31     |   2    | $1 \times 10^6$ | $5 \times 10^4$ |     C      |        Z         |
+|     32     |   2    | $2 \times 10^6$ | $5 \times 10^4$ |     C      |        Z         |
+|     33     |   2    | $3 \times 10^6$ | $5 \times 10^4$ |     C      |        Z         |
+|     34     |   2    | $4 \times 10^6$ | $5 \times 10^4$ |     C      |        Z         |
+|     35     |   2    | $5 \times 10^6$ | $5 \times 10^4$ |     C      |        Z         |
+|     36     |   2    | $6 \times 10^6$ | $5 \times 10^4$ |     C      |        Z         |
+|     37     |   3    | $7 \times 10^6$ | $5 \times 10^4$ |     C      |        Z         |
+|     38     |   3    | $1 \times 10^6$ | $5 \times 10^4$ |     C      |        W         |
+|     39     |   3    | $2 \times 10^6$ | $5 \times 10^4$ |     C      |        W         |
+|     40     |   3    | $3 \times 10^6$ | $5 \times 10^4$ |     C      |        W         |
+|     41     |   3    | $4 \times 10^6$ | $5 \times 10^4$ |     C      |        W         |
+|     42     |   3    | $5 \times 10^6$ | $5 \times 10^4$ |     C      |        W         |
+|     43     |   3    | $6 \times 10^6$ | $5 \times 10^4$ |     C      |        W         |
+|     44     |   3    | $7 \times 10^6$ | $5 \times 10^4$ |     C      |        W         |
+
+In the “Tree Shape” column above, $\texttt{A}$ means that for all $i \in [2,n]$, $f_i$ is generated uniformly at random in $[1,i-1]$. $\texttt{B}$ means that for all $i \in [2,n]$, $f_i = i-1$. $\texttt{C}$ means that the tree shape has no special restriction.
+
+In the “Special Property” column above, $\texttt{X}$ means there are no update operations. $\texttt{Y}$ means for every update operation, $x = y$. $\texttt{Z}$ means for every query operation, $x = y$. $\texttt{W}$ means there is no special property.
+
+For $100\%$ of the data, $1 \leq n \leq 7 \times 10^6$, $1 \leq q \leq 5 \times 10^4$, $1 \leq f_i < i$, $1 \leq x, y \leq n$, $0 \leq A, B, C, a_0, v \leq 10^9$.
+
+**[Hint]**
+
+Hints and warnings about the memory limit:
+
+1. The program itself may take about 2 to 4 MB of memory (for example, the included libc library). Please avoid using memory too close to the memory limit.
+2. The provided fast input template takes about 1 MB. Increasing the parameter `S` can reduce the number of `fread` calls (thus making it a bit faster), but it will use more memory. If necessary, you may freely adjust the size of `S`, or use your own input method.
+3. Note that although recursion itself does not explicitly use much memory, the recursion stack during recursion may still consume memory (you can roughly understand this as the program needing to record parameters and return values at a low level). For example, a recursive function that takes an `int` parameter and returns an `int`, called recursively 100 times, may produce a memory cost equivalent to defining 200 `int` variables (the exact ratio depends on compiler implementation and optimization). Since the “memory limit” during judging is actually the peak memory usage during execution, too deep recursion may cause MLE. Therefore, use recursion carefully unless you can ensure that the recursion depth will not be too large.
+4. Due to some reasons related to the underlying implementation of file output in computer systems (for example, caching output in memory), the output itself may take some memory. For the output size of this problem, you can assume this part will not exceed 1 MB. However, some debug output (for example, using `cerr` or printing to `stderr`) may produce additional memory overhead (even though they will not appear in the output file and thus will not affect judging). Therefore, make sure your final submission does not contain too much debug output.
+5. If you exceed the memory limit for the above reasons, you bear all consequences.
+
+The input size of this problem is large, so you may need to use an efficient input method to avoid TLE due to input inefficiency. For fairness, a fast input template is provided (see the distributed file fast_input.cpp for usage). Notes on the fast output template:
+
+1. The provided fast input template takes about 1 MB. The larger `S` is, the faster it is, but the more memory it uses. Please choose `S` carefully based on your situation to get the best time-memory balance.
+2. Please ensure there are no variables, functions, namespaces, etc. named `INPUT_SPACE` or `inn` in your code to avoid name conflicts; otherwise compilation will fail. Similarly, some statements like `#define gc getchar()` may cause internal name conflicts with `INPUT_SPACE`. If such compilation errors occur, you need to rename the conflicting identifiers.
+3. For this template, input from a file is recommended. If you input from the keyboard, it may become impossible to terminate; in this case, you need to manually input a character at the end of the input that has the same effect as the file terminator (this character must not be adjacent to the numeric characters in the input; it is recommended to put it on a new line). For example, on Windows, this character is `Ctrl+Z`.
+4. For C and C++ contestants, this template needs to include the header files `stdio.h` and `cstdio` (or `bits/stdc++.h`) respectively.
+5. For efficiency and code length considerations, the `inn()` function can only be used to input an unsigned 32-bit integer type.
+
+To demonstrate the usage of the fast input template and how the weights are generated, a sample program is provided; see the distributed file sample.cpp.
+
+Translated by ChatGPT 5
