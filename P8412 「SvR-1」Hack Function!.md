@@ -98,3 +98,102 @@ $$
 
 ---
 
+# P8412 "SvR-1" Hack Function!
+
+## 题目背景
+
+**Problem Number:** $\textit{63}$
+
+Little C is sitting at the contest site of J-PSC2077 (the problem can be downloaded from the "**Attachments**" section below). He is already over seventy years old, but as a player on Team Z, he still managed to participate successfully.
+
+## 题目描述
+
+Now J-PSC has finally changed to the CF contest format. Little C quickly got an AK on Day 1. He found that T2 function is quite easy to hack, and the “human-language” translation of the problem is as follows:
+
+> For a number $A$, define the function $f(A)$ as follows:
+>
+> 1. First convert $A$ into a base-$k$ number $B$.
+> 2. Replace $A$ with the sum of digits of $B$.
+> 3. Repeat Step 1 until $B$ becomes a single-digit number.
+> 4. Let $x$ denote the value of $A$ at this time (in decimal).
+>    Then $f(A) = x$. $f(A)$ is called the **digit-sum function** of $A$ with respect to $k$.
+>
+> Given $k, l, r, p$, compute $\sum_{i = l}^r f(i^i) \bmod p$.
+>
+> **In particular, when $\sum_{i = l}^r f(i^i) = p$, output $\texttt{perfect}$.**
+
+Little C solved this problem instantly. When he looked through other people’s code, he found they all used brute-force enumeration (because their machines run extremely fast).
+
+After much effort, he finally saw one person whose code did not contain a single $\texttt{perfect}$! But because the testdata was too weak, he still passed.
+
+Little C suddenly got excited and forgot how to construct hack testdata, so he asked you for help through Luogu 6.0.
+
+Little C will tell you the values of $k$ and $p$. You need to construct a pair $(l, r)$ **so that the answer outputs $\texttt{perfect}$**.
+
+**If it is impossible to construct, output two $\texttt{-1}$.**
+
+## 输入格式
+
+**This problem contains multiple test cases.**
+
+The first line contains an integer $T$, indicating the number of test cases.
+
+The next $T$ lines each contain two integers $k, p$, with meanings as described above.
+
+## 输出格式
+
+Output $T$ lines. For each test case, output the $l, r$ you constructed.
+
+If there are multiple solutions, output any one of them.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+3
+10 13
+10 3
+2 1
+```
+
+### 输出 #1
+
+```
+2 3
+-1 -1
+1 1
+```
+
+## 说明/提示
+
+#### Explanation of Sample 1
+
+- For test case $1$, under $k = 10$, we have $f(2^2) = f(4) = 4$ and $f(3^3) = f(27) = 9$. Obviously, when $l = 2, r = 3$, the original problem should output $\texttt{perfect}$.
+- For test case $2$, under $k = 10$, it turns out that it is impossible to meet the requirement.
+- For test case $3$, under $k = 2$, it is clear that $f(1^1) = 1$. This sample is only for understanding. According to the constraints and conventions, we guarantee $k \geq 10$.
+
+#### Constraints and Conventions
+
+$$
+\newcommand{\arraystretch}{1.5}
+\begin{array}{c|c|c|c}\hline\hline
+\textbf{Subtask} & \textbf{Description} & \textbf{Time Limit} & \textbf{Score} \\\hline
+\textsf{1} & \text{No solution} & 1\text{ s} & 3 \\\hline
+\textsf{2} & \text{A solution exists and \textbf{\textsf{there exists}} a solution with }1\le l\le r\le 10^5 & 1\text{ s} & 16 \\\hline
+\textsf{3} & 1\le p\le 10^7 & 1\text{ s} & 34 \\\hline
+\textsf{4} & \text{No special restrictions} & 1.5\text{ s} & 47 \\\hline\hline
+\end{array}
+$$
+
+For $100\%$ of the testdata: $10 \leq k \leq 10^3$, $1 \leq p \leq 10^8$, $1 \leq T \leq 10$.
+
+The time limit is guaranteed to be more than $4$ times the runtime of the standard solution (std).
+
+#### Judging Notes
+
+**This problem uses Special Judge and bundled tests.**
+
+You must ensure that $l = r = -1$ or $1 \leq l \leq r \leq 10^{18}$ and $r - l \leq 10^{15}$; otherwise, the SPJ will judge your answer as $0$ points.
+
+Translated by ChatGPT 5
