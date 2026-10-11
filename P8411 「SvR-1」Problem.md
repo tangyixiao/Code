@@ -115,3 +115,126 @@ $$
 
 ---
 
+# P8411 「SvR-1」Problem
+
+## 题目背景
+
+Little L was caught slacking off by nodgd, so he started solving problems.
+
+## 题目描述
+
+His DS skills are very poor, so he added a total of $n$ DS problems to his planned list, where the interestingness of problem $i$ is $a_i$.
+
+Since he is not good at DS, he found that before solving some problems, he must first solve some other problems. There are $n - 1$ such relations in total, and he also found that every problem appears in these relations and there are no duplicates.
+
+He found that for all $2 \leq i \leq n$, there is the relation described above between problem $i$ and problem $fa_i$, and $1 \leq fa_i < i$. **He must solve problem $fa_i$ before he can solve problem $i$.**
+
+He found that if his happiness level is $k$ before solving a problem, then after finishing problem $i$, his happiness level becomes $\min(k, a_i)$. **His happiness level before solving any problem is infinite.**
+
+He wants you to ask: **under the conditions that he must solve problem $1$ first and cannot solve any problem more than once**, what is the **maximum possible value of the sum of his happiness level after finishing each problem** over the whole process?
+
+## 输入格式
+
+The first line contains two integers $n, seed$.
+
+Since the input size is large, we generate $a_i, fa_i$ in the following way.
+
+C++:
+
+```cpp
+typedef unsigned int uint;
+
+inline uint get_next(uint &seed){
+	seed ^= seed << 13;
+	seed ^= seed >> 17;
+	seed ^= seed << 5;
+	return seed;
+}
+
+int main(){
+	// ...
+	for (int i = 1; i <= n; i++){
+		a[i] = get_next(seed);
+	}
+	for (int i = 2; i <= n; i++){
+		fa[i] = get_next(seed) % (i - 1) + 1;
+	}
+	// ...
+	return 0;
+}
+```
+
+For contestants using other languages, please refer to “**Pseudocode Reference**” in “**Hint**”.
+
+## 输出格式
+
+One line with one integer, representing the required value.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+6 114514
+```
+
+### 输出 #1
+
+```
+14907285111
+```
+
+## 说明/提示
+
+#### Sample #1 Explanation
+
+In this sample, $a = [3398922311, 3077554952, 2933028207, 4018360144, 1263042788, 835814542]$, $fa_2 = fa_3 = fa_4 = 1$, and $fa_5 = fa_6 = 2$.
+
+One of the optimal plans: solve problems $1, 4, 2, 3, 5, 6$ in order. The maximum value is $3398922311 + 3398922311 + 3077554952 + 2933028207 + 1263042788 + 835814542 = 14907285111$.
+
+#### Pseudocode Reference
+
+$$
+\def\b#1{ \textbf{ #1 } }\def\t#1{\text{ #1 }}\def\s{\quad}\def\f#1{\textsf{ #1 }}
+\def\l{\underline{\kern{300pt}}\\[-10pt]} 
+\def\r{\overline{\underline{\kern{300pt}}}}
+\begin{aligned}
+&\r\\&\b{Algorithm:}\t{Get }a_i,fa_i\\[-13pt]&\l\\
+&\begin{aligned}
+    \f{1.}&\b{function} \b{\color{red}unsigned int} \t{getnext}(\b{\color{red}unsigned int}\&seed): \\
+    \f{2.}&\s seed=seed\oplus\t{left}(seed,13)\\
+    \f{3.}&\s seed=seed\oplus\t{right}(seed,17)\\
+    \f{4.}&\s seed=seed\oplus\t{left}(seed,5) \\
+    \f{5.}&\s \b{return} seed\\
+    \f{6.}&\b{function} \t{main}(n):\\
+    \f{7.}&\s \b{for} i \b{from} 1 \b{to} n \b{step}1\\
+    \f{8.}&\s\s a_i=\t{getnext}(seed)\\
+    \f{9.}&\s \b{end for} \\
+    \f{10.}&\s \b{for} i \b{from} 2 \b{to} n \b{step}1\\
+    \f{11.}&\s\s fa_i=\t{getnext}(seed)\bmod(i-1)+1\\
+    \f{12.}&\s \b{end for} \\
+    \end{aligned}\\[-12pt]
+&\r
+\end{aligned}
+$$
+
+Here, $\text{left}(x,d)$ and $\text{right}(x,d)$ denote shifting $x$ left or right by $d$ bits, respectively.
+
+#### Constraints and Notes
+
+**This problem automatically enables bundled tests and $O2$ optimization.**
+
+$$
+\newcommand{\arraystretch}{1.5}
+\begin{array}{c|c|c}\hline\hline
+\textbf{Subtask} & \bm{n \leq} & \textbf{Score} \\\hline
+\textsf{1} & 10 & 10 \\\hline
+\textsf{2} & 10^4 & 20 \\\hline
+\textsf{3} & 10^6 & 20 \\\hline
+\textsf{4} & \text{No special constraints} & 50 \\\hline\hline
+\end{array}
+$$
+
+For $100\%$ of the testdata, $1 \leq n \leq 10^7$, $0 \leq seed < 2^{32}$.
+
+Translated by ChatGPT 5
