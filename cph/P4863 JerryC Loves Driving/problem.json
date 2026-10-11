@@ -1,0 +1,39 @@
+{
+  "name": "P4863 JerryC Loves Driving",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P4863",
+  "interactive": false,
+  "memoryLimit": 125,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "1 1\n",
+      "output": "-1\n"
+    },
+    {
+      "input": "2 2\n",
+      "output": "-1\n"
+    },
+    {
+      "input": "3 3\n",
+      "output": "-3\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P4863JerryCLovesDriving"
+    }
+  },
+  "batch": {
+    "id": "9ff47a9f-38e3-4960-a04f-8f29aeb88f7c",
+    "size": 1
+  }
+}
