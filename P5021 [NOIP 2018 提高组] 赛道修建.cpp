@@ -597,8 +597,87 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+struct Edge {
+    int to;
+    long long weight;
+};
+inline bool check(long long limit, int need, const vector<vector<Edge>> &graph, const vector<int> &parent, const vector<long long> &parent_weight, const vector<int> &order) {
+    vector<long long> remain(graph.size());
+    int completed = 0;
+    for (int i = static_cast<int>(order.size()) - 1; i >= 0; i--) {
+        int u = order[i];
+        multiset<long long> chains;
+        for (const auto &edge : graph[u]) {
+            if (parent[edge.to] != u) {
+                continue;
+            }
+            long long length = remain[edge.to] + parent_weight[edge.to];
+            if (length >= limit) {
+                completed++;
+                if (completed >= need) {
+                    return true;
+                }
+            } else {
+                chains.insert(length);
+            }
+        }
+        long long leftover = 0;
+        while (!chains.empty()) {
+            auto it = chains.begin();
+            long long x = *it;
+            chains.erase(it);
+            auto jt = chains.lower_bound(limit - x);
+            if (jt == chains.end()) {
+                leftover = max(leftover, x);
+            } else {
+                chains.erase(jt);
+                completed++;
+                if (completed >= need) {
+                    return true;
+                }
+            }
+        }
+        remain[u] = leftover;
+    }
+    return completed >= need;
+}
 inline void solve(int Task_Id) {
-    // do something here
+    int n, m;
+    cin >> n >> m;
+    vector<vector<Edge>> graph(n + 1);
+    long long total = 0;
+    for (int i = 1; i < n; i++) {
+        int u, v;
+        long long w;
+        cin >> u >> v >> w;
+        graph[u].push_back({v, w});
+        graph[v].push_back({u, w});
+        total += w;
+    }
+    vector<int> parent(n + 1), order(1, 1);
+    vector<long long> parent_weight(n + 1);
+    parent[1] = -1;
+    for (int i = 0; i < static_cast<int>(order.size()); i++) {
+        int u = order[i];
+        for (const auto &edge : graph[u]) {
+            if (edge.to == parent[u]) {
+                continue;
+            }
+            parent[edge.to] = u;
+            parent_weight[edge.to] = edge.weight;
+            order.push_back(edge.to);
+        }
+    }
+    long long low = 0, high = total / m + 1;
+    while (low + 1 < high) {
+        long long mid = (low + high) / 2;
+        if (check(mid, m, graph, parent, parent_weight, order)) {
+            low = mid;
+        } else {
+            high = mid;
+        }
+    }
+    cout << low << '\n';
     return;
 }
 } // namespace TANGYIXIAO

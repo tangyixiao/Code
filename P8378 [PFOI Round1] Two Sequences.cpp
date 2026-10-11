@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 3d4349d3-0b19-42bb-95e7-5d39c7e70121
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,21 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+constexpr long long MOD = 998244353;
+constexpr long long INV2 = 499122177;
 inline void solve(int Task_Id) {
-    // do something here
+    int T;
+    cin >> T;
+    for (; T; T--) {
+        long long n;
+        cin >> n;
+        if (n < 3) {
+            cout << 0 << '\n';
+            continue;
+        }
+        long long a = n % MOD, b = (n - 1) % MOD, c = (n - 2) % MOD;
+        cout << a * b % MOD * c % MOD * c % MOD * INV2 % MOD << '\n';
+    }
     return;
 }
 } // namespace TANGYIXIAO

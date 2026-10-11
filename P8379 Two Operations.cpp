@@ -597,8 +597,54 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+inline long long power_mod(long long a, long long b) {
+    long long r = 1;
+    for (; b; b >>= 1, a = a * a % 1000000007) {
+        if (b & 1) {
+            r = r * a % 1000000007;
+        }
+    }
+    return r;
+}
 inline void solve(int Task_Id) {
-    // do something here
+    constexpr long long MOD = 1000000007;
+    int n, m, k;
+    cin >> n >> m >> k;
+    vector<int> group(n + 1);
+    vector<long long> sum(k + 1), mx(k + 1);
+    for (int i = 1; i <= n; i++) {
+        cin >> group[i];
+    }
+    long long total = 0;
+    for (int i = 1; i <= n; i++) {
+        long long x;
+        cin >> x;
+        sum[group[i]] += x, mx[group[i]] = max(mx[group[i]], x), total += x;
+    }
+    set<pair<long long, int>> values;
+    auto key = [&](int x) { return 1LL * n * mx[x] - sum[x]; };
+    for (int i = 1; i <= k; i++) {
+        values.emplace(key(i), i);
+    }
+    long long inv_n = power_mod(n, MOD - 2);
+    for (int i = 1; i <= m; i++) {
+        string op;
+        cin >> op;
+        if (op == "Query") {
+            long long numerator = (total + values.begin()->first) % MOD;
+            cout << numerator * inv_n % MOD << '\n';
+        } else {
+            int x, y;
+            cin >> x >> y;
+            if (x == y) {
+                continue;
+            }
+            values.erase({key(x), x}), values.erase({key(y), y});
+            sum[y] += sum[x], mx[y] = max(mx[y], mx[x]);
+            sum[x] = mx[x] = 0;
+            values.emplace(key(y), y);
+        }
+    }
     return;
 }
 } // namespace TANGYIXIAO

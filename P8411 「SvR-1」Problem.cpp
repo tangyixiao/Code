@@ -598,7 +598,40 @@ signed main() {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 inline void solve(int Task_Id) {
-    // do something here
+    int n;
+    uint32_t seed;
+    cin >> n >> seed;
+    vector<uint32_t> a(n + 1);
+    vector<int> head(n + 1, -1), nxt(n + 1);
+    for (int i = 1; i <= n; i++) {
+        seed ^= seed << 13;
+        seed ^= seed >> 17;
+        seed ^= seed << 5;
+        a[i] = seed;
+    }
+    for (int i = 2; i <= n; i++) {
+        seed ^= seed << 13;
+        seed ^= seed >> 17;
+        seed ^= seed << 5;
+        int fa = seed % (i - 1) + 1;
+        nxt[i] = head[fa], head[fa] = i;
+    }
+    auto cmp = [&a](int x, int y) { return a[x] < a[y]; };
+    priority_queue<int, vector<int>, decltype(cmp)> pq(cmp);
+    for (int v = head[1]; v != -1; v = nxt[v]) {
+        pq.push(v);
+    }
+    long long mn = a[1], ans = mn;
+    for (int done = 1; done < n; done++) {
+        int u = pq.top();
+        pq.pop();
+        mn = min(mn, (long long)a[u]);
+        ans += mn;
+        for (int v = head[u]; v != -1; v = nxt[v]) {
+            pq.push(v);
+        }
+    }
+    cout << ans << '\n';
     return;
 }
 } // namespace TANGYIXIAO

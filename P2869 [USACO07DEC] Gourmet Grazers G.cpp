@@ -598,7 +598,44 @@ signed main() {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 inline void solve(int Task_Id) {
-    // do something here
+    int n, m;
+    cin >> n >> m;
+    struct Cow {
+        long long price, green;
+    };
+    struct Grass {
+        long long price, green;
+    };
+    vector<Cow> cows(n);
+    vector<Grass> grass(m);
+    for (auto &cow : cows) {
+        cin >> cow.price >> cow.green;
+    }
+    for (auto &food : grass) {
+        cin >> food.price >> food.green;
+    }
+    sort(cows.begin(), cows.end(), [](const Cow &a, const Cow &b) {
+        return a.green > b.green;
+    });
+    sort(grass.begin(), grass.end(), [](const Grass &a, const Grass &b) {
+        return a.green > b.green;
+    });
+    multiset<long long> prices;
+    long long answer = 0;
+    int j = 0;
+    for (const auto &cow : cows) {
+        for (; j < m && grass[j].green >= cow.green; j++) {
+            prices.insert(grass[j].price);
+        }
+        auto it = prices.lower_bound(cow.price);
+        if (it == prices.end()) {
+            cout << -1 << '\n';
+            return;
+        }
+        answer += *it;
+        prices.erase(it);
+    }
+    cout << answer << '\n';
     return;
 }
 } // namespace TANGYIXIAO
