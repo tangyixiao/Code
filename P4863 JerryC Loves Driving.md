@@ -77,3 +77,6 @@ $$\sum_{i=A}^B \sum_{j=1}^{i}\left\lfloor \frac{i}{j} \right\rfloor \times (-1)^
 对于 $50\%$ 的数据，$1 \leqslant A \leqslant B \leqslant 5\times10^3$；  
 对于 $70\%$ 的数据，$1 \leqslant A \leqslant B \leqslant 5\times10^4$；  
 对于 $100\%$ 的数据，$1 \leqslant A \leqslant B \leqslant 2\times10^7$。
+
+---
+
