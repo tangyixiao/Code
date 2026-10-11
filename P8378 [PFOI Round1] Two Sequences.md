@@ -83,3 +83,87 @@ $T$ 行，每行一个整数表示答案对 $998244353$ 取余数的结果。
 
 ---
 
+# P8378 [PFOI Round1] Two Sequences
+
+## 题目背景
+
+syzf2222 likes union-find (DSU). In particular, he likes the DSU with path compression.
+
+## 题目描述
+
+```cpp
+inline int find(int x){
+	if(x==fa[x])return x;
+	return fa[x]=find(fa[x]);
+}
+inline void merge(int x,int y){
+	fx=find(x),fy=find(y);
+	if(fx==fy)return;fa[fx]=fy;
+}
+```
+
+This is his commonly used DSU code. Initially, for every $x$, we have `fa[x]=x`.
+
+In the next $T$ days, each day, Xiao h gives him an $n$, which represents the DSU size (the $n$ for each day may be different).
+
+Mischievous Xiao x notices that he is not in the computer room, so every day he keeps calling `merge` on the DSU.
+Note that Xiao x does not like `==`. He thinks it looks like his eyes, so he will not allow the `merge` function to `return` at the conditional statement on the second line; otherwise, he will be very angry.
+
+Now, the only known information is the final `fa` array.
+syzf2222 wants to restore Xiao x's sequence of operations (i.e., several `merge` operations performed in order). Since his name contains many 2s and he is also very "2" (er, silly), he wants to know, for each day, how many `fa` arrays can be restored into **exactly** **two** operation sequences. Output the answer modulo $998244353$.
+
+Two operation sequences are considered different if and only if, during some `merge`, at least one of the variables `fx,fy` is different.
+
+## 输入格式
+
+The first line contains an integer $T$.
+
+The next $T$ lines each contain an integer $n$, representing the number given by Xiao h.
+
+## 输出格式
+
+Output $T$ lines, each containing one integer: the answer modulo $998244353$.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+4
+3
+20
+8492
+114514
+```
+
+### 输出 #1
+
+```
+3
+61560
+822256526
+988192964
+
+```
+
+## 说明/提示
+
+【Sample Explanation】
+
+For day 1, $n=3$. There are three `fa` arrays, $fa=[1,1,1],[2,2,2],[3,3,3]$, such that there are exactly two operation sequences.
+
+Take $fa=[1,1,1]$ as an example. The two operation sequences are `merge(2,1),merge(3,1)` and `merge(3,1),merge(2,1)`. Other solutions with different `merge` parameters are essentially the same as one of the above (each time, `fx,fy` are the same).
+
+---
+
+【Constraints】
+
+**「This problem uses bundled testdata」**
+
+- $\texttt{Subtask 1(10 pts)：}T=1,\ n\le 10$；
+- $\texttt{Subtask 2(30 pts)：}T=10^2,\ n\le 10^3$；
+- $\texttt{Subtask 3(60 pts)：}$No special restrictions.
+
+For $100\%$ of the testdata, $1\le T\le 10^5,\ 1\le n\le 10^9$ holds.
+
+Translated by ChatGPT 5
