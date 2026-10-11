@@ -41,3 +41,45 @@
 
 ---
 
+# P6807 [BalticOI 2010] Matching Bins (Day2)
+
+## 题目描述
+
+You are given a sequence of $N$ integers $A_1,A_2,\dots,A_N$. Let $M=\max\{A_1,A_2,\dots A_N\}$.
+
+You need to find the largest integer $K$ such that, from left to right, the first $K$ numbers are all smaller than the next $K$ numbers.
+
+## 输入格式
+
+The first line contains two integers $M,N$, representing the maximum value in the sequence and the number of elements.
+
+The second line contains $N$ integers $A_1,A_2,\dots,A_N$.
+
+## 输出格式
+
+Output one integer on a single line: the maximum $K$.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+5 10
+2 2 1 4 3 2 5 4 2 3
+```
+
+### 输出 #1
+
+```
+4
+```
+
+## 说明/提示
+
+For $100\%$ of the testdata, it is guaranteed that $1\le M\le 2\times 10^3$, $1\le N\le 2\times 10^4$, $1\le A_i\le M$.
+
+----
+
+**This problem is translated from [BalticOI 2010](https://www.luogu.com.cn/problem/U125995) [Day2](https://boi.cses.fi/files/boi2010_day2.pdf) *T1 Matching Bins***。
+
+Translated by ChatGPT 5
