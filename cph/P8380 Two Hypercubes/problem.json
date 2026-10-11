@@ -1,0 +1,35 @@
+{
+  "group": "Luogu", 
+  "name": "P8380 Two Hypercubes", 
+  "timeLimit": 2500, 
+  "interactive": false, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P8380TwoHypercubes"
+    }
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P8380", 
+  "testType": "single", 
+  "batch": {
+    "id": "209f6363-9387-4a2a-9c68-b88ba20f9061", 
+    "size": 1
+  }, 
+  "memoryLimit": 512, 
+  "tests": [
+    {
+      "output": "3\n8\n15\n", 
+      "input": "3\n1 2 3\n3 4 5\n6 7 8\n"
+    }, 
+    {
+      "output": "101202\n202276\n", 
+      "input": "2\n999 9999 99999\n2000 20000 200000\n"
+    }
+  ]
+}
