@@ -1,7 +1,7 @@
 {
   "name": "T791674 梨花梦",
-  "group": "Luogu - 【LGR-309-Div.1】洛谷 10 月月赛 III &「Star OI」Round 1",
-  "url": "https://www.luogu.com.cn/problem/T791674?contestId=359209",
+  "group": "Luogu - 【LGR-309-Div.2】洛谷 10 月月赛 III &「Star OI」Round 1",
+  "url": "https://www.luogu.com.cn/problem/T791674?contestId=359211",
   "interactive": false,
   "memoryLimit": 512,
   "timeLimit": 1000,
@@ -25,7 +25,7 @@
     }
   },
   "batch": {
-    "id": "777e6fdc-457c-490a-9014-34c7038aacca",
+    "id": "a84f7fba-e374-4d3d-b38e-025f8ef32cd6",
     "size": 1
   }
 }

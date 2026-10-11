@@ -21,7 +21,7 @@ Copyright (C) 2026 TangYixiao
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
 #define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
 #define FILE_INDEX 1                      // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -389,7 +389,7 @@ struct Heap {
     inline void push(const T &x) { a[++n] = x; up(n); return; }
     inline void pop() { a[1] = a[n--]; if (n) { down(1); } return; }
     template<class It>
-    inline void build(It first, It last) { n = 0; for (; first != last; ++first) { a[++n] = *first; } for (int i = n >> 1; i; i--) { down(i); } return; }
+    inline void build(It first, It la) { n = 0; for (; first != la; ++first) { a[++n] = *first; } for (int i = n >> 1; i; i--) { down(i); } return; }
 };
 struct DSU_Base {
     static inline int find_root(int *fa, int x) { for (; fa[x] != x; x = fa[x] = fa[fa[x]]) {} return x; }
@@ -582,9 +582,9 @@ signed main() {
 #elif JUDGE_TYPE == 2
     Local_File(FILE_NAME, FILE_INDEX);
 #endif
-    int T = 1;
+    int T = 1, C;
 #ifdef MULTIPLE_TEST
-    cin >> T;
+    cin >> T >> C;
 #endif
     for (int Task_Id = 1; Task_Id <= T; Task_Id++) {
         solve(Task_Id);
@@ -598,8 +598,114 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 2e6 + 5;
+bool vis[N];
+int ls[N], rs[N], n, m, h, la, l, u, fa, r, nxt, a, v;
+long long k, b, mx, t;
+queue<int> q;
+stack<int> st;
+inline long long gm() {
+    a = (r - v) >> 1;
+    return 1LL * a * v + (1LL * a * (a + 1) >> 1) + (1LL * (r - a) * (r - a - 1) >> 1);
+}
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> k;
+    if (n <= 2) {
+        if (k) {
+            cout << "-1\n";
+        } else {
+            for (int i = 1; i <= n; i++) {
+                cout << i << " \n"[i == n];
+            }
+        }
+        return;
+    }
+    b = 1LL * (n + 1) * (n - 2) >> 1, mx = b + (1LL * (n - 3) * (n - 3) >> 2);
+    if (k == 1 || k > mx || (n <= 5 && k == b - 1)) {
+        cout << "-1\n";
+        return;
+    }
+    if (k == b - 1) {
+        cout << 1 << " " << n - 1 << " ";
+        for (int i = 2; i <= n - 4; i++) {
+            cout << i << " ";
+        }
+        cout << n - 2 << " " << n - 3 << " " << n << "\n";
+        return;
+    }
+    if (k <= b) {
+        for (int i = 2; i < n; i++) {
+            vis[i] = false;
+        }
+        la = 0, l = 1;
+        for (int i = n - 1; i >= 2; i--) {
+            if (k >= i) {
+                vis[i] = true;
+                k -= i;
+                la = i;
+            }
+        }
+        if (k == 1) {
+            vis[la] = false, vis[la - 1] = vis[2] = true;
+        }
+        for (int i = 2; i < n; i++) {
+            if (!vis[i]) {
+                for (int j = i - 1; j >= l; j--) {
+                    cout << j << " ";
+                }
+                l = i;
+            }
+        }
+        for (int i = n - 1; i >= l; i--) {
+            cout << i << " ";
+        }
+        cout << n << "\n";
+        return;
+    }
+    k -= b, m = n - 2, h = 0;
+    for (int j = m; j >= 2; j--) {
+        r = j - 2, nxt = -1;
+        for (v = max(0, h - 1); v <= h + 1; v++) {
+            if (v <= r && k >= v) {
+                t = k - v;
+                if (t >= (1LL * v * (v - 1) >> 1LL) && t <= gm()) {
+                    nxt = v;
+                    break;
+                }
+            }
+        }
+        if (j < m) {
+            fa = q.front(), q.pop();
+            if (ls[fa]) {
+                rs[fa] = j;
+            } else {
+                ls[fa] = j;
+            }
+        }
+        for (int i = 1; i <= nxt - h + 1; i++) {
+            q.push(j);
+        }
+        k -= nxt, h = nxt;
+    }
+    fa = q.front();
+    q.pop();
+    if (ls[fa]) {
+        rs[fa] = 1;
+    } else {
+        ls[fa] = 1;
+    }
+    cout << n - 1 << " ";
+    for (u = m; u || !st.empty(); u = rs[u]) {
+        for (; u; u = ls[u]) {
+            st.push(u);
+        }
+        u = st.top(), st.pop();
+        cout << u << " ";
+    }
+    cout << n << "\n";
+    for (int i = 1; i <= m; i++) {
+        ls[i] = rs[i] = 0;
+    }
     return;
 }
 } // namespace TANGYIXIAO
