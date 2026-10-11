@@ -111,3 +111,114 @@ Query
 
 ---
 
+# P8379 Two Operations
+
+## 题目背景
+
+**The time limit of this problem is small, so please use a fast input method. Below is the fast input template provided by the setter:**
+
+```cpp
+typedef long long LL;
+inline LL read(){
+	register LL x=0,f=1;
+	char c=getchar();
+	while(c<'0'||c>'9'){
+		if(c=='-') f=-1;
+		c=getchar();
+	}
+	while(c>='0'&&c<='9') x=(x<<3)+(x<<1)+(c^48),c=getchar();
+	return x*f;
+}
+```
+
+Of course, you may also use your own input method.
+
+## 题目描述
+
+At a party, there are $n$ students, numbered $1,2,3,\cdots,n$. They are divided into $k$ groups, numbered $1,2,3,\ldots,k$.
+
+Teacher V is responsible for organizing the party. At the beginning of the party, the $i$-th student is assigned to group $a_i$ and receives $b_i$ candies. (Teacher V does not belong to any group and has no candies. In the following activities, Teacher V acts as the organizer.)
+
+There are $m$ rounds of activities. In each round, one of the following two cases may happen:
+
+1. `Change X Y`: Change the group number of all students currently in group $X$ to $Y$ (after the change, $X$ becomes an empty group), and **delete** group $X$.
+2. `Query`: Teacher V wants to know: if we merge the **remaining** groups (definition below) into one big group, what is the minimum possible value of the **maximum** number of candies held by any student in that big group.
+
+Define the size of a group $G_i$ as the number of students in the group, denoted by $S_i$.
+
+**Merge**: Merge group $G_1$ of size $S_1(S_1>0)$ into group $G_2$ of size $S_2(S_2>0)$. Let the sum of candies of all students in $G_1$ be $f$. Then:
+
+1. Step 1: Set the candies of all students originally in $G_1$ to $0$, and change their group number to $G_2$.
+2. Step 2: Add $\dfrac{f}{S_1+S_2}$ to the candies of each student currently in $G_2$ (including those originally from $G_1$). (The number of candies is not necessarily an integer.)
+
+**Notes:**
+
+1. The final result of merging $G_1$ into $G_2$ may be different from merging $G_2$ into $G_1$.
+2. The merges in `Query` do not actually happen. That is, after this case ends, every student’s candies and group remain the same as before this operation.
+
+For each `Query`, output the answer modulo $10^9+7$. (It may be a fraction modulo. If you do not know how to take modulo of a fraction, please see **Hint**.)
+
+## 输入格式
+
+The first line contains three integers $n,m,k$.
+
+The second line contains $n$ integers $a_{1\ldots n}$.
+
+The third line contains $n$ integers $b_{1\ldots n}$.
+
+The next $m$ lines each describe one case. The exact format can be found in the statement or the sample input/output.
+
+## 输出格式
+
+Output several lines, each containing one integer as the answer.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+3 3 2
+1 1 2
+3 4 5
+Query
+Change 2 1
+Query
+```
+
+### 输出 #1
+
+```
+666666677
+5
+```
+
+## 说明/提示
+
+[Sample Explanation]
+
+For the first `Query`, merge the second group into the first group. Then the three students have $\dfrac{14}{3},\dfrac{17}{3},\dfrac{5}{3}$ candies respectively. The student with the most candies has $\dfrac{17}{3}$ candies, which achieves the minimum possible value. After taking modulo $10^9+7$, the result is $666666677$.
+
+For the second `Query`, all students are in the same group, and the student with the most candies has $5$ candies.
+
+---
+
+[Constraints]
+
+| Test Point | $n$  | $m$  | $k$  | $a_i$ | $b_i$  |
+| -----------: | -----------: | -----------: | -----------: | -----------: | -----------: |
+| $1$ | $\le 10$ | No special limit | $\le 10$ | $\le 10$ | $\le 100$ |
+| $2$ | $\le 100$ | $\le 10$ | $\le 100$ | $\le 100$ | $\le 100$ |
+| $3$ | $\le 10^5$ | $=1$ | $\le 10^5$ | $\le 10^5$ | $\le 10^5$ |
+| $4$ | $\le 10^5$ | No special limit | $=1$ | $=1$ | $\le10^5$ |
+| $5$ | $\le 10^3$ | No special limit | $\le 5$ | $\le 5$ | $\le 100$ |
+| $6$ | $\le 10^4$ | $\le 10^3$ | $\le 10^4$ | $\le 10^4$ | $\le 10^5$ |
+| $7$ | $\le 10^4$ | $\le 5\times10^3$ | $\le 10^4$ | $\le 10^4$ | $\le 10^5$ |
+| $8$ | $\le 10^5$ | No special limit | $\le 10^5$ | $\le 10^5$ | $\le 10^5$ |
+| $9 $| $\le 5\times10^5$ | No special limit | $5\times10^5$ | $5\times10^5$ | $\le 10^5$ |
+| $10$ | $\le 10^6$ | No special limit | $\le 10^6$ | $\le 10^6$ | $\le 10^5$ |
+
+For $100\%$ of the testdata, it holds that $1 \leq n \leq 10^6,\ 1\leq m \leq 2\times k-1,\ 1 \leq a_i\leq k \leq n,\ 1 \leq b_i \leq 10^5$. **The testdata is guaranteed to be valid, and initially every group is non-empty.**
+
+If you are not familiar with taking modulo of rational numbers, please see [here](/problem/solution/P2613).
+
+Translated by ChatGPT 5
