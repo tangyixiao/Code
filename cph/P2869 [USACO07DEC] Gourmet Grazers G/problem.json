@@ -1,0 +1,31 @@
+{
+  "group": "Luogu", 
+  "name": "P2869 [USACO07DEC] Gourmet Grazers G", 
+  "timeLimit": 1000, 
+  "interactive": false, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P2869USACO07DECGourmetGrazersG"
+    }
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P2869", 
+  "testType": "single", 
+  "batch": {
+    "id": "bb1942fa-4759-421a-b2ee-63b8c10d7a67", 
+    "size": 1
+  }, 
+  "memoryLimit": 125, 
+  "tests": [
+    {
+      "output": "12\n", 
+      "input": "4 7\n1 1\n2 3\n1 4\n4 2\n3 2\n2 1\n4 3\n5 2\n5 4\n2 6\n4 4\n"
+    }
+  ]
+}
