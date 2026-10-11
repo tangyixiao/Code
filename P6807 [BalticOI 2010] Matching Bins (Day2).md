@@ -38,3 +38,6 @@
 ----
 
 **题目译自 [BalticOI 2010](https://www.luogu.com.cn/problem/U125995) [Day2](https://boi.cses.fi/files/boi2010_day2.pdf) *T1 Matching Bins***。
+
+---
+
