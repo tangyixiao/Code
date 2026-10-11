@@ -88,3 +88,91 @@ $(2,2,2),(2,4,4),(3,3,3),(4,2,2),(4,4,4),(5,5,5),(6,6,6).$
 
 ---
 
+# P8380 Two Hypercubes
+
+## 题目背景
+
+Note: The testdata has been strengthened.
+
+## 题目描述
+
+There are $T$ queries. For each query, given $A,B,C$, compute:
+
+$$\Big(\sum_{x=1}^A\sum_{y=1}^B\sum_{z=1}^C[y^x=x^z]\Big)\bmod (10^9+7).$$
+
+## 输入格式
+
+The first line contains a positive integer $T$.
+
+The next $T$ lines each contain three positive integers $A,B,C$.
+
+## 输出格式
+
+Output $T$ integers $\text{ans}$, one per line, representing the answers.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+3
+1 2 3
+3 4 5 
+6 7 8
+```
+
+### 输出 #1
+
+```
+3
+8
+15
+```
+
+## 输入输出样例 #2
+
+### 输入 #2
+
+```
+2
+999 9999 99999
+2000 20000 200000
+```
+
+### 输出 #2
+
+```
+101202
+202276
+```
+
+## 说明/提示
+
+[Sample 1 Explanation]
+
+For the first query $A=1,B=2,C=3$, the triples $(x,y,z)$ that satisfy the condition are $(1,1,1),(1,1,2),(1,1,3).$
+
+For the second query $A=3,B=4,C=5$, the triples $(x,y,z)$ that satisfy the condition are:
+
+$(1,1,1),(1,1,2),(1,1,3),(1,1,4),(1,1,5),(2,2,2),(2,4,4),(3,3,3).$
+
+For the third query $A=6,B=7,C=8$, the triples $(x,y,z)$ that satisfy the condition are:
+
+$(1,1,1),(1,1,2),(1,1,3),(1,1,4),(1,1,5),(1,1,6),(1,1,7),(1,1,8);$
+
+$(2,2,2),(2,4,4),(3,3,3),(4,2,2),(4,4,4),(5,5,5),(6,6,6).$
+
+---
+
+[Constraints]
+
+For $100\%$ of the data, $1\leq T\leq 2\times 10^4,\ 1\leq A,B,C\leq 10^{18}$.
+
+- $\text{Subtask}\ 0(5\ \text{pts})$：$T,A,B,C\leq 11$.
+- $\text{Subtask}\ 1(7\ \text{pts})$： $T\leq 20,\ A,B,C\leq 3333$.
+- $\text{Subtask}\ 2(17\ \text{pts})$：$T\leq 20,\ A,B\leq 10^{10},\ C\leq 3333$.
+- $\text{Subtask}\ 3(17\ \text{pts})$：$T\leq 20,\ A,B,C\leq 10^{10}$.
+- $\text{Subtask}\ 4(27\ \text{pts})$：$A,B,C\leq 10^{11}$.
+- $\text{Subtask}\ 5(27\ \text{pts})$：No special constraints.
+
+Translated by ChatGPT 5
