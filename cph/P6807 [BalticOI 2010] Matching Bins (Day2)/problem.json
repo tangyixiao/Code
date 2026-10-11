@@ -1,0 +1,31 @@
+{
+  "name": "P6807 [BalticOI 2010] Matching Bins (Day2)",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P6807",
+  "interactive": false,
+  "memoryLimit": 128,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "5 10\n2 2 1 4 3 2 5 4 2 3\n",
+      "output": "4\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P6807BalticOI2010MatchingBinsDay2"
+    }
+  },
+  "batch": {
+    "id": "575efd9f-efd3-47e5-a34e-e4b31214e52b",
+    "size": 1
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "name": "B4082 [语言月赛 202412] 古希腊掌管罚时的神",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/B4082",
+  "interactive": false,
+  "memoryLimit": 512,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "5\n1 0\n2 0\n3 0\n35 1\n91 1\n",
+      "output": "186\n"
+    },
+    {
+      "input": "10\n2 1\n35 1\n40 1\n47 1\n54 1\n63 0\n70 1\n75 0\n93 1\n97 1\n",
+      "output": "478\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "B4082202412"
+    }
+  },
+  "batch": {
+    "id": "3936a8ee-5235-4d25-ac1b-6284ceff26b8",
+    "size": 1
+  }
+}
