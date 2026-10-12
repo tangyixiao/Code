@@ -597,9 +597,54 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
+const int N = 1 << 13;
+int A, B, n, x, tot, cnt[N], a[N];
+string s, t;
+
+inline bool cmp(int x, int y) {
+    if (cnt[x] != cnt[y]) {
+        return cnt[x] > cnt[y];
+    }
+    return x < y;
+}
+
 inline void solve(int Task_Id) {
-    // do something here
-    return;
+    cin >> A >> B >> n;
+    while (cin >> t) {
+        s += t;
+    }
+    for (int i = 0; i < (int)s.size(); i++) {
+        x = ((x << 1) | (s[i] - '0')) & ((1 << B) - 1);
+        for (int j = A; j <= B && j <= i + 1; j++) {
+            cnt[(1 << j) | (x & ((1 << j) - 1))]++;
+        }
+    }
+    for (int i = 1 << A; i < (1 << (B + 1)); i++) {
+        if (cnt[i]) {
+            a[++tot] = i;
+        }
+    }
+    sort(a + 1, a + tot + 1, cmp);
+    for (int i = 1, g = 0; i <= tot && g < n; g++) {
+        int j = i;
+        while (j <= tot && cnt[a[j]] == cnt[a[i]]) {
+            j++;
+        }
+        cout << cnt[a[i]] << "\n";
+        for (int k = i; k < j; k++) {
+            int len = 31 - __builtin_clz(a[k]);
+            for (int p = len - 1; p >= 0; p--) {
+                cout << ((a[k] >> p) & 1);
+            }
+            if ((k - i + 1) % 6 == 0 || k == j - 1) {
+                cout << "\n";
+            } else {
+                cout << " ";
+            }
+        }
+        i = j;
+    }
 }
 } // namespace TANGYIXIAO
