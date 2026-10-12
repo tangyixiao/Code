@@ -1,0 +1,31 @@
+{
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "interactive": false, 
+  "languages": {
+    "java": {
+      "taskClass": "P1356NEERC1999", 
+      "mainClass": "Main"
+    }
+  }, 
+  "memoryLimit": 128, 
+  "tests": [
+    {
+      "input": "2\n4 7\n17 5 -21 15\n4 5\n17 5 -21 15\n", 
+      "output": "Divisible\nNot divisible\n"
+    }
+  ], 
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu", 
+  "name": "P1356 [NEERC 1999] 数列的整除性", 
+  "url": "https://www.luogu.com.cn/problem/P1356", 
+  "batch": {
+    "id": "de04c962-3397-4a10-abfb-9cbc9d161522", 
+    "size": 1
+  }
+}
