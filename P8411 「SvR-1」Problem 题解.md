@@ -26,8 +26,7 @@
 namespace TANGYIXIAO {
 const int N = 1e7 + 5;
 uint32_t a[N], sd;
-int hd[N], nx[N], hp[N], hs;
-int n;
+int n, hd[N], nx[N], hp[N], hs;
 long long mn, ans;
 
 inline uint32_t rnd() {

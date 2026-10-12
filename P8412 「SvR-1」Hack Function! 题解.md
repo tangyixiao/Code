@@ -58,8 +58,8 @@ using ll = long long;
 const int N = 1e6 + 5, K = 1e3 + 5;
 int a[K], b[N];
 ll ps[N], sf[K];
-int k, q, ph, m;
-ll p, cs;
+int k, q, ph, m, st, len;
+ll p, cs, c, t, nd, cc, rem, tot;
 
 inline ll pw(ll x, int e, int y) {
     ll r = 1 % y;
@@ -154,15 +154,13 @@ inline void solve(int Task_Id) {
         }
     }
 
-    ll c = p / cs, t = p % cs;
+    c = p / cs, t = p % cs;
     if (t == 0 && c > 0) {
         out(q, q + c * m - 1);
         return;
     }
-    int st, len;
     if (chk(b, m, t, st, len)) {
-        ll l = q + st;
-        out(l, l + c * m + len - 1);
+        out(q + st, q + st + c * m + len - 1);
         return;
     }
 
@@ -176,12 +174,12 @@ inline void solve(int Task_Id) {
         if (p < sf[l]) {
             continue;
         }
-        ll need = p - sf[l], cc = need / cs, rem = need % cs;
+        nd = p - sf[l], cc = nd / cs, rem = nd % cs;
         ll *it = lower_bound(ps, ps + m, rem);
         if (it == ps + m || *it != rem) {
             continue;
         }
-        ll tot = cc * m + (it - ps);
+        tot = cc * m + (it - ps);
         if (tot > 0) {
             out(l, q - 1 + tot);
             return;
