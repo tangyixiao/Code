@@ -1,0 +1,31 @@
+{
+  "timeLimit": 10000, 
+  "testType": "single", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "interactive": false, 
+  "languages": {
+    "java": {
+      "taskClass": "P14957", 
+      "mainClass": "Main"
+    }
+  }, 
+  "memoryLimit": 512, 
+  "tests": [
+    {
+      "input": "10 10\n7 1 48 87\n13 44 98 67\n74 21 79 25\n26 40 66 80\n18 41 80 97\n23 60 38 80\n92 1 94 39\n50 38 83 56\n19 20 57 85\n15 20 44 39\n23 47 38 100\n47 40 57 71\n13 7 91 43\n82 36 82 53\n1 47 57 96\n48 20 70 32\n82 75 100 90\n52 40 94 83\n45 85 71 88\n14 40 41 100\n", 
+      "output": "0\n2\n0\n0\n0\n0\n0\n0\n1\n0\n"
+    }
+  ], 
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu", 
+  "name": "P14957 【模板】离线静态四维数点", 
+  "url": "https://www.luogu.com.cn/problem/P14957", 
+  "batch": {
+    "id": "0646a4c7-a95e-4851-a453-60de21c5eaf4", 
+    "size": 1
+  }
+}
