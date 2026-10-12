@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: ffaad2de-d081-497d-a208-ec6c1cc14ea3
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -596,9 +596,49 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
+const int MOD = 1e9 + 7;
+struct Matrix {
+    int a[16][16];
+} f, g;
+long long n;
+int m, k, S, ans;
+
+inline Matrix mul(const Matrix &x, const Matrix &y) {
+    Matrix z = {};
+    for (int i = 0; i < S; i++) {
+        for (int j = 0; j < S; j++) {
+            if (x.a[i][j]) {
+                for (int t = 0; t < S; t++) {
+                    z.a[i][t] = (z.a[i][t] + 1LL * x.a[i][j] * y.a[j][t]) % MOD;
+                }
+            }
+        }
+    }
+    return z;
+}
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> m >> k;
+    S = 1 << (m - 1);
+    for (int i = 0; i < S; i++) {
+        g.a[i][i] = 1;
+        for (int j = 0; j <= 1; j++) {
+            if (__builtin_popcount(i) + j <= k) {
+                f.a[i][((i << 1) | j) & (S - 1)] = 1;
+            }
+        }
+    }
+    for (; n; n >>= 1) {
+        if (n & 1) {
+            g = mul(g, f);
+        }
+        f = mul(f, f);
+    }
+    for (int i = 0; i < S; i++) {
+        ans = (ans + g.a[i][i]) % MOD;
+    }
+    cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO
