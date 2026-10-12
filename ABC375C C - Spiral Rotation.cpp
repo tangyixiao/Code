@@ -9,8 +9,8 @@
 //  Test Type: single
 //  Batch ID: 62d1996c-7dfd-46d0-8a77-4ff18cb926ad
 //
-//  Algorithm:
-//  Complexity: O()
+//  Algorithm: Rotate each cell by its layer number modulo 4.
+//  Complexity: O(n^2) time, O(n^2) space
 //  Note:
 
 /*
@@ -610,8 +610,8 @@ inline void solve(int Task_Id) {
     for (int i = 1; i <= n; i++) {
         for (int j = 1, x, y, c, d; j <= n; j++) {
             x = i, y = j;
-            for (int k = 1; k <= min({i + 1, j + 1, n - i, n - j}) % 4; x = c, y = d) {
-                c = y, d = n - x - 1;
+            for (int k = 1; k <= min({i, j, n - i + 1, n - j + 1}) % 4; k++) {
+                c = y, d = n + 1 - x, x = c, y = d;
             }
             b[x][y] = a[i][j];
         }
