@@ -8,9 +8,11 @@
 
 设开始这段顺序前的高兴程度为 $h$。新顺序第一步的贡献是 $\min(h,a_x)$；由于 $a_x\ge a_y$，后续每一步的高兴程度依次与原顺序前 $j-1$ 步相同，其中 $j$ 是 $x$ 原来的位置。新顺序的第一项不小于原顺序第 $j$ 项，因为原顺序第 $j$ 项还受此前所有题目的最小值限制。因此交换后总和不会变小。重复应用这个交换，就得到每一步都选当前可做题中 $a_i$ 最大者的最优方案。
 
-用大根堆维护所有已经满足前置条件的题目。先做题目 $1$，随后每次取出堆顶并加入它的儿子。父亲编号小于儿子编号，所以按输入生成父亲关系后，用 `head`、`nxt` 数组保存树的邻接表即可。
+用大根堆维护所有已经满足前置条件的题目。先做题目 $1$，随后每次取出堆顶并加入它的儿子。父亲编号小于儿子编号，所以按输入生成父亲关系后，用全局数组 `hd`、`nx` 保存树的邻接表；用 `hp` 保存堆，避免动态分配。
 
 题目值由 32 位无符号数生成，答案至多为 $n(2^{32}-1)$，使用 `long long` 足够。
+
+题目有 $n\le10^7$，全局数组按 `N = 1e7 + 5` 开辟，覆盖题目编号和堆中最多 $n-1$ 个待做节点。
 
 ## 复杂度
 
@@ -22,41 +24,49 @@
 
 ```cpp
 namespace TANGYIXIAO {
+const int N = 1e7 + 5;
+uint32_t a[N], sd;
+int hd[N], nx[N], hp[N], hs;
+int n;
+long long mn, ans;
+
+inline uint32_t rnd() {
+    sd ^= sd << 13;
+    sd ^= sd >> 17;
+    sd ^= sd << 5;
+    return sd;
+}
+
+inline bool cmp(int x, int y) {
+    return a[x] < a[y];
+}
+
 inline void solve(int Task_Id) {
-    int n;
-    uint32_t seed;
-    cin >> n >> seed;
-    vector<uint32_t> a(n + 1);
-    vector<int> head(n + 1, -1), nxt(n + 1);
+    cin >> n >> sd;
     for (int i = 1; i <= n; i++) {
-        seed ^= seed << 13;
-        seed ^= seed >> 17;
-        seed ^= seed << 5;
-        a[i] = seed;
+        a[i] = rnd(), hd[i] = -1;
     }
     for (int i = 2; i <= n; i++) {
-        seed ^= seed << 13;
-        seed ^= seed >> 17;
-        seed ^= seed << 5;
-        int fa = seed % (i - 1) + 1;
-        nxt[i] = head[fa], head[fa] = i;
+        int f = rnd() % (i - 1) + 1;
+        nx[i] = hd[f], hd[f] = i;
     }
-    auto cmp = [&a](int x, int y) { return a[x] < a[y]; };
-    priority_queue<int, vector<int>, decltype(cmp)> pq(cmp);
-    for (int v = head[1]; v != -1; v = nxt[v]) {
-        pq.push(v);
+    hs = 0;
+    for (int v = hd[1]; v != -1; v = nx[v]) {
+        hp[hs++] = v;
+        push_heap(hp, hp + hs, cmp);
     }
-    long long mn = a[1], ans = mn;
+    mn = a[1], ans = mn;
     for (int i = 1; i < n; i++) {
-        int u = pq.top();
-        pq.pop();
+        pop_heap(hp, hp + hs, cmp);
+        int u = hp[--hs];
         mn = min(mn, (long long)a[u]);
         ans += mn;
-        for (int v = head[u]; v != -1; v = nxt[v]) {
-            pq.push(v);
+        for (int v = hd[u]; v != -1; v = nx[v]) {
+            hp[hs++] = v;
+            push_heap(hp, hp + hs, cmp);
         }
     }
-    cout << ans << '\n';
+    cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO

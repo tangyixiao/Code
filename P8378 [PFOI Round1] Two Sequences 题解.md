@@ -61,11 +61,11 @@ ll n, a, b, c;
 inline void solve(int Task_Id) {
     cin >> n;
     if (n < 3) {
-        cout << 0 << '\n';
+        cout << 0 << "\n";
         return;
     }
     a = n % mod, b = (n - 1) % mod, c = (n - 2) % mod;
-    cout << a * b % mod * c % mod * c % mod * iv % mod << '\n';
+    cout << a * b % mod * c % mod * c % mod * iv % mod << "\n";
     return;
 }
 } // namespace TANGYIXIAO

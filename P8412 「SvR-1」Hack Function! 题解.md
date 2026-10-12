@@ -46,24 +46,33 @@ $$
 
 设 $P=q\varphi(q)$。每组数据的时间复杂度为 $O(P+q^2)$，空间复杂度为 $O(P)$。
 
+题目保证 $k\le10^3$，所以 $q\le999$ 且 $P\le999\cdot998=997002$。周期数组按 `N = 1e6 + 5` 开辟；前缀数组长度 $m+1$ 也在该范围内。瞬态数组按 `K = 1e3 + 5` 开辟。
+
 ## 代码
 
 代码只列出模板末尾的 `namespace TANGYIXIAO` 部分。
 
 ```cpp
 namespace TANGYIXIAO {
-inline long long pw(long long a, int e, int mod) {
-    long long r = 1 % mod;
+using ll = long long;
+const int N = 1e6 + 5, K = 1e3 + 5;
+int a[K], b[N];
+ll ps[N], sf[K];
+int k, q, ph, m;
+ll p, cs;
+
+inline ll pw(ll x, int e, int y) {
+    ll r = 1 % y;
     for (; e; e >>= 1) {
         if (e & 1) {
-            r = r * a % mod;
+            r = r * x % y;
         }
-        a = a * a % mod;
+        x = x * x % y;
     }
     return r;
 }
 
-inline int getphi(int x) {
+inline int phi(int x) {
     int r = x;
     for (int d = 2; d * d <= x; d++) {
         if (x % d == 0) {
@@ -78,65 +87,63 @@ inline int getphi(int x) {
     return r;
 }
 
-inline bool findseg(const vector<int> &a, long long need, int &st, int &len) {
-    if (need <= 0) {
+inline bool chk(int *a, int n, ll v, int &st, int &len) {
+    if (v <= 0) {
         return false;
     }
-    int n = (int)a.size(), r = 0;
-    long long sum = 0;
-    for (int l = 0; l < n; l++) {
-        for (; r < l + n && sum < need; r++) {
+    int r = 0;
+    ll sum = 0;
+    for (int i = 0; i < n; i++) {
+        for (; r < i + n && sum < v; r++) {
             sum += a[r % n];
         }
-        if (sum == need) {
-            st = l, len = r - l;
+        if (sum == v) {
+            st = i, len = r - i;
             return true;
         }
-        if (r > l) {
-            sum -= a[l];
+        if (r > i) {
+            sum -= a[i];
         }
     }
     return false;
 }
 
-inline void out(long long l, long long r) {
-    cout << l << ' ' << r << '\n';
+inline void out(ll l, ll r) {
+    cout << l << " " << r << "\n";
     return;
 }
 
 inline void solve(int Task_Id) {
-    int k;
-    long long p;
     cin >> k >> p;
-    int q = k - 1, ph = getphi(q), m = q * ph;
-    vector<int> pre(q), cyc(m);
+    q = k - 1, ph = phi(q), m = q * ph;
+    ps[0] = 0, sf[q] = 0;
     for (int i = 1; i < q; i++) {
         int x = (int)pw(i, i, q);
-        pre[i] = x ? x : q;
+        a[i] = x ? x : q;
     }
     for (int x = 0; x < q; x++) {
         if (x == 0) {
             for (int t = 0; t < ph; t++) {
-                cyc[t * q] = q;
+                b[t * q] = q;
             }
             continue;
         }
-        long long value = pw(x, q + x, q), ratio = pw(x, q, q);
+        ll v = pw(x, q + x, q), r = pw(x, q, q);
         for (int t = 0; t < ph; t++) {
-            int at = x + t * q;
-            cyc[at] = value ? (int)value : q;
-            value = value * ratio % q;
+            int j = x + t * q;
+            b[j] = v ? (int)v : q;
+            v = v * r % q;
         }
     }
-    long long sumc = 0;
-    for (int x : cyc) {
-        sumc += x;
+    cs = 0;
+    for (int i = 0; i < m; i++) {
+        cs += b[i];
     }
 
     for (int l = 1; l < q; l++) {
-        long long sum = 0;
+        ll sum = 0;
         for (int r = l; r < q; r++) {
-            sum += pre[r];
+            sum += a[r];
             if (sum == p) {
                 out(l, r);
                 return;
@@ -147,36 +154,34 @@ inline void solve(int Task_Id) {
         }
     }
 
-    long long cnt = p / sumc, rem = p % sumc;
-    if (rem == 0 && cnt > 0) {
-        out(q, q + cnt * m - 1);
+    ll c = p / cs, t = p % cs;
+    if (t == 0 && c > 0) {
+        out(q, q + c * m - 1);
         return;
     }
     int st, len;
-    if (findseg(cyc, rem, st, len)) {
-        long long l = q + st;
-        out(l, l + cnt * m + len - 1);
+    if (chk(b, m, t, st, len)) {
+        ll l = q + st;
+        out(l, l + c * m + len - 1);
         return;
     }
 
-    vector<long long> ps(m + 1);
     for (int i = 0; i < m; i++) {
-        ps[i + 1] = ps[i] + cyc[i];
+        ps[i + 1] = ps[i] + b[i];
     }
-    vector<long long> sf(q + 1);
     for (int i = q - 1; i >= 1; i--) {
-        sf[i] = sf[i + 1] + pre[i];
+        sf[i] = sf[i + 1] + a[i];
     }
     for (int l = 1; l < q; l++) {
         if (p < sf[l]) {
             continue;
         }
-        long long need = p - sf[l], cycles = need / sumc, tail = need % sumc;
-        auto it = lower_bound(ps.begin(), ps.begin() + m, tail);
-        if (it == ps.begin() + m || *it != tail) {
+        ll need = p - sf[l], cc = need / cs, rem = need % cs;
+        ll *it = lower_bound(ps, ps + m, rem);
+        if (it == ps + m || *it != rem) {
             continue;
         }
-        long long tot = cycles * m + (it - ps.begin());
+        ll tot = cc * m + (it - ps);
         if (tot > 0) {
             out(l, q - 1 + tot);
             return;

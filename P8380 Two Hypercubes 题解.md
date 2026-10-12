@@ -60,7 +60,7 @@ $$
 
 ```cpp
 namespace TANGYIXIAO {
-const int N = 60, M = 4e3 + 5;
+const int N = 6e1, M = 4e3 + 5;
 const ll mod = 1e9 + 7;
 ull A, B, C, ra[N], rb[N];
 int pa[M], pb[M], pc;
@@ -136,8 +136,8 @@ inline void ini() {
     if (pc) {
         return;
     }
-    for (int a = 1; a <= 59; a++) {
-        for (int b = 1; b <= 59; b++) {
+    for (int a = 1; a < N; a++) {
+        for (int b = 1; b < N; b++) {
             if (MATH::gcd(a, b) == 1) {
                 pa[pc] = a, pb[pc] = b, pc++;
             }
@@ -163,7 +163,7 @@ inline void solve(int Task_Id) {
         ull cnt = a == 1 ? (r > 1 ? r - 1 : 0) : r / d;
         ans = (ans + cnt % mod) % mod;
     }
-    cout << ans << '\n';
+    cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO

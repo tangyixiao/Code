@@ -597,41 +597,49 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 1e7 + 5;
+uint32_t a[N], sd;
+int hd[N], nx[N], hp[N], hs;
+int n;
+long long mn, ans;
+
+inline uint32_t rnd() {
+    sd ^= sd << 13;
+    sd ^= sd >> 17;
+    sd ^= sd << 5;
+    return sd;
+}
+
+inline bool cmp(int x, int y) {
+    return a[x] < a[y];
+}
+
 inline void solve(int Task_Id) {
-    int n;
-    uint32_t seed;
-    cin >> n >> seed;
-    vector<uint32_t> a(n + 1);
-    vector<int> head(n + 1, -1), nxt(n + 1);
+    cin >> n >> sd;
     for (int i = 1; i <= n; i++) {
-        seed ^= seed << 13;
-        seed ^= seed >> 17;
-        seed ^= seed << 5;
-        a[i] = seed;
+        a[i] = rnd(), hd[i] = -1;
     }
     for (int i = 2; i <= n; i++) {
-        seed ^= seed << 13;
-        seed ^= seed >> 17;
-        seed ^= seed << 5;
-        int fa = seed % (i - 1) + 1;
-        nxt[i] = head[fa], head[fa] = i;
+        int f = rnd() % (i - 1) + 1;
+        nx[i] = hd[f], hd[f] = i;
     }
-    auto cmp = [&a](int x, int y) { return a[x] < a[y]; };
-    priority_queue<int, vector<int>, decltype(cmp)> pq(cmp);
-    for (int v = head[1]; v != -1; v = nxt[v]) {
-        pq.push(v);
+    hs = 0;
+    for (int v = hd[1]; v != -1; v = nx[v]) {
+        hp[hs++] = v;
+        push_heap(hp, hp + hs, cmp);
     }
-    long long mn = a[1], ans = mn;
+    mn = a[1], ans = mn;
     for (int i = 1; i < n; i++) {
-        int u = pq.top();
-        pq.pop();
+        pop_heap(hp, hp + hs, cmp);
+        int u = hp[--hs];
         mn = min(mn, (long long)a[u]);
         ans += mn;
-        for (int v = head[u]; v != -1; v = nxt[v]) {
-            pq.push(v);
+        for (int v = hd[u]; v != -1; v = nx[v]) {
+            hp[hs++] = v;
+            push_heap(hp, hp + hs, cmp);
         }
     }
-    cout << ans << '\n';
+    cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO

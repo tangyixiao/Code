@@ -602,15 +602,16 @@ struct E {
     int v, ne;
     ll w;
 };
-int n, m, h[N], fa[N], ord[N], k, ed;
+int n, m, h[N], fa[N], ord[N], k, ed, u, v, cnt;
 E e[M];
-ll f[N], pw[N], sum;
+ll f[N], pw[N], sum, l, r, mid, w, res;
+multiset<ll> s;
 inline void add(int u, int v, ll w) { e[++ed] = {v, h[u], w}, h[u] = ed; }
 inline bool chk(ll lim) {
-    int cnt = 0;
+    cnt = 0;
     for (int i = n; i; i--) {
         int u = ord[i];
-        multiset<ll> s;
+        s.clear();
         for (int j = h[u]; j; j = e[j].ne) {
             int v = e[j].v;
             if (fa[v] != u) {
@@ -626,7 +627,7 @@ inline bool chk(ll lim) {
                 s.insert(x);
             }
         }
-        ll res = 0;
+        res = 0;
         for (; !s.empty();) {
             auto it = s.begin();
             ll x = *it;
@@ -649,8 +650,6 @@ inline bool chk(ll lim) {
 inline void solve(int Task_Id) {
     cin >> n >> m;
     for (int i = 1; i < n; i++) {
-        int u, v;
-        ll w;
         cin >> u >> v >> w;
         add(u, v, w);
         add(v, u, w);
@@ -670,16 +669,16 @@ inline void solve(int Task_Id) {
             ord[++k] = v;
         }
     }
-    ll l = 0, r = sum / m + 1;
+    l = 0, r = sum / m + 1;
     for (; l + 1 < r;) {
-        ll mid = (l + r) / 2;
+        mid = (l + r) / 2;
         if (chk(mid)) {
             l = mid;
         } else {
             r = mid;
         }
     }
-    cout << l << '\n';
+    cout << l << "\n";
     return;
 }
 } // namespace TANGYIXIAO

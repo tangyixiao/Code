@@ -19,6 +19,9 @@
 ```cpp
 namespace TANGYIXIAO {
 const int N = 1e5 + 5;
+int n, m, j;
+ll ans;
+multiset<ll> s;
 struct C {
     ll x, y;
 } a[N];
@@ -28,7 +31,6 @@ struct G {
 inline bool cc(const C &x, const C &y) { return x.y > y.y; }
 inline bool cg(const G &x, const G &y) { return x.y > y.y; }
 inline void solve(int Task_Id) {
-    int n, m;
     cin >> n >> m;
     for (int i = 1; i <= n; i++) {
         cin >> a[i].x >> a[i].y;
@@ -38,22 +40,20 @@ inline void solve(int Task_Id) {
     }
     sort(a + 1, a + n + 1, cc);
     sort(b + 1, b + m + 1, cg);
-    multiset<ll> s;
-    ll ans = 0;
-    int j = 1;
+    s.clear(), ans = 0, j = 1;
     for (int i = 1; i <= n; i++) {
         for (; j <= m && b[j].y >= a[i].y; j++) {
             s.insert(b[j].x);
         }
         auto it = s.lower_bound(a[i].x);
         if (it == s.end()) {
-            cout << -1 << '\n';
+            cout << -1 << "\n";
             return;
         }
         ans += *it;
         s.erase(it);
     }
-    cout << ans << '\n';
+    cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO

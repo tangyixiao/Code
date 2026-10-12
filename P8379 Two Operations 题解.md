@@ -36,11 +36,11 @@ $$
 
 ```cpp
 namespace TANGYIXIAO {
-const int N = 1e6 + 5;
+const int N = 1e6 + 5, M = 1e1;
 const long long MOD = 1e9 + 7;
-int n, m, k, g[N];
-long long s[N], mx[N], tot, iv;
-char op[10];
+int n, m, k, g[N], x, y;
+long long s[N], mx[N], tot, iv, v;
+char op[M];
 set<pair<long long, int>> st;
 inline long long pw(long long a, long long b) {
     long long r = 1;
@@ -58,9 +58,8 @@ inline void solve(int Task_Id) {
         cin >> g[i];
     }
     for (int i = 1; i <= n; i++) {
-        long long x;
-        cin >> x;
-        s[g[i]] += x, mx[g[i]] = max(mx[g[i]], x), tot += x;
+        cin >> v;
+        s[g[i]] += v, mx[g[i]] = max(mx[g[i]], v), tot += v;
     }
     for (int i = 1; i <= k; i++) {
         st.emplace(get(i), i);
@@ -69,9 +68,8 @@ inline void solve(int Task_Id) {
     for (int i = 1; i <= m; i++) {
         cin >> op;
         if (op[0] == 'Q') {
-            cout << (tot + st.begin()->first) % MOD * iv % MOD << '\n';
+            cout << (tot + st.begin()->first) % MOD * iv % MOD << "\n";
         } else {
-            int x, y;
             cin >> x >> y;
             if (x == y) {
                 continue;
