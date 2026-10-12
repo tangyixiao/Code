@@ -598,8 +598,58 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+int n, m, x, y, id, k, tot, p[15];
+string a[15][105][15], s, t, c, op, ans;
+unordered_map<string, int> mp, h[15];
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n;
+    for (int i = 1; i <= n; i++) {
+        cin >> s >> x >> y;
+        mp[s] = i;
+        a[i][0][0] = to_string(x - 1);
+        for (int j = 1; j <= y; j++) {
+            cin >> s;
+            h[i][s] = j;
+        }
+        for (int j = 1; j < x; j++) {
+            for (int l = 1; l <= y; l++) {
+                cin >> a[i][j][l];
+            }
+        }
+    }
+    cin >> m;
+    while (m--) {
+        cin >> op >> c >> op >> t >> op >> s;
+        id = mp[t];
+        k = s.find("=");
+        t = s.substr(k + 1);
+        k = h[id][s.substr(0, k)];
+        tot = 0;
+        s = "";
+        for (int i = 0; i <= (int)c.size(); i++) {
+            if (i == (int)c.size() || c[i] == ',') {
+                p[++tot] = h[id][s];
+                s = "";
+            } else {
+                s += c[i];
+            }
+        }
+        x = stoi(a[id][0][0]);
+        for (int i = 1; i <= x; i++) {
+            if (a[id][i][k] == t) {
+                for (int j = 1; j <= tot; j++) {
+                    ans += a[id][i][p[j]];
+                    ans += (j == tot ? "\n" : " ");
+                }
+            }
+        }
+        if (ans.size() > 1000000) {
+            cout << ans;
+            ans.clear();
+        }
+    }
+    cout << ans;
     return;
 }
 } // namespace TANGYIXIAO
