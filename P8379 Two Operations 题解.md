@@ -30,14 +30,19 @@ $$
 
 ## 复杂度
 
-初始化为 $O(n+k)$，每次 `Change` 为 $O(\log k)$，每次 `Query` 为 $O(1)$；空间复杂度为 $O(n+k)$。
+初始化为 $O(n+k\log k)$，每次 `Change` 为 $O(\log k)$，每次 `Query` 为 $O(1)$；空间复杂度为 $O(n+k)$。
 
 ## 代码
 
 ```cpp
 namespace TANGYIXIAO {
-constexpr long long MOD = 1e9 + 7;
-inline long long qpow(long long a, long long b) {
+const int N = 1e6 + 5;
+const long long MOD = 1e9 + 7;
+int n, m, k, g[N];
+long long s[N], mx[N], tot, iv;
+char op[10];
+set<pair<long long, int>> st;
+inline long long pw(long long a, long long b) {
     long long r = 1;
     for (; b; b >>= 1, a = a * a % MOD) {
         if (b & 1) {
@@ -46,30 +51,24 @@ inline long long qpow(long long a, long long b) {
     }
     return r;
 }
+inline long long get(int x) { return 1LL * n * mx[x] - s[x]; }
 inline void solve(int Task_Id) {
-    int n, m, k;
     cin >> n >> m >> k;
-    vector<int> g(n + 1);
-    vector<long long> s(k + 1), mx(k + 1);
     for (int i = 1; i <= n; i++) {
         cin >> g[i];
     }
-    long long tot = 0;
     for (int i = 1; i <= n; i++) {
         long long x;
         cin >> x;
         s[g[i]] += x, mx[g[i]] = max(mx[g[i]], x), tot += x;
     }
-    set<pair<long long, int>> st;
-    auto get = [&](int x) { return 1LL * n * mx[x] - s[x]; };
     for (int i = 1; i <= k; i++) {
         st.emplace(get(i), i);
     }
-    long long iv = qpow(n, MOD - 2);
+    iv = pw(n, MOD - 2);
     for (int i = 1; i <= m; i++) {
-        string op;
         cin >> op;
-        if (op == "Query") {
+        if (op[0] == 'Q') {
             cout << (tot + st.begin()->first) % MOD * iv % MOD << '\n';
         } else {
             int x, y;
