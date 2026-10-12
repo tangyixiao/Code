@@ -9,9 +9,9 @@
 //  Test Type: multiple
 //  Batch ID: 209f6363-9387-4a2a-9c68-b88ba20f9061
 //
-//  Algorithm:
-//  Complexity: O()
-//  Note:
+//  Algorithm: Coprime exponents and exact integer roots
+//  Complexity: O(log^3 V) per query, O(log^2 V) space
+//  Note: Precompute feasible exponent pairs; correct floating root estimates with integer powers.
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -599,57 +599,41 @@ signed main() {
 namespace TANGYIXIAO {
 const int N = 6e1, M = 4e3 + 5;
 const ll mod = 1e9 + 7;
+const ull V = 1e18;
 ull A, B, C, ra[N], rb[N];
-int pa[M], pb[M], pc;
+int pa[M], pb[M], d[N], pc;
 ll ans;
-inline u128 pw(ull x, int e, u128 lim) {
+inline ull pw(ull x, int e, ull lim) {
     u128 v = 1, b = x;
     for (; e;) {
         if (e & 1) {
-            if (b > lim / v) {
+            v *= b;
+            if (v > lim) {
                 return lim + 1;
             }
-            v *= b;
         }
         e >>= 1;
         if (e) {
-            if (b > lim / b) {
-                b = lim + 1;
-            } else {
-                b *= b;
+            b *= b;
+            if (b > lim) {
+                return lim + 1;
             }
         }
     }
     return v;
 }
-inline bool chk(ull x, int e, u128 lim) {
-    return pw(x, e, lim) <= lim;
-}
-inline ull rt(u128 x, int e) {
+inline ull rt(ull x, int e) {
     if (x == 0) {
         return 0;
     }
     if (e == 1) {
-        return (ull)x;
+        return x;
     }
-    int k = 0;
-    for (u128 v = x; v; v >>= 1) {
-        k++;
-    }
-    ull r = 1ULL << ((k + e - 1) / e);
-    for (;;) {
-        u128 p = pw(r, e - 1, x);
-        u128 q = p > x ? 0 : x / p;
-        ull nr = (ull)(((u128)(e - 1) * r + q) / e);
-        if (nr >= r) {
-            break;
-        }
-        r = nr;
-    }
-    for (; chk(r + 1, e, x);) {
+    ull r = pow((double)x, 1.0 / e);
+    for (; pw(r + 1, e, x) <= x;) {
         r++;
     }
-    for (; !chk(r, e, x);) {
+    for (; pw(r, e, x) > x;) {
         r--;
     }
     return r;
@@ -674,8 +658,13 @@ inline void ini() {
         return;
     }
     for (int a = 1; a < N; a++) {
+        d[a] = rd(a);
+        ull t = max(2, d[a]), x = pw(t, a, V);
+        if (x > V) {
+            continue;
+        }
         for (int b = 1; b < N; b++) {
-            if (MATH::gcd(a, b) == 1) {
+            if (MATH::gcd(a, b) == 1 && pw(t, b, V) <= V && (u128)x * b <= (u128)V * a) {
                 pa[pc] = a, pb[pc] = b, pc++;
             }
         }
@@ -691,13 +680,15 @@ inline void solve(int Task_Id) {
     ans = C % mod;
     for (int i = 0; i < pc; i++) {
         int a = pa[i], b = pb[i];
-        int d = rd(a), mn = (a == 1 ? 2 : d);
+        int mn = max(2, d[a]);
         if (ra[a] < (ull)mn || rb[b] < (ull)mn) {
             continue;
         }
-        u128 lim = (u128)C * a / b;
-        ull r = min(rb[b], lim < (u128)A ? rt(lim, a) : ra[a]);
-        ull cnt = a == 1 ? (r > 1 ? r - 1 : 0) : r / d;
+        ull r = min(ra[a], rb[b]);
+        if ((u128)pw(r, a, A) * b > (u128)C * a) {
+            r = rt((u128)C * a / b, a);
+        }
+        ull cnt = a == 1 ? (r > 1 ? r - 1 : 0) : r / d[a];
         ans = (ans + cnt % mod) % mod;
     }
     cout << ans << "\n";
