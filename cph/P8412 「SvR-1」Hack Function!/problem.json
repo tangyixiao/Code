@@ -1,0 +1,31 @@
+{
+  "group": "Luogu", 
+  "name": "P8412 「SvR-1」Hack Function!", 
+  "timeLimit": 1500, 
+  "interactive": false, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P8412SvR1HackFunction"
+    }
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P8412", 
+  "testType": "single", 
+  "batch": {
+    "id": "2ff378cc-4258-4ab2-8def-08d050721098", 
+    "size": 1
+  }, 
+  "memoryLimit": 128, 
+  "tests": [
+    {
+      "output": "2 3\n-1 -1\n1 1\n", 
+      "input": "3\n10 13\n10 3\n2 1\n"
+    }
+  ]
+}
