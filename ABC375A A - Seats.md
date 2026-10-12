@@ -76,3 +76,6 @@ $N$ 个座位排列着，座位上有 $1,2,\ldots,N $ 的号码。座位的状�
 $i=1,4$ 时满足条件，因此答案是 $2$。
 
 Translation by @[$\frak{Lorentz}$](/user/1232305) and @[Jie_XuSheng](/user/1332013)。
+
+---
+
