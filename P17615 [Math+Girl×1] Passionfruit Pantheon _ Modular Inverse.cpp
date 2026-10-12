@@ -565,6 +565,7 @@ struct Link_Cut_Tree {
 };
 } // namespace DATA_STRUCTURE
 #pragma endregion
+inline void init();
 inline void solve(int Task_Id);
 } // namespace TANGYIXIAO
 using namespace TANGYIXIAO;
@@ -585,6 +586,7 @@ signed main() {
 #ifdef MULTIPLE_TEST
     cin >> T;
 #endif
+    init();
     for (int Task_Id = 1; Task_Id <= T; Task_Id++) {
         solve(Task_Id);
     }
@@ -597,8 +599,33 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 15000005;
+const long long LIM = 100000000000000LL;
+bool vis[N];
+long long f[700000], g[700000], M;
+int cnt1, cnt2;
+
+inline void init() {
+    for (int i = 2; 1LL * i * i < N; i++) {
+        if (!vis[i]) {
+            for (int j = i * i; j < N; j += i) {
+                vis[j] = true;
+            }
+        }
+    }
+    for (int i = 2; i <= 10000000; i++) {
+        if (!vis[i]) {
+            f[++cnt1] = 1LL * i * i;
+            if (1LL * i * (2LL * i + 1) <= LIM && !vis[2 * i + 1]) {
+                g[++cnt2] = 1LL * i * (2LL * i + 1);
+            }
+        }
+    }
+    return;
+}
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> M;
+    cout << (upper_bound(f + 1, f + cnt1 + 1, M) - f - 1) + (upper_bound(g + 1, g + cnt2 + 1, M) - g - 1) + (M >= 6) << "\n";
     return;
 }
 } // namespace TANGYIXIAO
