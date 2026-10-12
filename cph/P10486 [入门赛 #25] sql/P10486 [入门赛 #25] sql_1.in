@@ -1,0 +1,10 @@
+1
+basic_info
+4 3
+name sid grade
+Fusu 001 1
+Maxmilite 002 2
+Expect2004 003 2
+2
+select name from basic_info where grade=1
+select sid,name from basic_info where grade=2
