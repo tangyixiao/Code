@@ -677,7 +677,7 @@ inline void cdq4(int l, int r) {
         cdq3(1, tot);
     }
 }
-inline void solve() {
+inline void solve(int Task_Id) {
     cin >> n >> m;
     for (int i = 1; i <= n + m; i++) {
         cin >> a[i].x >> a[i].y >> a[i].z >> a[i].w;
