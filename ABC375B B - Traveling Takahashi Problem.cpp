@@ -597,15 +597,15 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-int n, cx, cy;
-double ans;
+int n;
+double x, y, cx, cy, ans;
 inline void solve(int Task_Id) {
     cin >> n;
-    for (int i = 1, x, y; i <= n; i++, cx = x, cy = y) {
-        cin >> x >> y, ans += ((x - cx) * (x - cx) + (y - cy) * (y - cy));
+    for (int i = 1; i <= n; i++) {
+        cin >> x >> y, ans += sqrt((x - cx) * (x - cx) + (y - cy) * (y - cy)), cx = x, cy = y;
     }
-    ans += (cx * cx + cy * cy);
-    cout << ans;
+    ans += sqrt(cx * cx + cy * cy);
+    cout << fixed << setprecision(15) << ans;
     return;
 }
 } // namespace TANGYIXIAO
