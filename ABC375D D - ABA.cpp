@@ -599,10 +599,10 @@ signed main() {
 namespace TANGYIXIAO {
 string s;
 ll cnt[26], pos[26], ans;
-int x;
+int x, n;
 inline void solve(int Task_Id) {
-    cin >> s, s = " " + s;
-    for (int i = 1; i <= s.size(); cnt[(s[i] - 'A')]++, pos[(s[i] - 'A')] += i, i++) {
+    cin >> s, n = s.size(), s = " " + s;
+    for (int i = 1; i <= n; cnt[(s[i] - 'A')]++, pos[(s[i] - 'A')] += i, i++) {
         ans += cnt[(s[i] - 'A')] * (i - 1) - pos[(s[i] - 'A')];
     }
     cout << ans << '\n';
