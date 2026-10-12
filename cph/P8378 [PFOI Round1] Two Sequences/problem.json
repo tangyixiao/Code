@@ -1,0 +1,31 @@
+{
+  "group": "Luogu", 
+  "name": "P8378 [PFOI Round1] Two Sequences", 
+  "timeLimit": 1000, 
+  "interactive": false, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P8378PFOIRound1TwoSequences"
+    }
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P8378", 
+  "testType": "single", 
+  "batch": {
+    "id": "e764d3b2-41ad-4b24-8c8c-a1e25b086d2a", 
+    "size": 1
+  }, 
+  "memoryLimit": 128, 
+  "tests": [
+    {
+      "output": "3\n61560\n822256526\n988192964\n", 
+      "input": "4\n3\n20\n8492\n114514\n"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "group": "AtCoder - Panasonic Programming Contest 2024（AtCoder Beginner Contest 375）", 
+  "name": "A - Seats", 
+  "timeLimit": 2000, 
+  "interactive": false, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "ASeats"
+    }
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "url": "https://atcoder.jp/contests/abc375/tasks/abc375_a", 
+  "testType": "single", 
+  "batch": {
+    "id": "4fad5bfe-a22d-4dee-b72c-925a752172ee", 
+    "size": 1
+  }, 
+  "memoryLimit": 1024, 
+  "tests": [
+    {
+      "output": "2\n", 
+      "input": "6\n#.##.#\n"
+    }, 
+    {
+      "output": "0\n", 
+      "input": "1\n#\n"
+    }, 
+    {
+      "output": "3\n", 
+      "input": "9\n##.#.#.##\n"
+    }
+  ]
+}

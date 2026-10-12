@@ -1,0 +1,31 @@
+{
+  "group": "Luogu", 
+  "name": "P8379 Two Operations", 
+  "timeLimit": 2000, 
+  "interactive": false, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P8379TwoOperations"
+    }
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P8379", 
+  "testType": "single", 
+  "batch": {
+    "id": "ff12f265-1fcd-42d2-ac27-0363af2c9d66", 
+    "size": 1
+  }, 
+  "memoryLimit": 256, 
+  "tests": [
+    {
+      "output": "666666677\n5\n", 
+      "input": "3 3 2\n1 1 2\n3 4 5\nQuery\nChange 2 1\nQuery\n"
+    }
+  ]
+}

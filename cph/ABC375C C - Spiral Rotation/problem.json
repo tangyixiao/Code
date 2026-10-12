@@ -1,0 +1,39 @@
+{
+  "group": "AtCoder - Panasonic Programming Contest 2024（AtCoder Beginner Contest 375）", 
+  "name": "C - Spiral Rotation", 
+  "timeLimit": 3000, 
+  "interactive": false, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "CSpiralRotation"
+    }
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "url": "https://atcoder.jp/contests/abc375/tasks/abc375_c", 
+  "testType": "single", 
+  "batch": {
+    "id": "62d1996c-7dfd-46d0-8a77-4ff18cb926ad", 
+    "size": 1
+  }, 
+  "memoryLimit": 1024, 
+  "tests": [
+    {
+      "output": "........\n#######.\n#.....#.\n#.###.#.\n#.#...#.\n#.#####.\n#.......\n########\n", 
+      "input": "8\n.......#\n.......#\n.####..#\n.####..#\n.##....#\n.##....#\n.#######\n.#######\n"
+    }, 
+    {
+      "output": "#.#.#.\n.#.#.#\n#.#.#.\n.#.#.#\n#.#.#.\n.#.#.#\n", 
+      "input": "6\n.#.#.#\n##.#..\n...###\n###...\n..#.##\n#.#.#.\n"
+    }, 
+    {
+      "output": ".#..##...##.\n#.#.#.#.#...\n###.##..#...\n#.#.#.#.#...\n#.#.##...##.\n............\n............\n.###.###.###\n...#...#.#..\n.###...#.###\n...#...#...#\n.###...#.###\n", 
+      "input": "12\n.......#.###\n#...#...#..#\n###.#..#####\n..#.#.#.#...\n.#.....#.###\n.......#.#..\n#...#..#....\n#####.......\n...#...#.#.#\n..###..#..##\n#..#.#.#.#.#\n.####.......\n"
+    }
+  ]
+}

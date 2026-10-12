@@ -546,24 +546,28 @@ istream &operator>>(istream &is, __int128 &x) {
     bool neg = false;
     x = 0;
     for (char c : s) {
-        if (c == '-')
+        if (c == '-') {
             neg = true;
-        else
+        } else {
             x = x * 10 + (c - '0');
+        }
     }
-    if (neg)
+    if (neg) {
         x = -x;
+    }
     return is;
 }
 ostream &operator<<(ostream &os, __int128 x) {
-    if (x == 0)
+    if (x == 0) {
         os << 0;
-    else {
+    } else {
         string s, t;
-        if (x < 0)
+        if (x < 0) {
             x = -x, t = "-";
-        while (x)
+        }
+        while (x) {
             s.push_back('0' + x % 10), x /= 10;
+        }
         reverse(s.begin(), s.end());
         os << t << s;
     }
@@ -651,11 +655,13 @@ ll ans;
 void dfs(int u, int parent) {
     dp[u] = val[u];
     for (int v : adj[u]) {
-        if (v == parent)
+        if (v == parent) {
             continue;
+        }
         dfs(v, u);
-        if (dp[v] > 0)
+        if (dp[v] > 0) {
             dp[u] += dp[v];
+        }
     }
     ans = max(ans, dp[u]);
 }
@@ -666,8 +672,9 @@ inline void solve(int Task_Id) {
     dp.resize(n + 1);
     adj.resize(n + 1);
 
-    for (int i = 1; i <= n; ++i)
+    for (int i = 1; i <= n; ++i) {
         cin >> val[i];
+    }
 
     for (int i = 0; i < n - 1; ++i) {
         int u, v;

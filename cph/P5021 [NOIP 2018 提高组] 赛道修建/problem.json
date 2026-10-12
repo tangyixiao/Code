@@ -1,0 +1,35 @@
+{
+  "group": "Luogu", 
+  "name": "P5021 [NOIP 2018 提高组] 赛道修建", 
+  "timeLimit": 1000, 
+  "interactive": false, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P5021NOIP2018"
+    }
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P5021", 
+  "testType": "single", 
+  "batch": {
+    "id": "0564e5ab-bf64-4fcf-a639-5014656abee8", 
+    "size": 1
+  }, 
+  "memoryLimit": 125, 
+  "tests": [
+    {
+      "output": "31\n", 
+      "input": "7 1\n1 2 10\n1 3 5\n2 4 9\n2 5 8\n3 6 6\n3 7 7\n"
+    }, 
+    {
+      "output": "15\n", 
+      "input": "9 3\n1 2 6\n2 3 3\n3 4 5\n4 5 10\n6 2 4\n7 2 9\n8 4 7\n9 4 4\n"
+    }
+  ]
+}

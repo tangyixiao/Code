@@ -1,0 +1,31 @@
+{
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "interactive": false, 
+  "languages": {
+    "java": {
+      "taskClass": "P2045", 
+      "mainClass": "Main"
+    }
+  }, 
+  "memoryLimit": 125, 
+  "tests": [
+    {
+      "input": "3 1\n1 2 3\n0 2 1\n1 4 2\n", 
+      "output": "11\n"
+    }
+  ], 
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu", 
+  "name": "P2045 方格取数加强版", 
+  "url": "https://www.luogu.com.cn/problem/P2045", 
+  "batch": {
+    "id": "cc537e6e-ff8a-45a3-be7e-4e89da6442a4", 
+    "size": 1
+  }
+}

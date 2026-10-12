@@ -1,0 +1,39 @@
+{
+  "group": "AtCoder - Panasonic Programming Contest 2024（AtCoder Beginner Contest 375）", 
+  "name": "D - ABA", 
+  "timeLimit": 2000, 
+  "interactive": false, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "DABA"
+    }
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "url": "https://atcoder.jp/contests/abc375/tasks/abc375_d", 
+  "testType": "single", 
+  "batch": {
+    "id": "1e78c82d-51f9-41b5-80a9-82a931511b64", 
+    "size": 1
+  }, 
+  "memoryLimit": 1024, 
+  "tests": [
+    {
+      "output": "5\n", 
+      "input": "ABCACC\n"
+    }, 
+    {
+      "output": "56\n", 
+      "input": "OOOOOOOO\n"
+    }, 
+    {
+      "output": "75\n", 
+      "input": "XYYXYYXYXXX\n"
+    }
+  ]
+}

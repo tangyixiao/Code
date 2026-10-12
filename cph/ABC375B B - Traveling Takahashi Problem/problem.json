@@ -1,0 +1,39 @@
+{
+  "group": "AtCoder - Panasonic Programming Contest 2024（AtCoder Beginner Contest 375）", 
+  "name": "B - Traveling Takahashi Problem", 
+  "timeLimit": 2000, 
+  "interactive": false, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "BTravelingTakahashiProblem"
+    }
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "url": "https://atcoder.jp/contests/abc375/tasks/abc375_b", 
+  "testType": "single", 
+  "batch": {
+    "id": "44b5a713-4829-493c-a2a7-8b4e41d84ecc", 
+    "size": 1
+  }, 
+  "memoryLimit": 1024, 
+  "tests": [
+    {
+      "output": "6.06449510224597979401\n", 
+      "input": "2\n1 2\n-1 0\n"
+    }, 
+    {
+      "output": "384694.57587932075868509383\n", 
+      "input": "7\n-14142 13562\n-17320 50807\n-22360 67977\n24494 89742\n-26457 51311\n28284 27124\n31622 77660\n"
+    }, 
+    {
+      "output": "1414213.56237309504880168872\n", 
+      "input": "5\n-100000 100000\n100000 -100000\n-100000 100000\n100000 -100000\n-100000 100000\n"
+    }
+  ]
+}

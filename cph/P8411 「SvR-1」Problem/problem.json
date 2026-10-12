@@ -1,0 +1,31 @@
+{
+  "group": "Luogu", 
+  "name": "P8411 「SvR-1」Problem", 
+  "timeLimit": 500, 
+  "interactive": false, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P8411SvR1Problem"
+    }
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P8411", 
+  "testType": "single", 
+  "batch": {
+    "id": "f8f94b87-63d3-47fa-b978-d8cf17fea235", 
+    "size": 1
+  }, 
+  "memoryLimit": 512, 
+  "tests": [
+    {
+      "output": "14907285111\n", 
+      "input": "6 114514\n"
+    }
+  ]
+}
