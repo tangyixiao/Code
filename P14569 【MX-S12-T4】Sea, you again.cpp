@@ -21,7 +21,7 @@ Copyright (C) 2026 TangYixiao
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
 #define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
 #define FILE_INDEX 1                      // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -597,9 +597,90 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
+const int mod = 998244353, N = 1000005;
+int B, nl, nr, l[N], r[N];
+int wa[2][N], va[2][N], wl[2][N], vl[2][N];
+int pw[N], pv[N], pz[N];
+
+inline int add(int x, int y) {
+    x += y;
+    if (x >= mod) { x -= mod; }
+    return x;
+}
+inline int sub(int x, int y) {
+    x -= y;
+    if (x < 0) { x += mod; }
+    return x;
+}
+inline int mul(int x, int y) {
+    return 1LL * x * y % mod;
+}
+
+inline int calc(int *a, int n) {
+    for (int i = 0; i < B; i++) {
+        wa[0][i] = (i == 0);
+        va[0][i] = wl[0][i] = vl[0][i] = 0;
+    }
+    int o = 0;
+    for (int i = 0; i < n; i++) {
+        int d = a[i], p = o ^ 1;
+        pw[0] = pv[0] = pz[0] = 0;
+        for (int j = 0; j < B; j++) {
+            pw[j + 1] = add(pw[j], wa[o][j]);
+            pv[j + 1] = add(pv[j], va[o][j]);
+            pz[j + 1] = add(pz[j], add(va[o][j], mul(j, wa[o][j])));
+        }
+        for (int j = 0; j < B; j++) {
+            wa[p][j] = add(pw[j + 1], mul(B, sub(pw[B], pw[B - j])));
+            va[p][j] = add(pv[j + 1], sub(pz[B], pz[B - j]));
+            if (j < d) {
+                wl[p][j] = wa[p][j];
+                vl[p][j] = va[p][j];
+            } else {
+                wl[p][j] = add(sub(pw[j + 1], pw[j - d + 1]), wl[o][j - d]);
+                vl[p][j] = add(sub(pv[j + 1], pv[j - d + 1]), vl[o][j - d]);
+            }
+        }
+        int x = 0, y = 0;
+        for (int j = B - d; j < B; j++) {
+            x = add(x, wl[o][j]);
+            y = add(y, add(vl[o][j], mul(j, wl[o][j])));
+        }
+        wl[p][d] = add(wl[p][d], mul(B, x));
+        vl[p][d] = add(vl[p][d], y);
+        o = p;
+    }
+    int ans = 0;
+    for (int i = 0; i < B; i++) {
+        ans = add(ans, add(vl[o][i], mul(i, wl[o][i])));
+    }
+    return ans;
+}
+
+inline int value(int *a, int n) {
+    int s = 0, w = 1, v = 0;
+    for (int i = 0; i < n; i++) {
+        if (s + a[i] < B) {
+            s += a[i];
+        } else {
+            v = add(v, mul(s, w));
+            w = mul(w, B);
+            s = a[i];
+        }
+    }
+    return add(v, mul(s, w));
+}
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> B >> nl;
+    for (int i = 0; i < nl; i++) { cin >> l[i]; }
+    cin >> nr;
+    for (int i = 0; i < nr; i++) { cin >> r[i]; }
+    int ans = calc(r, nr);
+    ans = sub(ans, calc(l, nl));
+    cout << add(ans, value(r, nr)) << "\n";
     return;
 }
 } // namespace TANGYIXIAO
