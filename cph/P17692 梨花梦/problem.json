@@ -1,0 +1,31 @@
+{
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "interactive": false, 
+  "languages": {
+    "java": {
+      "taskClass": "P17692", 
+      "mainClass": "Main"
+    }
+  }, 
+  "memoryLimit": 512, 
+  "tests": [
+    {
+      "input": "4 0\n3 2\n3 4\n5 6\n8 10\n", 
+      "output": "3 1 2\n-1\n2 1 4 3 5\n1 2 4 3 6 5 7 8\n"
+    }
+  ], 
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu", 
+  "name": "P17692 梨花梦", 
+  "url": "https://www.luogu.com.cn/problem/P17692", 
+  "batch": {
+    "id": "b9246349-51ec-4330-a4bd-a162fcffce19", 
+    "size": 1
+  }
+}
