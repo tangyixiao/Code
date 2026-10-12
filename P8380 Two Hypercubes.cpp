@@ -597,15 +597,15 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-constexpr long long MOD = 1000000007;
-inline u128 power_cap(ull x, int e, u128 lim) {
-    u128 value = 1, base = x;
-    while (e) {
+constexpr ll mod = 1000000007;
+inline u128 pow_cap(ull x, int e, u128 lim) {
+    u128 val = 1, base = x;
+    for (; e;) {
         if (e & 1) {
-            if (base > lim / value) {
+            if (base > lim / val) {
                 return lim + 1;
             }
-            value *= base;
+            val *= base;
         }
         e >>= 1;
         if (e) {
@@ -616,12 +616,12 @@ inline u128 power_cap(ull x, int e, u128 lim) {
             }
         }
     }
-    return value;
+    return val;
 }
-inline bool power_leq(ull x, int e, u128 lim) {
-    return power_cap(x, e, lim) <= lim;
+inline bool pow_le(ull x, int e, u128 lim) {
+    return pow_cap(x, e, lim) <= lim;
 }
-inline ull integer_root(u128 x, int e) {
+inline ull iroot(u128 x, int e) {
     if (x == 0) {
         return 0;
     }
@@ -634,7 +634,7 @@ inline ull integer_root(u128 x, int e) {
     }
     ull r = 1ULL << ((bits + e - 1) / e);
     for (;;) {
-        u128 p = power_cap(r, e - 1, x);
+        u128 p = pow_cap(r, e - 1, x);
         u128 q = p > x ? 0 : x / p;
         ull nr = (ull)(((u128)(e - 1) * r + q) / e);
         if (nr >= r) {
@@ -642,20 +642,21 @@ inline ull integer_root(u128 x, int e) {
         }
         r = nr;
     }
-    while (power_leq(r + 1, e, x)) {
+    for (; pow_le(r + 1, e, x);) {
         r++;
     }
-    while (!power_leq(r, e, x)) {
+    for (; !pow_le(r, e, x);) {
         r--;
     }
     return r;
 }
-inline int radical(int x) {
+inline int rad(int x) {
     int r = 1;
     for (int p = 2; p * p <= x; p++) {
         if (x % p == 0) {
             r *= p;
-            for (; x % p == 0; x /= p) {
+            for (; x % p == 0;) {
+                x /= p;
             }
         }
     }
@@ -664,46 +665,38 @@ inline int radical(int x) {
     }
     return r;
 }
-inline const vector<pair<int, int>> &coprime_pairs() {
-    static const vector<pair<int, int>> pairs = []() {
-        vector<pair<int, int>> result;
+inline const vector<pair<int, int>> &cpairs() {
+    static const vector<pair<int, int>> ps = []() {
+        vector<pair<int, int>> v;
         for (int a = 1; a <= 59; a++) {
             for (int b = 1; b <= 59; b++) {
                 if (gcd(a, b) == 1) {
-                    result.push_back({a, b});
+                    v.push_back({a, b});
                 }
             }
         }
-        return result;
+        return v;
     }();
-    return pairs;
+    return ps;
 }
 inline void solve(int Task_Id) {
     ull A, B, C;
     cin >> A >> B >> C;
-    ull rootA[60], rootB[60];
+    ull ra[60], rb[60];
     for (int e = 1; e <= 59; e++) {
-        rootA[e] = integer_root(A, e);
-        rootB[e] = integer_root(B, e);
+        ra[e] = iroot(A, e), rb[e] = iroot(B, e);
     }
-    long long ans = C % MOD;
-    for (const auto &pair : coprime_pairs()) {
-        int a = pair.first, b = pair.second;
-        int d = radical(a), need = (a == 1 ? 2 : d);
-        if (rootA[a] < (ull)need) {
+    ll ans = C % mod;
+    for (const auto &ab : cpairs()) {
+        int a = ab.first, b = ab.second;
+        int d = rad(a), need = (a == 1 ? 2 : d);
+        if (ra[a] < (ull)need || rb[b] < (ull)need) {
             continue;
         }
-        if (rootB[b] < (ull)need) {
-            continue;
-        }
-        u128 zlim = (u128)C * a / b;
-        ull xbound = rootA[a];
-        if (zlim < (u128)A) {
-            xbound = integer_root(zlim, a);
-        }
-        ull r = min(rootB[b], xbound);
-        ull ways = a == 1 ? (r > 1 ? r - 1 : 0) : r / d;
-        ans = (ans + ways % MOD) % MOD;
+        u128 lim = (u128)C * a / b;
+        ull r = min(rb[b], lim < (u128)A ? iroot(lim, a) : ra[a]);
+        ull cnt = a == 1 ? (r > 1 ? r - 1 : 0) : r / d;
+        ans = (ans + cnt % mod) % mod;
     }
     cout << ans << '\n';
     return;
