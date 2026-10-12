@@ -52,3 +52,53 @@ USACO Training Section 3.1
 
 ---
 
+# P2723 [USACO3.1] Humble Numbers
+
+## 题目描述
+
+Given a set of primes $S = \{ p_1, p_2, ..., p_k \}$, consider the set of positive integers whose prime factors all belong to $S$. This set includes $p_1$, $p_1 \times p_2$, $p_1 \times p_1$, $p_1 \times p_2 \times p_3$ ... (and others). This set is called the "humble numbers set" of $S$. Note: We consider $1$ not to be a humble number.
+
+Your task is, given the set $S$, to find the $n$-th humble number in the humble numbers set. It is guaranteed that the answer fits in a 32-bit signed integer.
+
+Supplement: The humble numbers are ordered from small to large. Each humble number is a product of numbers from the prime set. The $n$-th humble number is the $n$-th smallest positive integer that can be formed by multiplying numbers from the prime set (including a prime itself).
+
+## 输入格式
+
+- The first line contains two integers, which are the size $k$ of the set $S$ and the given parameter $n$.
+- The second line contains $k$ distinct integers, where the $i$-th integer denotes $p_i$.
+
+## 输出格式
+
+Output a single integer, the answer.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+4 19
+2 3 5 7
+```
+
+### 输出 #1
+
+```
+27
+```
+
+## 说明/提示
+
+- Constraints
+
+For $100\%$ of the testdata, it is guaranteed that:
+- $1 \leq k \leq 100$.
+- $1 \leq n \leq 10^5$.
+- $2 \leq p_i < 2^{31}$, and each $p_i$ is prime.
+
+- Notes
+
+Problem translation from NOCOW.
+
+USACO Training Section 3.1.
+
+Translated by ChatGPT 5
