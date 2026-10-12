@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: f8f94b87-63d3-47fa-b978-d8cf17fea235
 //
-//  Algorithm: 
-//  Complexity: O()
-//  Note: 
+//  Algorithm: Root-path minimum
+//  Complexity: O(n) time, O(n) space
+//  Note: Sum the minimum interestingness on each root path.
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -599,8 +599,8 @@ signed main() {
 namespace TANGYIXIAO {
 const int N = 1e7 + 5;
 uint32_t a[N], sd;
-int n, hd[N], nx[N], hp[N], hs;
-long long mn, ans;
+int n;
+long long ans;
 
 inline uint32_t rnd() {
     sd ^= sd << 13;
@@ -609,34 +609,14 @@ inline uint32_t rnd() {
     return sd;
 }
 
-inline bool cmp(int x, int y) {
-    return a[x] < a[y];
-}
-
 inline void solve(int Task_Id) {
     cin >> n >> sd;
     for (int i = 1; i <= n; i++) {
-        a[i] = rnd(), hd[i] = -1;
+        a[i] = rnd();
     }
+    ans = a[1];
     for (int i = 2; i <= n; i++) {
-        int f = rnd() % (i - 1) + 1;
-        nx[i] = hd[f], hd[f] = i;
-    }
-    hs = 0;
-    for (int v = hd[1]; v != -1; v = nx[v]) {
-        hp[hs++] = v;
-        push_heap(hp, hp + hs, cmp);
-    }
-    mn = a[1], ans = mn;
-    for (int i = 1; i < n; i++) {
-        pop_heap(hp, hp + hs, cmp);
-        int u = hp[--hs];
-        mn = min(mn, (long long)a[u]);
-        ans += mn;
-        for (int v = hd[u]; v != -1; v = nx[v]) {
-            hp[hs++] = v;
-            push_heap(hp, hp + hs, cmp);
-        }
+        a[i] = min(a[i], a[rnd() % (i - 1) + 1]), ans += a[i];
     }
     cout << ans << "\n";
     return;
