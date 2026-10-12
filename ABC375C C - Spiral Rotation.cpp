@@ -618,7 +618,7 @@ inline void solve(int Task_Id) {
     }
     for (int i = 1; i <= n; i++) {
         for (int j = 1; j <= n; j++) {
-            cout << b[i][j]
+            cout << b[i][j];
         }
         if (i != n) {
             cout << "\n";
