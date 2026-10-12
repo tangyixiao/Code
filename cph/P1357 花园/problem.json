@@ -1,0 +1,35 @@
+{
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "interactive": false, 
+  "languages": {
+    "java": {
+      "taskClass": "P1357", 
+      "mainClass": "Main"
+    }
+  }, 
+  "memoryLimit": 125, 
+  "tests": [
+    {
+      "input": "10 5 3\n", 
+      "output": "458\n"
+    }, 
+    {
+      "input": "6 2 1\n", 
+      "output": "18\n"
+    }
+  ], 
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu", 
+  "name": "P1357 花园", 
+  "url": "https://www.luogu.com.cn/problem/P1357", 
+  "batch": {
+    "id": "ffaad2de-d081-497d-a208-ec6c1cc14ea3", 
+    "size": 1
+  }
+}
