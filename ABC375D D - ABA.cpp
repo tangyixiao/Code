@@ -601,9 +601,9 @@ string s;
 ll cnt[26], pos[26], ans;
 int x;
 inline void solve(int Task_Id) {
-    cin >> s;
-    for (int i = 0; i < (int)s.size(); i++) {
-        x = s[i] - 'A', ans += cnt[x] * (i - 1) - pos[x], cnt[x]++, pos[x] += i;
+    cin >> s, s = " " + s;
+    for (int i = 1; i <= s.size(); cnt[(s[i] - 'A')]++, pos[(s[i] - 'A')] += i, i++) {
+        ans += cnt[(s[i] - 'A')] * (i - 1) - pos[(s[i] - 'A')];
     }
     cout << ans << '\n';
     return;
