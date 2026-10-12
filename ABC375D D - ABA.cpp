@@ -598,14 +598,14 @@ signed main() {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 string s;
-ll cnt[26], pos[26], ans;
+ll c[26], p[26], ans;
 int x, n;
 inline void solve(int Task_Id) {
     cin >> s, n = s.size(), s = " " + s;
-    for (int i = 1; i <= n; cnt[(s[i] - 'A')]++, pos[(s[i] - 'A')] += i, i++) {
-        ans += cnt[(s[i] - 'A')] * (i - 1) - pos[(s[i] - 'A')];
+    for (int i = 1; i <= n; c[(s[i] - 'A')]++, p[(s[i] - 'A')] += i, i++) {
+        ans += c[(s[i] - 'A')] * (i - 1) - p[(s[i] - 'A')];
     }
-    cout << ans << '\n';
+    cout << ans;
     return;
 }
 } // namespace TANGYIXIAO
