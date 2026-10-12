@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 6a4ddbeb-fdec-4c31-8483-ae05226740ea
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -596,9 +596,32 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
+const int N = 55;
+int n, m, a[N];
+double dp[N][N];
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> m;
+    for (int i = 1; i <= m; i++) {
+        cin >> a[i];
+    }
+    dp[1][0] = 1;
+    for (int i = 2; i <= n; i++) {
+        for (int j = 1; j <= m; j++) {
+            for (int k = 0; k < i - 1; k++) {
+                dp[i][(a[j] + k) % i] += dp[i - 1][k] / m;
+            }
+        }
+    }
+    cout << fixed << setprecision(2);
+    for (int i = 0; i < n; i++) {
+        if (i) {
+            cout << " ";
+        }
+        cout << dp[n][i] * 100 << "%";
+    }
+    cout << "\n";
     return;
 }
 } // namespace TANGYIXIAO
