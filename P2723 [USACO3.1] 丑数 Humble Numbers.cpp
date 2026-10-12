@@ -622,5 +622,6 @@ inline void solve(int Task_Id) {
         }
     }
     cout << a[n] << "\n";
+    return;
 }
 } // namespace TANGYIXIAO
