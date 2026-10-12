@@ -597,9 +597,30 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
+const int N = 100005;
+int n, k, p[105], pos[105], a[N];
+long long x;
+
 inline void solve(int Task_Id) {
-    // do something here
-    return;
+    cin >> k >> n;
+    for (int i = 1; i <= k; i++) {
+        cin >> p[i];
+    }
+    a[0] = 1;
+    for (int i = 1; i <= n; i++) {
+        x = LLONG_MAX;
+        for (int j = 1; j <= k; j++) {
+            x = min(x, 1LL * p[j] * a[pos[j]]);
+        }
+        a[i] = x;
+        for (int j = 1; j <= k; j++) {
+            if (1LL * p[j] * a[pos[j]] == x) {
+                pos[j]++;
+            }
+        }
+    }
+    cout << a[n] << "\n";
 }
 } // namespace TANGYIXIAO
