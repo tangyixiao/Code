@@ -10,7 +10,7 @@
 //  Batch ID: 209f6363-9387-4a2a-9c68-b88ba20f9061
 //
 //  Algorithm: Coprime exponents and exact integer roots
-//  Complexity: O(log^3 V) per query, O(log^2 V) space
+//  Complexity: O(log^2 V * log log V) per query, O(log^2 V) space
 //  Note: Precompute feasible exponent pairs; correct floating root estimates with integer powers.
 
 /*
