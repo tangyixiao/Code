@@ -597,16 +597,16 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-constexpr ll mod = 998244353, inv2 = 499122177;
+constexpr ll mod = 998244353, iv = 499122177;
+ll n, a, b, c;
 inline void solve(int Task_Id) {
-    ll n;
     cin >> n;
     if (n < 3) {
         cout << 0 << '\n';
         return;
     }
-    ll a = n % mod, b = (n - 1) % mod, c = (n - 2) % mod;
-    cout << a * b % mod * c % mod * c % mod * inv2 % mod << '\n';
+    a = n % mod, b = (n - 1) % mod, c = (n - 2) % mod;
+    cout << a * b % mod * c % mod * c % mod * iv % mod << '\n';
     return;
 }
 } // namespace TANGYIXIAO

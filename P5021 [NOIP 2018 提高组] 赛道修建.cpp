@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 0564e5ab-bf64-4fcf-a639-5014656abee8
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,21 +597,26 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 5e4 + 5, M = 1e5 + 5;
 struct E {
-    int v;
-    long long w;
+    int v, ne;
+    ll w;
 };
-inline bool chk(long long lim, int m, const vector<vector<E>> &g, const vector<int> &fa, const vector<long long> &pw, const vector<int> &ord) {
-    vector<long long> f(g.size());
+int n, m, h[N], fa[N], ord[N], k, ed;
+E e[M];
+ll f[N], pw[N], sum;
+inline void add(int u, int v, ll w) { e[++ed] = {v, h[u], w}, h[u] = ed; }
+inline bool chk(ll lim) {
     int cnt = 0;
-    for (int i = static_cast<int>(ord.size()) - 1; i >= 0; i--) {
+    for (int i = n; i; i--) {
         int u = ord[i];
-        multiset<long long> s;
-        for (const auto &e : g[u]) {
-            if (fa[e.v] != u) {
+        multiset<ll> s;
+        for (int j = h[u]; j; j = e[j].ne) {
+            int v = e[j].v;
+            if (fa[v] != u) {
                 continue;
             }
-            long long x = f[e.v] + pw[e.v];
+            ll x = f[v] + pw[v];
             if (x >= lim) {
                 cnt++;
                 if (cnt >= m) {
@@ -621,10 +626,10 @@ inline bool chk(long long lim, int m, const vector<vector<E>> &g, const vector<i
                 s.insert(x);
             }
         }
-        long long res = 0;
+        ll res = 0;
         for (; !s.empty();) {
             auto it = s.begin();
-            long long x = *it;
+            ll x = *it;
             s.erase(it);
             auto jt = s.lower_bound(lim - x);
             if (jt == s.end()) {
@@ -642,36 +647,33 @@ inline bool chk(long long lim, int m, const vector<vector<E>> &g, const vector<i
     return cnt >= m;
 }
 inline void solve(int Task_Id) {
-    int n, m;
     cin >> n >> m;
-    vector<vector<E>> g(n + 1);
-    long long sum = 0;
     for (int i = 1; i < n; i++) {
         int u, v;
-        long long w;
+        ll w;
         cin >> u >> v >> w;
-        g[u].push_back({v, w});
-        g[v].push_back({u, w});
+        add(u, v, w);
+        add(v, u, w);
         sum += w;
     }
-    vector<int> fa(n + 1), ord(1, 1);
-    vector<long long> pw(n + 1);
-    fa[1] = -1;
-    for (int i = 0; i < static_cast<int>(ord.size()); i++) {
+    k = 1;
+    ord[1] = 1;
+    for (int i = 1; i <= k; i++) {
         int u = ord[i];
-        for (const auto &e : g[u]) {
-            if (e.v == fa[u]) {
+        for (int j = h[u]; j; j = e[j].ne) {
+            int v = e[j].v;
+            if (v == fa[u]) {
                 continue;
             }
-            fa[e.v] = u;
-            pw[e.v] = e.w;
-            ord.push_back(e.v);
+            fa[v] = u;
+            pw[v] = e[j].w;
+            ord[++k] = v;
         }
     }
-    long long l = 0, r = sum / m + 1;
+    ll l = 0, r = sum / m + 1;
     for (; l + 1 < r;) {
-        long long mid = (l + r) / 2;
-        if (chk(mid, m, g, fa, pw, ord)) {
+        ll mid = (l + r) / 2;
+        if (chk(mid)) {
             l = mid;
         } else {
             r = mid;

@@ -18,37 +18,34 @@
 
 ```cpp
 namespace TANGYIXIAO {
+const int N = 1e5 + 5;
+struct C {
+    ll x, y;
+} a[N];
+struct G {
+    ll x, y;
+} b[N];
+inline bool cc(const C &x, const C &y) { return x.y > y.y; }
+inline bool cg(const G &x, const G &y) { return x.y > y.y; }
 inline void solve(int Task_Id) {
     int n, m;
     cin >> n >> m;
-    struct Cow {
-        long long a, b;
-    };
-    struct Grass {
-        long long c, d;
-    };
-    vector<Cow> a(n);
-    vector<Grass> b(m);
-    for (auto &x : a) {
-        cin >> x.a >> x.b;
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i].x >> a[i].y;
     }
-    for (auto &x : b) {
-        cin >> x.c >> x.d;
+    for (int i = 1; i <= m; i++) {
+        cin >> b[i].x >> b[i].y;
     }
-    sort(a.begin(), a.end(), [](const Cow &x, const Cow &y) {
-        return x.b > y.b;
-    });
-    sort(b.begin(), b.end(), [](const Grass &x, const Grass &y) {
-        return x.d > y.d;
-    });
-    multiset<long long> s;
-    long long ans = 0;
-    int j = 0;
-    for (const auto &x : a) {
-        for (; j < m && b[j].d >= x.b; j++) {
-            s.insert(b[j].c);
+    sort(a + 1, a + n + 1, cc);
+    sort(b + 1, b + m + 1, cg);
+    multiset<ll> s;
+    ll ans = 0;
+    int j = 1;
+    for (int i = 1; i <= n; i++) {
+        for (; j <= m && b[j].y >= a[i].y; j++) {
+            s.insert(b[j].x);
         }
-        auto it = s.lower_bound(x.a);
+        auto it = s.lower_bound(a[i].x);
         if (it == s.end()) {
             cout << -1 << '\n';
             return;

@@ -60,44 +60,48 @@ $$
 
 ```cpp
 namespace TANGYIXIAO {
-constexpr ll mod = 1000000007;
-inline u128 pow_cap(ull x, int e, u128 lim) {
-    u128 val = 1, base = x;
+const int N = 60, M = 4e3 + 5;
+const ll mod = 1e9 + 7;
+ull A, B, C, ra[N], rb[N];
+int pa[M], pb[M], pc;
+ll ans;
+inline u128 pw(ull x, int e, u128 lim) {
+    u128 v = 1, b = x;
     for (; e;) {
         if (e & 1) {
-            if (base > lim / val) {
+            if (b > lim / v) {
                 return lim + 1;
             }
-            val *= base;
+            v *= b;
         }
         e >>= 1;
         if (e) {
-            if (base > lim / base) {
-                base = lim + 1;
+            if (b > lim / b) {
+                b = lim + 1;
             } else {
-                base *= base;
+                b *= b;
             }
         }
     }
-    return val;
+    return v;
 }
-inline bool pow_le(ull x, int e, u128 lim) {
-    return pow_cap(x, e, lim) <= lim;
+inline bool chk(ull x, int e, u128 lim) {
+    return pw(x, e, lim) <= lim;
 }
-inline ull iroot(u128 x, int e) {
+inline ull rt(u128 x, int e) {
     if (x == 0) {
         return 0;
     }
     if (e == 1) {
         return (ull)x;
     }
-    int bits = 0;
+    int k = 0;
     for (u128 v = x; v; v >>= 1) {
-        bits++;
+        k++;
     }
-    ull r = 1ULL << ((bits + e - 1) / e);
+    ull r = 1ULL << ((k + e - 1) / e);
     for (;;) {
-        u128 p = pow_cap(r, e - 1, x);
+        u128 p = pw(r, e - 1, x);
         u128 q = p > x ? 0 : x / p;
         ull nr = (ull)(((u128)(e - 1) * r + q) / e);
         if (nr >= r) {
@@ -105,15 +109,15 @@ inline ull iroot(u128 x, int e) {
         }
         r = nr;
     }
-    for (; pow_le(r + 1, e, x);) {
+    for (; chk(r + 1, e, x);) {
         r++;
     }
-    for (; !pow_le(r, e, x);) {
+    for (; !chk(r, e, x);) {
         r--;
     }
     return r;
 }
-inline int rad(int x) {
+inline int rd(int x) {
     int r = 1;
     for (int p = 2; p * p <= x; p++) {
         if (x % p == 0) {
@@ -128,36 +132,34 @@ inline int rad(int x) {
     }
     return r;
 }
-inline const vector<pair<int, int>> &cpairs() {
-    static const vector<pair<int, int>> ps = []() {
-        vector<pair<int, int>> v;
-        for (int a = 1; a <= 59; a++) {
-            for (int b = 1; b <= 59; b++) {
-                if (gcd(a, b) == 1) {
-                    v.push_back({a, b});
-                }
+inline void ini() {
+    if (pc) {
+        return;
+    }
+    for (int a = 1; a <= 59; a++) {
+        for (int b = 1; b <= 59; b++) {
+            if (MATH::gcd(a, b) == 1) {
+                pa[pc] = a, pb[pc] = b, pc++;
             }
         }
-        return v;
-    }();
-    return ps;
+    }
+    return;
 }
 inline void solve(int Task_Id) {
-    ull A, B, C;
     cin >> A >> B >> C;
-    ull ra[60], rb[60];
-    for (int e = 1; e <= 59; e++) {
-        ra[e] = iroot(A, e), rb[e] = iroot(B, e);
+    ini();
+    for (int e = 1; e < N; e++) {
+        ra[e] = rt(A, e), rb[e] = rt(B, e);
     }
-    ll ans = C % mod;
-    for (const auto &ab : cpairs()) {
-        int a = ab.first, b = ab.second;
-        int d = rad(a), need = (a == 1 ? 2 : d);
-        if (ra[a] < (ull)need || rb[b] < (ull)need) {
+    ans = C % mod;
+    for (int i = 0; i < pc; i++) {
+        int a = pa[i], b = pb[i];
+        int d = rd(a), mn = (a == 1 ? 2 : d);
+        if (ra[a] < (ull)mn || rb[b] < (ull)mn) {
             continue;
         }
         u128 lim = (u128)C * a / b;
-        ull r = min(rb[b], lim < (u128)A ? iroot(lim, a) : ra[a]);
+        ull r = min(rb[b], lim < (u128)A ? rt(lim, a) : ra[a]);
         ull cnt = a == 1 ? (r > 1 ? r - 1 : 0) : r / d;
         ans = (ans + cnt % mod) % mod;
     }
