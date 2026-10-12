@@ -1,0 +1,31 @@
+{
+  "name": "P2724 [IOI 1998 / USACO3.1] 联系 Contact",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P2724",
+  "interactive": false,
+  "memoryLimit": 125,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "2 4 10\n01010010010001000111101100001010011001111000010010011110010000000\n",
+      "output": "23\n00\n15\n01 10\n12\n100\n11\n11 000 001\n10\n010\n8\n0100\n7\n0010 1001\n6\n111 0000\n5\n011 110 1000\n4\n0001 0011 1100\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P2724IOI1998USACO31Contact"
+    }
+  },
+  "batch": {
+    "id": "6154a555-dfdd-4ee4-9b29-cdd062a7d647",
+    "size": 1
+  }
+}
