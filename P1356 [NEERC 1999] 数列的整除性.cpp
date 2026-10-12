@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: de04c962-3397-4a10-abfb-9cbc9d161522
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -20,7 +20,7 @@ Copyright (C) 2026 TangYixiao
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
 #define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
 #define FILE_INDEX 1                      // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -596,9 +596,24 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
+const int N = 105;
+int T, n, k, a;
+bool dp[2][N];
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> k >> a;
+    memset(dp, 0, sizeof(dp));
+    a = (a % k + k) % k;
+    dp[1][a] = true;
+    for (int i = 2; i <= n; i++) {
+        cin >> a;
+        a = (a % k + k) % k;
+        for (int j = 0; j < k; j++) {
+            dp[i & 1][j] = dp[(i - 1) & 1][(j - a + k) % k] || dp[(i - 1) & 1][(j + a) % k];
+        }
+    }
+    cout << (dp[n & 1][0] ? "Divisible" : "Not divisible") << "\n";
     return;
 }
 } // namespace TANGYIXIAO
