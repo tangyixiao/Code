@@ -6,7 +6,7 @@
 //  Memory Limit: 128 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
-//  Test Type: single
+//  Test Type: multiple
 //  Batch ID: 3d4349d3-0b19-42bb-95e7-5d39c7e70121
 //
 //  Algorithm:
@@ -20,7 +20,7 @@ Copyright (C) 2026 TangYixiao
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
 #define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
 #define FILE_INDEX 1                      // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -600,18 +600,14 @@ namespace TANGYIXIAO {
 constexpr long long MOD = 998244353;
 constexpr long long INV2 = 499122177;
 inline void solve(int Task_Id) {
-    int T;
-    cin >> T;
-    for (; T; T--) {
-        long long n;
-        cin >> n;
-        if (n < 3) {
-            cout << 0 << '\n';
-            continue;
-        }
-        long long a = n % MOD, b = (n - 1) % MOD, c = (n - 2) % MOD;
-        cout << a * b % MOD * c % MOD * c % MOD * INV2 % MOD << '\n';
+    long long n;
+    cin >> n;
+    if (n < 3) {
+        cout << 0 << '\n';
+        return;
     }
+    long long a = n % MOD, b = (n - 1) % MOD, c = (n - 2) % MOD;
+    cout << a * b % MOD * c % MOD * c % MOD * INV2 % MOD << '\n';
     return;
 }
 } // namespace TANGYIXIAO

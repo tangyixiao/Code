@@ -6,12 +6,12 @@
 //  Memory Limit: 512 MB
 //  Time Limit: 2500 ms
 //  Interactive: false
-//  Test Type: single
+//  Test Type: multiple
 //  Batch ID: 209f6363-9387-4a2a-9c68-b88ba20f9061
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -20,7 +20,7 @@ Copyright (C) 2026 TangYixiao
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
 #define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
 #define FILE_INDEX 1                      // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -597,8 +597,115 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+constexpr long long MOD = 1000000007;
+inline u128 power_cap(ull x, int e, u128 lim) {
+    u128 value = 1, base = x;
+    while (e) {
+        if (e & 1) {
+            if (base > lim / value) {
+                return lim + 1;
+            }
+            value *= base;
+        }
+        e >>= 1;
+        if (e) {
+            if (base > lim / base) {
+                base = lim + 1;
+            } else {
+                base *= base;
+            }
+        }
+    }
+    return value;
+}
+inline bool power_leq(ull x, int e, u128 lim) {
+    return power_cap(x, e, lim) <= lim;
+}
+inline ull integer_root(u128 x, int e) {
+    if (x == 0) {
+        return 0;
+    }
+    if (e == 1) {
+        return (ull)x;
+    }
+    int bits = 0;
+    for (u128 v = x; v; v >>= 1) {
+        bits++;
+    }
+    ull r = 1ULL << ((bits + e - 1) / e);
+    for (;;) {
+        u128 p = power_cap(r, e - 1, x);
+        u128 q = p > x ? 0 : x / p;
+        ull nr = (ull)(((u128)(e - 1) * r + q) / e);
+        if (nr >= r) {
+            break;
+        }
+        r = nr;
+    }
+    while (power_leq(r + 1, e, x)) {
+        r++;
+    }
+    while (!power_leq(r, e, x)) {
+        r--;
+    }
+    return r;
+}
+inline int radical(int x) {
+    int r = 1;
+    for (int p = 2; p * p <= x; p++) {
+        if (x % p == 0) {
+            r *= p;
+            for (; x % p == 0; x /= p) {
+            }
+        }
+    }
+    if (x > 1) {
+        r *= x;
+    }
+    return r;
+}
+inline const vector<pair<int, int>> &coprime_pairs() {
+    static const vector<pair<int, int>> pairs = []() {
+        vector<pair<int, int>> result;
+        for (int a = 1; a <= 59; a++) {
+            for (int b = 1; b <= 59; b++) {
+                if (gcd(a, b) == 1) {
+                    result.push_back({a, b});
+                }
+            }
+        }
+        return result;
+    }();
+    return pairs;
+}
 inline void solve(int Task_Id) {
-    // do something here
+    ull A, B, C;
+    cin >> A >> B >> C;
+    ull rootA[60], rootB[60];
+    for (int e = 1; e <= 59; e++) {
+        rootA[e] = integer_root(A, e);
+        rootB[e] = integer_root(B, e);
+    }
+    long long ans = C % MOD;
+    for (const auto &pair : coprime_pairs()) {
+        int a = pair.first, b = pair.second;
+        int d = radical(a), need = (a == 1 ? 2 : d);
+        if (rootA[a] < (ull)need) {
+            continue;
+        }
+        if (rootB[b] < (ull)need) {
+            continue;
+        }
+        u128 zlim = (u128)C * a / b;
+        ull xbound = rootA[a];
+        if (zlim < (u128)A) {
+            xbound = integer_root(zlim, a);
+        }
+        ull r = min(rootB[b], xbound);
+        ull ways = a == 1 ? (r > 1 ? r - 1 : 0) : r / d;
+        ans = (ans + ways % MOD) % MOD;
+    }
+    cout << ans << '\n';
     return;
 }
 } // namespace TANGYIXIAO

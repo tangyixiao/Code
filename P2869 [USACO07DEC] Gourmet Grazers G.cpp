@@ -601,41 +601,41 @@ inline void solve(int Task_Id) {
     int n, m;
     cin >> n >> m;
     struct Cow {
-        long long price, green;
+        long long a, b;
     };
     struct Grass {
-        long long price, green;
+        long long c, d;
     };
-    vector<Cow> cows(n);
-    vector<Grass> grass(m);
-    for (auto &cow : cows) {
-        cin >> cow.price >> cow.green;
+    vector<Cow> a(n);
+    vector<Grass> b(m);
+    for (auto &x : a) {
+        cin >> x.a >> x.b;
     }
-    for (auto &food : grass) {
-        cin >> food.price >> food.green;
+    for (auto &x : b) {
+        cin >> x.c >> x.d;
     }
-    sort(cows.begin(), cows.end(), [](const Cow &a, const Cow &b) {
-        return a.green > b.green;
+    sort(a.begin(), a.end(), [](const Cow &x, const Cow &y) {
+        return x.b > y.b;
     });
-    sort(grass.begin(), grass.end(), [](const Grass &a, const Grass &b) {
-        return a.green > b.green;
+    sort(b.begin(), b.end(), [](const Grass &x, const Grass &y) {
+        return x.d > y.d;
     });
-    multiset<long long> prices;
-    long long answer = 0;
+    multiset<long long> s;
+    long long ans = 0;
     int j = 0;
-    for (const auto &cow : cows) {
-        for (; j < m && grass[j].green >= cow.green; j++) {
-            prices.insert(grass[j].price);
+    for (const auto &x : a) {
+        for (; j < m && b[j].d >= x.b; j++) {
+            s.insert(b[j].c);
         }
-        auto it = prices.lower_bound(cow.price);
-        if (it == prices.end()) {
+        auto it = s.lower_bound(x.a);
+        if (it == s.end()) {
             cout << -1 << '\n';
             return;
         }
-        answer += *it;
-        prices.erase(it);
+        ans += *it;
+        s.erase(it);
     }
-    cout << answer << '\n';
+    cout << ans << '\n';
     return;
 }
 } // namespace TANGYIXIAO

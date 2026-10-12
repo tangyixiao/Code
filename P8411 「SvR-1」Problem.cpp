@@ -622,7 +622,7 @@ inline void solve(int Task_Id) {
         pq.push(v);
     }
     long long mn = a[1], ans = mn;
-    for (int done = 1; done < n; done++) {
+    for (int i = 1; i < n; i++) {
         int u = pq.top();
         pq.pop();
         mn = min(mn, (long long)a[u]);
