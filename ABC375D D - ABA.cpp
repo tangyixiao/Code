@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 1e78c82d-51f9-41b5-80a9-82a931511b64
 //
-//  Algorithm: 
-//  Complexity: O()
-//  Note: 
+//  Algorithm: Count equal endpoints with prefix counts and position sums.
+//  Complexity: O(n) time, O(1) auxiliary space
+//  Note: Use long long for the answer and position sums.
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,15 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+string s;
+ll cnt[26], pos[26], ans;
+int x;
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> s;
+    for (int i = 0; i < (int)s.size(); i++) {
+        x = s[i] - 'A', ans += cnt[x] * (i - 1) - pos[x], cnt[x]++, pos[x] += i;
+    }
+    cout << ans << '\n';
     return;
 }
 } // namespace TANGYIXIAO
