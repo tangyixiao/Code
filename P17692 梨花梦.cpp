@@ -581,9 +581,9 @@ signed main() {
 #elif JUDGE_TYPE == 2
     Local_File(FILE_NAME, FILE_INDEX);
 #endif
-    int T = 1;
+    int T = 1, C;
 #ifdef MULTIPLE_TEST
-    cin >> T;
+    cin >> T >> C;
 #endif
     for (int Task_Id = 1; Task_Id <= T; Task_Id++) {
         solve(Task_Id);
