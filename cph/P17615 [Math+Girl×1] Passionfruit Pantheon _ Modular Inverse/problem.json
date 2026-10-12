@@ -1,0 +1,31 @@
+{
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "interactive": false, 
+  "languages": {
+    "java": {
+      "taskClass": "P17615MathGirl1PassionfruitPantheonModularInverse", 
+      "mainClass": "Main"
+    }
+  }, 
+  "memoryLimit": 512, 
+  "tests": [
+    {
+      "input": "5\n1\n4\n6\n10\n100\n", 
+      "output": "0\n1\n2\n4\n8\n"
+    }
+  ], 
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu", 
+  "name": "P17615 [Math+Girl×1] Passionfruit Pantheon / Modular Inverse", 
+  "url": "https://www.luogu.com.cn/problem/P17615", 
+  "batch": {
+    "id": "916bd8a7-7d52-421d-b6a6-9d5f0ff70869", 
+    "size": 1
+  }
+}
