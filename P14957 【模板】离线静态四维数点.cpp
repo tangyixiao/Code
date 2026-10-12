@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 0646a4c7-a95e-4851-a453-60de21c5eaf4
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -596,9 +596,108 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
-inline void solve(int Task_Id) {
-    // do something here
+const int N = 800005;
+struct Node {
+    int x, y, z, w, id;
+} a[N];
+struct Event {
+    int y, z, w, id;
+} b[N], tmp[N];
+int n, m, tot, len, now, bit[N], tag[N], ans[N], val[N];
+
+inline void add(int x) {
+    for (int i = x; i <= len; i += i & -i) {
+        if (tag[i] != now) {
+            tag[i] = now;
+            bit[i] = 0;
+        }
+        bit[i]++;
+    }
+}
+inline int ask(int x) {
+    int res = 0;
+    for (int i = x; i; i -= i & -i) {
+        if (tag[i] == now) {
+            res += bit[i];
+        }
+    }
+    return res;
+}
+inline void cdq3(int l, int r) {
+    if (l >= r) {
+        return;
+    }
+    int mid = (l + r) >> 1;
+    cdq3(l, mid);
+    cdq3(mid + 1, r);
+    ++now;
+    int i = l, j = mid + 1, k = l;
+    for (; i <= mid || j <= r;) {
+        if (j > r || (i <= mid && b[i].z <= b[j].z)) {
+            if (!b[i].id) {
+                add(b[i].w);
+            }
+            tmp[k++] = b[i++];
+        } else {
+            if (b[j].id) {
+                ans[b[j].id] += ask(b[j].w);
+            }
+            tmp[k++] = b[j++];
+        }
+    }
+    for (int p = l; p <= r; p++) {
+        b[p] = tmp[p];
+    }
+}
+inline void cdq4(int l, int r) {
+    if (l >= r) {
+        return;
+    }
+    int mid = (l + r) >> 1;
+    cdq4(l, mid);
+    cdq4(mid + 1, r);
+    tot = 0;
+    for (int i = l; i <= mid; i++) {
+        if (!a[i].id) {
+            b[++tot] = {a[i].y, a[i].z, a[i].w, 0};
+        }
+    }
+    int midtot = tot;
+    for (int i = mid + 1; i <= r; i++) {
+        if (a[i].id) {
+            b[++tot] = {a[i].y, a[i].z, a[i].w, a[i].id};
+        }
+    }
+    if (midtot && tot > midtot) {
+        sort(b + 1, b + tot + 1, [](const Event &x, const Event &y) {
+            return x.y != y.y ? x.y < y.y : x.id < y.id;
+        });
+        cdq3(1, tot);
+    }
+}
+inline void solve() {
+    cin >> n >> m;
+    for (int i = 1; i <= n + m; i++) {
+        cin >> a[i].x >> a[i].y >> a[i].z >> a[i].w;
+        a[i].z = -a[i].z;
+        a[i].w = -a[i].w;
+        a[i].id = i <= n ? 0 : i - n;
+        val[i] = a[i].w;
+    }
+    sort(val + 1, val + n + m + 1);
+    len = unique(val + 1, val + n + m + 1) - val - 1;
+    for (int i = 1; i <= n + m; i++) {
+        a[i].w = lower_bound(val + 1, val + len + 1, a[i].w) - val;
+    }
+    sort(a + 1, a + n + m + 1, [](const Node &x, const Node &y) {
+        return x.x != y.x ? x.x < y.x : x.id < y.id;
+    });
+    cdq4(1, n + m);
+    for (int i = 1; i <= m; i++) {
+        cout << ans[i] << "\n";
+    }
     return;
 }
 } // namespace TANGYIXIAO
