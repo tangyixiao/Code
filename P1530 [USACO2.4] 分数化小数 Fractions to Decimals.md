@@ -33,3 +33,42 @@
 翻译来自NOCOW
 
 USACO 2.4
+
+---
+
+# P1530 [USACO2.4] Fractions to Decimals
+
+## 题目描述
+
+Write a program that, given a fraction of the form $\dfrac{N}{D}$, outputs its decimal representation. If the decimal has a repeating cycle, enclose the cycle in a pair of parentheses.
+
+For example, $\dfrac{1}{3}=0.33333333\ldots$ is written as $0.(3)$, $\dfrac{41}{333}= 0.123123123\ldots$ is written as $0.(123)$, and an integer $x$ is written as $x.0$.
+
+## 输入格式
+
+The input contains two integers $N$ and $D$ ($1 \leq N, D \leq 10^5$).
+
+## 输出格式
+
+Output the decimal representation computed according to the rules above. If the length of the result exceeds $76$, print $76$ characters per line.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+45 56
+```
+
+### 输出 #1
+
+```
+0.803(571428)
+```
+
+## 说明/提示
+
+Translated from NOCOW.
+USACO 2.4
+
+Translated by ChatGPT 5
