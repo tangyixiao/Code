@@ -1,0 +1,13 @@
+2
+basic_info
+4 3
+name sid grade
+Fusu 001 1
+Maxmilite 002 2
+Expect2004 003 2
+GPA
+2 2
+sid GPA
+001 77.88
+1
+select GPA from GPA where sid=001

@@ -1,0 +1,31 @@
+{
+  "name": "P2994 [USACO10OCT] Dinner Time S",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P2994",
+  "interactive": false,
+  "memoryLimit": 125,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "2 1\n0 1\n1 0\n1 10\n",
+      "output": "2\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P2994USACO10OCTDinnerTimeS"
+    }
+  },
+  "batch": {
+    "id": "3a22cfc5-5739-4573-b269-6d41c399a339",
+    "size": 1
+  }
+}

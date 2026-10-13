@@ -1,0 +1,31 @@
+{
+  "name": "P15433 [蓝桥杯 2025 国 Python B] 灯塔",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P15433",
+  "interactive": false,
+  "memoryLimit": 512,
+  "timeLimit": 2000,
+  "tests": [
+    {
+      "input": "10 9\n1 3 2 5 2 10 9 6 5\n",
+      "output": "4\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P154332025PythonB"
+    }
+  },
+  "batch": {
+    "id": "919496da-e91e-4631-aa40-3294b58d8317",
+    "size": 1
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "P2723 [USACO3.1] 丑数 Humble Numbers",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P2723",
+  "interactive": false,
+  "memoryLimit": 125,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "4 19\n2 3 5 7\n",
+      "output": "27\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P2723USACO31HumbleNumbers"
+    }
+  },
+  "batch": {
+    "id": "fc2e1400-5956-4abe-bd2f-9902ae93b199",
+    "size": 1
+  }
+}
