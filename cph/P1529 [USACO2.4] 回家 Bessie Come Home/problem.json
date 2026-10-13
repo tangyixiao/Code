@@ -1,0 +1,31 @@
+{
+  "input": {
+    "type": "stdin"
+  }, 
+  "interactive": false, 
+  "group": "Luogu", 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P1529USACO24BessieComeHome"
+    }
+  }, 
+  "batch": {
+    "size": 1, 
+    "id": "a4a3a951-e299-4cd7-9609-190b21550c31"
+  }, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "memoryLimit": 512, 
+  "url": "https://www.luogu.com.cn/problem/P1529", 
+  "name": "P1529 [USACO2.4] 回家 Bessie Come Home", 
+  "testType": "single", 
+  "timeLimit": 1000, 
+  "tests": [
+    {
+      "input": "5\nA d 6\nB d 3\nC e 9\nd Z 8\ne Z 3\n", 
+      "output": "B 11\n"
+    }
+  ]
+}
