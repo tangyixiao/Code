@@ -48,3 +48,50 @@ USACO 2.4
 
 ---
 
+# P1529 [USACO2.4] Bessie Come Home
+
+## 题目描述
+
+It is dinnertime, and the cows are out in scattered pastures. Farmer John rings the electric bell, so they start heading to the barn. Your job is to determine which cow will reach the barn first (in the given testdata, there is always exactly one fastest cow). At milking time (before dinner), each cow is in her own pasture; some pastures may have no cows.
+
+Each road connects a pair of pastures (possibly the same pasture). Sometimes, more than one road connects the same pair of pastures. At least one pasture is connected to the barn by a road. Therefore, all cows can eventually reach the barn, and cows always take the shortest paths. Of course, cows can travel in either direction, and they all travel at the same speed. Pastures are labeled $\texttt{a} \ldots \texttt{z}$ and $\texttt{A} \ldots \texttt{Y}$. Each uppercase-labeled pasture contains one cow, while lowercase-labeled pastures contain no cows. The barn is labeled $\texttt{Z}$; note that there is no cow in the barn.
+
+**Note that $\texttt{m}$ and $\texttt{M}$ are not the same pasture.**
+
+## 输入格式
+
+The first line contains an integer $P$ ($1 \leq P \leq 10^4$), the number of roads connecting pastures and the barn.
+
+Each of the next $P$ lines contains two letters and a positive integer, separated by spaces: the labels of the two pastures connected by the road, and the length of that road (each road length is at most $10^3$).
+
+## 输出格式
+
+A single line containing two items: the label of the pasture where the cow that reaches the barn first starts, and the length of that cow’s path.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+5
+A d 6
+B d 3
+C e 9
+d Z 8
+e Z 3
+```
+
+### 输出 #1
+
+```
+B 11
+
+```
+
+## 说明/提示
+
+Translated from NOCOW.
+
+USACO 2.4.
+
+Translated by ChatGPT 5
