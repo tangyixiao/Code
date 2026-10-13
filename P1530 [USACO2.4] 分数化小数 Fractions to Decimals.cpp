@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 571c3987-b8b5-4928-96a7-2aa433ae2759
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -596,9 +596,35 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
+int n, d, r, pos[100005];
+string ans;
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> d;
+    ans = to_string(n / d) + ".";
+    r = n % d;
+    memset(pos, -1, sizeof(pos));
+    while (r && pos[r] == -1) {
+        pos[r] = ans.size();
+        r *= 10;
+        ans += char('0' + r / d);
+        r %= d;
+    }
+    if (r) {
+        ans.insert(pos[r], "(");
+        ans += ")";
+    }
+    if (ans.back() == '.') {
+        ans += "0";
+    }
+    for (int i = 0; i < (int)ans.size(); i++) {
+        cout << ans[i];
+        if ((i + 1) % 76 == 0 || i + 1 == (int)ans.size()) {
+            cout << "\n";
+        }
+    }
     return;
 }
 } // namespace TANGYIXIAO
