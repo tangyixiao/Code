@@ -599,12 +599,13 @@ signed main() {
 namespace TANGYIXIAO {
 int n, m, T, r1, c1, r2, c2;
 int dp[16][105][105];
-char s[105][105];
+string s[105];
 
 inline void solve(int Task_Id) {
     cin >> n >> m >> T;
     for (int i = 1; i <= n; i++) {
-        cin >> (s[i] + 1);
+        cin >> s[i];
+        s[i] = " " + s[i];
     }
     cin >> r1 >> c1 >> r2 >> c2;
     dp[0][r1][c1] = 1;
