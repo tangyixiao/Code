@@ -1,0 +1,35 @@
+{
+  "name": "P17669 [IO 2025 #4] 卢拉的火柴魔术",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P17669",
+  "interactive": false,
+  "memoryLimit": 512,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "1\n",
+      "output": "2\n"
+    },
+    {
+      "input": "2\n",
+      "output": "3\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P17669IO20254"
+    }
+  },
+  "batch": {
+    "id": "24d7307b-09b2-48ae-992a-85f51db0140d",
+    "size": 1
+  }
+}
