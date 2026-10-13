@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: a4a3a951-e299-4cd7-9609-190b21550c31
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -596,9 +596,44 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
+int p, w, dis[128], vis[128];
+char a, b, ans;
+vector<pair<int, int>> g[128];
+priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> q;
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> p;
+    for (int i = 1; i <= p; i++) {
+        cin >> a >> b >> w;
+        g[a].push_back({b, w});
+        g[b].push_back({a, w});
+    }
+    memset(dis, 0x3f, sizeof(dis));
+    dis['Z'] = 0;
+    q.push({0, 'Z'});
+    while (!q.empty()) {
+        int u = q.top().second;
+        q.pop();
+        if (!vis[u]) {
+            vis[u] = 1;
+            for (auto e : g[u]) {
+                if (dis[e.first] > dis[u] + e.second) {
+                    dis[e.first] = dis[u] + e.second;
+                    q.push({dis[e.first], e.first});
+                }
+            }
+        }
+    }
+    w = 0x3f3f3f3f;
+    for (char c = 'A'; c <= 'Y'; c++) {
+        if (dis[c] < w) {
+            w = dis[c];
+            ans = c;
+        }
+    }
+    cout << ans << " " << w << "\n";
     return;
 }
 } // namespace TANGYIXIAO
