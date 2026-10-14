@@ -86,3 +86,6 @@ Adam 喜欢数。有一次他在他的抽屉里找到了一沓空白纸卡牌，
 翻译自 BalticOI 2005 Day0 Card。
 
 原官网已经丢失此题，原数据可以在[这里](https://www.acmicpc.net/problem/3373)评测。
+
+---
+
