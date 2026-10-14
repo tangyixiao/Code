@@ -1,0 +1,35 @@
+{
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P6013CSGRound3"
+    }
+  }, 
+  "timeLimit": 1000, 
+  "name": "P6013 [CSGRound3] 压岁钱", 
+  "batch": {
+    "size": 1, 
+    "id": "7ea3a57f-727b-4e9a-b189-14fd2e1b9971"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu", 
+  "interactive": false, 
+  "tests": [
+    {
+      "output": "1\n", 
+      "input": "3\n1 10\n2 20\n2 10\n"
+    }, 
+    {
+      "output": "1\n", 
+      "input": "5\n1 10\n3 5 5\n2 10\n1 10\n2 20\n"
+    }
+  ], 
+  "memoryLimit": 125, 
+  "testType": "single", 
+  "url": "https://www.luogu.com.cn/problem/P6013", 
+  "output": {
+    "type": "stdout"
+  }
+}
