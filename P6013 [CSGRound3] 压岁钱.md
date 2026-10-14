@@ -112,3 +112,116 @@
 
 ---
 
+# P6013 [CSGRound3] Lucky Money
+
+## 题目背景
+
+Wishing everyone a happy Year of the Rat in the Gengzi year! Best wishes!
+
+May the pneumonia outbreak be brought under control as soon as possible. Stay strong, China!
+
+When the New Year comes, Xiao Z can always receive a lot of lucky money.
+
+Xiao Z is a player who really likes spending money in games, so from time to time he will spend part of his lucky money to buy skins and gems.
+
+But Xiao Z is also very worried that he will spend all his lucky money in just a few days. To deal with this, Xiao Z has a sealing technique that can temporarily seal away part of his money (meaning it cannot be spent). It can only be used after the seal is lifted on some day.
+
+## 题目描述
+
+There are $m$ events in total, and the events are divided into the following $3$ types.
+
+1. Xiao Z receives $a$ yuan of lucky money.
+2. Xiao Z spends $a$ yuan of lucky money to buy skins.
+3. Xiao Z seals $a$ yuan of his money. The seal will be lifted $1$ second before event $b$ happens. It is guaranteed that each time, the money Xiao Z currently has is greater than or equal to the amount being sealed.
+
+If Xiao Z does not have enough money to spend on some event, Xiao Z will feel unhappy. At the same time, when he does not have enough money, Xiao Z will not spend the money.
+
+Please tell Xiao Z in how many events he will not have enough money to spend.
+
+## 输入格式
+
+The first line contains an integer $m$, which indicates the total number of events.
+
+The next $m$ lines each start with an integer $t$, indicating the type of the event.
+
+If $t=1$ or $t=2$, then it is followed by an integer $a$.
+
+If $t=3$, then it is followed by two integers $a,b$.
+
+## 输出格式
+
+Output one line with one integer, indicating the number of events in which **there is not enough money to spend**.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+3
+1 10
+2 20
+2 10
+```
+
+### 输出 #1
+
+```
+1
+```
+
+## 输入输出样例 #2
+
+### 输入 #2
+
+```
+5
+1 10
+3 5 5
+2 10
+1 10
+2 20
+```
+
+### 输出 #2
+
+```
+1
+```
+
+## 说明/提示
+
+**[Sample 1 Explanation]**
+
+Day 1: Income $10$ yuan, balance $10$ yuan.
+
+Day 2: Not enough to spend $20$ yuan, balance $10$ yuan.
+
+Day 3: Spend $10$ yuan, balance $0$ yuan.
+
+Total: $1$ day.
+
+**[Sample 2 Explanation]**
+
+Day 1: Income $10$ yuan, balance $10$ yuan.
+
+Day 2: Seal $5$ yuan, balance $5$ yuan.
+
+Day 3: Not enough to spend $10$ yuan, balance $5$ yuan.
+
+Day 4: Income $10$ yuan, balance $15$ yuan.
+
+Day 5: The seal is lifted, spend $20$ yuan, balance $0$ yuan.
+
+Total: $1$ day.
+
+---
+
+**[Constraints]**
+
+For $50\%$ of the testdata, $m,a \leq 5\times 10^3$.
+
+For $70\%$ of the testdata, $t \ne 3$.
+
+For $100\%$ of the testdata, $ 1 \leq b \le m \leq 10^6$, $1 \le t \le 3$, $1 \leq a \leq 10^7$.
+
+Translated by ChatGPT 5
