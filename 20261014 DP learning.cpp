@@ -2,7 +2,7 @@
 using namespace std;
 int n, f[25], k;
 signed main() {
-    cin >> n;
+    cin >> n >> k;
     f[0] = f[1] = 1;
     f[k] = 0;
     for (int i = 2; i <= n; i++) {
