@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 7ea3a57f-727b-4e9a-b189-14fd2e1b9971
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -596,9 +596,33 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
+
 namespace TANGYIXIAO {
+const int N = 1000005;
+long long f[N], money;
+int m, t, a, b, ans;
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> m;
+    for (int i = 1; i <= m; i++) {
+        money += f[i];
+        cin >> t >> a;
+        if (t == 1) {
+            money += a;
+        } else if (t == 2) {
+            if (money >= a) {
+                money -= a;
+            } else {
+                ans++;
+            }
+        } else {
+            cin >> b;
+            money -= a;
+            f[b] += a;
+        }
+    }
+    cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO
