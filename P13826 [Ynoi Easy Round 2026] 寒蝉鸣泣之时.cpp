@@ -598,8 +598,114 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+using ll = long long;
+const int N = 300005, B = 450, S = N / B + 10, INF = 1e9;
+
+struct Event {
+    int l, r, v, nxt;
+} e[N * 2];
+
+int n, m, k, tot, ec, x1, x2, y1, y2;
+int head[N], id[N], bg[S], ed[S], a[N], tag[S], mn[S], mx[S];
+ll ans[N];
+unsigned short cnt[S][N];
+
+inline void add_event(int x, int l, int r, int v) {
+    e[++ec] = {l, r, v, head[x]};
+    head[x] = ec;
+}
+
+inline void calc(int b) {
+    if (mn[b] > mx[b]) {
+        return;
+    }
+    for (int i = bg[b]; i <= ed[b]; i++) {
+        for (int j = max(1, (a[i] + mn[b] + m - 1) / m), r = min(k, (a[i] + mx[b]) / m); j <= r; j++) {
+            ans[j] += cnt[b][j * m - a[i]];
+        }
+    }
+    memset(cnt[b] + mn[b], 0, (mx[b] - mn[b] + 1) * sizeof(unsigned short));
+    mn[b] = INF;
+    mx[b] = -INF;
+}
+
+inline void update(int l, int r, int v) {
+    int L = id[l], R = id[r];
+    if (L == R) {
+        if (l == bg[L] && r == ed[L]) {
+            tag[L] += v;
+        } else {
+            calc(L);
+            for (int i = l; i <= r; i++) {
+                a[i] += v;
+            }
+        }
+    } else {
+        if (l == bg[L]) {
+            tag[L] += v;
+        } else {
+            calc(L);
+            for (int i = l; i <= ed[L]; i++) {
+                a[i] += v;
+            }
+        }
+        for (int i = L + 1; i < R; i++) {
+            tag[i] += v;
+        }
+        if (r == ed[R]) {
+            tag[R] += v;
+        } else {
+            calc(R);
+            for (int i = bg[R]; i <= r; i++) {
+                a[i] += v;
+            }
+        }
+    }
+}
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> m;
+    k = n / m;
+    tot = (n - 1) / B + 1;
+
+    for (int i = 1; i <= n; i++) {
+        id[i] = (i - 1) / B + 1;
+    }
+    for (int i = 1; i <= tot; i++) {
+        bg[i] = (i - 1) * B + 1;
+        ed[i] = min(n, i * B);
+        mn[i] = INF;
+        mx[i] = -INF;
+    }
+
+    for (int i = 1; i <= n; i++) {
+        cin >> x1 >> x2 >> y1 >> y2;
+        add_event(x1, y1, y2 - 1, 1);
+        add_event(x2, y1, y2 - 1, -1);
+    }
+
+    for (int x = 1; x <= n; x++) {
+        for (int i = head[x]; i; i = e[i].nxt) {
+            update(e[i].l, e[i].r, e[i].v);
+        }
+        for (int i = 1; i <= tot; i++) {
+            ++cnt[i][tag[i]];
+            mn[i] = min(mn[i], tag[i]);
+            mx[i] = max(mx[i], tag[i]);
+        }
+        if (x % 60000 == 0) {
+            for (int i = 1; i <= tot; i++) {
+                calc(i);
+            }
+        }
+    }
+
+    for (int i = 1; i <= tot; i++) {
+        calc(i);
+    }
+    for (int i = 1; i <= k; i++) {
+        cout << ans[i] << "\n";
+    }
     return;
 }
 } // namespace TANGYIXIAO
