@@ -1,0 +1,115 @@
+# P16993 [NWERC 2018] 倒霉下注 / Jinxed Betting
+
+## 题目背景
+
+译自 [NWERC 2018](https://2018.nwerc.eu/) J 题。
+
+## 题目描述
+
+Julia 正在为一项大型体育比赛下注，比赛由若干两两对战的队伍组成。比赛不会并行进行，每位下注者每猜对一场比赛就得到一分。Julia 最近运气很好，目前处于领先。现在她担心好运可能要结束了，于是决定改变策略。
+
+她与一家博彩店老板合作，老板会告诉她其他所有人的下注情况。每当 Julia 要下注时，她会先查看目前分数最高的所有下注者（当然不包括她自己）的下注，然后选择其中多数人下注的队伍。如果出现平局，她就下注本场比赛两队中自己更喜欢的队伍。
+
+Julia 想知道，在最坏情况下（也就是说，无论其他人如何下注、比赛结果如何），她还能够保证领先多少场比赛。对于本题，如果没有任何其他下注者的分数严格高于 Julia，我们就认为 Julia 处于领先。
+
+例如，在样例输入 $1$ 中，Julia 初始有 $3$ 分，另外两名下注者分别有 $3$ 分和 $2$ 分。第一场比赛时，她会和另一名 $3$ 分下注者下同样的注。如果这个人下注了输的队，而另一个人下注了赢的队，那么三人的分数都会变成 $3$ 分。如果下一场比赛中另外两人下注不同队伍，Julia 会选择自己喜欢的队伍，而这当然可能输掉。因此再过两场比赛之后，她可能失去领先。
+
+## 输入格式
+
+输入包括：
+
+- 一行一个整数 $n$（$3\le n\le 10^5$），表示参与下注的人数。
+- 一行 $n$ 个整数 $p_1,\ldots,p_n$（对每个 $i$，$0\le p_i\le 10^{16}$），表示所有参与者的分数。其中第一个数是 Julia 的分数。保证一开始没有其他人的分数超过 Julia。
+
+## 输出格式
+
+输出 Julia 能够保证继续保持领先的比赛场数。
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+3
+3 3 2
+```
+
+### 输出 #1
+
+```
+1
+```
+
+## 输入输出样例 #2
+
+### 输入 #2
+
+```
+5
+8 4 3 5 2
+```
+
+### 输出 #2
+
+```
+6
+```
+
+## 说明/提示
+
+【数据规模与约定】
+
+具体限制见输入格式。
+
+---
+
+# P16993 [NWERC 2018] Jinxed Betting
+
+## 题目描述
+
+Julia is betting on a large sporting competition involving matches between pairs of teams. There are no parallel matches and each bettor receives one point for every correct bet they make. Julia had a good streak and is in the lead. Now she worries that her good luck may be turning, and decides to change her strategy.
+
+She collaborates with a betting shop owner who tells her the bets made by everyone else. Whenever Julia makes a bet, she first checks the bets of all bettors with the most points so far, except herself, and then chooses the same team as the majority. In the case of a tie, she bets on her favourite of the two teams in the game.
+
+Julia wants to know for how many more matches she is guaranteed to stay in the lead in the worst case. For this problem Julia is considered to be in the lead if there is no other bettor that has strictly more points than her.
+
+## 输入格式
+
+The input consists of:
+
+- One line with an integer $n$ ($3\le n\le 10^5$), the number of people who place their bets.
+- One line with $n$ integers $p_1,\ldots,p_n$ ($0\le p_i\le 10^{16}$), the points of all people who play the betting game. The first is Julia's score, and no other score initially exceeds it.
+
+## 输出格式
+
+Output the number of matches for which Julia is guaranteed to stay in the lead.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+3
+3 3 2
+```
+
+### 输出 #1
+
+```
+1
+```
+
+## 输入输出样例 #2
+
+### 输入 #2
+
+```
+5
+8 4 3 5 2
+```
+
+### 输出 #2
+
+```
+6
+```

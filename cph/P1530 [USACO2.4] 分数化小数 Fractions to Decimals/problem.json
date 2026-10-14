@@ -1,0 +1,31 @@
+{
+  "input": {
+    "type": "stdin"
+  }, 
+  "interactive": false, 
+  "group": "Luogu", 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P1530USACO24FractionsToDecimals"
+    }
+  }, 
+  "batch": {
+    "size": 1, 
+    "id": "571c3987-b8b5-4928-96a7-2aa433ae2759"
+  }, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "memoryLimit": 125, 
+  "url": "https://www.luogu.com.cn/problem/P1530", 
+  "name": "P1530 [USACO2.4] 分数化小数 Fractions to Decimals", 
+  "testType": "single", 
+  "timeLimit": 1000, 
+  "tests": [
+    {
+      "input": "45 56\n", 
+      "output": "0.803(571428)\n"
+    }
+  ]
+}

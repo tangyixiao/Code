@@ -1,0 +1,31 @@
+{
+  "input": {
+    "type": "stdin"
+  }, 
+  "interactive": false, 
+  "group": "Luogu", 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P1535USACO08MARCowTravellingS"
+    }
+  }, 
+  "batch": {
+    "size": 1, 
+    "id": "0c369f6e-a437-49a1-aaa7-39ec3cc98ff5"
+  }, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "memoryLimit": 128, 
+  "url": "https://www.luogu.com.cn/problem/P1535", 
+  "name": "P1535 [USACO08MAR] Cow Travelling S", 
+  "testType": "single", 
+  "timeLimit": 1000, 
+  "tests": [
+    {
+      "input": "4 5 6\n...*.\n...*.\n.....\n.....\n1 3 1 5\n", 
+      "output": "1\n"
+    }
+  ]
+}
