@@ -63,3 +63,53 @@ Julia 想知道，在最坏情况下（也就是说，无论其他人如何下�
 
 ---
 
+# P16993 [NWERC 2018] Jinxed Betting
+
+## 题目描述
+
+Julia is betting on a large sporting competition involving matches between pairs of teams. There are no parallel matches and each bettor receives one point for every correct bet they make. Julia had a good streak and is in the lead. Now she worries that her good luck may be turning, and decides to change her strategy.
+
+She collaborates with a betting shop owner who tells her the bets made by everyone else. Whenever Julia makes a bet, she first checks the bets of all bettors with the most points so far, except herself, and then chooses the same team as the majority. In the case of a tie, she bets on her favourite of the two teams in the game.
+
+Julia wants to know for how many more matches she is guaranteed to stay in the lead in the worst case. For this problem Julia is considered to be in the lead if there is no other bettor that has strictly more points than her.
+
+## 输入格式
+
+The input consists of:
+
+- One line with an integer $n$ ($3\le n\le 10^5$), the number of people who place their bets.
+- One line with $n$ integers $p_1,\ldots,p_n$ ($0\le p_i\le 10^{16}$), the points of all people who play the betting game. The first is Julia's score, and no other score initially exceeds it.
+
+## 输出格式
+
+Output the number of matches for which Julia is guaranteed to stay in the lead.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+3
+3 3 2
+```
+
+### 输出 #1
+
+```
+1
+```
+
+## 输入输出样例 #2
+
+### 输入 #2
+
+```
+5
+8 4 3 5 2
+```
+
+### 输出 #2
+
+```
+6
+```
