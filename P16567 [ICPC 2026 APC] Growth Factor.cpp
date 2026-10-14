@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: eed37e64-f266-4ac7-a1d1-97c03b9361fe
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -596,9 +596,61 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
+
 namespace TANGYIXIAO {
+const int N = 200005, K = 18, mod = 998244353;
+int n, a[N], pos[N], lg[N], f[N][K + 1], c[N][K + 1];
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n;
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i];
+    }
+    for (int i = n - 1; i >= 1; i--) {
+        a[i] = min(a[i], a[i + 1]);
+    }
+
+    int m = a[n], last = 0;
+    for (int i = 1; i <= n; i++) {
+        for (int j = last + 1; j <= a[i]; j++) {
+            pos[j] = i;
+        }
+        last = a[i];
+    }
+
+    c[0][0] = 1;
+    for (int i = 1; i <= n; i++) {
+        c[i][0] = 1;
+        for (int j = 1; j <= K; j++) {
+            c[i][j] = (c[i - 1][j] + c[i - 1][j - 1]) % mod;
+        }
+    }
+
+    for (int i = 2; i <= m; i++) {
+        lg[i] = lg[i / 2] + 1;
+    }
+
+    for (int i = 1; i <= m; i++) {
+        if (i <= a[1]) {
+            f[i][0] = (f[i][0] + 1) % mod;
+        }
+        for (int j = i + i; j <= m; j += i) {
+            int L = max(pos[i], pos[j] - 1);
+            for (int k = 0; k <= lg[i]; k++) {
+                f[j][k + 1] = (f[j][k + 1] + f[i][k]) % mod;
+                f[j][0] = (f[j][0] - 1LL * f[i][k] * c[L][k + 1] % mod + mod) % mod;
+            }
+        }
+    }
+
+    int ans = 0;
+    for (int i = 1; i <= m; i++) {
+        for (int j = 0; j <= lg[i]; j++) {
+            ans = (ans + 1LL * f[i][j] * c[n][j]) % mod;
+        }
+    }
+    cout << ans << '\n';
     return;
 }
 } // namespace TANGYIXIAO
