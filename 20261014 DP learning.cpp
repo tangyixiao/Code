@@ -1,15 +1,15 @@
 #include <bits/stdc++.h>
 using namespace std;
-int n, f[25], k;
+int n, g[25], a[25];
 signed main() {
-    cin >> n >> k;
-    f[0] = f[1] = 1;
-    f[k] = 0;
-    for (int i = 2; i <= n; i++) {
-        if (i != k) {
-            f[i] = f[i - 1] + f[i - 2];
-        }
+    cin >> n;
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i];
     }
-    cout << f[n];
+    g[1] = a[1];
+    for (int i = 2; i <= n; i++) {
+        g[i] = min(g[i - 1], g[i - 2]) + a[i];
+    }
+    cout << g[n];
     return 0;
 }
