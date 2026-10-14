@@ -1,0 +1,35 @@
+{
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P16993NWERC2018JinxedBetting"
+    }
+  }, 
+  "timeLimit": 2000, 
+  "name": "P16993 [NWERC 2018] 倒霉下注 / Jinxed Betting", 
+  "batch": {
+    "size": 1, 
+    "id": "54ad885b-95d8-4490-a83c-472b81a28edd"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu", 
+  "interactive": false, 
+  "tests": [
+    {
+      "output": "1\n", 
+      "input": "3\n3 3 2\n"
+    }, 
+    {
+      "output": "6\n", 
+      "input": "5\n8 4 3 5 2\n"
+    }
+  ], 
+  "memoryLimit": 512, 
+  "testType": "single", 
+  "url": "https://www.luogu.com.cn/problem/P16993", 
+  "output": {
+    "type": "stdout"
+  }
+}
