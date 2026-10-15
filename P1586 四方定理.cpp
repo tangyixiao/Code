@@ -609,7 +609,7 @@ inline void solve(int Task_Id) {
     cin >> t;
     for (; t--;) {
         cin >> n;
-        cout << f[n][1] + f[n][2] + f[n][3] + f[n][4] << '\n';
+        cout << f[n][1] + f[n][2] + f[n][3] + f[n][4] << "\n";
     }
     return;
 }
