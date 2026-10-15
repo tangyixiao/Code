@@ -597,7 +597,7 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-set<int> q;
+set<int> s;
 pair<int, int> a[10];
 int sum;
 inline void solve(int Task_Id) {
@@ -605,12 +605,12 @@ inline void solve(int Task_Id) {
         cin >> a[i].first;
         a[i].second = i;
     }
-    sort(a + 1, a + 1 + n);
+    sort(a + 1, a + 1 + 8);
     for (int i = 4; i <= 8; i++) {
         sum += a[i].first;
-        q.insert(a[i].second);
+        s.insert(a[i].second);
     }
-    cout << a[i].first << " ";
+    cout << sum << " ";
     for (auto it : s) {
         cout << it << " ";
     }
