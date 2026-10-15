@@ -610,7 +610,7 @@ inline void solve(int Task_Id) {
         sum += a[i].first;
         s.insert(a[i].second);
     }
-    cout << sum << " ";
+    cout << sum << "\n";
     for (auto it : s) {
         cout << it << " ";
     }
