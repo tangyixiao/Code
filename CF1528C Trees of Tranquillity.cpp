@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 1f558b51-4bb7-44dc-b7e4-56821337ca24
 //
-//  Algorithm: 
-//  Complexity: O()
-//  Note: 
+//  Algorithm: DFS 序 + set + 回滚
+//  Complexity: O(n log n) time, O(n) space
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -20,7 +20,7 @@ Copyright (C) 2026 TangYixiao
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
 #define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
 #define FILE_INDEX 1                      // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -597,8 +597,45 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 3e5 + 5;
+int n, p, tot, top, ans, l[N], r[N], id[N], st[N], c[N];
+vector<int> a[N], b[N];
+set<int> s;
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n, tot = top = ans = 0, s.clear();
+    for (int i = 1; i <= n; i++) { a[i].clear(), b[i].clear(); }
+    for (int i = 2; i <= n; i++) { cin >> p, a[p].push_back(i); }
+    for (int i = 2; i <= n; i++) { cin >> p, b[p].push_back(i); }
+    st[++top] = 1;
+    for (; top;) {
+        int u = st[top--];
+        if (u < 0) {
+            r[-u] = tot;
+        } else {
+            l[u] = ++tot, id[tot] = u, st[++top] = -u;
+            for (int v : b[u]) { st[++top] = v; }
+        }
+    }
+    st[++top] = 1;
+    for (; top;) {
+        int u = st[top--];
+        if (u < 0) {
+            u = -u;
+            if (c[u] >= 0) { s.erase(l[u]); }
+            if (c[u] > 0) { s.insert(c[u]); }
+        } else {
+            c[u] = -1;
+            auto it = s.lower_bound(l[u]);
+            if (it == s.end() || *it > r[u]) {
+                c[u] = 0;
+                if (it != s.begin() && r[id[*prev(it)]] >= l[u]) { c[u] = *prev(it), s.erase(prev(it)); }
+                s.insert(l[u]), ans = max(ans, (int)s.size());
+            }
+            st[++top] = -u;
+            for (int v : a[u]) { st[++top] = v; }
+        }
+    }
+    cout << ans << '\n';
     return;
 }
 } // namespace TANGYIXIAO
