@@ -598,8 +598,46 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 300005;
+long long a[N], b[N], n, m;
+
+inline bool check(long long x) {
+    long long sum = 0;
+    for (int i = 1; i <= n; i++) {
+        if (a[i] <= b[i]) {
+            sum += (x + b[i] - 1) / b[i];
+        } else if (x <= m * a[i]) {
+            sum += (x + a[i] - 1) / a[i];
+        } else {
+            sum += m + (x - m * a[i] + b[i] - 1) / b[i];
+        }
+
+        if (sum > n * m) {
+            return false;
+        }
+    }
+    return true;
+}
+
 inline void solve(int Task_Id) {
-    // do something here
-    return;
+    cin >> n >> m;
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i];
+    }
+    for (int i = 1; i <= n; i++) {
+        cin >> b[i];
+    }
+
+    long long l = 0, r = m * 1000000000LL;
+    while (l < r) {
+        long long mid = (l + r + 1) / 2;
+        if (check(mid)) {
+            l = mid;
+        } else {
+            r = mid - 1;
+        }
+    }
+
+    cout << l << "\n";
 }
 } // namespace TANGYIXIAO
