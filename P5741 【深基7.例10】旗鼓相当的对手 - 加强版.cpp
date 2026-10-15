@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: f682407c-53cb-4ccf-b3c0-7b2e63e56fe1
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,25 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 1e3 + 5;
+int n;
+struct node {
+    string s;
+    int c, m, e;
+} a[N];
+set<pair<string, string>> k;
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n;
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i].s >> a[i].m >> a[i].e;
+    }
+    for (int i = 1; i <= n; i++) {
+        for (int j = i + 1; j <= n; j++) {
+            if (max(abs(a[i].c - a[j].c), max(abs(a[i].m - a[j].m), abs(a[i].e - a[j].e))) <= 5 && abs((a[i] + b[i] + c[i]) - (a[j] + b[j] + c[j])) <= 10) {
+                cout << a[i].s << " " << a[j].s << "\n";
+            }
+        }
+    }
     return;
 }
 } // namespace TANGYIXIAO
