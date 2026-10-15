@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 6697ac5e-faeb-4f9a-bad0-621e64ba3085
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,23 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+set<int> q;
+pair<int, int> a[10];
+int sum;
 inline void solve(int Task_Id) {
-    // do something here
+    for (int i = 1; i <= 8; i++) {
+        cin >> a[i].first;
+        a[i].second = i;
+    }
+    sort(a + 1, a + 1 + n);
+    for (int i = 4; i <= 8; i++) {
+        sum += a[i].first;
+        q.insert(a[i].second);
+    }
+    cout << a[i].first << " ";
+    for (auto it : s) {
+        cout << it << " ";
+    }
     return;
 }
 } // namespace TANGYIXIAO
