@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 0943e49f-8aff-43c4-9970-3f8921985ff6
 //
-//  Algorithm: 
-//  Complexity: O()
-//  Note: 
+//  Algorithm: DP, divisor sieve
+//  Complexity: O(n log n)
+//  Note: Prefix sums
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,19 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 1e6 + 5, mod = 998244353;
+int n, f, s, d[N];
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n;
+    for (int i = 1; i <= n; i++) {
+        for (int j = i; j <= n; j += i) {
+            d[j]++;
+        }
+    }
+    for (int i = 1; i <= n; i++) {
+        f = (s + d[i]) % mod, s = (s + f) % mod;
+    }
+    cout << f << '\n';
     return;
 }
 } // namespace TANGYIXIAO
