@@ -16,6 +16,7 @@ This monorepo contains independent competitive-programming solutions and support
 
 Do not proactively fill in or modify the algorithm and complexity fields in solution header comments.
 Use the string literal `"\n"` instead of the character literal `'\n'` for C++ output line breaks.
+For array capacity constants, use scientific notation with a `+ 5` margin, such as `N = 1e4 + 5`, rather than `+ 1`.
 
 C++ uses 4-space indentation, K&R braces, `#include <bits/stdc++.h>`, fast iostream setup, and `signed main()`. For competitive-programming implementation, especially `solve`, combine related assignments with comma expressions and keep a line compressed only when enabled `clang-format` also keeps it on one line. Always retain braces for every conditional and loop body, including single-line bodies. Generally use `for` loops, including `for (; condition;)` for condition-driven iteration. Avoid unnecessary temporary variables; prefer global declarations for necessary working variables and arrays, while keeping function parameters and loop indices scoped where needed. Use short function, variable, and array names. Write numeric constants in scientific notation, such as `N = 2e5 + 5` and `M = 1e6 + 5`, preserving their exact values and integer types. Never compress input-dependent work into a `for` update expression that changes its evaluation order.
 
