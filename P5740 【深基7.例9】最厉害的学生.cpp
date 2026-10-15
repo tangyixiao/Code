@@ -604,7 +604,7 @@ struct node {
     string s;
     bool operator<(const node A) const {
         if (c + m + e != A.c + A.m + A.e) {
-            return c + m + e < A.c + A.m + A.e;
+            return c + m + e > A.c + A.m + A.e;
         }
         return id < A.id;
     }
