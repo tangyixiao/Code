@@ -1,0 +1,31 @@
+{
+  "testType": "single", 
+  "memoryLimit": 512, 
+  "url": "https://www.luogu.com.cn/problem/P11010", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "interactive": false, 
+  "batch": {
+    "size": 1, 
+    "id": "3558ca1f-ce28-4aad-b36a-9b6b69a8a4c4"
+  }, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P11010STAR7DivideAndMergeGame"
+    }
+  }, 
+  "tests": [
+    {
+      "input": "2\n4 4\n8 3\n", 
+      "output": "Bob\nAlice\n"
+    }
+  ], 
+  "name": "P11010 『STA - R7』Divide and Merge Game", 
+  "group": "Luogu", 
+  "timeLimit": 3000
+}
