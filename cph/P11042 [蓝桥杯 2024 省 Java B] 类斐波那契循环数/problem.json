@@ -1,0 +1,26 @@
+{
+  "tests": [], 
+  "batch": {
+    "id": "94f386e7-ec78-4dfc-92cb-36a5494bad3d", 
+    "size": 1
+  }, 
+  "name": "P11042 [蓝桥杯 2024 省 Java B] 类斐波那契循环数", 
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "interactive": false, 
+  "url": "https://www.luogu.com.cn/problem/P11042", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "group": "Luogu", 
+  "memoryLimit": 512, 
+  "languages": {
+    "java": {
+      "taskClass": "P110422024JavaB", 
+      "mainClass": "Main"
+    }
+  }, 
+  "input": {
+    "type": "stdin"
+  }
+}
