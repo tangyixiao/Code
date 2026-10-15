@@ -1,0 +1,43 @@
+{
+  "name": "P8161 [JOI 2022 Final] 自学 / Self Study",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P8161",
+  "interactive": false,
+  "memoryLimit": 537,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "3 3\n19 4 5\n2 6 2\n",
+      "output": "18\n"
+    },
+    {
+      "input": "2 1\n9 7\n2 6\n",
+      "output": "7\n"
+    },
+    {
+      "input": "5 60000\n630510219 369411957 874325200 990002527 567203997\n438920902 634940661 593780254 315929832 420627496\n",
+      "output": "41397427274960\n"
+    },
+    {
+      "input": "4 25\n1 2 3 4\n1 2 3 4\n",
+      "output": "48\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P8161JOI2022FinalSelfStudy"
+    }
+  },
+  "batch": {
+    "id": "df387635-3dc1-4690-9dae-95d658f117c3",
+    "size": 1
+  }
+}

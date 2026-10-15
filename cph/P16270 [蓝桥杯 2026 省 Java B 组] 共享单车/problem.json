@@ -1,0 +1,35 @@
+{
+  "name": "P16270 [蓝桥杯 2026 省 Java B 组] 共享单车",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P16270",
+  "interactive": false,
+  "memoryLimit": 512,
+  "timeLimit": 3000,
+  "tests": [
+    {
+      "input": "3 4\n1 3 7\n2 4 5 8\n",
+      "output": "3\n"
+    },
+    {
+      "input": "3 4\n3 1 3\n5 2 2 8\n",
+      "output": "4\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P162702026JavaB"
+    }
+  },
+  "batch": {
+    "id": "ea9577fb-fe3a-47f5-982a-cce86b98c323",
+    "size": 1
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "B4211 [常州市赛 2022] 可能的三角形",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/B4211",
+  "interactive": false,
+  "memoryLimit": 512,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "2 4 5 7\n",
+      "output": "2 2 3\n2 3 4\n2 4 5\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "B42112022"
+    }
+  },
+  "batch": {
+    "id": "fcde531c-3b01-4b6a-a0e1-7b6776f8e74b",
+    "size": 1
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "name": "P7775 [COCI 2009/2010 #2] VUK",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P7775",
+  "interactive": false,
+  "memoryLimit": 32,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "4 4\n+...\n....\n....\nV..J\n",
+      "output": "3\n"
+    },
+    {
+      "input": "4 5\n.....\n.+++.\n.+.+.\nV+.J+\n",
+      "output": "0\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P7775COCI200920102VUK"
+    }
+  },
+  "batch": {
+    "id": "333fad27-6d1c-4570-a1bb-a7864ec309cf",
+    "size": 1
+  }
+}
