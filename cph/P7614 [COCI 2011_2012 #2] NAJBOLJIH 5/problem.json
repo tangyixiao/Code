@@ -1,0 +1,39 @@
+{
+  "tests": [
+    {
+      "output": "261\n3 4 5 6 8\n", 
+      "input": "20\n30\n50\n48\n33\n66\n0\n64\n"
+    }, 
+    {
+      "output": "373\n3 4 5 6 7\n", 
+      "input": "20\n0\n50\n80\n77\n110\n56\n48\n"
+    }, 
+    {
+      "output": "355\n2 3 4 5 8\n", 
+      "input": "20\n30\n50\n80\n110\n11\n0\n85\n"
+    }
+  ], 
+  "batch": {
+    "id": "6697ac5e-faeb-4f9a-bad0-621e64ba3085", 
+    "size": 1
+  }, 
+  "name": "P7614 [COCI 2011/2012 #2] NAJBOLJIH 5", 
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "interactive": false, 
+  "url": "https://www.luogu.com.cn/problem/P7614", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "group": "Luogu", 
+  "memoryLimit": 32, 
+  "languages": {
+    "java": {
+      "taskClass": "P7614COCI201120122NAJBOLJIH5", 
+      "mainClass": "Main"
+    }
+  }, 
+  "input": {
+    "type": "stdin"
+  }
+}
