@@ -1,0 +1,31 @@
+{
+  "tests": [
+    {
+      "output": "10\n", 
+      "input": "2 3\n"
+    }
+  ], 
+  "batch": {
+    "id": "ba817c84-84ba-4e16-ab9a-a991d72c6604", 
+    "size": 1
+  }, 
+  "name": "P2415 集合求和", 
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "interactive": false, 
+  "url": "https://www.luogu.com.cn/problem/P2415", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "group": "Luogu", 
+  "memoryLimit": 128, 
+  "languages": {
+    "java": {
+      "taskClass": "P2415", 
+      "mainClass": "Main"
+    }
+  }, 
+  "input": {
+    "type": "stdin"
+  }
+}
