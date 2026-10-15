@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 3558ca1f-ce28-4aad-b36a-9b6b69a8a4c4
 //
-//  Algorithm: 
-//  Complexity: O()
-//  Note: 
+//  Algorithm: CiNeMa
+//  Complexity: O(114514)
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -598,7 +598,7 @@ signed main() {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 inline void solve(int Task_Id) {
-    // do something here
+    
     return;
 }
 } // namespace TANGYIXIAO
