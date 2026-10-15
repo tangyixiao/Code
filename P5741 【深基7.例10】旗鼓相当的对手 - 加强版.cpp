@@ -606,7 +606,7 @@ struct node {
 inline void solve(int Task_Id) {
     cin >> n;
     for (int i = 1; i <= n; i++) {
-        cin >> a[i].s >> a[i].m >> a[i].e;
+        cin >> a[i].s >> a[i].c >> a[i].m >> a[i].e;
     }
     for (int i = 1; i <= n; i++) {
         for (int j = i + 1; j <= n; j++) {
