@@ -599,18 +599,19 @@ signed main() {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 int n;
+
 inline void solve(int Task_Id) {
     cin >> n;
-    for (int i = 0; i < 2 * n - 1; i++) {
-        for (int j = 0; j < 2 * n - 1; j++) {
-            if (abs(i - n + 1) + abs(j - n + 1) == n - 1) {
-                cout << '#';
+    int mid = (n + 1) / 2;
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= n; j++) {
+            if (abs(i - mid) + abs(j - mid) == mid - 1) {
+                cout << "#";
             } else {
-                cout << '.';
+                cout << ".";
             }
         }
-        cout << '\n';
+        cout << "\n";
     }
-    return;
 }
 } // namespace TANGYIXIAO
