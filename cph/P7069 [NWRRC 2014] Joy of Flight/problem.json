@@ -1,0 +1,31 @@
+{
+  "tests": [
+    {
+      "output": "Yes\n3 2.5\n5 2.5\n7 4\n", 
+      "input": "1 1 7 4\n2 3 10\n0 1 2\n2 2 0\n"
+    }
+  ], 
+  "batch": {
+    "id": "9781dc12-55e7-49f1-99b6-79b96b0e5459", 
+    "size": 1
+  }, 
+  "name": "P7069 [NWRRC 2014] Joy of Flight", 
+  "timeLimit": 2000, 
+  "testType": "single", 
+  "interactive": false, 
+  "url": "https://www.luogu.com.cn/problem/P7069", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "group": "Luogu", 
+  "memoryLimit": 256, 
+  "languages": {
+    "java": {
+      "taskClass": "P7069NWRRC2014JoyOfFlight", 
+      "mainClass": "Main"
+    }
+  }, 
+  "input": {
+    "type": "stdin"
+  }
+}
