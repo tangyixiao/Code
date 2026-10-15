@@ -350,9 +350,9 @@ struct List {
         int pre = 0, nxt = 0;
         bool used = false;
     } tr[N + 1];
-    int free_stack[N + 1], free_top = 0, tot = 0, n = 0;
+    int free_stack[N + 1], free_top = 0, c = 0, n = 0;
     inline List() { tr[0].pre = tr[0].nxt = 0; tr[0].used = true; }
-    inline int new_node(const T &x) { int p; if (free_top) { p = free_stack[--free_top]; } else { p = ++tot; } tr[p].val = x; tr[p].used = true; tr[p].pre = tr[p].nxt = 0; return p; }
+    inline int new_node(const T &x) { int p; if (free_top) { p = free_stack[--free_top]; } else { p = ++c; } tr[p].val = x; tr[p].used = true; tr[p].pre = tr[p].nxt = 0; return p; }
     inline void recycle(int p) { tr[p].used = false; free_stack[free_top++] = p; return; }
     inline bool empty() const { return n == 0; }
     inline int size() const { return n; }
@@ -408,15 +408,15 @@ struct Leftist_Heap {
         T val;
         int l = 0, r = 0, dis = 0;
     } tr[N + 1];
-    int tot = 0, rt = 0, n = 0;
+    int c = 0, rt = 0, n = 0;
     Compare cmp;
     inline bool better(const T &a, const T &b) const { return cmp(b, a); }
     inline int merge_node(int x, int y) { if (!x || !y) { return x | y; } if (better(tr[y].val, tr[x].val)) { swap(x, y); } tr[x].r = merge_node(tr[x].r, y); if (tr[tr[x].l].dis < tr[tr[x].r].dis) { swap(tr[x].l, tr[x].r); } tr[x].dis = tr[tr[x].r].dis + 1; return x; }
     inline bool empty() const { return n == 0; }
     inline int size() const { return n; }
     inline const T &top() const { return tr[rt].val; }
-    inline void clear() { tot = rt = n = 0; return; }
-    inline int insert(const T &x) { int p = ++tot; tr[p].val = x, tr[p].l = tr[p].r = 0, tr[p].dis = 1, rt = merge_node(rt, p), n++; return p; }
+    inline void clear() { c = rt = n = 0; return; }
+    inline int insert(const T &x) { int p = ++c; tr[p].val = x, tr[p].l = tr[p].r = 0, tr[p].dis = 1, rt = merge_node(rt, p), n++; return p; }
     inline void push(const T &x) { insert(x); return; }
     inline void pop() { rt = merge_node(tr[rt].l, tr[rt].r); n--; return; }
     inline void merge(Leftist_Heap &other) { /* Pool-owning heaps cannot safely merge nodes from different objects. */ for (; !other.empty();) { push(other.top()); other.pop(); } return; }
@@ -428,7 +428,7 @@ struct Pairing_Heap {
         int child = 0, next = 0, prev = 0;
         bool alive = false;
     } tr[N + 1];
-    int tot = 0, rt = 0, n = 0;
+    int c = 0, rt = 0, n = 0;
     Compare cmp;
     inline bool better(const T &a, const T &b) const { return cmp(b, a); }
     inline int meld(int x, int y) { if (!x || !y) { return x | y; } if (better(tr[y].val, tr[x].val)) { swap(x, y); } tr[y].prev = x, tr[y].next = tr[x].child; if (tr[x].child) { tr[tr[x].child].prev = y; } tr[x].child = y; return x; }
@@ -437,8 +437,8 @@ struct Pairing_Heap {
     inline bool empty() const { return n == 0; }
     inline int size() const { return n; }
     inline const T &top() const { return tr[rt].val; }
-    inline void clear() { tot = rt = n = 0; return; }
-    inline int insert(const T &x) { int p = ++tot; tr[p].val = x, tr[p].child = tr[p].next = tr[p].prev = 0, tr[p].alive = true, rt = meld(rt, p), n++; return p; }
+    inline void clear() { c = rt = n = 0; return; }
+    inline int insert(const T &x) { int p = ++c; tr[p].val = x, tr[p].child = tr[p].next = tr[p].prev = 0, tr[p].alive = true, rt = meld(rt, p), n++; return p; }
     inline void push(const T &x) { insert(x); return; }
     inline void pop() { int old = rt; int c = tr[old].child; if (c) { tr[c].prev = 0; } rt = merge_pairs(c); tr[old].alive = false; tr[old].child = tr[old].next = tr[old].prev = 0; n--; return; }
     inline bool improve(int p, const T &x) { if (!tr[p].alive || !better(x, tr[p].val)) { return false; } tr[p].val = x; if (p != rt) { cut(p); rt = meld(rt, p); } return true; }
@@ -451,7 +451,7 @@ struct Fibonacci_Heap {
         int parent = 0, child = 0, left = 0, right = 0, degree = 0;
         bool mark = false, alive = false;
     } tr[N + 1];
-    int tot = 0, rt = 0, n = 0;
+    int c = 0, rt = 0, n = 0;
     Compare cmp;
     inline bool better(const T &a, const T &b) const { return cmp(b, a); }
     inline void singleton(int p) { tr[p].left = tr[p].right = p; return; }
@@ -469,25 +469,25 @@ struct Fibonacci_Heap {
     inline bool empty() const { return n == 0; }
     inline int size() const { return n; }
     inline const T &top() const { return tr[rt].val; }
-    inline void clear() { tot = rt = n = 0; return; }
-    inline int insert(const T &x) { int p = ++tot; tr[p].val = x, tr[p].parent = tr[p].child = 0, tr[p].degree = 0, tr[p].mark = false, tr[p].alive = true; singleton(p), add_root(p), n++; return p; }
+    inline void clear() { c = rt = n = 0; return; }
+    inline int insert(const T &x) { int p = ++c; tr[p].val = x, tr[p].parent = tr[p].child = 0, tr[p].degree = 0, tr[p].mark = false, tr[p].alive = true; singleton(p), add_root(p), n++; return p; }
     inline void push(const T &x) { insert(x); return; }
     inline void pop() { int z = rt; vector<int> children = list_nodes(tr[z].child); for (int x : children) { remove_from_list(x); add_root(x); } tr[z].child = 0; if (tr[z].right == z) { rt = 0; } else { int nr = tr[z].right; remove_from_list(z); rt = nr; } tr[z].alive = false; n--; if (rt) { consolidate(); } return; }
     inline bool improve(int x, const T &v) { if (!tr[x].alive || !better(v, tr[x].val)) { return false; } tr[x].val = v; int y = tr[x].parent; if (y && better(tr[x].val, tr[y].val)) { cut(x, y); cascading_cut(y); } if (better(tr[x].val, tr[rt].val)) { rt = x; } return true; }
 };
 template<int N, int Sigma = 26, char Base = 'a'>
 struct Trie {
-    int ch[N + 1][Sigma], cnt[N + 1], pass[N + 1], tot = 1;
-    inline void clear() { memset(ch, 0, sizeof(ch)); memset(cnt, 0, sizeof(cnt)); memset(pass, 0, sizeof(pass)); tot = 1; return; }
-    inline void insert(const string &s) { int p = 1; pass[p]++; for (char c : s) { int x = c - Base; if (!ch[p][x]) { ch[p][x] = ++tot; } p = ch[p][x], pass[p]++; } cnt[p]++; return; }
+    int ch[N + 1][Sigma], cnt[N + 1], pass[N + 1], c = 1;
+    inline void clear() { memset(ch, 0, sizeof(ch)); memset(cnt, 0, sizeof(cnt)); memset(pass, 0, sizeof(pass)); c = 1; return; }
+    inline void insert(const string &s) { int p = 1; pass[p]++; for (char c : s) { int x = c - Base; if (!ch[p][x]) { ch[p][x] = ++c; } p = ch[p][x], pass[p]++; } cnt[p]++; return; }
     inline int count(const string &s) const { int p = 1; for (char c : s) { int x = c - Base; if (x < 0 || x >= Sigma || !ch[p][x]) { return 0; } p = ch[p][x]; } return cnt[p]; }
     inline int prefix_count(const string &s) const { int p = 1; for (char c : s) { int x = c - Base; if (x < 0 || x >= Sigma || !ch[p][x]) { return 0; } p = ch[p][x]; } return pass[p]; }
 };
 template<int N, int B = 63>
 struct Binary_Trie {
-    int ch[N + 1][2], cnt[N + 1], tot = 1;
-    inline void clear() { memset(ch, 0, sizeof(ch)); memset(cnt, 0, sizeof(cnt)); tot = 1; return; }
-    inline void insert(ull x) { int p = 1; cnt[p]++; for (int i = B - 1; i >= 0; i--) { int b = (x >> i) & 1; if (!ch[p][b]) { ch[p][b] = ++tot; } p = ch[p][b], cnt[p]++; } return; }
+    int ch[N + 1][2], cnt[N + 1], c = 1;
+    inline void clear() { memset(ch, 0, sizeof(ch)); memset(cnt, 0, sizeof(cnt)); c = 1; return; }
+    inline void insert(ull x) { int p = 1; cnt[p]++; for (int i = B - 1; i >= 0; i--) { int b = (x >> i) & 1; if (!ch[p][b]) { ch[p][b] = ++c; } p = ch[p][b], cnt[p]++; } return; }
     inline bool erase(ull x) { int p = 1; if (!cnt[p]) { return false; } int path[B + 1]; path[0] = p; for (int i = B - 1, k = 0; i >= 0; i--, k++) { int b = (x >> i) & 1; if (!ch[p][b] || !cnt[ch[p][b]]) { return false; } p = ch[p][b], path[k + 1] = p; } for (int i = 0; i <= B; i++) { cnt[path[i]]--; } return true; }
     inline ull max_xor(ull x) const { int p = 1; ull r = 0; for (int i = B - 1; i >= 0; i--) { int b = (x >> i) & 1, q = b ^ 1; if (ch[p][q] && cnt[ch[p][q]]) { r |= 1ULL << i; p = ch[p][q]; } else { p = ch[p][b]; } } return r; }
 };
@@ -498,12 +498,12 @@ struct Treap {
         ull pri = 0;
         int l = 0, r = 0, sz = 0, cnt = 0;
     } tr[N + 1];
-    int rt = 0, tot = 0;
+    int rt = 0, c = 0;
     Compare cmp;
     inline int size(int p) const { return p ? tr[p].sz : 0; }
     inline void pull(int p) { tr[p].sz = size(tr[p].l) + size(tr[p].r) + tr[p].cnt; return; }
     inline bool equal_key(const T &a, const T &b) const { return !cmp(a, b) && !cmp(b, a); }
-    inline int new_node(const T &x) { int p = ++tot; tr[p].key = x; tr[p].pri = RANDOM::next_u64(); tr[p].l = tr[p].r = 0; tr[p].sz = tr[p].cnt = 1; return p; }
+    inline int new_node(const T &x) { int p = ++c; tr[p].key = x; tr[p].pri = RANDOM::next_u64(); tr[p].l = tr[p].r = 0; tr[p].sz = tr[p].cnt = 1; return p; }
     inline void rotate_left(int &p) { int q = tr[p].r; tr[p].r = tr[q].l, tr[q].l = p; pull(p), pull(q), p = q; return; }
     inline void rotate_right(int &p) { int q = tr[p].l; tr[p].l = tr[q].r, tr[q].r = p; pull(p), pull(q), p = q; return; }
     inline void insert(int &p, const T &x) { if (!p) { p = new_node(x); return; } if (equal_key(x, tr[p].key)) { tr[p].cnt++; } else if (cmp(x, tr[p].key)) { insert(tr[p].l, x); if (tr[tr[p].l].pri > tr[p].pri) { rotate_right(p); } } else { insert(tr[p].r, x); if (tr[tr[p].r].pri > tr[p].pri) { rotate_left(p); } } pull(p); return; }
@@ -515,7 +515,7 @@ struct Treap {
     inline const T &kth(int k) const { int p = rt; for (;;) { int lsz = size(tr[p].l); if (k <= lsz) { p = tr[p].l; } else if (k <= lsz + tr[p].cnt) { return tr[p].key; } else { k -= lsz + tr[p].cnt; p = tr[p].r; } } }
     inline int size() const { return size(rt); }
     inline bool empty() const { return rt == 0; }
-    inline void clear() { rt = tot = 0; return; }
+    inline void clear() { rt = c = 0; return; }
 };
 template<class T, int N, class Compare = less<T>>
 struct FHQ_Treap {
@@ -524,12 +524,12 @@ struct FHQ_Treap {
         ull pri = 0;
         int l = 0, r = 0, sz = 0;
     } tr[N + 1];
-    int rt = 0, tot = 0;
+    int rt = 0, c = 0;
     Compare cmp;
     inline int size(int p) const { return p ? tr[p].sz : 0; }
     inline void pull(int p) { tr[p].sz = size(tr[p].l) + size(tr[p].r) + 1; return; }
     inline bool leq(const T &a, const T &b) const { return !cmp(b, a); }
-    inline int new_node(const T &x) { int p = ++tot; tr[p].key = x; tr[p].pri = RANDOM::next_u64(); tr[p].l = tr[p].r = 0; tr[p].sz = 1; return p; }
+    inline int new_node(const T &x) { int p = ++c; tr[p].key = x; tr[p].pri = RANDOM::next_u64(); tr[p].l = tr[p].r = 0; tr[p].sz = 1; return p; }
     inline void split(int p, const T &x, int &a, int &b) { if (!p) { a = b = 0; return; } if (leq(tr[p].key, x)) { a = p; split(tr[p].r, x, tr[p].r, b); pull(a); } else { b = p; split(tr[p].l, x, a, tr[p].l); pull(b); } return; }
     inline int merge(int a, int b) { if (!a || !b) { return a | b; } if (tr[a].pri > tr[b].pri) { tr[a].r = merge(tr[a].r, b); pull(a); return a; } tr[b].l = merge(a, tr[b].l); pull(b); return b; }
     inline void insert(const T &x) { int a, b; split(rt, x, a, b); rt = merge(merge(a, new_node(x)), b); return; }
@@ -539,7 +539,7 @@ struct FHQ_Treap {
     inline const T &kth(int k) const { int p = rt; for (;;) { int lsz = size(tr[p].l); if (k == lsz + 1) { return tr[p].key; } if (k <= lsz) { p = tr[p].l; } else { k -= lsz + 1; p = tr[p].r; } } }
     inline int size() const { return size(rt); }
     inline bool empty() const { return rt == 0; }
-    inline void clear() { rt = tot = 0; return; }
+    inline void clear() { rt = c = 0; return; }
 };
 template<class T, int N>
 struct Link_Cut_Tree {
@@ -598,7 +598,7 @@ signed main() {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 const int N = 1e5 + 5;
-int n, u, v, tot, l[N], r[N], p[N], q[N];
+int n, u, v, c, l[N], r[N], p[N], q[N];
 ll f[N][2];
 vector<int> e[N];
 inline void solve(int Task_Id) {
@@ -609,12 +609,12 @@ inline void solve(int Task_Id) {
     for (int i = 1; i < n; i++) {
         cin >> u >> v, e[u].push_back(v), e[v].push_back(u);
     }
-    q[1] = tot = 1, p[1] = 0;
-    for (int i = 1; i <= tot; i++) {
+    q[1] = c = 1, p[1] = 0;
+    for (int i = 1; i <= c; i++) {
         u = q[i];
         for (int v : e[u]) {
             if (v != p[u]) {
-                p[v] = u, q[++tot] = v;
+                p[v] = u, q[++c] = v;
             }
         }
     }
