@@ -622,7 +622,7 @@ inline void solve(int Task_Id) {
         u = q[i], v = p[u];
         f[v][0] += max(f[u][0] + abs(l[v] - l[u]), f[u][1] + abs(l[v] - r[u])), f[v][1] += max(f[u][0] + abs(r[v] - l[u]), f[u][1] + abs(r[v] - r[u]));
     }
-    cout << max(f[1][0], f[1][1]) << '\n';
+    cout << max(f[1][0], f[1][1]) << "\n";
     return;
 }
 } // namespace TANGYIXIAO
