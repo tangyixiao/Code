@@ -609,7 +609,6 @@ inline void solve(int Task_Id) {
         }
     }
     sort(a + 1, a + 1 + n);
-
     for (int i = 2; i <= n; i++) {
         if (a[i] <= 0 && a[i] - a[i - 1] < m) {
             flag = false;
