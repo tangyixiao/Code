@@ -598,13 +598,13 @@ signed main() {
 #pragma endregion PREPROCESSOR
 
 namespace TANGYIXIAO {
-const int N = 1e5 + 5;
-int n, x, y, a[N];
+int n, x, y;
+vector<int> a;
 ll ans;
 inline void solve(int Task_Id) {
-    cin >> n, ans = 0;
+    cin >> n, ans = 0, a.resize(n + 1);
     for (int i = 1; i <= n; i++) { cin >> x >> y, ans -= max(x, y), a[i] = x + y; }
-    sort(a + 1, a + n + 1);
+    sort(a.begin() + 1, a.end());
     for (int i = 1; i <= n / 2; i++) { ans += a[i]; }
     cout << ans << '\n';
     return;
