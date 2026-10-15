@@ -70,3 +70,6 @@ Connect 在一个由方格组成的棋盘上进行，棋盘由 R 行和 C 列组
 $5 \leqslant R \leqslant 25$，$5 \leqslant C \leqslant 80$。
 
 题面翻译由 ChatGPT-4o 提供。
+
+---
+
