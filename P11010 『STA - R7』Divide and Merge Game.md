@@ -68,3 +68,72 @@ Alice
 
 ---
 
+# P11010 "STA - R7" Divide and Merge Game
+
+## 题目描述
+
+Given two positive integers $n, k(2 \le k \le n)$, Alice and Bob will play the following game:
+
+- Alice needs to provide a sequence $a$ of length $k$ consisting of **positive integers**, such that $\sum\limits_{i = 1}^{k} a_i = n$.
+
+- Bob needs to try to give a positive integer $m$ with $m \ge 2$, such that the positive integer sequence $a$ given by Alice can be partitioned into $m$ **non-empty multisets**, and the sums of elements in these multisets are all equal. If Bob can give such an integer $m$, then Bob wins; otherwise, Alice wins.
+
+Assuming both players use optimal strategies, determine who will win. You need to answer $T$ queries.
+
+## 输入格式
+
+**This problem contains multiple queries in a single test file.**
+
+The first line contains a positive integer $T$, representing the number of queries.
+
+For each query: one line contains two positive integers $n, k$, with the meaning described in the **Description**.
+
+## 输出格式
+
+For each query, output one line `Alice` or `Bob`, indicating who will win.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+2
+4 4
+8 3
+
+```
+
+### 输出 #1
+
+```
+Bob
+Alice
+```
+
+## 说明/提示
+
+**Sample Explanation**
+
+For the first group of testdata, Alice can only provide the positive integer sequence $\left\{1,1,1,1\right\}$. Then Bob gives $m = 4$ and partitions the sequence into $\left\{\left\{1\right\},\left\{1\right\},\left\{1\right\},\left\{1\right\}\right\}$. Bob can also give $m = 2$ and partition the sequence into $\left\{\left\{1, 1\right\}, \left\{1, 1\right\}\right\}$, obtaining two multisets whose element sums are both $2$, which also satisfies the requirement.
+
+For the second group of testdata, Alice can provide the positive integer sequence $\left\{3, 2, 3\right\}$. It can be proven that Bob has no valid partition plan at this time, so Alice wins.
+
+**Constraints**
+
+**This problem uses bundled tests.**
+
+For $100\%$ of the data:
+
+- $1 \le T \le 2 \times 10^5$;
+- $2 \le k \le n \le 10^8$.
+
+The detailed subtask allocation is as follows:
+
+|Subtask ID|Constraints|Score|
+|:--------:|:--------:|:--------:|
+|1|$n \le 10$|$16$|
+|2|$k^2 \le n$|$27$|
+|3|$2 \nmid n$|$27$|
+|4|No special restrictions|$30$|
+
+Translated by ChatGPT 5
