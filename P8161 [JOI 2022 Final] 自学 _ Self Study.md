@@ -148,3 +148,158 @@
 ----
 
 **译自 [JOI 2022 Final](https://www.ioi-jp.org/joi/2021/2022-ho/index.html) T2「[自習](https://www.ioi-jp.org/joi/2021/2022-ho/2022-ho-t2.pdf) / [Self Study](https://www.ioi-jp.org/joi/2021/2022-ho/2022-ho-t2-en.pdf)」**
+
+---
+
+# P8161 [JOI 2022 Final] Self Study / Self Study
+
+## 题目描述
+
+During the third term of the first year at JOI High School, which lasts for $M$ weeks, there are $N$ subjects numbered $1 \sim N$. Each week has $N$ class periods. In period $i$, there is a class of subject $i$.
+
+Bitaro is a first-year high school student. For each of the $N \times M$ class periods, he will choose one of the following actions:
+
+- Action 1: Bitaro attends the class. If he attends one class of subject $i$, then his level of understanding of subject $i$ increases by $A_i$.
+- Action 2: Bitaro does not attend the class. Instead, he chooses any subject and does self-study for that subject. If he chooses subject $i$ and self-studies for one class period, then his level of understanding of subject $i$ increases by $B_i$.
+
+At the beginning, his level of understanding for every subject is $0$. Since Bitaro wants to practice programming contests after school, he will not study outside of class periods. After all class periods in the third term end, the final exams will be held.
+
+Bitaro does not want to fail. Therefore, he wants to maximize the minimum value of his level of understanding among all subjects at the time of the final exams.
+
+Given the term length, the number of subjects, and the increase values of understanding, write a program to compute the maximum possible value of the minimum level of understanding among all subjects at the time of the final exams.
+
+## 输入格式
+
+The first line contains two positive integers $N, M$.
+
+The second line contains $N$ positive integers $A_1, A_2, \ldots, A_N$.
+
+The third line contains $N$ positive integers $B_1, B_2, \ldots, B_N$.
+
+## 输出格式
+
+Output one line containing one number, which is the maximum possible value of the minimum level of understanding among all subjects at the time of the final exams.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+3 3
+19 4 5
+2 6 2
+
+```
+
+### 输出 #1
+
+```
+18
+
+```
+
+## 输入输出样例 #2
+
+### 输入 #2
+
+```
+2 1
+9 7
+2 6
+
+```
+
+### 输出 #2
+
+```
+7
+
+```
+
+## 输入输出样例 #3
+
+### 输入 #3
+
+```
+5 60000
+630510219 369411957 874325200 990002527 567203997
+438920902 634940661 593780254 315929832 420627496
+
+```
+
+### 输出 #3
+
+```
+41397427274960
+
+```
+
+## 输入输出样例 #4
+
+### 输入 #4
+
+```
+4 25
+1 2 3 4
+1 2 3 4
+
+```
+
+### 输出 #4
+
+```
+48
+
+```
+
+## 说明/提示
+
+**[Sample Explanation #1]**
+
+For example, if Bitaro studies in the following way, then his levels of understanding of subjects $1, 2, 3$ will be $19, 18, 19$, respectively.
+
+- Week 1, subject $1$ period: self-study subject $2$.
+- Week 1, subject $2$ period: self-study subject $2$.
+- Week 1, subject $3$ period: attend the class of subject $3$.
+- Week 2, subject $1$ period: attend the class of subject $1$.
+- Week 2, subject $2$ period: self-study subject $3$.
+- Week 2, subject $3$ period: attend the class of subject $3$.
+- Week 3, subject $1$ period: self-study subject $3$.
+- Week 3, subject $2$ period: self-study subject $2$.
+- Week 3, subject $3$ period: attend the class of subject $3$.
+
+Since the minimum level of understanding among all subjects cannot be greater than or equal to $19$, output $18$.
+
+This sample satisfies the constraints of subtasks $3, 5$.
+
+**[Sample Explanation #2]**
+
+This sample satisfies the constraints of subtasks $1, 3, 5$.
+
+**[Sample Explanation #3]**
+
+This sample satisfies the constraints of subtasks $3, 5$.
+
+**[Sample Explanation #4]**
+
+This sample satisfies the constraints of subtasks $2, 3, 4, 5$.
+
+----
+
+**[Constraints]**
+
+**This problem uses bundled testdata.**
+
+For all testdata ($100\%$), $1 \le N \le 3 \times {10}^5$, $1 \le M \le {10}^9$, $1 \le A_i, B_i \le {10}^9$.
+
+- Subtask $1$ ($10$ points): $M = 1$.
+- Subtask $2$ ($25$ points): $N \cdot M \le 3 \times {10}^5$, $A_i = B_i$.
+- Subtask $3$ ($27$ points): $N \cdot M \le 3 \times {10}^5$.
+- Subtask $4$ ($29$ points): $A_i = B_i$.
+- Subtask $5$ ($9$ points): no additional constraints.
+
+----
+
+Translated from [JOI 2022 Final](https://www.ioi-jp.org/joi/2021/2022-ho/index.html) T2 “[自習](https://www.ioi-jp.org/joi/2021/2022-ho/2022-ho-t2.pdf) / [Self Study](https://www.ioi-jp.org/joi/2021/2022-ho/2022-ho-t2-en.pdf)”.
+
+Translated by ChatGPT 5
