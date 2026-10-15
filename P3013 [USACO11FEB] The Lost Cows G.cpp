@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: b879ae7c-7734-4faf-aa9f-35a30e9ec88d
 //
-//  Algorithm: 
-//  Complexity: O()
-//  Note: 
+//  Algorithm: 点对逆向 BFS + 合并构造
+//  Complexity: O(n^2 m + n^3 + L) time, O(n^3 + nm) space
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,37 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 2e2 + 5;
+int n, m, a[N][N], f[N][N][N], p[N], op[N][N];
+vector<int> e[N][N];
+queue<pair<int, int>> q;
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> m;
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= n; j++) { cin >> a[i][j], e[i][a[i][j]].push_back(j); }
+    }
+    for (int i = 1; i <= n; i++) { f[1][1][i] = p[i] = i; }
+    op[1][1] = -1, q.push({1, 1});
+    for (; !q.empty();) {
+        auto u = q.front();
+        q.pop();
+        for (int k = 1; k <= m; k++) {
+            for (int x : e[k][u.first]) {
+                for (int y : e[k][u.second]) {
+                    if (op[x][y]) { continue; }
+                    op[x][y] = k, q.push({x, y});
+                    for (int j = 1; j <= n; j++) { f[x][y][j] = f[u.first][u.second][a[k][j]]; }
+                }
+            }
+        }
+    }
+    for (int i = 2; i <= n; i++) {
+        for (int j = i + 1; j <= n; j++) { p[j] = f[1][p[i]][p[j]]; }
+        for (int u = 1, v = p[i]; u != 1 || v != 1;) {
+            int k = op[u][v];
+            cout << k << '\n', u = a[k][u], v = a[k][v];
+        }
+    }
     return;
 }
 } // namespace TANGYIXIAO

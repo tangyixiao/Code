@@ -598,27 +598,30 @@ signed main() {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 const int N = 3e5 + 5;
-int n, p, tot, top, ans, l[N], r[N], id[N], st[N], c[N];
+int n, p, tot, ans, l[N], r[N], id[N], c[N];
 vector<int> a[N], b[N];
 set<int> s;
+stack<int> st;
 inline void solve(int Task_Id) {
-    cin >> n, tot = top = ans = 0, s.clear();
+    cin >> n, tot = ans = 0, s.clear();
     for (int i = 1; i <= n; i++) { a[i].clear(), b[i].clear(); }
     for (int i = 2; i <= n; i++) { cin >> p, a[p].push_back(i); }
     for (int i = 2; i <= n; i++) { cin >> p, b[p].push_back(i); }
-    st[++top] = 1;
-    for (; top;) {
-        int u = st[top--];
+    st.push(1);
+    for (; !st.empty();) {
+        int u = st.top();
+        st.pop();
         if (u < 0) {
             r[-u] = tot;
         } else {
-            l[u] = ++tot, id[tot] = u, st[++top] = -u;
-            for (int v : b[u]) { st[++top] = v; }
+            l[u] = ++tot, id[tot] = u, st.push(-u);
+            for (int v : b[u]) { st.push(v); }
         }
     }
-    st[++top] = 1;
-    for (; top;) {
-        int u = st[top--];
+    st.push(1);
+    for (; !st.empty();) {
+        int u = st.top();
+        st.pop();
         if (u < 0) {
             u = -u;
             if (c[u] >= 0) { s.erase(l[u]); }
@@ -631,8 +634,8 @@ inline void solve(int Task_Id) {
                 if (it != s.begin() && r[id[*prev(it)]] >= l[u]) { c[u] = *prev(it), s.erase(prev(it)); }
                 s.insert(l[u]), ans = max(ans, (int)s.size());
             }
-            st[++top] = -u;
-            for (int v : a[u]) { st[++top] = v; }
+            st.push(-u);
+            for (int v : a[u]) { st.push(v); }
         }
     }
     cout << ans << '\n';

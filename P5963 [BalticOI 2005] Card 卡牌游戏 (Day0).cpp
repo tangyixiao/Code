@@ -9,8 +9,8 @@
 //  Test Type: single
 //  Batch ID: 6afac0bf-74c1-4956-9763-581ddf1bca69
 //
-//  Algorithm:
-//  Complexity: O()
+//  Algorithm: 贪心 + 排序
+//  Complexity: O(n log n) time, O(n) space
 //  Note:
 
 /*
@@ -598,23 +598,15 @@ signed main() {
 #pragma endregion PREPROCESSOR
 
 namespace TANGYIXIAO {
-const int N = 100005;
-int n;
-long long a[N], ans;
-
+const int N = 1e5 + 5;
+int n, x, y, a[N];
+ll ans;
 inline void solve(int Task_Id) {
-    cin >> n;
-    for (int i = 1, x, y; i <= n; i++) {
-        cin >> x >> y;
-        ans -= max(x, y);
-        a[i] = 1LL * x + y;
-    }
+    cin >> n, ans = 0;
+    for (int i = 1; i <= n; i++) { cin >> x >> y, ans -= max(x, y), a[i] = x + y; }
     sort(a + 1, a + n + 1);
-    for (int i = 1; i <= n / 2; i++) {
-        ans += a[i];
-    }
+    for (int i = 1; i <= n / 2; i++) { ans += a[i]; }
     cout << ans << '\n';
     return;
 }
-
 } // namespace TANGYIXIAO
