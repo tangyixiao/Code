@@ -601,11 +601,11 @@ const int N = 1e5 + 5, inf = 0x3f3f3f3f;
 bool flag;
 int n, a[N], ans, m;
 inline void solve(int Task_Id) {
-    cin >> n, ans = n, m = inf, flag = true;
+    cin >> n, ans = n, m = inf, flag = false;
     for (int i = 1; i <= n; i++) {
         cin >> a[i];
         if (a[i] > 0) {
-            ans--, m = min(a[i], m);
+            ans--, m = min(a[i], m), flag = true;
         }
     }
     sort(a + 1, a + 1 + n);
@@ -615,7 +615,7 @@ inline void solve(int Task_Id) {
             break;
         }
     }
-    cout << ans + (flag && m != inf) << "\n";
+    cout << ans + flag << "\n";
     return;
 }
 } // namespace TANGYIXIAO
