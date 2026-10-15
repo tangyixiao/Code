@@ -6,12 +6,12 @@
 //  Memory Limit: 256 MB
 //  Time Limit: 1000 ms
 //  Interactive: false
-//  Test Type: single
+//  Test Type: multiple
 //  Batch ID: 075e76df-57d7-471f-a82f-efe6d972512a
 //
-//  Algorithm: 
-//  Complexity: O()
-//  Note: 
+//  Algorithm: Tree DP
+//  Complexity: O(n)
+//  Note: Iterative traversal
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -20,7 +20,7 @@ Copyright (C) 2026 TangYixiao
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
 #define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
 #define FILE_INDEX 1                      // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -597,8 +597,32 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 1e5 + 5;
+int n, u, v, tot, l[N], r[N], p[N], q[N];
+ll f[N][2];
+vector<int> e[N];
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n;
+    for (int i = 1; i <= n; i++) {
+        cin >> l[i] >> r[i], e[i].clear(), f[i][0] = f[i][1] = 0;
+    }
+    for (int i = 1; i < n; i++) {
+        cin >> u >> v, e[u].push_back(v), e[v].push_back(u);
+    }
+    q[1] = tot = 1, p[1] = 0;
+    for (int i = 1; i <= tot; i++) {
+        u = q[i];
+        for (int v : e[u]) {
+            if (v != p[u]) {
+                p[v] = u, q[++tot] = v;
+            }
+        }
+    }
+    for (int i = n; i > 1; i--) {
+        u = q[i], v = p[u];
+        f[v][0] += max(f[u][0] + abs(l[v] - l[u]), f[u][1] + abs(l[v] - r[u])), f[v][1] += max(f[u][0] + abs(r[v] - l[u]), f[u][1] + abs(r[v] - r[u]));
+    }
+    cout << max(f[1][0], f[1][1]) << '\n';
     return;
 }
 } // namespace TANGYIXIAO
