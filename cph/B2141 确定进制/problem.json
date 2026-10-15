@@ -1,0 +1,31 @@
+{
+  "batch": {
+    "id": "ca33cabb-fc43-476b-a9a0-298869fbb875", 
+    "size": 1
+  }, 
+  "tests": [
+    {
+      "output": "13\n", 
+      "input": "6 9 42\n"
+    }
+  ], 
+  "url": "https://www.luogu.com.cn/problem/B2141", 
+  "timeLimit": 1000, 
+  "group": "Luogu", 
+  "name": "B2141 确定进制", 
+  "languages": {
+    "java": {
+      "taskClass": "B2141", 
+      "mainClass": "Main"
+    }
+  }, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "memoryLimit": 128, 
+  "testType": "single", 
+  "interactive": false
+}
