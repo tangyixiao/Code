@@ -1,0 +1,31 @@
+{
+  "batch": {
+    "id": "376e0e0f-61cc-4876-bbb7-ae0559b5dd68", 
+    "size": 1
+  }, 
+  "tests": [
+    {
+      "output": "42562\n52\n1\n", 
+      "input": "3\n?heoret?cal\nc?mputer\n?cience\njagiellonian\n?niversity\nkra?ow\n?\nb\nc\n"
+    }
+  ], 
+  "url": "https://www.luogu.com.cn/problem/P4761", 
+  "timeLimit": 2000, 
+  "group": "Luogu", 
+  "name": "P4761 [CERC2014] Vocabulary", 
+  "languages": {
+    "java": {
+      "taskClass": "P4761CERC2014Vocabulary", 
+      "mainClass": "Main"
+    }
+  }, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "memoryLimit": 125, 
+  "testType": "single", 
+  "interactive": false
+}
