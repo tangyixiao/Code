@@ -98,3 +98,6 @@ Kavi 想知道好配对的数量。由于答案可能很大，请输出对 $9982
 ![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1528B/4bfe3f3beac587d75fee5d30f6490c2823b90e1d.png)
 
 由 ChatGPT 4.1 翻译
+
+---
+
