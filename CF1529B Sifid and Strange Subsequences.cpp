@@ -616,7 +616,7 @@ inline void solve(int Task_Id) {
             break;
         }
     }
-    cout << ans + (flag && mn != inf) << "\n";
+    cout << ans + (flag && m != inf) << "\n";
     return;
 }
 } // namespace TANGYIXIAO
