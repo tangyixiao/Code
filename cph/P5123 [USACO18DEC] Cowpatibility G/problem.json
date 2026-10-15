@@ -1,0 +1,31 @@
+{
+  "batch": {
+    "id": "3257523b-760d-4784-bb9d-ccfae8de8310", 
+    "size": 1
+  }, 
+  "tests": [
+    {
+      "output": "4\n", 
+      "input": "4\n1 2 3 4 5\n1 2 3 10 8\n10 9 8 7 6\n50 60 70 80 90\n"
+    }
+  ], 
+  "url": "https://www.luogu.com.cn/problem/P5123", 
+  "timeLimit": 3000, 
+  "group": "Luogu", 
+  "name": "P5123 [USACO18DEC] Cowpatibility G", 
+  "languages": {
+    "java": {
+      "taskClass": "P5123USACO18DECCowpatibilityG", 
+      "mainClass": "Main"
+    }
+  }, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "memoryLimit": 256, 
+  "testType": "single", 
+  "interactive": false
+}
