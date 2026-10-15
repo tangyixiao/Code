@@ -609,7 +609,7 @@ inline void solve(int Task_Id) {
     for (int i = 1; i <= n; i++) {
         f = (s + d[i]) % mod, s = (s + f) % mod;
     }
-    cout << f << '\n';
+    cout << f;
     return;
 }
 } // namespace TANGYIXIAO
