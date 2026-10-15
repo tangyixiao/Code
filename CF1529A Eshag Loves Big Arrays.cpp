@@ -602,7 +602,7 @@ int n, m, ans, a[N];
 inline void solve(int Task_Id) {
     cin >> n, m = inf;
     for (int i = 1; i <= n; i++) {
-        cin >> a[i], m = min(mn, a[i]);
+        cin >> a[i], m = min(m, a[i]);
     }
     for (int i = 1; i <= n; i++) {
         ans += (a[i] != m);
