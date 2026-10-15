@@ -1,0 +1,31 @@
+{
+  "name": "B4554 [GESP202606 二级] 菱形",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/B4554",
+  "interactive": false,
+  "memoryLimit": 512,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "4\n",
+      "output": "...+...\n..+.+..\n.+...+.\n+.....+\n.+...+.\n..+.+..\n...+...\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "B4554GESP202606"
+    }
+  },
+  "batch": {
+    "id": "b3b4657f-88ce-4e8c-a4cf-4773636a1b82",
+    "size": 1
+  }
+}
