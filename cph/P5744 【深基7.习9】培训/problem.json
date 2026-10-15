@@ -1,0 +1,31 @@
+{
+  "tests": [
+    {
+      "output": "kkksc03 25 0\nchen_zhe 15 480\nnzhtl1477 19 600\n", 
+      "input": "3\nkkksc03 24 0\nchen_zhe 14 400\nnzhtl1477 18 590\n"
+    }
+  ], 
+  "batch": {
+    "id": "0c7e369d-19f6-4931-ab84-5cad4d9242c5", 
+    "size": 1
+  }, 
+  "name": "P5744 【深基7.习9】培训", 
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "interactive": false, 
+  "url": "https://www.luogu.com.cn/problem/P5744", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "group": "Luogu", 
+  "memoryLimit": 125, 
+  "languages": {
+    "java": {
+      "taskClass": "P574479", 
+      "mainClass": "Main"
+    }
+  }, 
+  "input": {
+    "type": "stdin"
+  }
+}
