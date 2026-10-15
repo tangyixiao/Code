@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: cd75b832-6148-47a3-97d6-d13adf684688
 //
-//  Algorithm: 
-//  Complexity: O()
-//  Note: 
+//  Algorithm: 完全背包计数
+//  Complexity: O(4 * N * sqrt(N) + t), N = 32768
+//  Note: 按平方数递增枚举，避免重复统计排列
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,20 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 3.2768e4;
+int t, n, f[N + 1][5];
 inline void solve(int Task_Id) {
-    // do something here
+    f[0][0] = 1;
+    for (int i = 1; i * i <= N; i++) {
+        for (int j = i * i; j <= N; j++) {
+            for (int k = 1; k <= 4; k++) { f[j][k] += f[j - i * i][k - 1]; }
+        }
+    }
+    cin >> t;
+    for (; t--;) {
+        cin >> n;
+        cout << f[n][1] + f[n][2] + f[n][3] + f[n][4] << '\n';
+    }
     return;
 }
 } // namespace TANGYIXIAO
