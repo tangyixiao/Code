@@ -1,0 +1,35 @@
+{
+  "name": "B4412 [GESP202509 二级] 菱形",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/B4412",
+  "interactive": false,
+  "memoryLimit": 512,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "3\n",
+      "output": ".#.\n#.#\n.#.\n"
+    },
+    {
+      "input": "9\n",
+      "output": "....#....\n...#.#...\n..#...#..\n.#.....#.\n#.......#\n.#.....#.\n..#...#..\n...#.#...\n....#....\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "B4412GESP202509"
+    }
+  },
+  "batch": {
+    "id": "07a344f8-4ddd-4adf-ada0-a27562ca8c50",
+    "size": 1
+  }
+}
