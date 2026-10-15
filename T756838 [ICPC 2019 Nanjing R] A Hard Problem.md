@@ -41,3 +41,39 @@
 
 ---
 
+# T756838 [ICPC 2019 Nanjing R] A Hard Problem
+
+## 题目描述
+
+Given a positive integer $n$, you need to find out the minimum integer $k$ such that for any subset $T$ of the set $\{1,2,\cdots,n\}$ of size $k$, there exist two different integers $u,v \in T$ that $u$ is a factor of $v$.
+
+## 输入格式
+
+The first line contains an integer $T~(1\le T\le 10^5)$ indicating the number of test cases.
+
+Each of the following $T$ lines contains an integer $n~(2\le n\le 10^9)$ describing a test case.
+
+## 输出格式
+
+For each test case, output a line containing an integer which indicates the answer.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+4
+2
+3
+4
+5
+```
+
+### 输出 #1
+
+```
+2
+3
+3
+4
+```
