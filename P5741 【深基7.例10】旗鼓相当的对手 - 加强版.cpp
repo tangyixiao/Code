@@ -603,7 +603,6 @@ struct node {
     string s;
     int c, m, e;
 } a[N];
-set<pair<string, string>> k;
 inline void solve(int Task_Id) {
     cin >> n;
     for (int i = 1; i <= n; i++) {
@@ -611,7 +610,7 @@ inline void solve(int Task_Id) {
     }
     for (int i = 1; i <= n; i++) {
         for (int j = i + 1; j <= n; j++) {
-            if (max(abs(a[i].c - a[j].c), max(abs(a[i].m - a[j].m), abs(a[i].e - a[j].e))) <= 5 && abs((a[i] + b[i] + c[i]) - (a[j] + b[j] + c[j])) <= 10) {
+            if (max(abs(a[i].c - a[j].c), max(abs(a[i].m - a[j].m), abs(a[i].e - a[j].e))) <= 5 && abs((a[i].c + a[i].m + a[i].e) - (a[j].c + a[j].m + a[j].e)) <= 10) {
                 cout << a[i].s << " " << a[j].s << "\n";
             }
         }
