@@ -597,7 +597,7 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 1e4 + 1;
+const int N = 1e4 + 5;
 int n, k, d, p[N], cnt;
 bool v[N];
 inline void solve(int Task_Id) {
