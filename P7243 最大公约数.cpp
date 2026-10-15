@@ -614,13 +614,13 @@ inline void solve(int Task_Id) {
     for (int i = 1; i <= n; i++) {
         for (int j = 1; j <= m; j++) {
             int d = abs(i - x) + abs(j - y);
-            g[d] = gcd(g[d], a[i][j]);
+            g[d] = MATH::gcd(g[d], a[i][j]);
         }
     }
 
     long long ans = 0;
     for (int d = 0; d <= n + m - 2; d++) {
-        ans = gcd(ans, g[d]);
+        ans = MATH::gcd(ans, g[d]);
         if (ans == 1) {
             cout << d << "\n";
             return;
