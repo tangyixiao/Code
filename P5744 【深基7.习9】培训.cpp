@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 0c7e369d-19f6-4931-ab84-5cad4d9242c5
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -20,7 +20,7 @@ Copyright (C) 2026 TangYixiao
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
 #define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
 #define FILE_INDEX 1                      // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -597,8 +597,11 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+string s;
+int n, m;
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> s >> n >> m;
+    cout << s << " " << n + 1 << " " << min(600, m + m / 5) << "\n";
     return;
 }
 } // namespace TANGYIXIAO
