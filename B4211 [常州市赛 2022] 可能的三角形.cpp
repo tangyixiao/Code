@@ -597,6 +597,8 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
+
 namespace TANGYIXIAO {
 long long x[5], p[20];
 int cnt;
@@ -621,12 +623,13 @@ inline void solve(int Task_Id) {
                 long long a = p[i], b = p[j], c = p[k];
                 if (a >= 2 && a + b > c) {
                     long long s[8] = {0, a, b, c, a + b, a + c, b + c, a + b + c};
-                    bool ok = true;
+                    bool used[8] = {}, ok = true;
 
                     for (int t = 1; t <= 4; t++) {
                         bool flag = false;
                         for (int l = 1; l <= 7; l++) {
-                            if (x[t] == s[l]) {
+                            if (!used[l] && x[t] == s[l] && !flag) {
+                                used[l] = true;
                                 flag = true;
                             }
                         }
