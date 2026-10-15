@@ -1,0 +1,31 @@
+{
+  "batch": {
+    "id": "f1fb71fa-c3cd-495e-bbf3-3f88d14adbd1", 
+    "size": 1
+  }, 
+  "tests": [
+    {
+      "output": "9\n", 
+      "input": "2 3\n"
+    }
+  ], 
+  "url": "https://www.luogu.com.cn/problem/B2144", 
+  "timeLimit": 1000, 
+  "group": "Luogu", 
+  "name": "B2144 阿克曼（Ackermann）函数", 
+  "languages": {
+    "java": {
+      "taskClass": "B2144Ackermann", 
+      "mainClass": "Main"
+    }
+  }, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "memoryLimit": 128, 
+  "testType": "single", 
+  "interactive": false
+}

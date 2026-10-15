@@ -1,0 +1,31 @@
+{
+  "batch": {
+    "id": "91612eb8-4cff-48a5-a71f-4bc5f4448feb", 
+    "size": 1
+  }, 
+  "tests": [
+    {
+      "output": "7\n8\n62\n", 
+      "input": "3\n2\n1 6\n3 8\n1 2\n3\n1 3\n4 6\n7 9\n1 2\n2 3\n6\n3 14\n12 20\n12 19\n2 12\n10 17\n3 17\n3 2\n6 5\n1 5\n2 6\n4 6\n"
+    }
+  ], 
+  "url": "https://codeforces.com/contest/1529/problem/C", 
+  "timeLimit": 1000, 
+  "group": "Codeforces - Codeforces Round 722 (Div. 2)", 
+  "name": "C. Parsa's Humongous Tree", 
+  "languages": {
+    "java": {
+      "taskClass": "CParsasHumongousTree", 
+      "mainClass": "Main"
+    }
+  }, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "memoryLimit": 256, 
+  "testType": "single", 
+  "interactive": false
+}

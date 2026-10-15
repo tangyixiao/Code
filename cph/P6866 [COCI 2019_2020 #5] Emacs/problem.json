@@ -1,0 +1,39 @@
+{
+  "tests": [
+    {
+      "output": "3\n", 
+      "input": "6 7\n***....\n***..**\n.....**\n.***.**\n.***...\n.***...\n"
+    }, 
+    {
+      "output": "4\n", 
+      "input": "3 3\n*.*\n...\n*.*\n"
+    }, 
+    {
+      "output": "3\n", 
+      "input": "1 10\n.*.**.***.\n"
+    }
+  ], 
+  "batch": {
+    "id": "56a702b2-ea04-4b88-bf43-4ad3f1f50c64", 
+    "size": 1
+  }, 
+  "name": "P6866 [COCI 2019/2020 #5] Emacs", 
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "interactive": false, 
+  "url": "https://www.luogu.com.cn/problem/P6866", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "group": "Luogu", 
+  "memoryLimit": 512, 
+  "languages": {
+    "java": {
+      "taskClass": "P6866COCI201920205Emacs", 
+      "mainClass": "Main"
+    }
+  }, 
+  "input": {
+    "type": "stdin"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "tests": [
+    {
+      "output": "senpai 114 51 4\n", 
+      "input": "3\nsenpai 114 51 4\nlxl 114 10 23\nfafa 51 42 60\n"
+    }
+  ], 
+  "batch": {
+    "id": "142972f8-c10b-4889-879d-4f8e009a0fa5", 
+    "size": 1
+  }, 
+  "name": "P5740 【深基7.例9】最厉害的学生", 
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "interactive": false, 
+  "url": "https://www.luogu.com.cn/problem/P5740", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "group": "Luogu", 
+  "memoryLimit": 128, 
+  "languages": {
+    "java": {
+      "taskClass": "P574079", 
+      "mainClass": "Main"
+    }
+  }, 
+  "input": {
+    "type": "stdin"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "batch": {
+    "id": "8275375e-a18a-47be-98ef-6374cd06ccb5", 
+    "size": 1
+  }, 
+  "tests": [
+    {
+      "output": "30\n", 
+      "input": "17 15\n+-+-+-+-+-+-+-+\n|             |\n+ + + + + + + +\n|X  |   |     |\n+ + + + + + + +\n|   |   |  X  |\n+-+ + + + + + +\n|       |     |\n+ + + +-+-+-+-+\n|            X|\n+ + +-+-+-+-+ +\n|             |\n+ + + + + + + +\n|  X|         |\n+ + + + + + + +\n|  |          |\n+-+-+-+-+-+-+-+\n"
+    }
+  ], 
+  "url": "https://www.luogu.com.cn/problem/P6889", 
+  "timeLimit": 1000, 
+  "group": "Luogu", 
+  "name": "P6889 [CEOI 2006] CONNECT", 
+  "languages": {
+    "java": {
+      "taskClass": "P6889CEOI2006CONNECT", 
+      "mainClass": "Main"
+    }
+  }, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "memoryLimit": 128, 
+  "testType": "single", 
+  "interactive": false
+}

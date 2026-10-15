@@ -1,0 +1,31 @@
+{
+  "batch": {
+    "id": "ae78123e-035d-4012-959d-b3eee0fe9b06", 
+    "size": 1
+  }, 
+  "tests": [
+    {
+      "output": "15\n", 
+      "input": "5\n"
+    }
+  ], 
+  "url": "https://www.luogu.com.cn/problem/B2142", 
+  "timeLimit": 1000, 
+  "group": "Luogu", 
+  "name": "B2142 求 1+2+3+...+N 的值", 
+  "languages": {
+    "java": {
+      "taskClass": "B2142123N", 
+      "mainClass": "Main"
+    }
+  }, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "memoryLimit": 128, 
+  "testType": "single", 
+  "interactive": false
+}

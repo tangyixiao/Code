@@ -1,0 +1,43 @@
+{
+  "batch": {
+    "id": "458853b1-20a7-4548-abe8-41b23d6127cf", 
+    "size": 1
+  }, 
+  "tests": [
+    {
+      "output": "1\n", 
+      "input": "1\n"
+    }, 
+    {
+      "output": "3\n", 
+      "input": "2\n"
+    }, 
+    {
+      "output": "6\n", 
+      "input": "3\n"
+    }, 
+    {
+      "output": "688750769\n", 
+      "input": "100\n"
+    }
+  ], 
+  "url": "https://codeforces.com/contest/1529/problem/D", 
+  "timeLimit": 1000, 
+  "group": "Codeforces - Codeforces Round 722 (Div. 2)", 
+  "name": "D. Kavi on Pairing Duty", 
+  "languages": {
+    "java": {
+      "taskClass": "DKaviOnPairingDuty", 
+      "mainClass": "Main"
+    }
+  }, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "memoryLimit": 256, 
+  "testType": "single", 
+  "interactive": false
+}

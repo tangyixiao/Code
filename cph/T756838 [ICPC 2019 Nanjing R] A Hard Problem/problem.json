@@ -1,0 +1,31 @@
+{
+  "batch": {
+    "id": "89bb0289-e9b0-45bb-8771-87addaf2e26c", 
+    "size": 1
+  }, 
+  "tests": [
+    {
+      "output": "2\n3\n3\n4\n", 
+      "input": "4\n2\n3\n4\n5\n"
+    }
+  ], 
+  "url": "https://www.luogu.com.cn/problem/T756838?contestId=358584", 
+  "timeLimit": 1000, 
+  "group": "Luogu - [ICPC2019 Nanjing R] ICPC 2019 区域赛南京站重现赛", 
+  "name": "T756838 [ICPC 2019 Nanjing R] A Hard Problem", 
+  "languages": {
+    "java": {
+      "taskClass": "T756838ICPC2019NanjingRAHardProblem", 
+      "mainClass": "Main"
+    }
+  }, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "memoryLimit": 512, 
+  "testType": "single", 
+  "interactive": false
+}

@@ -1,0 +1,31 @@
+{
+  "tests": [
+    {
+      "output": "Excellent\nNot excellent\nNot excellent\nExcellent\n", 
+      "input": "4\n1223 95 59\n1224 50 7\n1473 32 45\n1556 86 99\n"
+    }
+  ], 
+  "batch": {
+    "id": "63236606-b018-4137-a384-78416966bfde", 
+    "size": 1
+  }, 
+  "name": "P5742 【深基7.例11】评等级", 
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "interactive": false, 
+  "url": "https://www.luogu.com.cn/problem/P5742", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "group": "Luogu", 
+  "memoryLimit": 128, 
+  "languages": {
+    "java": {
+      "taskClass": "P5742711", 
+      "mainClass": "Main"
+    }
+  }, 
+  "input": {
+    "type": "stdin"
+  }
+}

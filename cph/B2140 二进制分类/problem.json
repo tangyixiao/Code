@@ -1,0 +1,31 @@
+{
+  "batch": {
+    "id": "3d923268-baca-4428-9abf-e001af0b0193", 
+    "size": 1
+  }, 
+  "tests": [
+    {
+      "output": "5 2\n", 
+      "input": "7\n"
+    }
+  ], 
+  "url": "https://www.luogu.com.cn/problem/B2140", 
+  "timeLimit": 1000, 
+  "group": "Luogu", 
+  "name": "B2140 二进制分类", 
+  "languages": {
+    "java": {
+      "taskClass": "B2140", 
+      "mainClass": "Main"
+    }
+  }, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "memoryLimit": 128, 
+  "testType": "single", 
+  "interactive": false
+}

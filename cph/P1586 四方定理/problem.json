@@ -1,0 +1,31 @@
+{
+  "batch": {
+    "id": "cd75b832-6148-47a3-97d6-d13adf684688", 
+    "size": 1
+  }, 
+  "tests": [
+    {
+      "output": "48\n", 
+      "input": "1\n2003\n"
+    }
+  ], 
+  "url": "https://www.luogu.com.cn/problem/P1586", 
+  "timeLimit": 1000, 
+  "group": "Luogu", 
+  "name": "P1586 四方定理", 
+  "languages": {
+    "java": {
+      "taskClass": "P1586", 
+      "mainClass": "Main"
+    }
+  }, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "memoryLimit": 125, 
+  "testType": "single", 
+  "interactive": false
+}

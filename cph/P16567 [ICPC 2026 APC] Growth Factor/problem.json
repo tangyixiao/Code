@@ -1,0 +1,35 @@
+{
+  "batch": {
+    "id": "eed37e64-f266-4ac7-a1d1-97c03b9361fe", 
+    "size": 1
+  }, 
+  "tests": [
+    {
+      "output": "6\n", 
+      "input": "2\n2 4\n"
+    }, 
+    {
+      "output": "16555779\n", 
+      "input": "6\n265 9801 192168 200000 192018 199809\n"
+    }
+  ], 
+  "url": "https://www.luogu.com.cn/problem/P16567", 
+  "timeLimit": 3000, 
+  "group": "Luogu", 
+  "name": "P16567 [ICPC 2026 APC] Growth Factor", 
+  "languages": {
+    "java": {
+      "taskClass": "P16567ICPC2026APCGrowthFactor", 
+      "mainClass": "Main"
+    }
+  }, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "memoryLimit": 1024, 
+  "testType": "single", 
+  "interactive": false
+}

@@ -1,0 +1,35 @@
+{
+  "batch": {
+    "id": "6afac0bf-74c1-4956-9763-581ddf1bca69", 
+    "size": 1
+  }, 
+  "tests": [
+    {
+      "output": "-34\n", 
+      "input": "6\n-8 12\n0 5\n7 -3\n10 -7\n-2 7\n1 4\n"
+    }, 
+    {
+      "output": "-155\n", 
+      "input": "10\n70 70\n62 73\n81 65\n59 77\n99 40\n35 88\n80 57\n76 67\n85 57\n53 96\n"
+    }
+  ], 
+  "url": "https://www.luogu.com.cn/problem/P5963", 
+  "timeLimit": 1000, 
+  "group": "Luogu", 
+  "name": "P5963 [BalticOI 2005] Card 卡牌游戏 (Day0)", 
+  "languages": {
+    "java": {
+      "taskClass": "P5963BalticOI2005CardDay0", 
+      "mainClass": "Main"
+    }
+  }, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "memoryLimit": 125, 
+  "testType": "single", 
+  "interactive": false
+}
