@@ -603,6 +603,9 @@ inline void solve(int Task_Id) {
     for (int k = 1; k <= n; k++) {
         cnt = w = 0;
         for (int i = 0;; i++) {
+            if ((1 << i) > k) {
+                break;
+            }
             if (k & (1 << i)) {
                 cnt++;
             } else {
