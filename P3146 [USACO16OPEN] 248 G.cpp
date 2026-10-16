@@ -601,13 +601,11 @@ const int N = 3e2 + 5;
 int n, a[N], f[N][N], ans;
 inline void solve(int Task_Id) {
     cin >> n, ans = 0;
-    memset(f, 0, sizeof(f));
     for (int i = 1; i <= n; i++) {
         cin >> a[i], f[i][i] = a[i], ans = max(ans, a[i]);
     }
     for (int len = 2; len <= n; len++) {
-        for (int l = 1; l + len - 1 <= n; l++) {
-            int r = l + len - 1;
+        for (int l = 1, r = len; l + len - 1 <= n; l++, r++) {
             for (int k = l; k < r; k++) {
                 if (f[l][k] != 0 && f[l][k] == f[k + 1][r]) {
                     f[l][r] = max(f[l][r], f[l][k] + 1);
