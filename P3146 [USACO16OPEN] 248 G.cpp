@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 28004cdf-bde6-4093-b5dc-f883452db029
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,26 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 3e2 + 5;
+int n, a[N], f[N][N], ans;
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n, ans = 0;
+    memset(f, 0, sizeof(f));
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i], f[i][i] = a[i], ans = max(ans, a[i]);
+    }
+    for (int len = 2; len <= n; len++) {
+        for (int l = 1; l + len - 1 <= n; l++) {
+            int r = l + len - 1;
+            for (int k = l; k < r; k++) {
+                if (f[l][k] != 0 && f[l][k] == f[k + 1][r]) {
+                    f[l][r] = max(f[l][r], f[l][k] + 1);
+                }
+            }
+            ans = max(ans, f[l][r]);
+        }
+    }
+    cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO
