@@ -1,0 +1,31 @@
+{
+  "testType": "single", 
+  "memoryLimit": 256, 
+  "url": "https://www.luogu.com.cn/problem/P3146", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "interactive": false, 
+  "batch": {
+    "size": 1, 
+    "id": "396abe28-4dc0-4bcd-9186-00a07b9cf3cb"
+  }, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P3146USACO16OPEN248G"
+    }
+  }, 
+  "tests": [
+    {
+      "input": "4\n1\n1\n1\n2\n", 
+      "output": "3\n"
+    }
+  ], 
+  "name": "P3146 [USACO16OPEN] 248 G", 
+  "group": "Luogu", 
+  "timeLimit": 1000
+}
