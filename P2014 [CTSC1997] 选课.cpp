@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: f22f3fb0-25ef-4bc2-b3ab-ed9d74b2cef0
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,31 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+int dp[310][310], n, m, s[310], v;
+vector<int> g[310];
+int dfs(int x) {
+    int t = 1;
+    dp[x][1] = s[x];
+    for (int i = 0; i < g[x].size(); i++) {
+        int v = g[x][i];
+        int sz = dfs(v);
+        for (int j = max(t, m - 1); j >= 1; j--) {
+            for (int k = 1; k <= sz && (j + k) <= n + 1; k++) {
+                dp[x][j + k] = max(dp[x][j + k], dp[x][j] + dp[v][k]);
+            }
+        }
+        t += sz;
+    }
+    return t;
+}
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> m;
+    for (int i = 1; i <= n; i++) {
+        cin >> v >> s[i];
+        g[v].push_back(i);
+    }
+    dfs(0);
+    cout << dp[0][m + 1];
     return;
 }
 } // namespace TANGYIXIAO
