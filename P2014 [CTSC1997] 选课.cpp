@@ -597,31 +597,40 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-int dp[310][310], n, m, s[310], v;
-vector<int> g[310];
-int dfs(int x) {
-    int t = 1;
-    dp[x][1] = s[x];
-    for (int i = 0; i < g[x].size(); i++) {
-        int v = g[x][i];
-        int sz = dfs(v);
-        for (int j = max(t, m - 1); j >= 1; j--) {
-            for (int k = 1; k <= sz && (j + k) <= n + 1; k++) {
-                dp[x][j + k] = max(dp[x][j + k], dp[x][j] + dp[v][k]);
+const int N = 3e2 + 5;
+int n, m, a[N], f[N][N], g[N], sz[N];
+vector<int> e[N];
+inline void dfs(int u) {
+    f[u][0] = 0, f[u][1] = a[u], sz[u] = 1;
+    for (int v : e[u]) {
+        dfs(v);
+        fill(g, g + N, -1), g[0] = 0;
+        for (int j = 1; j <= min(sz[u], m + 1); j++) {
+            if (f[u][j] == -1) {
+                continue;
+            }
+            for (int k = 0; k <= min(sz[v], m + 1 - j); k++) {
+                if (f[v][k] != -1) {
+                    g[j + k] = max(g[j + k], f[u][j] + f[v][k]);
+                }
             }
         }
-        t += sz;
+        sz[u] += sz[v];
+        for (int j = 0; j <= min(sz[u], m + 1); j++) {
+            f[u][j] = g[j];
+        }
     }
-    return t;
+    return;
 }
 inline void solve(int Task_Id) {
     cin >> n >> m;
-    for (int i = 1; i <= n; i++) {
-        cin >> v >> s[i];
-        g[v].push_back(i);
+    memset(f, -1, sizeof(f));
+    for (int i = 1, k; i <= n; i++) {
+        cin >> k >> a[i];
+        e[k].push_back(i);
     }
     dfs(0);
-    cout << dp[0][m + 1];
+    cout << f[0][m + 1] << "\n";
     return;
 }
 } // namespace TANGYIXIAO
