@@ -1,0 +1,31 @@
+{
+  "testType": "single", 
+  "memoryLimit": 125, 
+  "url": "https://www.luogu.com.cn/problem/P2014", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "interactive": false, 
+  "batch": {
+    "size": 1, 
+    "id": "f22f3fb0-25ef-4bc2-b3ab-ed9d74b2cef0"
+  }, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P2014CTSC1997"
+    }
+  }, 
+  "tests": [
+    {
+      "input": "7 4\n2 2\n0 1\n0 4\n2 1\n7 1\n7 6\n2 2\n", 
+      "output": "13\n"
+    }
+  ], 
+  "name": "P2014 [CTSC1997] 选课", 
+  "group": "Luogu", 
+  "timeLimit": 1000
+}
