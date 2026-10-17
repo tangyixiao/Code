@@ -598,7 +598,7 @@ signed main() {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 const int N = 2e6 + 5, M = 2e6;
-ll n, m, s[N], w[N], ans;
+ll n, m, s[N], a[N], ans;
 inline void solve(int Task_Id) {
     cin >> n >> m;
     for (int i = 1, x; i <= n; i++) {
@@ -610,12 +610,12 @@ inline void solve(int Task_Id) {
     for (int i = 1, l; i <= m; i++) {
         cin >> l;
         for (int j = 1, x; j <= l; j++) {
-            cin >> x, w[i] += s[x];
+            cin >> x, a[i] += s[x];
         }
     }
-    sort(w + 1, w + 1 + m);
+    sort(a + 1, a + 1 + m);
     for (int i = 1; i <= m; i++) {
-        ans += w[i] * (m - i + 1);
+        ans += a[i] * (m - i + 1);
     }
     cout << ans + (m * n * (n + 1) >> 1LL) << "\n";
     return;
