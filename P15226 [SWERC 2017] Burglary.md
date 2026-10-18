@@ -74,3 +74,80 @@
 - 任何架子正下方有 1 到 10 个梯子。
 
 翻译由 DeepSeek 完成
+
+---
+
+# P15226 [SWERC 2017] Burglary
+
+## 题目描述
+
+The giant Candy-Bar Wall in the Royal Kitchen is used to store… well, candy bars. These are placed in jars on $ N $ equal-length shelves. The shelves are positioned in a vertical progression from the ground up, and perfectly aligned horizontally on their rightmost and leftmost edges. Each shelf is partitioned into $ M $ equally-sized slots, which can either be empty or occupied by a jar. A jar contains between 1 and 9 candy bars.
+
+Every shelf is connected to the one directly below (or to the floor, for the bottommost shelf) by one or more vertical ladders. A ladder connects a slot to the corresponding slot on the shelf below, or to the floor. There is at most one ladder directly under any given slot.
+
+The topmost shelf does not contain any jars, but just above it is a huge open window leading to the Royal Kitchen rooftop. Mini-Fierce-And-Hungry Bandit has surprisingly managed to get into the Royal Kitchen via this top window and now plans a massive candy-bar burglary. More precisely, he intends to do a fun-and-profit “round trip” across the wall, that is:
+
+- start from the topmost shelf;
+- move down 0 or more shelves, possibly until reaching the floor;
+- and then move up again, to the top window through which he will gracefully exit;
+
+while of course grabbing as many candy bars as possible during his trip.
+
+The major issue the bandit faces however is that he cannot enter a slot containing a candy jar more than once, since this would trigger a dreadful Candy Alarm.
+
+Your mission: help the bandit carefully plan his round trip across the Candy-Bar Wall so as to maximize the number of candy bars he grabs, without triggering any alarm.
+
+## 输入格式
+
+The first line consists of two integers: $ N $ (number of shelves) and $ M $ (number of slots on a shelf), separated by a space. The following $ 2N $ lines each consist of strings of length $ M $ depicting, in an ASCII art manner, the shelf and ladder configuration:
+
+- Line $ 2k $, for $ 1 \leq k \leq N $, comprises the characters ‘-’, ‘1’, ..., ‘9’, where a digit $ x $ represents a jar containing $ x $ candy bars, and ‘-’ denotes an empty slot.
+- Line $ 2k+1 $, for $ 1 \leq k \leq N $, comprises the characters ‘.’ and ‘|’, where ‘|’ represents a ladder, and ‘.’ means empty wall space.
+
+## 输出格式
+
+The output consists of an integer on a single line, representing the maximum number of candy bars the bandit can collect without triggering any alarm.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+5 20
+--------------------
+.|.....|...|......|.
+1-1--1115-3-1-1--1-1
+....|.........|.....
+---1-11-1-11---1--3-
+.......|.........|..
+-7----9-4-----------
+..|.................
+--------9-----------
+.|.................|
+```
+
+### 输出 #1
+
+```
+38
+```
+
+## 说明/提示
+
+#### Example
+
+:::align{center}
+![](https://cdn.luogu.com.cn/upload/image_hosting/r9o1mq40.png)
+:::
+
+#### Notes
+
+- Slots corresponding to ladder endpoints may contain jars.
+- A slot may be entered either by walking (left to right or right to left) on a shelf, or by reaching the endpoint of a ladder. Slots corresponding to a ladder’s endpoints are necessarily entered if the ladder is used.
+- There are no candy jars on the topmost shelf and on the floor.
+
+#### Limits
+
+- $ 1 \leq N \leq 1000 $;
+- $ 1 \leq M \leq 500 $;
+- there are between 1 and 10 ladders directly under any shelf.
