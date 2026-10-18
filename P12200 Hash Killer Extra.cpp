@@ -597,9 +597,67 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
+
 namespace TANGYIXIAO {
+const int N = 4096;
+struct Node {
+    int val, l, r;
+} tr[6000];
+struct Pair {
+    int val, l, r;
+} a[2100];
+int b, p, tot, n, id[N + 5], d[N + 5];
+
+inline void dfs(int u, int x) {
+    if (u <= N) {
+        d[u] += x;
+        return;
+    }
+    dfs(tr[u].l, x);
+    dfs(tr[u].r, -x);
+}
+
 inline void solve(int Task_Id) {
-    // do something here
-    return;
+    cin >> b >> p;
+    tot = n = N;
+    tr[N].val = 1;
+    for (int i = N - 1; i >= 1; i--) {
+        tr[i].val = 1LL * tr[i + 1].val * b % p;
+    }
+    for (int i = 1; i <= N; i++) {
+        id[i] = i;
+    }
+
+    while (true) {
+        sort(id + 1, id + n + 1, [](int x, int y) {
+            return tr[x].val < tr[y].val;
+        });
+        for (int i = 1; i <= n / 2; i++) {
+            a[i] = {tr[id[i * 2]].val - tr[id[i * 2 - 1]].val,
+                    id[i * 2], id[i * 2 - 1]};
+        }
+        sort(a + 1, a + n / 2 + 1, [](const Pair &x, const Pair &y) {
+            return x.val < y.val;
+        });
+        if (!a[1].val) {
+            tr[++tot] = {0, a[1].l, a[1].r};
+            dfs(tot, 1);
+            break;
+        }
+        n /= 4;
+        for (int i = 1; i <= n; i++) {
+            tr[++tot] = {a[i].val, a[i].l, a[i].r};
+            id[i] = tot;
+        }
+    }
+    for (int i = 1; i <= N; i++) {
+        cout << 'b';
+    }
+    cout << "\n";
+    for (int i = 1; i <= N; i++) {
+        cout << char('b' + d[i]);
+    }
+    cout << "\n";
 }
 } // namespace TANGYIXIAO

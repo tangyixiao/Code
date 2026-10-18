@@ -1,13 +1,15 @@
 #include <bits/stdc++.h>
 using namespace std;
-const int N = 1e4 + 5;
+const int N = 1e5 + 5;
 int n, len, a[N], b[N];
 char s[N];
+
+inline int val(char c) { return c <= '9' ? c - '0' : c - 'A' + 10; }
 
 inline void input() {
     cin >> n >> s;
     for (int i = (int)strlen(s) - 1; i >= 0; i--) {
-        a[len++] = s[i] - '0';
+        a[len++] = val(s[i]);
     }
     return;
 }
