@@ -1,0 +1,31 @@
+{
+  "name": "P5283 [十二省联考 2019] 异或粽子",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P5283",
+  "interactive": false,
+  "memoryLimit": 1024,
+  "timeLimit": 3500,
+  "tests": [
+    {
+      "input": "3 2\n1 2 3\n",
+      "output": "6\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P52832019"
+    }
+  },
+  "batch": {
+    "id": "831f732f-81c3-4ce4-ac5f-601078f1d72b",
+    "size": 1
+  }
+}
