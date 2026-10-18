@@ -7,9 +7,15 @@ int main() {
     for (x = 1; x <= 20; x++) {
         for (y = 1; y <= 39; y++) {
             z = 100 - x - y;
-            if (z <= 0) continue;
-            if (3 * x + 2 * y + z / 3 != 100) continue;
-            if (z % 3 != 0) continue;
+            if (z <= 0) {
+                continue;
+            }
+            if (3 * x + 2 * y + z / 3 != 100) {
+                continue;
+            }
+            if (z % 3 != 0) {
+                continue;
+            }
             printf("%-5d%-5d%-5d\n", x, y, z);
         }
     }

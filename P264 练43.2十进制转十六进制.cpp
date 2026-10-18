@@ -1,8 +1,8 @@
 #include <bits/stdc++.h>
 #define int long long
 using namespace std;
-int n, x, ans;
-char c[] = "0123456789ABCDEF";
+int n;
+char c[] = "0123456789ABCDEF", s[15];
 
 inline void input() {
     cin >> n;
@@ -11,10 +11,13 @@ inline void input() {
 
 inline void solve() {
     input();
-    for (; n; n /= 16) ans = ans * 16 + n % 16;
-    int t = ans, len = 0;
-    while (t) len++, t /= 10;
-    for (int i = len; i; i--) printf("%c", c[ans / pow(10, i - 1) % 10]);
+    int t = 0;
+    for (; n; n /= 16) {
+        s[t++] = c[n % 16];
+    }
+    for (int i = t - 1; i >= 0; i--) {
+        printf("%c", s[i]);
+    }
     printf("\n");
     return;
 }

@@ -10,7 +10,9 @@ inline void input() {
 
 inline void solve() {
     input();
-    for (int i = 1; i < n; i++) ans *= a;
+    for (int i = 1; i <= n; i++) {
+        ans *= a;
+    }
     cout << ans << "\n";
     return;
 }
