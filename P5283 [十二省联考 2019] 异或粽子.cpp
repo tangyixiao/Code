@@ -598,8 +598,71 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+constexpr int N = 500005, M = N * 33;
+struct Node {
+    int ch[2], sz;
+} tr[M];
+struct State {
+    unsigned int val;
+    int id, rk;
+    bool operator<(const State &o) const {
+        return val < o.val;
+    }
+};
+priority_queue<State> pq;
+unsigned int s[N], v;
+int rt[N], tot, n, k;
+long long ans;
+
+inline int insert(int p, unsigned int x) {
+    int q = ++tot, root = q;
+    tr[q] = tr[p];
+    ++tr[q].sz;
+    for (int i = 31; i >= 0; i--) {
+        int b = (x >> i) & 1, old = tr[p].ch[b];
+        tr[q].ch[b] = ++tot;
+        q = tr[q].ch[b];
+        tr[q] = tr[old];
+        ++tr[q].sz;
+        p = old;
+    }
+    return root;
+}
+
+inline unsigned int query(int p, unsigned int x, int rk) {
+    unsigned int res = 0;
+    for (int i = 31; i >= 0; i--) {
+        int b = ((x >> i) & 1) ^ 1, c = tr[tr[p].ch[b]].sz;
+        if (c >= rk) {
+            res |= 1u << i;
+            p = tr[p].ch[b];
+        } else {
+            rk -= c;
+            p = tr[p].ch[b ^ 1];
+        }
+    }
+    return res;
+}
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> k;
+    for (int i = 1; i <= n; i++) {
+        cin >> v;
+        s[i] = s[i - 1] ^ v;
+    }
+    for (int i = 1; i <= n; i++) {
+        rt[i] = insert(rt[i - 1], s[i - 1]);
+        pq.push({query(rt[i], s[i], 1), i, 1});
+    }
+    for (int i = 1; i <= k; i++) {
+        State cur = pq.top();
+        pq.pop();
+        ans += cur.val;
+        if (cur.rk < cur.id) {
+            pq.push({query(rt[cur.id], s[cur.id], cur.rk + 1), cur.id, cur.rk + 1});
+        }
+    }
+    cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO
