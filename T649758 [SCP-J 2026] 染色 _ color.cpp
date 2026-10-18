@@ -598,9 +598,8 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int N = 2e5 + 5;
-int n;
-ll a[N], mn = 1e18, mx = -1e18;
+const ll N = 2e5 + 5, inf = 1e18;
+ll n, a[N], mn = inf, mx = -inf;
 inline void solve(int Task_Id) {
     cin >> n;
     for (int i = 1; i <= n; i++) {
@@ -609,7 +608,7 @@ inline void solve(int Task_Id) {
     for (int i = 1; i < n; i++) {
         mn = min(mn, a[i + 1]), mx = max(mx, a[i] - mn);
     }
-    cout << a[n] - a[1] + max(0LL, mx) << "\n";
+    cout << a[n] - a[1] + (mx < 0 ? 0 : mx) << "\n";
     return;
 }
 } // namespace TANGYIXIAO
