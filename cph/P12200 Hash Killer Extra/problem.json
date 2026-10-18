@@ -1,0 +1,31 @@
+{
+  "name": "P12200 Hash Killer Extra",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P12200",
+  "interactive": false,
+  "memoryLimit": 512,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "37 131\n",
+      "output": "bbbbbbbbbbbbbbbb\ncaabbbbbbcbbbbbb\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P12200HashKillerExtra"
+    }
+  },
+  "batch": {
+    "id": "df060a0a-dab5-4b8d-a3de-ff48f7bc8b6e",
+    "size": 1
+  }
+}
