@@ -1,0 +1,31 @@
+{
+  "name": "P6587 超超的序列 加强",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P6587",
+  "interactive": false,
+  "memoryLimit": 256,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "5 3\n1 2 3 4 6\n1 2 1\n1 1 1 3\n2 0 0\n",
+      "output": "7\n25\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P6587"
+    }
+  },
+  "batch": {
+    "id": "58183b6a-ee3a-4eeb-928e-f58bfb27f73e",
+    "size": 1
+  }
+}
