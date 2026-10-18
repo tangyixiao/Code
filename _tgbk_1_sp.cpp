@@ -1,6 +1,0 @@
-#include <bits/stdc++.h>
-using namespace std;
-int main() {
-    printf("\xb9\xab\x20\xbc\xa6\x20\xc4\xb8\x20\xbc\xa6\x20\xd0\xa1\x20\xbc\xa6\n");
-    return 0;
-}

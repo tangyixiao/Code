@@ -1,7 +1,0 @@
-#include <bits/stdc++.h>
-using namespace std;
-
-int main() {
-    printf("\xe5\x85\xac\xe9\xb8\xa1  \xe6\xaf\x8d\xe9\xb8\xa1  \xe5\xb0\x8f\xe9\xb8\xa1\n");
-    return 0;
-}
