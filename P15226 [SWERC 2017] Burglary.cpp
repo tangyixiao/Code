@@ -598,8 +598,99 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+constexpr int INF = 1e9;
+int n, m, oldn, newn, ans, pos[12], nxt[12], a[5005], s[5005], L[5005], R[5005], f[12][12], g[12][12];
+string row, lad;
+struct Segment {
+    int l, r, val, x, y;
+} seg[12][12];
+inline Segment get(int x, int y) {
+    Segment t;
+    t.l = min(x, y), t.r = max(x, y);
+    t.val = s[t.r] - s[t.l - 1];
+    t.x = a[t.l] ? 0 : L[t.l];
+    t.y = a[t.r] ? m + 1 : R[t.r];
+    return t;
+}
+inline int merge(const Segment &p, const Segment &q) {
+    int l = max(p.l, q.l), r = min(p.r, q.r);
+    if (l <= r && s[r] - s[l - 1]) { return -1; }
+    int res = p.val + q.val;
+    int ext[4] = {p.x, p.y, q.x, q.y};
+    for (int k = 0; k < 4; k++) {
+        int x = ext[k];
+        if (x >= 1 && x <= m && !(p.l <= x && x <= p.r) && !(q.l <= x && x <= q.r)) {
+            bool used = false;
+            for (int h = 0; h < k; h++) {
+                if (ext[h] == x) { used = true; }
+            }
+            if (!used) { res += a[x]; }
+        }
+    }
+    return res;
+}
 inline void solve(int Task_Id) {
-    // do something here
-    return;
+    cin >> n >> m;
+    cin >> row >> lad;
+    for (int i = 1; i <= m; i++) {
+        if (lad[i - 1] == '|') { pos[++oldn] = i; }
+    }
+    for (int i = 1; i <= oldn; i++) {
+        for (int j = 1; j <= oldn; j++) { f[i][j] = 0; }
+    }
+    for (int id = 2; id <= n; id++) {
+        cin >> row >> lad;
+        int last = 0;
+        for (int i = 1; i <= m; i++) {
+            a[i] = (row[i - 1] == '-' ? 0 : row[i - 1] - '0');
+            s[i] = s[i - 1] + a[i];
+            L[i] = last;
+            if (a[i]) { last = i; }
+        }
+        last = m + 1;
+        for (int i = m; i >= 1; i--) {
+            R[i] = last;
+            if (a[i]) { last = i; }
+        }
+        for (int i = 1; i <= oldn; i++) {
+            for (int j = 1; j <= oldn; j++) {
+                if (f[i][j] >= 0) {
+                    Segment t = get(pos[i], pos[j]);
+                    ans = max(ans, f[i][j] + t.val + (t.x ? a[t.x] : 0) + (t.y <= m ? a[t.y] : 0));
+                }
+            }
+        }
+        newn = 0;
+        for (int i = 1; i <= m; i++) {
+            if (lad[i - 1] == '|') { nxt[++newn] = i; }
+        }
+        for (int i = 1; i <= oldn; i++) {
+            for (int j = 1; j <= newn; j++) { seg[i][j] = get(pos[i], nxt[j]); }
+        }
+        for (int i = 1; i <= newn; i++) {
+            for (int j = 1; j <= newn; j++) { g[i][j] = -INF; }
+        }
+        for (int i = 1; i <= oldn; i++) {
+            for (int j = 1; j <= oldn; j++) {
+                if (f[i][j] >= 0) {
+                    for (int x = 1; x <= newn; x++) {
+                        for (int y = 1; y <= newn; y++) {
+                            int v = merge(seg[i][x], seg[j][y]);
+                            if (v >= 0) { g[x][y] = max(g[x][y], f[i][j] + v); }
+                        }
+                    }
+                }
+            }
+        }
+        oldn = newn;
+        for (int i = 1; i <= oldn; i++) {
+            pos[i] = nxt[i];
+            for (int j = 1; j <= oldn; j++) { f[i][j] = g[i][j]; }
+        }
+    }
+    for (int i = 1; i <= oldn; i++) {
+        for (int j = 1; j <= oldn; j++) { ans = max(ans, f[i][j]); }
+    }
+    cout << ans << "\n";
 }
 } // namespace TANGYIXIAO
