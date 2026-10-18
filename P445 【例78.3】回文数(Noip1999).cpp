@@ -1,7 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
-int n, len, a[35], b[35];
-char s[35];
+const int N = 1e4 + 5;
+int n, len, a[N], b[N];
+char s[N];
 
 inline void input() {
     cin >> n >> s;

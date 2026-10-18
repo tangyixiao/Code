@@ -23,7 +23,7 @@ inline void solve() {
     int l = a[1].l, r = a[1].r;
     for (int i = 2; i <= n; i++) {
         if (a[i].l > r) {
-            cout << "nonono\n";
+            cout << "no\n";
             return;
         }
         r = max(r, a[i].r);

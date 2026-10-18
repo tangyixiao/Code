@@ -3,7 +3,7 @@ using namespace std;
 int x, y, z;
 
 int main() {
-    printf("公鸡  母鸡  小鸡\n");
+    printf("\xb9\xab\xbc\xa6  \xc4\xb8\xbc\xa6  \xd0\xa1\xbc\xa6\n");
     for (x = 1; x <= 20; x++) {
         for (y = 1; y <= 39; y++) {
             z = 100 - x - y;
