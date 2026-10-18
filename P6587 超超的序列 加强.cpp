@@ -598,8 +598,65 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+constexpr int K = 18, S = 1 << K;
+long long sum[S << 1], tag[S << 1], la, v;
+int cnt[S << 1], path[K + 1], n, m, op, x, y;
+
+inline void modify(int x, int y, long long v) {
+    int p = 1;
+    path[0] = 1;
+    for (int i = 0; i < x; i++) {
+        p = (p << 1) | ((y >> i) & 1);
+        path[i + 1] = p;
+    }
+    long long d = v * cnt[p];
+    for (int i = 0; i <= x; i++) {
+        sum[path[i]] += d;
+    }
+    tag[p] += v;
+}
+
+inline long long query(int x, int y) {
+    int p = 1;
+    long long d = 0;
+    for (int i = 0; i < x; i++) {
+        d += tag[p];
+        p = (p << 1) | ((y >> i) & 1);
+    }
+    return sum[p] + d * cnt[p];
+}
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> m;
+    for (int i = 1; i <= n; i++) {
+        long long a;
+        cin >> a;
+        int p = 0;
+        for (int j = 0; j < K; j++) {
+            p = (p << 1) | ((i >> j) & 1);
+        }
+        sum[S + p] = a;
+        cnt[S + p] = 1;
+    }
+    for (int i = S - 1; i >= 1; i--) {
+        sum[i] = sum[i << 1] + sum[i << 1 | 1];
+        cnt[i] = cnt[i << 1] + cnt[i << 1 | 1];
+    }
+    for (int i = 1; i <= m; i++) {
+        cin >> op >> x >> y;
+        op = ((op + la) & 1) + 1;
+        bool ok = !(x > K && y >= S);
+        x = min(x, K);
+        if (op == 1) {
+            cin >> v;
+            if (ok) {
+                modify(x, y, v);
+            }
+        } else {
+            la = ok ? query(x, y) : 0;
+            cout << la << "\n";
+        }
+    }
     return;
 }
 } // namespace TANGYIXIAO
