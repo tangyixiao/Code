@@ -1,0 +1,31 @@
+{
+  "testType": "single", 
+  "memoryLimit": 128, 
+  "url": "https://www.luogu.com.cn/problem/P1352", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "interactive": false, 
+  "batch": {
+    "size": 1, 
+    "id": "bdd098db-b746-47e4-9dfc-e34f27de9159"
+  }, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P1352"
+    }
+  }, 
+  "tests": [
+    {
+      "input": "7\n1\n1\n1\n1\n1\n1\n1\n1 3\n2 3\n6 4\n7 4\n4 5\n3 5\n", 
+      "output": "5\n"
+    }
+  ], 
+  "name": "P1352 没有上司的舞会", 
+  "group": "Luogu", 
+  "timeLimit": 1000
+}

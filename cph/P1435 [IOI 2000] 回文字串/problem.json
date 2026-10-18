@@ -1,0 +1,31 @@
+{
+  "testType": "single", 
+  "memoryLimit": 125, 
+  "url": "https://www.luogu.com.cn/problem/P1435", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "interactive": false, 
+  "batch": {
+    "size": 1, 
+    "id": "d4193c18-958c-417e-ac6a-c02aa0b04a75"
+  }, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P1435IOI2000"
+    }
+  }, 
+  "tests": [
+    {
+      "input": "Ab3bd\n", 
+      "output": "2\n"
+    }
+  ], 
+  "name": "P1435 [IOI 2000] 回文字串", 
+  "group": "Luogu", 
+  "timeLimit": 1000
+}

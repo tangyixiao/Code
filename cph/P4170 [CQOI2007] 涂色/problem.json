@@ -1,0 +1,35 @@
+{
+  "testType": "single", 
+  "memoryLimit": 128, 
+  "url": "https://www.luogu.com.cn/problem/P4170", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "interactive": false, 
+  "batch": {
+    "size": 1, 
+    "id": "ee196d35-751d-4d12-a693-16561116e94e"
+  }, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P4170CQOI2007"
+    }
+  }, 
+  "tests": [
+    {
+      "input": "AAAAA\n", 
+      "output": "1\n"
+    }, 
+    {
+      "input": "RGBGR\n", 
+      "output": "3\n"
+    }
+  ], 
+  "name": "P4170 [CQOI2007] 涂色", 
+  "group": "Luogu", 
+  "timeLimit": 1000
+}

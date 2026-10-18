@@ -1,0 +1,31 @@
+{
+  "testType": "single", 
+  "memoryLimit": 125, 
+  "url": "https://www.luogu.com.cn/problem/P3911", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "interactive": false, 
+  "batch": {
+    "size": 1, 
+    "id": "216a687b-2303-4b21-a919-af299fc7a51a"
+  }, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P3911"
+    }
+  }, 
+  "tests": [
+    {
+      "input": "2\n2 3\n", 
+      "output": "17\n"
+    }
+  ], 
+  "name": "P3911 最小公倍数之和", 
+  "group": "Luogu", 
+  "timeLimit": 1000
+}
