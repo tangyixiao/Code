@@ -1,0 +1,31 @@
+{
+  "testType": "single", 
+  "memoryLimit": 128, 
+  "interactive": false, 
+  "batch": {
+    "id": "8acfd51b-5226-4c5f-a892-447b60c0655c", 
+    "size": 1
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu", 
+  "timeLimit": 1000, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P6714", 
+  "name": "P6714 [CCO 2018] Wrong Answer", 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P6714CCO2018WrongAnswer"
+    }
+  }, 
+  "tests": [
+    {
+      "input": "", 
+      "output": "5\n1 2 3 4\n10 9 8\n7 6\n5\n"
+    }
+  ]
+}
