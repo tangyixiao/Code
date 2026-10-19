@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 6605f759-1043-4d87-8a2f-d69a21d25d93
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -596,9 +596,96 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
+using ll = long long;
+const int N = 1e5 + 5, M = 2e5 + 5;
+const ll mod = 1e9 + 7;
+int n, m, t[N], st[N], a[N], v[M], las[M], cnt[M], sum, sz, k;
+ll iv[N], d[M], p[M], s = 1, ans;
+bool f = true;
+struct node {
+    int x, y, z;
+} q[N];
+inline ll qp(ll x, ll y) {
+    ll res = 1;
+    for (; y; y >>= 1, x = x * x % mod) {
+        if (y & 1) {
+            res = res * x % mod;
+        }
+    }
+    return res;
+}
+inline ll c() {
+    ans = 0;
+    for (int i = 1; i <= k; i++) {
+        p[i] = 1;
+    }
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= t[i]; j++) {
+            int c = a[st[i] + j - 1];
+            d[c] = (d[c] + 1LL * (j - las[c]) * (t[i] - j + 1)) % mod;
+            las[c] = j;
+        }
+        for (int j = 1; j <= t[i]; j++) {
+            int c = a[st[i] + j - 1];
+            if (las[c]) {
+                p[c] = p[c] * ((1LL * t[i] * (t[i] + 1) / 2 - d[c]) % mod + mod) % mod * iv[i] % mod;
+                d[c] = las[c] = 0;
+            }
+        }
+    }
+    for (int i = 1; i <= k; i++) {
+        ans = (ans + 1 - p[i] + mod) % mod;
+    }
+    return ans * s % mod;
+}
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> m;
+    for (int i = 1; i <= n; i++) {
+        cin >> t[i], f = f && t[i] == 1;
+        st[i] = sz + 1, sz += t[i];
+        iv[i] = qp(1LL * t[i] * (t[i] + 1) / 2 % mod, mod - 2);
+        s = s * (1LL * t[i] * (t[i] + 1) / 2 % mod) % mod;
+    }
+    for (int i = 1; i <= sz; i++) {
+        cin >> a[i], v[++k] = a[i];
+    }
+    for (int i = 1; i <= m; i++) {
+        cin >> q[i].x >> q[i].y >> q[i].z, v[++k] = q[i].z;
+    }
+    sort(v + 1, v + 1 + k), k = unique(v + 1, v + 1 + k) - v - 1;
+    for (int i = 1; i <= sz; i++) {
+        a[i] = lower_bound(v + 1, v + 1 + k, a[i]) - v;
+    }
+    for (int i = 1; i <= m; i++) {
+        q[i].z = lower_bound(v + 1, v + 1 + k, q[i].z) - v;
+    }
+    if (f) {
+        for (int i = 1; i <= sz; i++) {
+            if (!cnt[a[i]]++) {
+                sum++;
+            }
+        }
+        cout << sum << "\n";
+        for (int i = 1; i <= m; i++) {
+            int x = st[q[i].x] + q[i].y - 1;
+            if (!--cnt[a[x]]) {
+                sum--;
+            }
+            if (!cnt[q[i].z]++) {
+                sum++;
+            }
+            a[x] = q[i].z;
+            cout << sum << "\n";
+        }
+        return;
+    }
+    cout << c() << "\n";
+    for (int i = 1; i <= m; i++) {
+        a[st[q[i].x] + q[i].y - 1] = q[i].z;
+        cout << c() << "\n";
+    }
     return;
 }
 } // namespace TANGYIXIAO
