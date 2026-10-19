@@ -1,0 +1,39 @@
+{
+  "name": "T663156 [SCP-J 2026] 打印 / print",
+  "group": "Luogu - 【LGR-308】SCP 2026 第二轮（复赛 J 组）模拟",
+  "url": "https://www.luogu.com.cn/problem/T663156?contestId=264620",
+  "interactive": false,
+  "memoryLimit": 512,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "5 3\n",
+      "output": "0\n"
+    },
+    {
+      "input": "9721133095981013 3091273763060069\n",
+      "output": "1545636881530035\n"
+    },
+    {
+      "input": "9365613187328233 5617672623161991\n",
+      "output": "1873970282083122\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "T663156SCPJ2026Print"
+    }
+  },
+  "batch": {
+    "id": "16cc2fdb-c3b4-4849-a62e-c32cb981aba7",
+    "size": 1
+  }
+}
