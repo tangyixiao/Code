@@ -603,10 +603,12 @@ const ll b1 = 23333333, b2 = 6666666, mod = 1e9 + 7;
 int n, k, f[N], g[N], cnt;
 ll s, dp[N], ans;
 inline void solve(int Task_Id) {
-    cin >> n >> k >> s, dp[1] = s;
-    for (int i = 2; i <= n; i++) {
-        s = (s * b1 + b2) % mod, dp[i] = s;
-        f[i] = (s ^ b1) % (i - 1) + 1;
+    cin >> n >> k;
+    for (int i = 1; i <= n; i++) {
+        cin >> dp[i];
+    }
+    for (int i = 1, u, v; i <= n - 1; i++) {
+        cin >> u >> v, f[v] = u;
     }
     for (int i = n; i >= 1; i--) {
         if (g[i]) {
