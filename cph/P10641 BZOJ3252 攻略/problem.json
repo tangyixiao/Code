@@ -1,0 +1,31 @@
+{
+  "testType": "single", 
+  "memoryLimit": 512, 
+  "url": "https://www.luogu.com.cn/problem/P10641", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "interactive": false, 
+  "batch": {
+    "size": 1, 
+    "id": "200b4d34-46f1-4e9f-8056-be284a03c19a"
+  }, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P10641BZOJ3252"
+    }
+  }, 
+  "tests": [
+    {
+      "output": "10\n", 
+      "input": "5 2\n4 3 2 1 1\n1 2\n1 5\n2 3\n2 4\n"
+    }
+  ], 
+  "name": "P10641 BZOJ3252 攻略", 
+  "group": "Luogu", 
+  "timeLimit": 1000
+}
