@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 200b4d34-46f1-4e9f-8056-be284a03c19a
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,38 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+using ll = long long;
+const int N = 2e7 + 5;
+const ll b1 = 23333333, b2 = 6666666, mod = 1e9 + 7;
+int n, k, f[N], g[N], cnt;
+ll s, dp[N], ans;
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> k >> s, dp[1] = s;
+    for (int i = 2; i <= n; i++) {
+        s = (s * b1 + b2) % mod, dp[i] = s;
+        f[i] = (s ^ b1) % (i - 1) + 1;
+    }
+    for (int i = n; i >= 1; i--) {
+        if (g[i]) {
+            dp[i] += dp[g[i]];
+        }
+        if (f[i] && (!g[f[i]] || dp[i] > dp[g[f[i]]])) {
+            g[f[i]] = i;
+        }
+    }
+    for (int i = 1; i <= n; i++) {
+        if (!f[i] || g[f[i]] != i) {
+            dp[++cnt] = dp[i];
+        }
+    }
+    k = min(k, cnt);
+    if (k < cnt) {
+        nth_element(dp + 1, dp + k, dp + 1 + cnt, greater<ll>());
+    }
+    for (int i = 1; i <= k; i++) {
+        ans += dp[i];
+    }
+    cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO
