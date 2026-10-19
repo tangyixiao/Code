@@ -233,3 +233,243 @@ Idea：nzhtl1477，Solution：nzhtl1477，Code：nzhtl1477，Data：nzhtl1477( p
 $1 \leq n,m,len_i \leq 10^5$，序列中的元素均为 $32$ 位整型数，$\sum len_i \leq 10^5$。
 
 共 $50$ 组数据。
+
+---
+
+# P4692 [Ynoi Easy Round 2016] Whose Dream
+
+## 题目背景
+
+::::info[题目背景已折叠]
+6.373
+
+The world is independent of my will.
+
+6.374
+
+Even if everything we hope for happens,
+
+in the end it can only be called a gift of fate.
+
+If you ask why, it is because between will and the world,
+
+the logical connection that can guarantee this does not exist.
+
+Ludwig Josef Johann Wittgenstein [Tractatus Logico-Philosophicus]
+
+How long has it been since my twin brother passed away…
+
+Since then, I have kept that stuffed doll.
+
+After that, I was only a shadow… and this stuffed doll was the real me…
+
+That is not so bad either.
+
+I think it is enough if the current me disappears…
+
+But those two people saved someone like me.
+
+One of them was Yuki-nee…
+
+She came back to my side again…
+
+Bringing Minamori-nii… back to our side…
+
+Mizukami Yuki-nee, a gentle older sister.
+
+Someone who once liked Minamori-nii very much……
+
+![](https://cdn.luogu.com.cn/upload/pic/21195.png)
+
+On the way back…
+
+A slope we usually would not pass…
+
+While climbing that slope…
+
+I saw the sun at night.
+
+A huge sunflower that was nearby, yet I never noticed it.
+
+The night dew made its fuzz glow white.
+
+The deep blue moonlight and the yellow sunflower…
+
+It was as if the positions of the sun and the moon were reversed…
+
+The sun, originally so dazzling, was on the ground, and the moon, which could only shine behind it, was in the sky…
+
+The yellow sunflower was dyed deep blue.
+
+That sight was very beautiful…
+
+But the sunflower, blooming with all its might, instead looked like something fragile.
+
+The sunflower stretching toward the sky at night…
+
+Inside the car, I kept chasing its silhouette…
+
+The sun illuminated by the moonlight at night.
+
+The sun dyed deep blue…
+
+Its figure… I kept chasing it……
+
+![](https://cdn.luogu.com.cn/upload/pic/21196.png)
+
+On the rooftop lit by moonlight…
+
+A shadow…
+
+Clearly just a shadow… yet it seemed… to be confronting something…
+
+Minamori-nii…
+
+A statue under the moon, a shadow.
+
+His chest flickered in the wind.
+
+In the hand placed before his chest was… that small knife from back then.
+
+The same posture as seven years ago.
+
+The only difference was that there was only one shadow there.
+
+That knife seemed to have been stabbed into his body by himself.
+
+![](https://cdn.luogu.com.cn/upload/pic/21197.png)
+
+It is a curse…
+
+This is only natural…
+
+It is not some mental illness…
+
+It is a curse…
+
+A curse placed on us survivors…
+
+Perhaps, not only Takushi-nii… but even Yuki-nee is cursing us…
+
+So it ended up like this…
+
+My brother stabbed his own chest…
+
+Destroyed my other half…
+
+And then… he will send many people back to the sky…
+
+The day of returning to the sky.
+
+The day of giving back the soul.
+
+What Takushi-nii did to me that day.
+
+That act… of killing Yuki-nee…
+
+He wants to do it once again…
+
+This time… together with many people…
+
+![](https://cdn.luogu.com.cn/upload/pic/21198.png)
+
+No…
+
+That is… me…
+
+It is that… slope…
+
+That slope where two people saw the sunflower together…
+
+…I said I wanted to climb that slope… to look for Dad’s soul…
+
+I thought that if I reached beyond that slope, I could take back Dad’s soul… and Dad would come back to life…
+
+If I crossed the sunflower road… and went toward that big slope that extends into the sky the sunflower faces…
+Then, probably, Dad’s soul would be there…
+
+The big slope… of Dad’s hometown…
+
+![](https://cdn.luogu.com.cn/upload/pic/21199.png)
+
+My brother’s body floated in the air…
+
+I jumped out without a word.
+
+Ah… so that is how it is…
+
+Yuki-nee felt like this too…
+
+There is no reason to it…
+
+Just because the person I like jumped toward the sky…
+
+I wanted to grab that body…
+
+I—
+::::
+
+## 题目描述
+
+You are playing a galgame when the power suddenly goes out. You run to the property management office to ask, and find out it was because a bald guy kicked the transformer, and it may take a long time to fix. So you decide to think about a data structure problem you saw before:
+
+Define the weight of a sequence as the number of distinct numbers in it. For example, $[1,2,3,3]$ has weight $3$.
+
+Now there are $n$ sequences. For each sequence, we choose a non-empty contiguous substring, and concatenate them. Compute the sum of the weights of the resulting sequence over all choices.
+
+If a sequence can be obtained in multiple ways, count it multiple times.
+
+This problem includes modification operations; see the input format.
+
+Since the result may be too large, output the answer $\bmod 19260817$.
+
+## 输入格式
+
+The first line contains two integers $n,m$, meaning there are $n$ sequences and $m$ modifications.
+
+The second line contains $n$ integers; the $i$-th number is $len_i$, meaning the length of the $i$-th sequence.
+
+Then follow $n$ lines; the $i$-th line contains $len_i$ integers, representing the $i$-th sequence.
+
+Then follow $m$ lines; each line contains three integers $x,y,z$, meaning change the $y$-th element of the $x$-th sequence to $z$.
+
+## 输出格式
+
+Output $m + 1$ lines, each containing one integer, representing the answer for the initial state and after each modification, in order.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+2 5
+6 6
+1 3 1 1 3 2 
+2 3 3 2 1 1 
+1 1 1
+1 1 2
+1 1 2
+1 1 1
+1 1 1
+```
+
+### 输出 #1
+
+```
+1158
+1158
+1168
+1168
+1158
+1158
+```
+
+## 说明/提示
+
+Idea: nzhtl1477, Solution: nzhtl1477, Code: nzhtl1477, Data: nzhtl1477 ( partially uploaded )
+
+$1 \leq n,m,len_i \leq 10^5$. The elements in the sequences are all $32$-bit integers, and $\sum len_i \leq 10^5$.
+
+There are $50$ test cases.
+
+Translated by ChatGPT 5
