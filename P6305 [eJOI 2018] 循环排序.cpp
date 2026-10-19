@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 5308b9b3-f532-41d8-bf06-743687e80622
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,89 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 2e5 + 5;
+int n, s, a[N], b[N], p[N], vis[N], r[N], q[N], x[N], y[N], cnt, c, k, nx, ny, l;
+bool f = true;
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> s;
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i], b[i] = a[i];
+    }
+    sort(b + 1, b + 1 + n);
+    for (int i = 1; i <= n; i++) {
+        cnt += a[i] != b[i], f = f && b[i] == i;
+    }
+    if (cnt > s) {
+        cout << -1 << "\n";
+        return;
+    }
+    if (!cnt) {
+        cout << 0 << "\n";
+        return;
+    }
+    if (b[n] <= 2) {
+        for (int i = 1; i <= n; i++) {
+            if (a[i] != b[i]) {
+                if (a[i] == 2) {
+                    x[++nx] = i;
+                } else {
+                    y[++ny] = i;
+                }
+            }
+        }
+        cout << 1 << "\n"
+             << cnt << "\n";
+        for (int i = 1; i <= nx; i++) {
+            cout << x[i] << " " << y[i] << " ";
+        }
+        cout << "\n";
+        return;
+    }
+    if (!f) {
+        cout << -1 << "\n";
+        return;
+    }
+    for (int i = 1; i <= n; i++) {
+        p[i] = a[i];
+    }
+    for (int i = 1; i <= n; i++) {
+        if (!vis[i] && p[i] != i) {
+            r[++c] = i;
+            for (int j = i; !vis[j]; j = p[j]) {
+                vis[j] = 1;
+            }
+        }
+    }
+    k = min(c, s - cnt);
+    if (k >= 3) {
+        cout << c - k + 2 << "\n"
+             << k << "\n";
+        for (int i = 1; i <= k; i++) {
+            cout << r[i] << " ";
+        }
+        cout << "\n";
+        for (int i = k; i >= 2; i--) {
+            swap(p[r[i]], p[r[i - 1]]);
+        }
+    } else {
+        cout << c << "\n";
+    }
+    for (int i = 0; i <= n; i++) {
+        vis[i] = 0;
+    }
+    for (int i = 1; i <= n; i++) {
+        if (!vis[i] && p[i] != i) {
+            l = 0;
+            for (int j = i; !vis[j]; j = p[j]) {
+                vis[j] = 1, q[++l] = j;
+            }
+            cout << l << "\n";
+            for (int j = 1; j <= l; j++) {
+                cout << q[j] << " ";
+            }
+            cout << "\n";
+        }
+    }
     return;
 }
 } // namespace TANGYIXIAO
