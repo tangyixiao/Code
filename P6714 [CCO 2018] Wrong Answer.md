@@ -71,3 +71,6 @@ def Solve(N, A):
 本题译自 [Canadian Computing Olympiad 2018](https://cemc.math.uwaterloo.ca/contests/computing/2018) [Day 1](https://cemc.math.uwaterloo.ca/contests/computing/2018/stage%202/day1.pdf) T2 Wrong Answer。
 
 感谢 @[tiger2005](https://www.luogu.com.cn/user/60864) 提供的 SPJ。
+
+---
+
