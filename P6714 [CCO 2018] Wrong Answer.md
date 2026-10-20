@@ -74,3 +74,81 @@ def Solve(N, A):
 
 ---
 
+# P6714 [CCO 2018] Wrong Answer
+
+## 题目描述
+
+In a contest, you encountered a problem:
+> There is a complete graph with $N$ vertices and weighted edges. You can control two people starting from vertex $1$ to visit every vertex. You may only move from a smaller-numbered vertex to a larger-numbered vertex. Find the minimum total edge weight.
+
+You took one look and thought it was easy, so you solved it instantly.
+
+However, a contestant’s Python submission caught your attention:
+```python
+def Solve(N, A):
+    # A[i][j] is cost of moving from level i to level j
+    # N is the number of levels
+    x, y, sx, sy = 1, 1, 0, 0 # Initialize x and y to 1, sx and sy to 0
+    for i in range(2, N + 1): # loop from 2 to N
+        if sx + A[x][i] < sy + A[y][i]:
+            sx += A[x][i]
+            x = i
+        else:
+            sy += A[y][i]
+            y = i
+    return sx + sy
+```
+You immediately realized this is a wrong solution, so you decided to hack it.
+
+## 输入格式
+
+No input.
+
+## 输出格式
+
+The first line contains an integer $N$.
+
+In the next $N - 1$ lines, the $i$-th line contains $N - i$ numbers, which are $A_{i,i+1}, A_{i,i+2} \ldots A_{i,n}$. Here, $A_{i,j}$ denotes the edge weight from $i$ to $j$.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+
+```
+
+### 输出 #1
+
+```
+5
+1 2 3 4
+10 9 8
+7 6
+5
+
+```
+
+## 说明/提示
+
+#### SPJ Scoring Rules
+
+You must ensure that $2 \le N \le 100$ and $1 \le A_{i,j} \le 100$, otherwise you will receive no score.
+
+You must ensure the output format is correct, otherwise you will receive no score.
+
+If this wrong code returns $X$ and the correct answer is $Y$, then you will get a score of $\lceil \min(25, \frac{X}{4 \times Y}) \rceil$.
+
+Translator’s note: For easier scoring, please use $100$ points as the full score in the SPJ.
+
+#### Sample Explanation
+
+In the official solution, one person goes to the second vertex, and the other person goes to the remaining vertices. The total edge weight is $1 + 2 + 7 + 5 = 15$, while the wrong code returns $18$, so you get $\lceil \frac{18}{4 \times 15} \rceil = 1$ point.
+
+#### Notes
+
+This problem is translated from [Canadian Computing Olympiad 2018](https://cemc.math.uwaterloo.ca/contests/computing/2018) [Day 1](https://cemc.math.uwaterloo.ca/contests/computing/2018/stage%202/day1.pdf) T2 Wrong Answer.
+
+Thanks to @[tiger2005](https://www.luogu.com.cn/user/60864) for providing the SPJ.
+
+Translated by ChatGPT 5
