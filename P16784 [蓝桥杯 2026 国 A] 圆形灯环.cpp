@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 3bcdc2f4-7aed-4c23-b943-e24e8ae6a05c
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,122 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int P = 998244353, S = 26;
+struct M {
+    int a[S][S];
+};
+
+inline M mul(M &A, M &B) {
+    M C;
+    for (int i = 0; i < S; i++) {
+        for (int j = 0; j < S; j++) {
+            long long s = 0;
+            for (int k = 0; k < S; k++) {
+                s = (s + (long long)A.a[i][k] * B.a[k][j]) % P;
+            }
+            C.a[i][j] = (int)s;
+        }
+    }
+    return C;
+}
+
+inline M qpw(M A, int e) {
+    M R;
+    for (int i = 0; i < S; i++) {
+        for (int j = 0; j < S; j++) {
+            R.a[i][j] = (i == j);
+        }
+    }
+    for (; e; e >>= 1, A = mul(A, A)) {
+        if (e & 1) {
+            R = mul(R, A);
+        }
+    }
+    return R;
+}
+
+inline int tr(M &A) {
+    int s = 0;
+    for (int i = 0; i < S; i++) {
+        s += A.a[i][i];
+        if (s >= P) {
+            s -= P;
+        }
+    }
+    return s;
+}
+
+inline int cT(int n) {
+    int r = 0;
+    for (int b = 0; b < S; b++) {
+        M T;
+        for (int i = 0; i < S; i++) {
+            for (int j = 0; j < S; j++) {
+                T.a[i][j] = 1;
+            }
+        }
+        for (int a = 0; a < S; a++) {
+            int c = 26 - b - a;
+            if (0 <= c && c < S) {
+                T.a[a][c] = 0;
+            }
+        }
+        M Q = qpw(T, n);
+        r += tr(Q);
+        if (r >= P) {
+            r -= P;
+        }
+    }
+    return r;
+}
+
+inline int cS(int n) {
+    int r = 0;
+    for (int b = 0; b < S; b++) {
+        M T;
+        for (int i = 0; i < S; i++) {
+            for (int j = 0; j < S; j++) {
+                T.a[i][j] = 1;
+            }
+        }
+        for (int a = 0; a < S; a++) {
+            int c = 26 - b - a;
+            if (0 <= c && c < S) {
+                T.a[a][c] = 0;
+            }
+        }
+        if (b == 6) {
+            for (int c = 0; c < S; c++) {
+                T.a[2][c] = (P - T.a[2][c]) % P;
+            }
+        }
+        M Q = qpw(T, n);
+        r += tr(Q);
+        if (r >= P) {
+            r -= P;
+        }
+    }
+    return r;
+}
+
+inline int pi(int a, int b) {
+    long long r = 1, x = a;
+    for (; b; b >>= 1, x = x * x % P) {
+        if (b & 1) {
+            r = r * x % P;
+        }
+    }
+    return (int)r;
+}
+
 inline void solve(int Task_Id) {
-    // do something here
+    int v = (P + 1) >> 1, t = cT(2026), s = cS(2026), A = (long long)(t + s) % P * v % P, B = cT(1013);
+    long long r = A;
+    r = (r + 1012LL * 26) % P;
+    r = (r + 1012LL * 648) % P;
+    r = (r + B) % P;
+    r = r * pi(2026, P - 2) % P;
+    cout << r << "\n";
     return;
 }
 } // namespace TANGYIXIAO
