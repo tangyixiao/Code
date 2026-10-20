@@ -597,105 +597,26 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int P = 998244353, S = 26;
-struct M {
-    int a[S][S];
-};
+const int P = 998244353, S = 26, N = S * S;
+int M[N][N], R[N][N], T[N][N], U[N][N];
 
-inline M mul(M &A, M &B) {
-    M C;
-    for (int i = 0; i < S; i++) {
-        for (int j = 0; j < S; j++) {
-            long long s = 0;
-            for (int k = 0; k < S; k++) {
-                s = (s + (long long)A.a[i][k] * B.a[k][j]) % P;
+inline void mul(int A[N][N], int B[N][N], int C[N][N]) {
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            unsigned long long s = 0;
+            for (int k = 0; k < N; k++) {
+                s += 1ULL * A[i][k] * B[k][j];
+                if ((k & 7) == 7) {
+                    s %= P;
+                }
             }
-            C.a[i][j] = (int)s;
+            C[i][j] = (int)(s % P);
         }
     }
-    return C;
+    return;
 }
 
-inline M qpw(M A, int e) {
-    M R;
-    for (int i = 0; i < S; i++) {
-        for (int j = 0; j < S; j++) {
-            R.a[i][j] = (i == j);
-        }
-    }
-    for (; e; e >>= 1, A = mul(A, A)) {
-        if (e & 1) {
-            R = mul(R, A);
-        }
-    }
-    return R;
-}
-
-inline int tr(M &A) {
-    int s = 0;
-    for (int i = 0; i < S; i++) {
-        s += A.a[i][i];
-        if (s >= P) {
-            s -= P;
-        }
-    }
-    return s;
-}
-
-inline int cT(int n) {
-    int r = 0;
-    for (int b = 0; b < S; b++) {
-        M T;
-        for (int i = 0; i < S; i++) {
-            for (int j = 0; j < S; j++) {
-                T.a[i][j] = 1;
-            }
-        }
-        for (int a = 0; a < S; a++) {
-            int c = 26 - b - a;
-            if (0 <= c && c < S) {
-                T.a[a][c] = 0;
-            }
-        }
-        M Q = qpw(T, n);
-        r += tr(Q);
-        if (r >= P) {
-            r -= P;
-        }
-    }
-    return r;
-}
-
-inline int cS(int n) {
-    int r = 0;
-    for (int b = 0; b < S; b++) {
-        M T;
-        for (int i = 0; i < S; i++) {
-            for (int j = 0; j < S; j++) {
-                T.a[i][j] = 1;
-            }
-        }
-        for (int a = 0; a < S; a++) {
-            int c = 26 - b - a;
-            if (0 <= c && c < S) {
-                T.a[a][c] = 0;
-            }
-        }
-        if (b == 6) {
-            for (int c = 0; c < S; c++) {
-                T.a[2][c] = (P - T.a[2][c]) % P;
-            }
-        }
-        M Q = qpw(T, n);
-        r += tr(Q);
-        if (r >= P) {
-            r -= P;
-        }
-    }
-    return r;
-}
-
-inline int pi(int a, int b) {
+inline int qpw(int a, int b) {
     long long r = 1, x = a;
     for (; b; b >>= 1, x = x * x % P) {
         if (b & 1) {
@@ -706,13 +627,61 @@ inline int pi(int a, int b) {
 }
 
 inline void solve(int Task_Id) {
-    int v = (P + 1) >> 1, t = cT(2026), s = cS(2026), A = (long long)(t + s) % P * v % P, B = cT(1013);
-    long long r = A;
-    r = (r + 1012LL * 26) % P;
-    r = (r + 1012LL * 648) % P;
-    r = (r + B) % P;
-    r = r * pi(2026, P - 2) % P;
-    cout << r << "\n";
+    for (int a = 0; a < S; a++) {
+        for (int b = 0; b < S; b++) {
+            for (int c = 0; c < S; c++) {
+                if (a + b + c != 26) {
+                    M[a * S + b][b * S + c] = 1;
+                }
+            }
+        }
+    }
+    for (int i = 0; i < N; i++) {
+        R[i][i] = 1;
+    }
+    int e = 1013;
+    while (e) {
+        if (e & 1) {
+            mul(R, M, T);
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < N; j++) {
+                    R[i][j] = T[i][j];
+                }
+            }
+        }
+        mul(M, M, T);
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                M[i][j] = T[i][j];
+            }
+        }
+        e >>= 1;
+    }
+    int A1013 = 0;
+    for (int i = 0; i < N; i++) {
+        A1013 += R[i][i];
+        if (A1013 >= P) {
+            A1013 -= P;
+        }
+    }
+    mul(R, R, U);
+    int A2026 = 0;
+    for (int i = 0; i < N; i++) {
+        A2026 += U[i][i];
+        if (A2026 >= P) {
+            A2026 -= P;
+        }
+    }
+    int G2026 = A2026 - U[58][58];
+    if (G2026 < 0) {
+        G2026 += P;
+    }
+    long long ans = G2026;
+    ans = (ans + A1013) % P;
+    ans = (ans + 1012LL * 648) % P;
+    ans = (ans + 1012LL * 26) % P;
+    ans = ans * qpw(2026, P - 2) % P;
+    cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO
