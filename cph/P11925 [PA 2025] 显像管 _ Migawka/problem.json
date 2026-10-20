@@ -1,0 +1,26 @@
+{
+  "testType": "single", 
+  "memoryLimit": 1024, 
+  "interactive": false, 
+  "batch": {
+    "id": "64851fe4-0674-4bd3-81d6-ea8d57e2cdb3", 
+    "size": 1
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu", 
+  "timeLimit": 4000, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P11925", 
+  "name": "P11925 [PA 2025] 显像管 / Migawka", 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P11925PA2025Migawka"
+    }
+  }, 
+  "tests": []
+}
