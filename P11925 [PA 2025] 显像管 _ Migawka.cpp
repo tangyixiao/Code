@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 64851fe4-0674-4bd3-81d6-ea8d57e2cdb3
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,85 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 100, M = 9801;
+int a[105][105], init[105][105];
+bool fl[105][105];
+mt19937_64 rng(20260921);
+
+inline ull geth() {
+    ull h = 1469598103934665603ULL;
+    for (int i = 1; i <= N; i++) {
+        for (int j = 1; j <= N; j++) {
+            h = (h ^ (ull)(a[i][j] + 1)) * 1099511628211ULL;
+        }
+    }
+    return h;
+}
+
+inline void step() {
+    for (int i = 1; i <= N; i++) {
+        for (int j = 1; j <= N; j++) {
+            fl[i][j] = false;
+        }
+    }
+    for (int i = 1; i < N; i++) {
+        for (int j = 1; j < N; j++) {
+            int x = a[i][j], y = a[i][j + 1], z = a[i + 1][j], w = a[i + 1][j + 1];
+            if (x == w && y == z && x != y) {
+                fl[i][j] = fl[i][j + 1] = fl[i + 1][j] = fl[i + 1][j + 1] = true;
+            }
+        }
+    }
+    for (int i = 1; i <= N; i++) {
+        for (int j = 1; j <= N; j++) {
+            a[i][j] ^= (int)fl[i][j];
+        }
+    }
+    return;
+}
+
 inline void solve(int Task_Id) {
-    // do something here
+    for (int at = 0; at < 10; at++) {
+        for (int i = 1; i <= N; i++) {
+            for (int j = 1; j <= N; j++) {
+                a[i][j] = (int)(rng() & 1ULL);
+                init[i][j] = a[i][j];
+            }
+        }
+        unordered_set<ull> st;
+        st.insert(geth());
+        int last = 0;
+        bool ok = false;
+        for (int t = 1; t <= M; t++) {
+            step();
+            st.insert(geth());
+            if ((int)st.size() >= M) {
+                ok = true;
+                break;
+            }
+            if (t % 100 == 0) {
+                if ((int)st.size() == last) {
+                    break;
+                }
+                last = (int)st.size();
+            }
+        }
+        if (ok) {
+            for (int i = 1; i <= N; i++) {
+                for (int j = 1; j <= N; j++) {
+                    cout << init[i][j];
+                }
+                cout << "\n";
+            }
+            return;
+        }
+    }
+    for (int i = 1; i <= N; i++) {
+        for (int j = 1; j <= N; j++) {
+            cout << init[i][j];
+        }
+        cout << "\n";
+    }
     return;
 }
 } // namespace TANGYIXIAO
