@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 8acfd51b-5226-4c5f-a892-447b60c0655c
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -596,9 +596,96 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
+const int N = 10, I = 1e9;
+int a[15][15], b[15][15], f[15], g[15], w[6] = {1, 1, 2, 50, 99, 100}, x, y, sx, sy, wx, wy, bx, by, cx, cy, i, j, u, v, s, t, o, p;
+mt19937 r(20260921);
+
+inline void calc() {
+    x = 1, y = 1, sx = 0, sy = 0;
+    for (i = 2; i <= N; i++) {
+        if (sx + a[x][i] < sy + a[y][i]) {
+            sx += a[x][i], x = i;
+        } else {
+            sy += a[y][i], y = i;
+        }
+    }
+    wx = sx + sy;
+    for (i = 1; i <= N; i++) {
+        f[i] = I;
+    }
+    f[1] = a[1][2];
+    for (i = 2; i < N; i++) {
+        for (j = 1; j <= i; j++) {
+            g[j] = I;
+        }
+        for (j = 1; j < i; j++) {
+            if (f[j] < I) {
+                p = f[j] + a[i][i + 1];
+                if (p < g[j]) {
+                    g[j] = p;
+                }
+                p = f[j] + a[j][i + 1];
+                if (p < g[i]) {
+                    g[i] = p;
+                }
+            }
+        }
+        for (j = 1; j <= i; j++) {
+            f[j] = g[j];
+        }
+    }
+    wy = I;
+    for (j = 1; j < N; j++) {
+        if (f[j] < wy) {
+            wy = f[j];
+        }
+    }
+    return;
+}
+
 inline void solve(int Task_Id) {
-    // do something here
+    bx = 0, by = 1;
+    for (s = 0; s < 120; s++) {
+        for (i = 1; i <= N; i++) {
+            for (j = i + 1; j <= N; j++) {
+                a[i][j] = (int)(r() % 100) + 1;
+            }
+        }
+        calc(), cx = wx, cy = wy;
+        for (t = 0; t < 4000; t++) {
+            i = (int)(r() % (N - 1)) + 1, j = i + (int)(r() % (N - i)) + 1, o = a[i][j], a[i][j] = w[r() % 6], calc();
+            if ((ll)wx * cy >= (ll)cx * wy || r() % 1000 == 0) {
+                cx = wx, cy = wy;
+            } else {
+                a[i][j] = o;
+            }
+            if ((ll)cx * by > (ll)bx * cy) {
+                bx = cx, by = cy;
+                for (u = 1; u <= N; u++) {
+                    for (v = u + 1; v <= N; v++) {
+                        b[u][v] = a[u][v];
+                    }
+                }
+            }
+        }
+    }
+    for (i = 1; i <= N; i++) {
+        for (j = i + 1; j <= N; j++) {
+            a[i][j] = b[i][j];
+        }
+    }
+    cout << N << "\n";
+    for (i = 1; i < N; i++) {
+        for (j = i + 1; j <= N; j++) {
+            cout << a[i][j];
+            if (j < N) {
+                cout << " ";
+            }
+        }
+        cout << "\n";
+    }
     return;
 }
 } // namespace TANGYIXIAO
