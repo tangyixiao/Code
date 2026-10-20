@@ -1,0 +1,31 @@
+{
+  "testType": "single", 
+  "memoryLimit": 512, 
+  "interactive": false, 
+  "batch": {
+    "id": "90481b75-9ea1-4654-99eb-81f4160ab1eb", 
+    "size": 1
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu", 
+  "timeLimit": 5000, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P16784", 
+  "name": "P16784 [蓝桥杯 2026 国 A] 圆形灯环", 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P167842026A"
+    }
+  }, 
+  "tests": [
+    {
+      "input": "", 
+      "output": ""
+    }
+  ]
+}
