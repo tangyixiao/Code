@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 7976b2fa-7e19-4f2c-83b4-211d77af6e82
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -596,9 +596,39 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
+const int N = 100005;
+int n, a[N], p[N];
+bool vis[N];
+pair<int, int> b[N];
+long long ans;
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n;
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i];
+        b[i] = {a[i], i};
+    }
+    sort(b + 1, b + n + 1);
+    for (int i = 1; i <= n; i++) { p[b[i].second] = i; }
+
+    for (int i = 1; i <= n; i++) {
+        if (!vis[i]) {
+            long long sum = 0, mn = LLONG_MAX;
+            int cnt = 0;
+            for (int j = i; !vis[j]; j = p[j]) {
+                vis[j] = true;
+                sum += a[j];
+                mn = min(mn, 1LL * a[j]);
+                cnt++;
+            }
+            if (cnt > 1) {
+                ans += min(sum + (cnt - 2) * mn, sum + mn + (cnt + 1) * b[1].first);
+            }
+        }
+    }
+    cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO
