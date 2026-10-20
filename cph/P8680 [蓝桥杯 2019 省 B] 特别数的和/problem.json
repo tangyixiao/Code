@@ -1,0 +1,31 @@
+{
+  "name": "P8680 [蓝桥杯 2019 省 B] 特别数的和",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P8680",
+  "interactive": false,
+  "memoryLimit": 256,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "40\n",
+      "output": "574\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P86802019B"
+    }
+  },
+  "batch": {
+    "id": "5202557f-3c00-4e1c-9405-979786914f79",
+    "size": 1
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "P8711 [蓝桥杯 2020 省 B1] 整除序列",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P8711",
+  "interactive": false,
+  "memoryLimit": 128,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "20\n",
+      "output": "20 10 5 2 1\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P87112020B1"
+    }
+  },
+  "batch": {
+    "id": "c90fe9a8-4011-49d9-8514-7a2ea1cdffc9",
+    "size": 1
+  }
+}
