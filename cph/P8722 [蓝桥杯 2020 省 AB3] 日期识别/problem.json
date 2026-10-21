@@ -1,0 +1,35 @@
+{
+  "name": "P8722 [蓝桥杯 2020 省 AB3] 日期识别",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P8722",
+  "interactive": false,
+  "memoryLimit": 128,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "Feb08\n",
+      "output": "2 8\n"
+    },
+    {
+      "input": "Oct18\n",
+      "output": "10 18\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P87222020AB3"
+    }
+  },
+  "batch": {
+    "id": "baeeec97-b40f-443e-80d9-b7413ded3200",
+    "size": 1
+  }
+}
