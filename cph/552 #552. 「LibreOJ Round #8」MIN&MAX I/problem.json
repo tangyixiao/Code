@@ -1,0 +1,43 @@
+{
+  "testType": "single", 
+  "batch": {
+    "id": "d0845ad0-eae1-4a3e-acd0-9a44cfb42006", 
+    "size": 1
+  }, 
+  "timeLimit": 1000, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "tests": [
+    {
+      "input": "3\n", 
+      "output": "665496236\n"
+    }, 
+    {
+      "input": "91\n", 
+      "output": "116578319\n"
+    }, 
+    {
+      "input": "3\n", 
+      "output": "665496236\n"
+    }, 
+    {
+      "input": "91\n", 
+      "output": "116578319\n"
+    }
+  ], 
+  "url": "https://loj.ac/p/552", 
+  "name": "#552. 「LibreOJ Round #8」MIN&MAX I", 
+  "interactive": false, 
+  "group": "LibreOJ", 
+  "memoryLimit": 256, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "LibreOJRound8MINMAXI"
+    }
+  }
+}
