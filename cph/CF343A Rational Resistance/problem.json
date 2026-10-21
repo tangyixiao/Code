@@ -1,0 +1,39 @@
+{
+  "testType": "single", 
+  "batch": {
+    "id": "93d3a85b-4270-4b9e-b258-5b95988c5000", 
+    "size": 1
+  }, 
+  "timeLimit": 1000, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "tests": [
+    {
+      "input": "1 1\n", 
+      "output": "1\n"
+    }, 
+    {
+      "input": "3 2\n", 
+      "output": "3\n"
+    }, 
+    {
+      "input": "199 200\n", 
+      "output": "200\n"
+    }
+  ], 
+  "url": "https://codeforces.com/problemset/problem/343/A", 
+  "name": "A. Rational Resistance", 
+  "interactive": false, 
+  "group": "Codeforces - Codeforces Round 200 (Div. 1)", 
+  "memoryLimit": 256, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "ARationalResistance"
+    }
+  }
+}
