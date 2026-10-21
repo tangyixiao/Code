@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 93d3a85b-4270-4b9e-b258-5b95988c5000
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,14 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+using ll = long long;
+ll a, b, ans;
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> a >> b;
+    for (; b; a %= b, swap(a, b)) {
+        ans += a / b;
+    }
+    cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO
