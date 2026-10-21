@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: ff330d1f-86e9-4755-8044-84f89dcaf749
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,19 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+long long n, a, b, c, d, ans;
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> a >> b >> c >> d;
+    if (b * c > a * d) {
+        swap(a, c);
+        swap(b, d);
+    }
+    ans = LLONG_MAX;
+    for (int i = 0, lim = a / gcd(a, c); i < lim; i++) {
+        ans = min(ans, 1LL * i * d + (max(0LL, n - 1LL * i * c) + a - 1) / a * b);
+    }
+    cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO
