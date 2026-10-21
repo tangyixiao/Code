@@ -597,8 +597,60 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+using ll = long long;
+const int N = 35;
+bool vis[N], u[N];
+int n, k, cnt, c[N];
+ll b[N][N], a[N], t, ans;
+string s;
+inline bool check(ll sum) {
+    int p = 0;
+    for (int i = 0; i < n; i++) {
+        if (!vis[s[i] - 'A' + 1]) {
+            if (p) {
+                sum += b[p][s[i] - 'A' + 1];
+            }
+            p = s[i] - 'A' + 1;
+        }
+    }
+    return p && sum <= t;
+}
+inline void dfs(int id, ll sum) {
+    if (id > cnt) {
+        if (check(sum)) {
+            ans++;
+        }
+        return;
+    }
+    vis[c[id]] = false;
+    dfs(id + 1, sum);
+    vis[c[id]] = true;
+    dfs(id + 1, sum + a[c[id]]);
+    vis[c[id]] = false;
+    return;
+}
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> k >> t;
+    cin >> s;
+    for (int i = 1; i <= k; i++) {
+        cin >> a[i];
+    }
+    for (int i = 1; i <= k; i++) {
+        for (int j = 1; j <= k; j++) {
+            cin >> b[i][j];
+        }
+    }
+    cnt = 0, ans = 0;
+    for (int i = 0; i < n; i++) {
+        u[s[i] - 'A' + 1] = true;
+    }
+    for (int i = 1; i <= k; i++) {
+        if (u[i]) {
+            c[++cnt] = i;
+        }
+    }
+    dfs(1, 0);
+    cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO
