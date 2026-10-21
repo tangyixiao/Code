@@ -603,7 +603,7 @@ inline void solve(int Task_Id) {
     cin >> s;
     for (char c : s) {
         if (c >= 'a' && c <= 'z') {
-            cout << c - 'a' + 'A';
+            cout << (char)(c - 'a' + 'A');
         }
         else{
             cout<<c;
