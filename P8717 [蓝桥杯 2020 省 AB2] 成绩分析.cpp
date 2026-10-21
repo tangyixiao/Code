@@ -598,8 +598,18 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+int n, x, mx = 0, mn = 100, sum = 0;
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n;
+    for (int i = 1; i <= n; i++) {
+        cin >> x;
+        mx = max(mx, x);
+        mn = min(mn, x);
+        sum += x;
+    }
+    cout << mx << "\n"
+         << mn << "\n";
+    cout << fixed << setprecision(2) << 1.0 * sum / n << "\n";
     return;
 }
 } // namespace TANGYIXIAO
