@@ -598,8 +598,47 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+string s;
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> s;
+    if (s.substr(0, 3) == "Jan") {
+        cout << "1";
+    }
+    if (s.substr(0, 3) == "Feb") {
+        cout << "2";
+    }
+    if (s.substr(0, 3) == "Mar") {
+        cout << "3";
+    }
+    if (s.substr(0, 3) == "Apr") {
+        cout << "4";
+    }
+    if (s.substr(0, 3) == "May") {
+        cout << "5";
+    }
+    if (s.substr(0, 3) == "Jun") {
+        cout << "6";
+    }
+    if (s.substr(0, 3) == "Jul") {
+        cout << "7";
+    }
+    if (s.substr(0, 3) == "Aug") {
+        cout << "8";
+    }
+    if (s.substr(0, 3) == "Sep") {
+        cout << "9";
+    }
+    if (s.substr(0, 3) == "Oct") {
+        cout << "10";
+    }
+    if (s.substr(0, 3) == "Nov") {
+        cout << "11";
+    }
+    if (s.substr(0, 3) == "Dec") {
+        cout << "12";
+    }
+    cout << " ";
+    cout << (s[3] - '0') * 10 + (s[4] - '0');
     return;
 }
 } // namespace TANGYIXIAO
