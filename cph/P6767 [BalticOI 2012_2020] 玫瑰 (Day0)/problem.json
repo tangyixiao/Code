@@ -1,0 +1,35 @@
+{
+  "testType": "single", 
+  "batch": {
+    "id": "ff330d1f-86e9-4755-8044-84f89dcaf749", 
+    "size": 1
+  }, 
+  "timeLimit": 500, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "tests": [
+    {
+      "input": "5 1 4 3 6\n", 
+      "output": "12\n"
+    }, 
+    {
+      "input": "22 2 3 10 14\n", 
+      "output": "31\n"
+    }
+  ], 
+  "url": "https://www.luogu.com.cn/problem/P6767", 
+  "name": "P6767 [BalticOI 2012/2020] 玫瑰 (Day0)", 
+  "interactive": false, 
+  "group": "Luogu", 
+  "memoryLimit": 256, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P6767BalticOI20122020Day0"
+    }
+  }
+}

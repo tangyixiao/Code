@@ -1,0 +1,31 @@
+{
+  "testType": "single", 
+  "batch": {
+    "id": "7976b2fa-7e19-4f2c-83b4-211d77af6e82", 
+    "size": 1
+  }, 
+  "timeLimit": 1000, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "tests": [
+    {
+      "input": "6\n8 4 5 3 2 7\n", 
+      "output": "34\n"
+    }
+  ], 
+  "url": "https://www.luogu.com.cn/problem/P2127", 
+  "name": "P2127 序列排序", 
+  "interactive": false, 
+  "group": "Luogu", 
+  "memoryLimit": 125, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P2127"
+    }
+  }
+}

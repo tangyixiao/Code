@@ -1,0 +1,31 @@
+{
+  "testType": "single", 
+  "batch": {
+    "id": "3bd3678c-b2cd-4a4b-b091-d995497112ac", 
+    "size": 1
+  }, 
+  "timeLimit": 1000, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "tests": [
+    {
+      "input": "5 3 13\nBACAC\n4 1 2\n1 2 3\n2 3 4\n3 4 10\n", 
+      "output": "5\n"
+    }
+  ], 
+  "url": "https://codeforces.com/problemset/problem/76/C", 
+  "name": "C. Mutation", 
+  "interactive": false, 
+  "group": "Codeforces - All-Ukrainian School Olympiad in Informatics", 
+  "memoryLimit": 256, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "CMutation"
+    }
+  }
+}
