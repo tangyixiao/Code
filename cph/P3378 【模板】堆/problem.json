@@ -1,0 +1,31 @@
+{
+  "name": "P3378 【模板】堆",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P3378",
+  "interactive": false,
+  "memoryLimit": 512,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "5\n1 2\n1 5\n2\n3\n2\n",
+      "output": "2\n5\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P3378"
+    }
+  },
+  "batch": {
+    "id": "6ea30a1a-7d1e-47f9-86d3-1de35b975bdc",
+    "size": 1
+  }
+}
