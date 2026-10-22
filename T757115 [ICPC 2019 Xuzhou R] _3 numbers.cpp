@@ -597,6 +597,7 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+int L, R, cnt;
 inline bool check(int x) {
     if (x == 1) {
         return true;
