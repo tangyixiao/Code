@@ -597,9 +597,40 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
+const int N = 500005;
+int nxt[N][26], fail[N], len[N], num[N], a[N];
+int tot = 1, last = 0, ans = 0, n;
+string s;
+
+inline int getfail(int p, int i) {
+    while (a[i - len[p] - 1] != a[i]) {
+        p = fail[p];
+    }
+    return p;
+}
+
 inline void solve(int Task_Id) {
-    // do something here
-    return;
+    cin >> s;
+    n = s.size();
+    len[1] = -1;
+    fail[0] = 1;
+    a[0] = -1;
+    for (int i = 1; i <= n; i++) {
+        a[i] = (s[i - 1] - 'a' + ans) % 26;
+        int p = getfail(last, i);
+        if (!nxt[p][a[i]]) {
+            int q = ++tot;
+            len[q] = len[p] + 2;
+            fail[q] = (len[q] == 1 ? 0 : nxt[getfail(fail[p], i)][a[i]]);
+            num[q] = num[fail[q]] + 1;
+            nxt[p][a[i]] = q;
+        }
+        last = nxt[p][a[i]];
+        ans = num[last];
+        cout << ans << (i == n ? "\n" : " ");
+        return;
+    }
 }
 } // namespace TANGYIXIAO
