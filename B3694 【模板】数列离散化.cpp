@@ -1,4 +1,20 @@
 //  Author: Tangyixiao
+//  Time: 2026-10-22 19:43:17
+//  Problem: B3694 【模板】数列离散化
+//  Contest: Luogu
+//  URL: https://www.luogu.com.cn/problem/B3694
+//  Memory Limit: 512 MB
+//  Time Limit: 1000 ms
+//  Interactive: false
+//  Test Type: single
+//
+//  Algorithm:
+//  Complexity: O()
+//  Note:
+//
+//  Powered by Visual Studio Code + CPH (Competitive Programming Helper)
+
+//  Author: Tangyixiao
 //  Time: 2026-08-15 07:29:50
 //  Problem: B3694 【模板】数列离散化
 //  Contest: Luogu
