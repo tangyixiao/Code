@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: de3b1ecf-0667-4187-9f84-8eb4588f5a99
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -20,7 +20,7 @@ Copyright (C) 2026 TangYixiao
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
 #define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
 #define FILE_INDEX 1                      // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -597,8 +597,33 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+inline bool check(int x) {
+    if (x == 1) {
+        return true;
+    }
+    if (x & 1) {
+        for (int i = 3; i <= x / i; i += 2) {
+            if (x % i == 0) {
+                return false;
+            }
+        }
+        return true;
+    } else {
+        return x == 2;
+    }
+}
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> L >> R;
+    if (R - L + 1 >= 210) {
+        cout << "Yes\n";
+        return;
+    }
+    cnt = 0;
+    for (int i = L; i <= R; i++) {
+        cnt += check(i);
+    }
+    cout << (cnt * 3 < R - L + 1 ? "Yes" : "No") << "\n";
     return;
 }
 } // namespace TANGYIXIAO
