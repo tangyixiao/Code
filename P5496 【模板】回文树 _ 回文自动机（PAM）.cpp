@@ -630,7 +630,7 @@ inline void solve(int Task_Id) {
         last = nxt[p][a[i]];
         ans = num[last];
         cout << ans << (i == n ? "\n" : " ");
-        return;
     }
+    return;
 }
 } // namespace TANGYIXIAO
