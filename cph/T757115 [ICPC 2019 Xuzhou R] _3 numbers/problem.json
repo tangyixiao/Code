@@ -1,0 +1,31 @@
+{
+  "languages": {
+    "java": {
+      "taskClass": "T757115ICPC2019XuzhouR3Numbers", 
+      "mainClass": "Main"
+    }
+  }, 
+  "memoryLimit": 512, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "group": "Luogu - [ICPC2019 Xuzhou R] ICPC 2019 区域赛徐州站重现赛", 
+  "name": "T757115 [ICPC 2019 Xuzhou R] <3 numbers", 
+  "interactive": false, 
+  "url": "https://www.luogu.com.cn/problem/T757115?contestId=366007", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "tests": [
+    {
+      "output": "No\nYes\nNo\n", 
+      "input": "3\n7 7\n25 25\n5 14\n"
+    }
+  ], 
+  "timeLimit": 1000, 
+  "batch": {
+    "id": "de3b1ecf-0667-4187-9f84-8eb4588f5a99", 
+    "size": 1
+  }, 
+  "testType": "single"
+}
