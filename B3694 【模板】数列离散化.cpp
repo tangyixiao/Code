@@ -40,7 +40,7 @@ Copyright (C) 2026 TangYixiao
 // #define PRAGMA_GPlusPlus_ALLOWED
 #define JUDGE_TYPE 0 // 0 for online judge, 1 for judge file , 2 for local file
 #define FILE_INDEX 1 // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -667,28 +667,20 @@ namespace TANGYIXIAO {
 
 const int N = 1e5 + 5;
 
-int a[N], b[N];
+int n, a[N], b[N];
 
 inline void solve(int Task_Id) {
-    int T;
-    cin >> T;
+    cin >> n;
 
-    while (T--) {
-        int n;
-        cin >> n;
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i], b[i] = a[i];
+    }
 
-        for (int i = 1; i <= n; i++) {
-            cin >> a[i];
-            b[i] = a[i];
-        }
+    sort(b + 1, b + n + 1);
+    int m = unique(b + 1, b + n + 1) - b - 1;
 
-        sort(b + 1, b + n + 1);
-        int m = unique(b + 1, b + n + 1) - b - 1;
-
-        for (int i = 1; i <= n; i++) {
-            cout << lower_bound(b + 1, b + m + 1, a[i]) - b;
-            cout << (i == n ? '\n' : ' ');
-        }
+    for (int i = 1; i <= n; i++) {
+        cout << lower_bound(b + 1, b + m + 1, a[i]) - b << " \n"[i == n];
     }
 
     return;
