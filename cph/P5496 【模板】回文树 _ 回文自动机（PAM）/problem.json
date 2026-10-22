@@ -1,0 +1,39 @@
+{
+  "name": "P5496 【模板】回文树 / 回文自动机（PAM）",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P5496",
+  "interactive": false,
+  "memoryLimit": 256,
+  "timeLimit": 500,
+  "tests": [
+    {
+      "input": "debber\n",
+      "output": "1 1 1 2 1 1\n"
+    },
+    {
+      "input": "lwkvjfrphhgkfvzzyx\n",
+      "output": "1 1 2 2 3 1 1 1 1 2 3 1 1 1 1 2 3 4\n"
+    },
+    {
+      "input": "azzzyyzyyx\n",
+      "output": "1 2 1 2 3 2 2 2 3 3\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P5496PAM"
+    }
+  },
+  "batch": {
+    "id": "4a3e3a53-19b6-4f40-9fc0-9cb5fdae662b",
+    "size": 1
+  }
+}
