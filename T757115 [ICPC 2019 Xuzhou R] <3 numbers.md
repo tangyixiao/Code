@@ -50,3 +50,48 @@ No
 
 ---
 
+# T757115 [ICPC 2019 Xuzhou R] <3 numbers
+
+## 题目描述
+
+Rosie likes to play with positive integers, especially the <3 numbers in positive integers.
+
+<3 number is a special group of positive integers, all of which can be divided by less than three positive integers.
+
+For example, $7$ is a < 3 number. There are two positive integers that divide $7$ by $1$ and $7$. $25$ is not a number less than $3$. There are $1$, $5$ and $25$ that can divide $25$.
+
+Now, Rosie is curious about how many <3 numbers are included between positive integers $L$ and $R$. But it's too difficult to figure out exactly how many <3 numbers there are. Rosie wants to know whether the proportion of <3 numbers between $L$ and $R$ is less than one third. To be exact, if there are $x$ <3 numbers between $L$ and $R$, Rosie wants to know if $\frac{x}{R-L+1} < \frac{1}{3}$.
+
+Please help the curious Rosie to answer his questions.
+
+## 输入格式
+
+The first line has a positive integer of $T$, which represents the total number of test data.
+
+Each test data is a line of two integers $L, R$.
+
+- $1 \le T \le 100$
+- $1 \le L \le R \le 10^9$
+
+## 输出格式
+
+Please output one line for each test data. If the proportion of <3 numbers between $L$ and $R$ is less than one third, output `Yes`, otherwise output `No`.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+3
+7 7
+25 25
+5 14
+```
+
+### 输出 #1
+
+```
+No
+Yes
+No
+```
