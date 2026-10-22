@@ -1,0 +1,31 @@
+{
+  "name": "P8706 [蓝桥杯 2020 省 AB1] 解码",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P8706",
+  "interactive": false,
+  "memoryLimit": 128,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "H3el5o2\n",
+      "output": "HHHellllloo\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P87062020AB1"
+    }
+  },
+  "batch": {
+    "id": "91d0c97f-e7a9-4d3d-9980-2c7b687c8a1a",
+    "size": 1
+  }
+}

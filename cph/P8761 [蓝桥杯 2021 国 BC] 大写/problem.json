@@ -1,0 +1,31 @@
+{
+  "name": "P8761 [蓝桥杯 2021 国 BC] 大写",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P8761",
+  "interactive": false,
+  "memoryLimit": 128,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "LanQiao\n",
+      "output": "LANQIAO\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P87612021BC"
+    }
+  },
+  "batch": {
+    "id": "29877ba6-a03c-4673-8952-b089fac5b374",
+    "size": 1
+  }
+}

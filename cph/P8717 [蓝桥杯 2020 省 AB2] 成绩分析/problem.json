@@ -1,0 +1,31 @@
+{
+  "name": "P8717 [蓝桥杯 2020 省 AB2] 成绩分析",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P8717",
+  "interactive": false,
+  "memoryLimit": 128,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "7\n80\n92\n56\n74\n88\n99\n10\n",
+      "output": "99\n10\n71.29\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P87172020AB2"
+    }
+  },
+  "batch": {
+    "id": "a527ac24-35c5-4658-a74d-b272a73c3b24",
+    "size": 1
+  }
+}
