@@ -1,0 +1,31 @@
+{
+  "tests": [
+    {
+      "output": "1\n", 
+      "input": "4\nmanbo\nmanba\nnba\nabc\n"
+    }
+  ], 
+  "name": "B4435 [语言月赛 202511] 太空曼波", 
+  "testType": "single", 
+  "memoryLimit": 512, 
+  "url": "https://www.luogu.com.cn/problem/B4435", 
+  "timeLimit": 1000, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "batch": {
+    "id": "e3c4e873-b5b3-46ab-9acf-1edf1b6d3e97", 
+    "size": 1
+  }, 
+  "interactive": false, 
+  "languages": {
+    "java": {
+      "taskClass": "B4435202511", 
+      "mainClass": "Main"
+    }
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu"
+}
