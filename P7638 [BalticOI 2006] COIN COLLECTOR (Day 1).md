@@ -51,3 +51,66 @@
 #### 题目说明  
 来源于 [Baltic Olympiad in Informatics 2006](https://www.cs.helsinki.fi/group/boi2006/) 的 [Day 1:Coins](https://www.cs.helsinki.fi/group/boi2006/tasks/coins.pdf)。  
 由 @[求学的企鹅](/user/271784) 翻译整理。
+
+---
+
+# P7638 [BalticOI 2006] COIN COLLECTOR (Day 1)
+
+## 题目描述
+
+In a country, there are $N$ coin denominations in circulation, including a $1$-cent coin. In addition, there is a banknote with value $K$ cents, which is worth more than any coin denomination. A coin collector wants to collect a sample coin of every denomination. He already has some coins at home, but currently he only has one $K$-cent banknote in his wallet.
+
+He is in a shop where every item is sold at a price less than $K$ cents (i.e. $1$ cent, $2$ cents, $3$ cents, $\cdots$, $K-1$ cents). In this shop, change is given using the following algorithm:
+
+1. Let the amount of change be $A$ cents.
+1. Find the largest coin denomination not exceeding $A$ (call it a $B$-cent coin).
+1. Give the customer one $B$-cent coin, and subtract $B$ from $A$.
+1. If $A = 0$, stop; otherwise go back to step $2$.
+
+The coin collector buys an item using the $K$-cent banknote.
+
+Your task is to write a program to determine:
+
+- How many different coin denominations can the collector obtain from this transaction that he did not already have in his collection?
+- What is the most expensive item the shop can sell him, such that during the change-making process, the number of new denominations obtained is maximized as in the first question?
+
+## 输入格式
+
+The first line contains integers $N$ and $K$. The next $N$ lines describe the coins in circulation. Line $i+1$ contains integers $c_i$ and $d_i$, where $c_i$ is the coin value (in cents). If $d_i = 1$, it means the collector already has a coin of this denomination; if $d_i = 0$, it means he does not. The coin values are given in increasing order, i.e. $c_1 < c_2 < \cdots < c_N$. The first coin is known to be the $1$-cent coin, i.e. $c_1 = 1$.
+
+## 输出格式
+
+The first line contains one integer: the maximum number of coin denominations that the collector does not have yet but can obtain through one purchase. The second line contains one integer: the highest possible item price such that the change includes the maximum number of new denominations stated in the first line.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+7 25
+1 0
+2 0
+3 1
+5 0
+10 0
+13 0
+20 0
+```
+
+### 输出 #1
+
+```
+3
+6
+```
+
+## 说明/提示
+
+#### Constraints  
+For $100\%$ of the testdata, $1 \le N \le 5 \times 10^5$, $2 \le K \le 10^9$, $1 \le c_i \le K$.
+
+#### Notes  
+From [Baltic Olympiad in Informatics 2006](https://www.cs.helsinki.fi/group/boi2006/), [Day 1:Coins](https://www.cs.helsinki.fi/group/boi2006/tasks/coins.pdf).  
+Translated and整理 (zhengli) by @[求学的企鹅](/user/271784).
+
+Translated by ChatGPT 5
