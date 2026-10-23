@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: be51d77f-8f80-4516-8136-2b39485c331a
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -596,9 +596,24 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
+int n1, m1, n2, m2, k, a, p;
+long long sum;
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n1 >> m1 >> n2 >> m2 >> k;
+    for (int i = 1; i <= n1 + n2; i++) {
+        for (int j = 1; j <= (i <= n1 ? m1 : m2); j++) {
+            cin >> a;
+            if (a == 999999) {
+                p = (i + j) % 2 ? -1 : 1;
+            } else {
+                sum += (i + j) % 2 ? k - a : a - k;
+            }
+        }
+    }
+    cout << k - p * sum << "\n";
     return;
 }
 } // namespace TANGYIXIAO
