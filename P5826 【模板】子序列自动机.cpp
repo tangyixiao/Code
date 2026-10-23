@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 43af66f4-6084-4253-8be8-208e16d3b361
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,28 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 100005;
+int type, n, q, m, l, x, p;
+vector<int> pos[N];
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> type >> n >> q >> m;
+    for (int i = 1; i <= n; i++) {
+        cin >> x;
+        pos[x].push_back(i);
+    }
+    for (int i = 1; i <= q; i++) {
+        cin >> l;
+        p = 0;
+        for (int j = 1; j <= l; j++) {
+            cin >> x;
+            if (p <= n) {
+                auto it = upper_bound(pos[x].begin(), pos[x].end(), p);
+                p = (it == pos[x].end() ? n + 1 : *it);
+            }
+        }
+        cout << (p <= n ? "Yes" : "No") << "\n";
+    }
     return;
 }
 } // namespace TANGYIXIAO
