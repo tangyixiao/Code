@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 492ba6fe-e7ae-4f1f-85c6-7cd53643249d
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -20,7 +20,7 @@ Copyright (C) 2026 TangYixiao
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
 #define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
 #define FILE_INDEX 1                      // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -596,9 +596,60 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
+const int N = 3000005;
+struct Node {
+    int son, bro, cnt;
+    char ch;
+} tr[N];
+int T, n, q, tot;
+string s;
+
+inline int find(int u, char c) {
+    for (int v = tr[u].son; v; v = tr[v].bro) {
+        if (tr[v].ch == c) { return v; }
+    }
+    return 0;
+}
+
+inline void insert() {
+    int u = 0, v;
+    for (char c : s) {
+        v = find(u, c);
+        if (!v) {
+            v = ++tot;
+            tr[v].ch = c;
+            tr[v].bro = tr[u].son;
+            tr[u].son = v;
+        }
+        u = v;
+        tr[u].cnt++;
+    }
+    return;
+}
+
+inline int query() {
+    int u = 0;
+    for (char c : s) {
+        u = find(u, c);
+        if (!u) { return 0; }
+    }
+    return tr[u].cnt;
+}
+
 inline void solve(int Task_Id) {
-    // do something here
+    memset(tr, 0, (tot + 1) * sizeof(tr[0]));
+    tot = 0;
+    cin >> n >> q;
+    for (int i = 1; i <= n; i++) {
+        cin >> s;
+        insert();
+    }
+    for (int i = 1; i <= q; i++) {
+        cin >> s;
+        cout << query() << "\n";
+    }
     return;
 }
 } // namespace TANGYIXIAO
