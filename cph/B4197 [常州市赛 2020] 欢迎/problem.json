@@ -1,0 +1,35 @@
+{
+  "tests": [
+    {
+      "output": "*************************\n*Welcome,ContestantNo.1!*\n*************************\n", 
+      "input": "1\n"
+    }, 
+    {
+      "output": "***************************\n*Welcome,ContestantNo.233!*\n***************************\n", 
+      "input": "233\n"
+    }
+  ], 
+  "name": "B4197 [常州市赛 2020] 欢迎", 
+  "testType": "single", 
+  "memoryLimit": 128, 
+  "url": "https://www.luogu.com.cn/problem/B4197", 
+  "timeLimit": 1000, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "batch": {
+    "id": "5f6afcea-d39f-4f27-bbfd-bee7207306d9", 
+    "size": 1
+  }, 
+  "interactive": false, 
+  "languages": {
+    "java": {
+      "taskClass": "B41972020", 
+      "mainClass": "Main"
+    }
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu"
+}
