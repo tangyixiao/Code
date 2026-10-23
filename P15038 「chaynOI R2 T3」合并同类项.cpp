@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 613a45be-aa20-4712-bc38-215648a9832a
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -596,9 +596,35 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
+const int N = 6005;
+int n, k, x, y, a[N], s[N], f[N][N];
+vector<int> pos[N];
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> k >> x >> y;
+    y = min(x, y);
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i];
+        s[i] = (s[i - 1] + a[i]) % k;
+    }
+    for (int r = 1; r <= n; r++) {
+        for (int l = r; l >= 1; l--) {
+            if (s[r] == s[l - 1]) { pos[r].push_back(l); }
+        }
+    }
+    for (int l = n; l >= 1; l--) {
+        for (int r = l + 1; r <= n; r++) {
+            f[l][r] = f[l][r - 1] + x;
+            if (s[r - 1] == s[l - 1]) { f[l][r] = min(f[l][r], f[l][r - 1] + y); }
+            for (int p : pos[r]) {
+                if (p <= l) { break; }
+                f[l][r] = min(f[l][r], f[l][p - 1] + f[p][r] + y);
+            }
+        }
+    }
+    cout << f[1][n] << "\n";
     return;
 }
 } // namespace TANGYIXIAO
