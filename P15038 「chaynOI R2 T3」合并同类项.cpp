@@ -598,7 +598,7 @@ signed main() {
 #pragma endregion PREPROCESSOR
 
 namespace TANGYIXIAO {
-const int N = 6005;
+const int N = 6e3 + 5;
 int n, k, x, y, a[N], s[N], f[N][N];
 vector<int> pos[N];
 
@@ -611,15 +611,21 @@ inline void solve(int Task_Id) {
     }
     for (int r = 1; r <= n; r++) {
         for (int l = r; l >= 1; l--) {
-            if (s[r] == s[l - 1]) { pos[r].push_back(l); }
+            if (s[r] == s[l - 1]) {
+                pos[r].push_back(l);
+            }
         }
     }
     for (int l = n; l >= 1; l--) {
         for (int r = l + 1; r <= n; r++) {
             f[l][r] = f[l][r - 1] + x;
-            if (s[r - 1] == s[l - 1]) { f[l][r] = min(f[l][r], f[l][r - 1] + y); }
+            if (s[r - 1] == s[l - 1]) {
+                f[l][r] = min(f[l][r], f[l][r - 1] + y);
+            }
             for (int p : pos[r]) {
-                if (p <= l) { break; }
+                if (p <= l) {
+                    break;
+                }
                 f[l][r] = min(f[l][r], f[l][p - 1] + f[p][r] + y);
             }
         }
