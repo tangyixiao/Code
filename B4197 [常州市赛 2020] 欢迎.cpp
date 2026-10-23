@@ -611,5 +611,4 @@ inline void solve(int Task_Id) {
          << s;
     return;
 }
-}
 } // namespace TANGYIXIAO
