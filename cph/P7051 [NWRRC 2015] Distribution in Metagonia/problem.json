@@ -1,0 +1,31 @@
+{
+  "tests": [
+    {
+      "output": "1\n1\n1\n2\n1\n3\n2\n4 6\n", 
+      "input": "4\n1\n2\n3\n10\n"
+    }
+  ], 
+  "name": "P7051 [NWRRC 2015] Distribution in Metagonia", 
+  "testType": "single", 
+  "memoryLimit": 256, 
+  "url": "https://www.luogu.com.cn/problem/P7051", 
+  "timeLimit": 2000, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "batch": {
+    "id": "63c19259-a6d8-41af-bc40-f325315a6561", 
+    "size": 1
+  }, 
+  "interactive": false, 
+  "languages": {
+    "java": {
+      "taskClass": "P7051NWRRC2015DistributionInMetagonia", 
+      "mainClass": "Main"
+    }
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu"
+}

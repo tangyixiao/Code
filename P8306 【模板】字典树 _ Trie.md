@@ -70,3 +70,81 @@ fusu
 ### 说明
 
 std 的 IO 使用的是关闭同步后的 cin/cout，本题不卡常。
+
+
+---
+
+# P8306 [Template] Trie / Prefix Tree.
+
+## 题目描述
+
+Given $n$ pattern strings $s_1, s_2, \dots, s_n$ and $q$ queries, each query provides a text string $t_i$. For each query, please answer how many strings $s_j$ among $s_1 \sim s_n$ satisfy that $t_i$ is a **prefix** of $s_j$.
+
+A string $t$ is a prefix of $s$ if and only if deleting some (possibly $0$) consecutive characters from the end of $s$ makes it equal to $t$.
+
+The input strings are case-sensitive. For example, the string `Fusu` is different from the string `fusu`.
+
+## 输入格式
+
+**This problem contains multiple sets of testdata within a single test case.**
+
+The first line contains an integer $T$, the number of test groups.
+
+For each group, the format is as follows.  
+The first line contains two integers, representing the number of pattern strings $n$ and the number of queries $q$.  
+The next $n$ lines each contain a string, representing a pattern string.  
+The next $q$ lines each contain a string, representing a query.
+
+## 输出格式
+
+Output the answers for each test group in the order of input.  
+For each query, output one integer per line as the answer.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+3
+3 3
+fusufusu
+fusu
+anguei
+fusu
+anguei
+kkksc
+5 2
+fusu
+Fusu
+AFakeFusu
+afakefusu
+fusuisnotfake
+Fusu
+fusu
+1 1
+998244353
+9
+```
+
+### 输出 #1
+
+```
+2
+1
+0
+1
+2
+1
+```
+
+## 说明/提示
+
+### Constraints
+
+For all test points, it is guaranteed that $1 \leq T, n, q \leq 10^5$, and the total length of all input strings does not exceed $3 \times 10^6$. The input strings contain only uppercase letters, lowercase letters, and digits, and there are no empty strings.
+
+### Notes
+
+The standard solution uses `cin/cout` with synchronization disabled. This problem is not strict about constant factors.
+
+Translated by ChatGPT 5

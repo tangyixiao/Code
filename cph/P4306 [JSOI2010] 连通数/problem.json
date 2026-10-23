@@ -1,0 +1,31 @@
+{
+  "tests": [
+    {
+      "output": "9\n", 
+      "input": "3\n010\n001\n100\n"
+    }
+  ], 
+  "name": "P4306 [JSOI2010] 连通数", 
+  "testType": "single", 
+  "memoryLimit": 128, 
+  "url": "https://www.luogu.com.cn/problem/P4306", 
+  "timeLimit": 300, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "batch": {
+    "id": "9ebacbe6-9a10-486b-813c-235e0ed3e260", 
+    "size": 1
+  }, 
+  "interactive": false, 
+  "languages": {
+    "java": {
+      "taskClass": "P4306JSOI2010", 
+      "mainClass": "Main"
+    }
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu"
+}

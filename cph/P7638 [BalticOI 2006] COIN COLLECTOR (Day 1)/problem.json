@@ -1,0 +1,31 @@
+{
+  "tests": [
+    {
+      "output": "3\n6\n", 
+      "input": "7 25\n1 0\n2 0\n3 1\n5 0\n10 0\n13 0\n20 0\n"
+    }
+  ], 
+  "name": "P7638 [BalticOI 2006] COIN COLLECTOR (Day 1)", 
+  "testType": "single", 
+  "memoryLimit": 128, 
+  "url": "https://www.luogu.com.cn/problem/P7638", 
+  "timeLimit": 1000, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "batch": {
+    "id": "1b82e2e4-430c-4667-b2ca-4f4806472d84", 
+    "size": 1
+  }, 
+  "interactive": false, 
+  "languages": {
+    "java": {
+      "taskClass": "P7638BalticOI2006COINCOLLECTORDay1", 
+      "mainClass": "Main"
+    }
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu"
+}

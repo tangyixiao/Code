@@ -1,0 +1,31 @@
+{
+  "tests": [
+    {
+      "output": "10\n", 
+      "input": "7 40 2 1\n10 20 30 0 30 20 10\n"
+    }
+  ], 
+  "name": "P15038 「chaynOI R2 T3」合并同类项", 
+  "testType": "single", 
+  "memoryLimit": 512, 
+  "url": "https://www.luogu.com.cn/problem/P15038", 
+  "timeLimit": 1000, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "batch": {
+    "id": "b2cfc6e4-2e17-4440-b558-2dbc761f25c7", 
+    "size": 1
+  }, 
+  "interactive": false, 
+  "languages": {
+    "java": {
+      "taskClass": "P15038ChaynOIR2T3", 
+      "mainClass": "Main"
+    }
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu"
+}
