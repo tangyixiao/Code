@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 1b82e2e4-430c-4667-b2ca-4f4806472d84
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,29 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 500005;
+int n, k, c, d, sum, top, st[N];
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> k;
+    for (int i = 1; i <= n; i++) {
+        cin >> c >> d;
+        if (sum >= c) {
+            sum -= st[top--];
+        }
+        if (d == 0) {
+            if (sum + c >= k) {
+                break;
+            }
+            st[++top] = c;
+            sum += c;
+        }
+    }
+    if (sum == 0) {
+        sum = 1;
+    }
+    cout << top << "\n"
+         << k - sum << "\n";
     return;
 }
 } // namespace TANGYIXIAO
