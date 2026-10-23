@@ -1,0 +1,31 @@
+{
+  "tests": [
+    {
+      "output": "0\n0\n0\n1\n0\n1\n", 
+      "input": "6\n2\n3\n4\n5\n12\n514\n"
+    }
+  ], 
+  "name": "P8054 A 质因数", 
+  "testType": "single", 
+  "memoryLimit": 128, 
+  "url": "https://www.luogu.com.cn/problem/P8054", 
+  "timeLimit": 500, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "batch": {
+    "id": "8df8f351-c0e0-402f-8a83-d0061ab98915", 
+    "size": 1
+  }, 
+  "interactive": false, 
+  "languages": {
+    "java": {
+      "taskClass": "P8054A", 
+      "mainClass": "Main"
+    }
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu"
+}
