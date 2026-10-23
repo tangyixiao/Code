@@ -1,0 +1,31 @@
+{
+  "tests": [
+    {
+      "output": "2\n", 
+      "input": "2 2 3 4 0\n0 0\n1 0\n2 1 1 0\n0 1 999999 0\n0 0 0 0\n"
+    }
+  ], 
+  "name": "P8050 [ZYOI Round1] Chessboard game/棋盘游戏", 
+  "testType": "single", 
+  "memoryLimit": 32, 
+  "url": "https://www.luogu.com.cn/problem/P8050", 
+  "timeLimit": 500, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "batch": {
+    "id": "be51d77f-8f80-4516-8136-2b39485c331a", 
+    "size": 1
+  }, 
+  "interactive": false, 
+  "languages": {
+    "java": {
+      "taskClass": "P8050ZYOIRound1ChessboardGame", 
+      "mainClass": "Main"
+    }
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu"
+}
