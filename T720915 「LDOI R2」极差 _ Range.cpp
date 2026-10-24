@@ -602,23 +602,25 @@ inline void solve(int Task_Id) {
     cin >> n;
     if (n < 5) {
         cout << "-1\n";
-    } else {
-        for (int i = 1; i <= n; i += 2) {
+        return;
+    }
+    for (int j = 1; j <= 4; j++) {
+        for (int i = j; i <= n; i += 2) {
             cout << i << " ";
         }
-        for (int i = 2; i <= n; i += 2) {
-            cout << i << " ";
+        if (j == 2) {
+            cout << "\n";
+        } else {
+            if (j == 3) {
+                cout << "1 ";
+            } else {
+                if (j == 4) {
+                    cout << "2\n";
+                }
+            }
         }
-        cout << "\n";
-        for (int i = 3; i <= n; i += 2) {
-            cout << i << " ";
-        }
-        cout << "1 ";
-        for (int i = 4; i <= n; i += 2) {
-            cout << i << " ";
-        }
-        cout << "2\n";
     }
     return;
 }
+
 } // namespace TANGYIXIAO
