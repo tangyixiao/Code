@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 01c79f96-7611-4eae-bb56-b79f08a643f0
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,63 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 1e5 + 5;
+string s;
+int n, m, a[N];
+char c[N];
+
+inline int f(int x) {
+    if (x == 1) {
+        return 1;
+    }
+    int res = 1;
+    for (; x; x /= 10) {
+        res++;
+    }
+    return res;
+}
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> s;
+    for (int i = 0; i < (int)s.size();) {
+        int k = 0;
+        for (; i < (int)s.size() && isdigit(s[i]); i++) {
+            k = k * 10 + s[i] - '0';
+        }
+        a[++m] = k ? k : 1;
+        c[m] = s[i++];
+        n += a[m];
+    }
+
+    int mn = INT_MAX, mx = 1, x = 1, y = n, sum = 0;
+    char z = c[m] == 'A' ? 'C' : 'A';
+
+    for (int i = 1; i <= m; i++) {
+        int d = -1;
+        if (a[i] > 1) {
+            d = f(a[i] - 1) - f(a[i]);
+        } else if (i > 1 && i < m && c[i - 1] == c[i + 1]) {
+            d = f(a[i - 1] + a[i + 1]) - f(a[i - 1]) - f(a[i + 1]) - 1;
+        }
+        if (d < mn) {
+            mn = d;
+            x = sum + 1;
+        }
+
+        for (int p = 1; p < a[i]; p = p == 1 ? 2 : p == 2 ? 10
+                                                          : p * 10) {
+            d = f(p) + f(a[i] - p) + 1 - f(a[i]);
+            if (d > mx) {
+                mx = d;
+                y = sum + p;
+                z = c[i] == 'A' ? 'C' : 'A';
+            }
+        }
+        sum += a[i];
+    }
+
+    cout << "2 " << x << "\n";
+    cout << "1 " << y << " " << z << "\n";
     return;
 }
 } // namespace TANGYIXIAO
