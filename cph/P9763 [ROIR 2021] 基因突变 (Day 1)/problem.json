@@ -1,0 +1,31 @@
+{
+  "batch": {
+    "id": "01c79f96-7611-4eae-bb56-b79f08a643f0", 
+    "size": 1
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P9763ROIR2021Day1"
+    }
+  }, 
+  "name": "P9763 [ROIR 2021] 基因突变 (Day 1)", 
+  "timeLimit": 1000, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P9763", 
+  "interactive": false, 
+  "tests": [
+    {
+      "output": "3 6 A\n1 2 C\n", 
+      "input": "5AC5A2C\n"
+    }
+  ], 
+  "group": "Luogu", 
+  "testType": "single", 
+  "memoryLimit": 128
+}
