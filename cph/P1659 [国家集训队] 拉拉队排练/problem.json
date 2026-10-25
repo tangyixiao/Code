@@ -1,0 +1,31 @@
+{
+  "name": "P1659 [国家集训队] 拉拉队排练",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P1659",
+  "interactive": false,
+  "memoryLimit": 500,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "5 3\nababa\n",
+      "output": "45\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P1659"
+    }
+  },
+  "batch": {
+    "id": "9c40083e-8f2b-44ad-bbe9-a0d514f20fe8",
+    "size": 1
+  }
+}
