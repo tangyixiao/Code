@@ -1,0 +1,43 @@
+{
+  "name": "P8089 『JROI-5』Color", 
+  "memoryLimit": 128, 
+  "interactive": false, 
+  "timeLimit": 500, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P8089JROI5Color"
+    }
+  }, 
+  "group": "Luogu", 
+  "batch": {
+    "id": "d9f74162-8ea1-477c-ae2a-807cf8e1f51c", 
+    "size": 1
+  }, 
+  "testType": "single", 
+  "tests": [
+    {
+      "output": "4\n", 
+      "input": "1\n2\n10\n"
+    }, 
+    {
+      "output": "25\n", 
+      "input": "1\n3\n100\n"
+    }, 
+    {
+      "output": "10\n", 
+      "input": "1\n3\n010\n"
+    }, 
+    {
+      "output": "见附件\n", 
+      "input": "见附件\n"
+    }
+  ], 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P8089"
+}
