@@ -399,7 +399,7 @@ struct DSU {
     int fa[N + 1], sz[N + 1];
     inline void init(int n) { for (int i = 1; i <= n; i++) { fa[i] = i, sz[i] = 1; } return; }
     inline int find(int x) { return fa[x] == x ? x : fa[x] = find(fa[x]); }
-    inline bool same(int x, int y) { return find(x) == find(y); }
+    inline bool ss(int x, int y) { return find(x) == find(y); }
     inline bool merge(int x, int y) { x = find(x), y = find(y); if (x == y) { return false; } if (sz[x] < sz[y]) { swap(x, y); } fa[y] = x, sz[x] += sz[y]; return true; }
     inline int size(int x) { return sz[find(x)]; }
 };
@@ -597,9 +597,155 @@ signed main() {
 }
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
+
 namespace TANGYIXIAO {
+const int N = 1005, M = 14;
+int b, s, n, m, q, lim, tp[N], v[N], st[N], id[M], vis[M], z[M], o[M], c[M], sz[M];
+ll sum, mul = 1, ans = (1LL << 62), w[M][M], d[M];
+string str;
+
+struct Node {
+    int l = 0, r = 0;
+    ll a[M][M] = {};
+};
+
+inline void add(Node &x, const Node &y) {
+    if (!y.l) { return; }
+    if (!x.l) {
+        x = y;
+        return;
+    }
+    ++x.a[x.r][y.l];
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= m; j++) { x.a[i][j] += y.a[i][j]; }
+    }
+    x.r = y.r;
+}
+
+inline Node calc(int &p) {
+    Node x;
+    while (p <= n && tp[p] != 2) {
+        if (!tp[p]) {
+            int u = v[p++];
+            if (!z[u]) {
+                if (x.l) {
+                    ++x.a[x.r][u];
+                } else {
+                    x.l = u;
+                }
+                x.r = u;
+            }
+        } else {
+            int t = v[p++];
+            Node y = calc(p);
+            if (y.l) {
+                for (int i = 1; i <= m; i++) {
+                    for (int j = 1; j <= m; j++) { y.a[i][j] *= t; }
+                }
+                y.a[y.r][y.l] += t - 1;
+                add(x, y);
+            }
+        }
+    }
+    if (p <= n) { ++p; }
+    return x;
+}
+
+inline void dfs(int p, int k, ll cs) {
+    if (cs >= ans) { return; }
+    if (p > q) {
+        int x = 100, y = 100;
+        for (int i = 1; i <= k; i++) {
+            if (sz[i] < x) {
+                y = x;
+                x = sz[i];
+            } else if (sz[i] < y) {
+                y = sz[i];
+            }
+        }
+        if (x + y > s) { ans = cs; }
+        return;
+    }
+    int u = o[p];
+    ll ev = 0, ss[M] = {};
+    for (int i = 1; i < p; i++) {
+        int t = o[i];
+        ev += w[u][t];
+        ss[c[t]] += w[u][t];
+    }
+    for (int i = 1; i <= k; i++) {
+        if (sz[i] < s && cs + ev - ss[i] < ans) {
+            c[u] = i;
+            ++sz[i];
+            dfs(p + 1, k, cs + ev - ss[i]);
+            --sz[i];
+            c[u] = 0;
+        }
+    }
+    if (k < lim && cs + ev < ans) {
+        c[u] = k + 1;
+        sz[k + 1] = 1;
+        dfs(p + 1, k + 1, cs + ev);
+        sz[k + 1] = 0;
+        c[u] = 0;
+    }
+}
+
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> b >> s;
+    int top = 0;
+    while (cin >> str) {
+        ++n;
+        if (str[0] == 'V') {
+            v[n] = stoi(str.substr(1));
+            vis[v[n]] = 1;
+            sum += mul;
+        } else if (str[0] == 'R') {
+            tp[n] = 1;
+            v[n] = stoi(str.substr(1));
+            mul *= v[n];
+            st[++top] = v[n];
+        } else {
+            tp[n] = 2;
+            mul /= st[top--];
+        }
+    }
+    for (int i = 1; i <= 13; i++) {
+        if (vis[i]) { id[i] = ++m; }
+    }
+    for (int i = 1; i <= n; i++) {
+        if (!tp[i]) { v[i] = id[v[i]]; }
+    }
+    if (m <= s) {
+        cout << sum << "\n";
+        return;
+    }
+
+    q = m - s;
+    lim = min(b - 1, 1 + (q - 1) / ((s + 2) / 2));
+    for (int mask = 0; mask < (1 << m) && ans > 1; mask++) {
+        if (__builtin_popcount((unsigned)mask) == s) {
+            q = 0;
+            for (int i = 1; i <= m; i++) {
+                z[i] = (mask >> (i - 1)) & 1;
+                if (!z[i]) { o[++q] = i; }
+            }
+            int p = 1;
+            Node x = calc(p);
+            for (int i = 1; i <= m; i++) {
+                d[i] = 0;
+                for (int j = 1; j <= m; j++) {
+                    w[i][j] = x.a[i][j] + x.a[j][i];
+                    if (i != j) { d[i] += w[i][j]; }
+                }
+            }
+            sort(o + 1, o + q + 1, [](int x, int y) {
+                return d[x] != d[y] ? d[x] > d[y] : x < y;
+            });
+            dfs(1, 0, 1);
+        }
+    }
+    cout << sum + ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO
