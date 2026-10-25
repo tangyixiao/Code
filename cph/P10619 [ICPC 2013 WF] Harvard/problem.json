@@ -1,0 +1,43 @@
+{
+  "name": "P10619 [ICPC 2013 WF] Harvard",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P10619",
+  "interactive": false,
+  "memoryLimit": 512,
+  "timeLimit": 5000,
+  "tests": [
+    {
+      "input": "1 2\nV1 V2 V1 V1 V2\n",
+      "output": "5\n"
+    },
+    {
+      "input": "2 1\nV1 V2 V1 V1 V2\n",
+      "output": "6\n"
+    },
+    {
+      "input": "1 2\nR10 V1 V2 V1 E\n",
+      "output": "30\n"
+    },
+    {
+      "input": "4 1\nV1 R2 V2 V4 R2 V1 E V3 E\n",
+      "output": "17\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P10619ICPC2013WFHarvard"
+    }
+  },
+  "batch": {
+    "id": "8fed2611-36bb-4a58-95c0-a17e9bd57f85",
+    "size": 1
+  }
+}
