@@ -1,12 +1,15 @@
 #include <bits/stdc++.h>
 using namespace std;
 const int N = 5e2 + 5;
-int m, n, i, j, k, ans, p, w;
-int t[N], b[N], used[N], id[N];
+int m, n, i, j, k, ans, t[N], b[N], used[N], id[N];
 bool cmp(int x, int y) {
     return b[x] > b[y];
 }
 signed main() {
+    if (fopen("riddle.in", "r")) {
+        freopen("riddle.in", "r", stdin);
+        freopen("riddle.out", "w", stdout);
+    }
     scanf("%d%d", &m, &n);
     for (i = 1; i <= n; i++) {
         scanf("%d", &t[i]);
