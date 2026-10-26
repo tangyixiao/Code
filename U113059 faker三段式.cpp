@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 04ae1d9d-cd15-466d-88bf-e9c55dfebdb1
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -600,11 +600,10 @@ namespace TANGYIXIAO {
 string s;
 int n, ans;
 inline void solve(int Task_Id) {
-    cin >> s;
-    n = s.size(), s = " " + s, ans = 0;
+    cin >> s, n = s.size(), s = " " + s, ans = 0;
     for (int r = 2; r * r <= n; r++) {
         for (int i = 1; i * r * r <= n; i++) {
-            if (s[i * r] == 'a' && ((s[i] == 'f' && s[i * r * r] == 'x') || (s[i] == 'x' && s[i * r * r] == 'f'))) { ans++; }
+            ans += s[i * r] == 'a' && ((s[i] == 'f' && s[i * r * r] == 'x') || (s[i] == 'x' && s[i * r * r] == 'f'));
         }
     }
     cout << ans << "\n";
