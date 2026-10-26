@@ -6,13 +6,13 @@ int s;
 signed main() {
     cin >> s;
     if (s >= 90) {
-        cout << "excellent" << "\n";
+        cout << "Excellent" << "\n";
     } else if (s >= 80) {
-        cout << "good" << "\n";
+        cout << "Good" << "\n";
     } else if (s >= 60) {
-        cout << "pass" << "\n";
+        cout << "Pass" << "\n";
     } else {
-        cout << "fail" << "\n";
+        cout << "Fail" << "\n";
     }
     return 0;
 }
