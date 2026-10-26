@@ -1,9 +1,23 @@
 #include <bits/stdc++.h>
 using namespace std;
-const int N = 1e4 + 5;
-int m, n, k, s, i, t, pos, cnt, dir, lim;
+const int N = 1e3 + 5;
+int m, s, n, k, i, t, pos, cnt, lim, d;
 bool live[N];
 int out[N];
+int step(int p, int dir) {
+    for (;;) {
+        p += dir;
+        if (p > m) {
+            p = 1;
+        }
+        if (p < 1) {
+            p = m;
+        }
+        if (live[p]) {
+            return p;
+        }
+    }
+}
 signed main() {
     cin >> m >> s >> n >> k;
     for (i = 1; i <= m; i++) {
@@ -12,44 +26,17 @@ signed main() {
     pos = s;
     for (t = 1; t <= m; t++) {
         lim = (t % 2 == 1) ? n : k;
-        dir = (t % 2 == 1) ? 1 : -1;
-        cnt = 0;
-        for (int guard = 0; guard < m + 1;) {
-            if (live[pos]) {
-                cnt++;
-            }
-            if (cnt == lim) {
-                break;
-            }
-            for (;;) {
-                pos += dir;
-                if (pos > m) {
-                    pos = 1;
-                }
-                if (pos < 1) {
-                    pos = m;
-                }
-                if (live[pos]) {
-                    break;
-                }
-            }
+        d = (t % 2 == 1) ? 1 : -1;
+        if (t > 1) {
+            pos = step(pos, d);
+        }
+        cnt = 1;
+        for (; cnt < lim;) {
+            pos = step(pos, d);
+            cnt++;
         }
         live[pos] = false;
         out[t] = pos;
-        if (t < m) {
-            for (;;) {
-                pos += dir;
-                if (pos > m) {
-                    pos = 1;
-                }
-                if (pos < 1) {
-                    pos = m;
-                }
-                if (live[pos]) {
-                    break;
-                }
-            }
-        }
     }
     for (i = 1; i <= m; i++) {
         if (i > 1) {
