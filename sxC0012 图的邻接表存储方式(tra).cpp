@@ -1,6 +1,5 @@
 #include <bits/stdc++.h>
 using namespace std;
-const int N = 1e5 + 5;
 const int M = 2e5 + 5;
 int n, i, u, v, p;
 struct edge {
@@ -22,16 +21,11 @@ signed main() {
     sort(e + 1, e + 2 * n + 1, cmp);
     for (i = 1; i <= 2 * n; i = p) {
         cout << e[i].a << ":";
-        int first = 1;
         for (p = i; p <= 2 * n && e[p].a == e[i].a; p++) {
-            if (p > i && e[p].b == e[p - 1].b) {
-                continue;
-            }
-            if (!first) {
+            if (p > i) {
                 cout << " ";
             }
             cout << e[p].b;
-            first = 0;
         }
         cout << "\n";
     }
