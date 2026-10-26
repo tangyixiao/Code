@@ -1,14 +1,15 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int n, i, x, ans;
+int n, i;
+long long ans;
 
 signed main() {
-    cin >> n;
+    scanf("%d", &n);
     ans = 0;
     for (i = 1; i <= n; i++) {
-        ans += i * (i + 1) / 2;
+        ans += 1LL * i * (i + 1) / 2;
     }
-    cout << ans << "\n";
+    printf("%lld\n", ans);
     return 0;
 }
