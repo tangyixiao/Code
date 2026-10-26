@@ -1,0 +1,31 @@
+{
+  "url": "https://www.luogu.com.cn/problem/P3389", 
+  "batch": {
+    "id": "75680dd7-afde-4034-8797-58053ab79a8c", 
+    "size": 1
+  }, 
+  "name": "P3389 【模板】高斯消元法", 
+  "tests": [
+    {
+      "input": "3\n1 3 4 5\n1 4 7 3\n9 3 2 2\n", 
+      "output": "-0.97\n5.18\n-2.39\n"
+    }
+  ], 
+  "output": {
+    "type": "stdout"
+  }, 
+  "group": "Luogu", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "interactive": false, 
+  "memoryLimit": 500, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P3389"
+    }
+  }
+}
