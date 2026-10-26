@@ -2,27 +2,10 @@
 using namespace std;
 
 const int N = 1e5 + 5;
-const int M = 2e5 + 5;
-int n, m, cnt, head[N], nxt[M], to[M], ans[N], c;
+vector<int> g[N];
+int n, m, c, tp;
+int ans[N], stkU[N], stkI[N];
 bool vis[N];
-
-void add(int u, int v) {
-    cnt++;
-    to[cnt] = v;
-    nxt[cnt] = head[u];
-    head[u] = cnt;
-}
-
-void dfs(int u) {
-    vis[u] = 1;
-    ans[++c] = u;
-    for (int i = head[u]; i; i = nxt[i]) {
-        int v = to[i];
-        if (!vis[v]) {
-            dfs(v);
-        }
-    }
-}
 
 signed main() {
     ios::sync_with_stdio(false);
@@ -31,10 +14,33 @@ signed main() {
     for (int i = 1; i <= m; i++) {
         int x, y;
         cin >> x >> y;
-        add(x, y);
-        add(y, x);
+        g[x].push_back(y);
+        g[y].push_back(x);
     }
-    dfs(1);
+    for (int i = 1; i <= n; i++) {
+        sort(g[i].begin(), g[i].end());
+    }
+    vis[1] = 1;
+    ans[++c] = 1;
+    tp = 1;
+    stkU[1] = 1;
+    stkI[1] = 0;
+    while (tp > 0) {
+        int u = stkU[tp];
+        if (stkI[tp] < (int)g[u].size()) {
+            int v = g[u][stkI[tp]];
+            stkI[tp]++;
+            if (!vis[v]) {
+                vis[v] = 1;
+                ans[++c] = v;
+                tp++;
+                stkU[tp] = v;
+                stkI[tp] = 0;
+            }
+        } else {
+            tp--;
+        }
+    }
     for (int i = 1; i <= c; i++) {
         cout << ans[i];
         if (i < c) {
