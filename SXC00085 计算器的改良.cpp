@@ -34,6 +34,10 @@ void parse(int l, int r, double &c, double &kk) {
     }
 }
 signed main() {
+    if (fopen("cal.in", "r")) {
+        freopen("cal.in", "r", stdin);
+        freopen("cal.out", "w", stdout);
+    }
     scanf("%s", s + 1);
     len = strlen(s + 1);
     int p = 1;
