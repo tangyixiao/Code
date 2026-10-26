@@ -1,24 +1,29 @@
 #include <bits/stdc++.h>
 using namespace std;
-const int N = 1e2 + 5;
+const int N = 1e6 + 5;
 char s[N], q[N];
-int la, lb, n, i, j, st[N], top, ok, c;
+int la, lb, n, i, j, st[N], top, ok, c1[26], c2[26];
 signed main() {
-    cin >> (s + 1) >> (q + 1);
+    scanf("%s%s", s + 1, q + 1);
     la = strlen(s + 1), lb = strlen(q + 1);
+    if (lb > la) {
+        printf("NO\n");
+        return 0;
+    }
+    for (i = 1; i <= lb; i++) {
+        c1[tolower(s[i]) - 'a']++;
+        c2[tolower(q[i]) - 'a']++;
+    }
     for (i = 1; i + lb - 1 <= la; i++) {
-        int cnt[26], cnt2[26];
-        for (j = 0; j < 26; j++) {
-            cnt[j] = 0, cnt2[j] = 0;
-        }
-        for (j = 0; j < lb; j++) {
-            char a = tolower(s[i + j]), b = tolower(q[1 + j]);
-            cnt[a - 'a']++, cnt2[b - 'a']++;
+        if (i > 1) {
+            c1[tolower(s[i - 1]) - 'a']--;
+            c1[tolower(s[i + lb - 1]) - 'a']++;
         }
         ok = 1;
         for (j = 0; j < 26; j++) {
-            if (cnt[j] != cnt2[j]) {
+            if (c1[j] != c2[j]) {
                 ok = 0;
+                break;
             }
         }
         if (ok) {
@@ -26,15 +31,15 @@ signed main() {
         }
     }
     if (!top) {
-        cout << "NO\n";
-    } else {
-        for (i = 1; i <= top; i++) {
-            if (i > 1) {
-                cout << " ";
-            }
-            cout << st[i];
-        }
-        cout << "\n";
+        printf("NO\n");
+        return 0;
     }
+    for (i = 1; i <= top; i++) {
+        if (i > 1) {
+            printf(" ");
+        }
+        printf("%d", st[i]);
+    }
+    printf("\n");
     return 0;
 }
