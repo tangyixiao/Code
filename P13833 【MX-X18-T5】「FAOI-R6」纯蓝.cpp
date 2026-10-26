@@ -619,7 +619,7 @@ inline void dfs(int id) {
     }
     return;
 }
-inline void solve() {
+inline void solve(int Task_Id) {
     cin >> n;
     for (int i = 1; i <= n; i++) {
         cin >> a[i];
