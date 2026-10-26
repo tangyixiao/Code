@@ -2,9 +2,11 @@
 using namespace std;
 
 const int N = 1e4 + 5;
-int n, ms, top;
+int n, top;
+long long ms;
 double cs;
-int sm[N], sc[N];
+long long sm[N];
+double sc[N];
 char op[5];
 
 signed main() {
@@ -14,7 +16,8 @@ signed main() {
     for (int i = 1; i <= n; i++) {
         cin >> op;
         if (op[0] == 'P') {
-            int v, c;
+            long long v;
+            double c;
             cin >> v >> c;
             top++;
             sm[top] = ms;
