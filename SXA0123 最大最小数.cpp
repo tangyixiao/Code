@@ -13,7 +13,7 @@ signed main() {
             mn = x;
         }
     }
-    cout << "Max＝" << mx << "\n";
-    cout << "Min＝" << mn << "\n";
+    cout << "Max=" << mx << "\n";
+    cout << "Min=" << mn << "\n";
     return 0;
 }
