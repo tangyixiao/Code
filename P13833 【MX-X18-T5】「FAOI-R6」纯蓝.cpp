@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 5f4f7440-3f04-4eba-976c-402595b5f281
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,80 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-inline void solve(int Task_Id) {
-    // do something here
+const int mod = 998244353, N = 8e3 + 5, inf = 2e9;
+int n, a[N], b[N], ans;
+const int M = (1 << 9) + 5;
+int c[M], f[M], g[M], v = 1, k;
+long long x, y;
+inline void dfs(int id) {
+    if (id == n + 1) {
+        int res = inf;
+        for (int i = 1; i <= n; i++) {
+            for (int j = i + 1; j <= n; j++) {
+                res = min(res, b[i] ^ b[j]);
+            }
+        }
+        ans = (ans + res) % mod;
+        return;
+    }
+    for (int i = 0; i <= a[id]; i++) {
+        b[id] = i;
+        dfs(id + 1);
+    }
+    return;
+}
+inline void solve() {
+    cin >> n;
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i];
+        for (; v <= a[i]; v <<= 1) {
+        }
+    }
+    if (n <= 5 && v <= 16) {
+        dfs(1);
+    } else {
+        if (n == 2) {
+            for (int t = 1; t < v; t <<= 1) {
+                x = (a[1] + 1) / (2 * t) * t + max(0, (a[1] + 1) % (2 * t) - t);
+                y = (a[2] + 1) / (2 * t) * t + max(0, (a[2] + 1) % (2 * t) - t);
+                ans = (ans + t * (x * (a[2] + 1 - y) + y * (a[1] + 1 - x))) % mod;
+            }
+        } else {
+            if (n <= 500 && v <= 512) {
+                for (int i = 1; i <= n; i++) {
+                    c[a[i]]++;
+                }
+                for (int j = v - 1; j >= 0; j--) {
+                    c[j] += c[j + 1];
+                }
+                for (k = 0; k < min(v, 2 * v / (n - 1)); k++) {
+                    for (int j = 0; j < v; j++) {
+                        f[j] = c[j];
+                    }
+                    for (int i = 2; i <= n; i++) {
+                        for (int j = 0; j < v; j++) {
+                            g[j] = 0;
+                            if (c[j] >= i) {
+                                for (int t = j + 1; t < v; t++) {
+                                    if ((j ^ t) > k) {
+                                        g[j] = (g[j] + f[t]) % mod;
+                                    }
+                                }
+                                g[j] = 1LL * g[j] * (c[j] - i + 1) % mod;
+                            }
+                        }
+                        for (int j = 0; j < v; j++) {
+                            f[j] = g[j];
+                        }
+                    }
+                    for (int j = 0; j < v; j++) {
+                        ans = (ans + f[j]) % mod;
+                    }
+                }
+            }
+        }
+    }
+    cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO
