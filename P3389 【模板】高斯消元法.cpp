@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 75680dd7-afde-4034-8797-58053ab79a8c
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,99 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 1e2 + 5;
+const double eps = 1e-7;
+int n;
+double mp[N][N], ans[N];
+inline void gauss() {
+    for (int i = 1; i <= n; i++) {
+        int r = i;
+        for (int j = i + 1; j <= n; j++) {
+            if (fabs(mp[r][i]) < fabs(mp[j][i])) {
+                r = j;
+            }
+        }
+        if (fabs(mp[r][i]) < eps) {
+            printf("No Solution");
+            exit(0);
+        }
+        if (i != r) {
+            swap(mp[i], mp[r]);
+        }
+        double div = mp[i][i];
+        for (int j = i; j <= n + 1; j++) {
+            mp[i][j] /= div;
+        }
+        for (int j = i + 1; j <= n; j++) {
+            div = mp[j][i];
+            for (int k = i; k <= n + 1; k++) {
+                mp[j][k] -= mp[i][k] * div;
+            }
+        }
+    }
+    ans[n] = mp[n][n + 1];
+    for (int i = n - 1; i >= 1; i--) {
+        ans[i] = mp[i][n + 1];
+        for (int j = i + 1; j <= n; j++) {
+            ans[i] -= (mp[i][j] * ans[j]);
+        }
+    }
+    return;
+}
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n;
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= n + 1; j++) {
+            cin >> mp[i][j];
+        }
+    }
+    gauss();
+    for (int i = 1; i <= n; i++) {
+        printf("%.2lf\n", ans[i]);
+    }
     return;
 }
 } // namespace TANGYIXIAO
+/*
+老师模板
+const int N = 1e3 + 5;
+const double eps = 1e-7;
+double a[N][N];
+int n, m;
+int gauss() {
+    int c = 0;  // 目前的主元数量
+    for (int i = 1; i <= n; ++i) {
+        bool flag = 0;
+        for (int j = c + 1; j <= m; ++j)
+            if (fabs(a[j][i]) > eps) {  // 处理浮点误差
+                ++c, flag = 1;
+                swap(a[j], a[c]);
+                break;
+            }
+        if (!flag) {
+            continue;
+        }
+        double p = a[c][i];
+        // printf("i=%d,c=%d,p=%.2lf\n",i,c,p);
+        for (int k = 1; k <= n + 1; ++k) {
+            a[c][k] /= p;
+        }
+        for (int j = 1; j <= m; ++j) {
+            if (j != c && fabs(a[j][i]) > eps) {
+                double r = a[j][i];
+                for (int k = i; k <= n + 1; ++k)
+                    a[j][k] -= r * a[c][k];
+            }
+        }
+    }
+    for (int i = c + 1; i <= m; ++i) {
+        if (fabs(a[i][n + 1]) > eps) {
+            return -1;  // 无解
+        }
+    }
+    if (c == n) {
+        return 0;  // 唯一解
+    }
+    return 1;  // 无穷多解
+}
+*/
