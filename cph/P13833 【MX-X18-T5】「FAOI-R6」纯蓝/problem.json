@@ -1,0 +1,43 @@
+{
+  "url": "https://www.luogu.com.cn/problem/P13833", 
+  "batch": {
+    "id": "5f4f7440-3f04-4eba-976c-402595b5f281", 
+    "size": 1
+  }, 
+  "name": "P13833 【MX-X18-T5】「FAOI-R6」纯蓝", 
+  "tests": [
+    {
+      "input": "2\n1 3\n", 
+      "output": "12\n"
+    }, 
+    {
+      "input": "3\n3 8 4\n", 
+      "output": "214\n"
+    }, 
+    {
+      "input": "5\n19 48 23 74 30\n", 
+      "output": "180221824\n"
+    }, 
+    {
+      "input": "10\n5000 1234 5000 1234 5000 1234 5000 1234 5000 1234\n", 
+      "output": "134499885\n"
+    }
+  ], 
+  "output": {
+    "type": "stdout"
+  }, 
+  "group": "Luogu", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "timeLimit": 2000, 
+  "testType": "single", 
+  "interactive": false, 
+  "memoryLimit": 512, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P13833MXX18T5FAOIR6"
+    }
+  }
+}
