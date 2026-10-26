@@ -5,6 +5,10 @@ int n, m, k, i, j, t, b, l, r, s, area, ans;
 int a[N][N], c[N];
 char line[N];
 signed main() {
+    if (fopen("cell.in", "r")) {
+        freopen("cell.in", "r", stdin);
+        freopen("cell.out", "w", stdout);
+    }
     scanf("%d%d%d", &n, &m, &k);
     for (i = 1; i <= n; i++) {
         scanf("%s", line + 1);
