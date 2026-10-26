@@ -2,15 +2,15 @@
 using namespace std;
 
 const int N = 1e5 + 5;
-const int M = 2e5 + 5;
 
 int n, k, i, p, v, len;
 long long ans;
 int a[N];
-long long cl[2][M], cr[2][M];
+long long cl[2][2 * N], cr[2][2 * N];
 
 signed main() {
     scanf("%d %d", &n, &k);
+    p = 0;
     for (i = 1; i <= n; i++) {
         scanf("%d", &a[i]);
         if (a[i] == k) {
@@ -43,10 +43,15 @@ signed main() {
     }
     ans = 0;
     for (int par = 0; par < 2; par++) {
-        for (i = 0; i < M; i++) {
-            if (cl[par][i] > 0 && cr[par][M - 1 - i] > 0) {
-                ans += cl[par][i] * cr[par][M - 1 - i];
+        for (i = 0; i < 2 * N; i++) {
+            if (cl[par][i] == 0) {
+                continue;
             }
+            int j = 2 * N - i;
+            if (j < 0 || j >= 2 * N) {
+                continue;
+            }
+            ans += cl[par][i] * cr[par][j];
         }
     }
     printf("%lld\n", ans);
