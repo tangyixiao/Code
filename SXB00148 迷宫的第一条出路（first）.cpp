@@ -2,7 +2,7 @@
 using namespace std;
 
 int n, i, j, plen;
-char s[32];
+char buf[2005];
 int a[32][32], v[32][32], px[505], py[505];
 int mx[4] = {0, -1, 0, 1};
 int my[4] = {-1, 0, 1, 0};
@@ -29,14 +29,37 @@ int dfs(int x, int y, int dep) {
 }
 
 signed main() {
-    scanf("%d", &n);
+    int tot = 0, c;
+    while ((c = getchar()) != EOF) {
+        if (tot < 2000) {
+            buf[tot] = (char)c;
+        }
+        tot++;
+    }
+    int p = 0;
+    while (p < tot && p < 2000 && (buf[p] < '0' || buf[p] > '9')) {
+        p++;
+    }
+    n = 0;
+    while (p < tot && p < 2000 && buf[p] >= '0' && buf[p] <= '9') {
+        n = n * 10 + (buf[p] - '0');
+        p++;
+    }
+    int cnt = 0;
     for (i = 1; i <= n; i++) {
-        scanf("%s", s);
         for (j = 1; j <= n; j++) {
-            a[i][j] = s[j - 1] - '0';
+            while (p < tot && p < 2000 && (buf[p] < '0' || buf[p] > '9')) {
+                p++;
+            }
+            if (p < tot && p < 2000) {
+                a[i][j] = buf[p] - '0';
+                p++;
+            }
+            cnt++;
         }
     }
     plen = 0;
+    v[1][1] = 1;
     dfs(1, 1, 0);
     for (i = 0; i < plen; i++) {
         if (i > 0) {
