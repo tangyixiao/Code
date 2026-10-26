@@ -20,7 +20,7 @@ Copyright (C) 2026 TangYixiao
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
 #define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
 #define FILE_INDEX 1                      // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -597,8 +597,17 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+string s;
+int n, ans;
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> s;
+    n = s.size(), s = " " + s, ans = 0;
+    for (int r = 2; r * r <= n; r++) {
+        for (int i = 1; i * r * r <= n; i++) {
+            if (s[i * r] == 'a' && ((s[i] == 'f' && s[i * r * r] == 'x') || (s[i] == 'x' && s[i * r * r] == 'f'))) { ans++; }
+        }
+    }
+    cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO
