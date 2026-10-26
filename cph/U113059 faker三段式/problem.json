@@ -1,0 +1,31 @@
+{
+  "url": "https://www.luogu.com.cn/problem/U113059?contestId=368717", 
+  "batch": {
+    "id": "04ae1d9d-cd15-466d-88bf-e9c55dfebdb1", 
+    "size": 1
+  }, 
+  "name": "U113059 faker三段式", 
+  "tests": [
+    {
+      "input": "3\nffffaaaax\nffafaaaax\nxaafaaaafaaaaaax\n", 
+      "output": "0\n1\n3\n"
+    }
+  ], 
+  "output": {
+    "type": "stdout"
+  }, 
+  "group": "Luogu - SXYZ 训练赛⑤", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "timeLimit": 100, 
+  "testType": "single", 
+  "interactive": false, 
+  "memoryLimit": 125, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "U113059Faker"
+    }
+  }
+}
