@@ -1,0 +1,5 @@
+trim: C++11严格编译与格式检查通过；5组网页/附件样例通过；SHA256 0b4755f4c302930a69f062c19fc59d211cc4ac2bba564a35b081c0d5aaf86261
+garden: C++11严格编译与格式检查通过；3组网页/附件样例通过；SHA256 7b6263939d6243db79ad31ace516e586fe83bdcc1840243078d50f1378e18232
+epigraphy: C++11严格编译与格式检查通过；3组网页/附件样例通过；SHA256 f6a76705aa866d597fad9379d4e2f58f1496eb674e4a152f97aa22516e1b780d
+isogeny: C++11严格编译与格式检查通过；4组网页/附件样例通过；SHA256 715b4bebabd81b0c723b3169e4fc9ef6ea8b61ac73a72132c95f28699aee689d
+ends: C++11严格编译与格式检查通过；3组网页/附件样例通过；SHA256 d437d3a0f499784cdbc13abf26df735f5b73e43b0316711f772a60bead523de1
