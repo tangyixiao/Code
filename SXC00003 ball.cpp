@@ -1,111 +1,95 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int M, N;
-long long E;
-int cost[8];
-char g[105][105];
-int seen[105][105][2][2];
-int seenpos[105][105][2][2];
-long long pref[1000005];
+const int N = 1e2 + 5;
+
+int m, n, c[8];
+long long e, paid;
+char g[N][N];
+int seen[N][N][2][2];
+long long at[N][N][2][2];
 
 signed main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
-    cin >> M >> N >> E;
+    cin >> m >> n >> e;
     for (int i = 0; i < 8; i++) {
-        cin >> cost[i];
+        cin >> c[i];
     }
-    for (int i = 0; i < M + 2; i++) {
-        for (int j = 0; j < N + 2; j++) {
+    for (int i = 0; i <= m + 1; i++) {
+        for (int j = 0; j <= n + 1; j++) {
             g[i][j] = ' ';
         }
     }
-    int r = 1, c = 1, dr = 1, dc = 1;
-    long long s = 0;
-    for (int loop = 0; loop < 1000000; loop++) {
-        if (E <= 0 || r < 1 || r > M || c < 1 || c > N) {
-            break;
-        }
-        int a = (dr > 0) ? 1 : 0, b = (dc > 0) ? 1 : 0;
-        if (seen[r][c][a][b]) {
-            int k = seenpos[r][c][a][b];
-            long long cyc = pref[s] - pref[k];
-            if (cyc == 0) {
-                break;
-            }
-            long long times = (E - 1) / cyc;
-            if (times > 0) {
-                E -= times * cyc;
-            }
-            for (int i = 0; i < M + 2; i++) {
-                for (int j = 0; j < N + 2; j++) {
-                    seen[i][j][0][0] = seen[i][j][0][1] = 0;
-                    seen[i][j][1][0] = seen[i][j][1][1] = 0;
+    int r = 0, col = 0, dr = 1, dc = 1, one = 0;
+    for (;;) {
+        int a = (dr < 0), b = (dc < 0);
+        if (!one) {
+            if (seen[r][col][a][b]) {
+                long long cyc = paid - at[r][col][a][b];
+                if (cyc <= 0) {
+                    break;
                 }
+                paid += (e - paid - 1) / cyc * cyc, one = 1;
+            } else {
+                seen[r][col][a][b] = 1, at[r][col][a][b] = paid;
             }
-            s = 0;
-            pref[0] = 0;
         }
-        seen[r][c][a][b] = 1;
-        seenpos[r][c][a][b] = (int)s;
-        if (dr * dc > 0) {
-            g[r][c] = '\\';
-        } else {
-            g[r][c] = '/';
-        }
-        int lr = (dr > 0) ? r : r - 1;
-        int lc = (dc > 0) ? c : c - 1;
-        int cst = 0;
-        int fr = 0, fc = 0;
-        int top = (lr == 0), bot = (lr == M), lef = (lc == 0), rig = (lc == N);
+        int top = (r == 0 && dr < 0), bot = (r == m && dr > 0);
+        int lef = (col == 0 && dc < 0), rig = (col == n && dc > 0);
         if (top && lef) {
-            cst = cost[4], fr = 1, fc = 1;
+            paid += c[4];
         } else if (top && rig) {
-            cst = cost[5], fr = 1, fc = 1;
+            paid += c[5];
         } else if (bot && rig) {
-            cst = cost[6], fr = 1, fc = 1;
+            paid += c[6];
         } else if (bot && lef) {
-            cst = cost[7], fr = 1, fc = 1;
+            paid += c[7];
         } else if (top) {
-            cst = cost[0], fr = 1;
+            paid += c[0];
         } else if (rig) {
-            cst = cost[1], fc = 1;
+            paid += c[1];
         } else if (bot) {
-            cst = cost[2], fr = 1;
+            paid += c[2];
         } else if (lef) {
-            cst = cost[3], fc = 1;
+            paid += c[3];
         }
-        E -= cst;
-        s++;
-        pref[s] = pref[s - 1] + cst;
-        if (E <= 0) {
+        if ((top || bot || lef || rig) && paid >= e) {
             break;
         }
-        if (fr) {
+        if (top || bot) {
             dr = -dr;
         }
-        if (fc) {
+        if (lef || rig) {
             dc = -dc;
         }
-        r = (dr > 0) ? lr + 1 : lr;
-        c = (dc > 0) ? lc + 1 : lc;
-    }
-    for (int i = 0; i < N; i++) {
-        cout << "-";
-    }
-    cout << "\n";
-    for (int i = 1; i <= M; i++) {
-        cout << "|";
-        for (int j = 1; j <= N; j++) {
-            cout << g[i][j];
+        if (dr > 0 && dc > 0) {
+            g[r + 1][col + 1] = '\\';
+        } else if (dr > 0 && dc < 0) {
+            g[r + 1][col] = '/';
+        } else if (dr < 0 && dc < 0) {
+            g[r][col] = '\\';
+        } else {
+            g[r][col + 1] = '/';
         }
-        cout << "|\n";
+        r += dr, col += dc;
     }
     cout << " ";
-    for (int i = 0; i < N; i++) {
+    for (int i = 0; i < n; i++) {
         cout << "-";
     }
-    cout << "\n";
+    cout << " " << "\n";
+    for (int i = 1; i <= m; i++) {
+        cout << "|";
+        for (int j = 1; j <= n; j++) {
+            cout << g[i][j];
+        }
+        cout << "|" << "\n";
+    }
+    cout << " ";
+    for (int i = 0; i < n; i++) {
+        cout << "-";
+    }
+    cout << " " << "\n";
     return 0;
 }
