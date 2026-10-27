@@ -2,12 +2,12 @@
 using namespace std;
 
 typedef unsigned __int128 u128;
-char s[25];
+char s[40];
 u128 f[2][2][2], g[2][2][2];
 int len;
 
 void put(u128 v) {
-    char buf[50];
+    char buf[60];
     int p = 0;
     if (v == 0) {
         printf("0\n");
@@ -24,6 +24,8 @@ void put(u128 v) {
 }
 
 signed main() {
+    freopen("lucky.in", "r", stdin);
+    freopen("lucky.out", "w", stdout);
     scanf("%s", s);
     len = strlen(s);
     f[1][0][0] = 1;
@@ -31,32 +33,26 @@ signed main() {
         memset(g, 0, sizeof(g));
         int lim = s[i] - '0';
         for (int t = 0; t < 2; t++) {
-            for (int h = 0; h < 2; h++) {
-                for (int l4 = 0; l4 < 2; l4++) {
-                    if (f[t][h][l4] == 0) {
+            for (int p = 0; p < 2; p++) {
+                for (int fd = 0; fd < 2; fd++) {
+                    if (f[t][p][fd] == 0) {
                         continue;
                     }
                     int up = t ? lim : 9;
                     for (int d = 0; d <= up; d++) {
-                        int nh = h;
-                        if (l4 == 1 && d == 9) {
-                            nh = 1;
+                        int nt = (t == 1 && d == lim) ? 1 : 0;
+                        int nfd = fd;
+                        if (p == 1 && d == 9) {
+                            nfd = 1;
                         }
-                        int nt = 0;
-                        if (t == 1 && d == lim) {
-                            nt = 1;
-                        }
-                        int nl = 0;
-                        if (d == 4) {
-                            nl = 1;
-                        }
-                        g[nt][nh][nl] += f[t][h][l4];
+                        int np = (d == 4) ? 1 : 0;
+                        g[nt][np][nfd] += f[t][p][fd];
                     }
                 }
             }
         }
         memcpy(f, g, sizeof(g));
     }
-    put(f[0][1][0] + f[0][1][1] + f[1][1][0] + f[1][1][1]);
+    put(f[0][0][1] + f[0][1][1] + f[1][0][1] + f[1][1][1]);
     return 0;
 }
