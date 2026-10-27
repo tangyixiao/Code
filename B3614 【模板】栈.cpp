@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 74f31c6e-b621-4fd0-9658-e2aff926a06e
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -20,7 +20,7 @@ Copyright (C) 2026 TangYixiao
 #define PRAGMA_GCC_or_GPlusPlus_ALLOWED 0 // 0 for disabled, 1 for GCC
 #define JUDGE_TYPE 0                      // 0 for online judge, 1 for judge file, 2 for local file
 #define FILE_INDEX 1                      // the index of the file in the local file system
-// #define MULTIPLE_TEST
+#define MULTIPLE_TEST
 // #define DEBUG
 // #define TIME_COUNT
 #define FILE_NAME ""
@@ -597,8 +597,39 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+int n;
+string op;
+stack<unsigned long long> st;
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n;
+    for (unsigned long long x; n--;) {
+        cin >> op;
+        if (op == "push") {
+            cin >> x;
+            st.push(x);
+        } else {
+            if (op == "query") {
+                if (st.empty()) {
+                    cout << "Anguei!\n";
+                } else {
+                    cout << st.top() << "\n";
+                }
+            } else {
+                if (op == "size") {
+                    cout << st.size() << "\n";
+                } else {
+                    if (st.empty()) {
+                        cout << "Empty\n";
+                    } else {
+                        st.pop();
+                    }
+                }
+            }
+        }
+    }
+    for (; !st.empty();) {
+        st.pop();
+    }
     return;
 }
 } // namespace TANGYIXIAO
