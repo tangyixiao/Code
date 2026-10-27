@@ -1,9 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int N = 1e5 + 5;
+const int N = 5e5 + 5;
 
-int a[N], b[N], n;
+int n, a[N], b[N];
 long long ans;
 
 inline void msort(int l, int r) {
@@ -31,23 +31,14 @@ inline void msort(int l, int r) {
     }
 }
 
-inline void input() {
+signed main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
     cin >> n;
     for (int i = 1; i <= n; ++i) {
         cin >> a[i];
     }
-}
-
-inline void solve() {
     msort(1, n);
     cout << ans << "\n";
-    return;
-}
-
-signed main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    input();
-    solve();
     return 0;
 }

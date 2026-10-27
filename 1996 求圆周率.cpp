@@ -3,7 +3,7 @@ using namespace std;
 
 const int N = 1e5 + 5;
 
-int n, d, A[N], B[N], T[N], U[N];
+int n, d, P, A[N], B[N], T[N], U[N];
 
 inline void cl(int a[]) {
     for (int i = 0; i < d; i++) {
@@ -54,8 +54,8 @@ inline bool nz(int a[]) {
     return false;
 }
 
-inline void at(int a[], int x) {
-    cl(T), T[d - 1] = 1, dv(T, x);
+inline void arctan(int a[], int x) {
+    cl(T), T[P] = 1, dv(T, x);
     for (int k = 0; nz(T); k++) {
         cp(U, T), dv(U, 2 * k + 1);
         if (k % 2 == 0) {
@@ -65,33 +65,37 @@ inline void at(int a[], int x) {
         }
         dv(T, x * x);
     }
-    return;
-}
-
-inline void input() {
-    cin >> n;
-    return;
-}
-
-inline void solve() {
-    d = n + 25;
-    cl(A), cl(B);
-    at(A, 5), at(B, 239);
-    ml(A, 16), ml(B, 4);
-    sb(A, B);
-    for (int i = 1; i <= n; i++) {
-        if (i > 1 && (i - 1) % 10 == 0) {
-            printf("\n");
-        }
-        printf("%d", A[d - 1 - i]);
-    }
-    return;
 }
 
 signed main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-    input();
-    solve();
+    cin >> n;
+    d = n + 25, P = d - 1;
+    cl(A), cl(B);
+    arctan(A, 5), arctan(B, 239);
+    ml(A, 16), ml(B, 4);
+    sb(A, B);
+    if (A[P - n - 1] >= 5) {
+        int c = 1;
+        for (int i = P - n; i < d && c; i++) {
+            A[i] += c;
+            if (A[i] >= 10) {
+                A[i] -= 10;
+            } else {
+                c = 0;
+            }
+        }
+    }
+    printf("%d.\n", A[P]);
+    for (int i = 1; i <= n; i++) {
+        printf("%d", A[P - i]);
+        if (i % 10 == 0) {
+            printf("\n");
+        }
+    }
+    if (n % 10 != 0) {
+        printf("\n");
+    }
     return 0;
 }
