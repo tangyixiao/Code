@@ -21,25 +21,19 @@ signed main() {
     }
     int lim = 1 << m;
     for (int s = 0; s < lim; s++) {
-        if (s & (s << 1)) {
-            continue;
-        }
-        ok[s] = 1;
+        ok[s] = ((s & (s << 1)) == 0);
     }
     f[0] = 1;
     for (int i = 1; i <= n; i++) {
         for (int s = 0; s < lim; s++) {
             g[s] = 0;
-        }
-        for (int s = 0; s < lim; s++) {
-            if (!ok[s] || (s & ~a[i])) {
+            if (!ok[s] || (s & ~a[i]) != 0) {
                 continue;
             }
             for (int t = 0; t < lim; t++) {
-                if (s & t) {
-                    continue;
+                if (ok[t] && (s & t) == 0) {
+                    g[s] = (g[s] + f[t]) % MOD;
                 }
-                g[t] = (g[t] + f[s]) % MOD;
             }
         }
         for (int s = 0; s < lim; s++) {
