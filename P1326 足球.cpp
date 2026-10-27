@@ -1,5 +1,5 @@
 //  Author: Tangyixiao
-//  Time: 2026-10-27 08:40:37
+//  Time: 2026-10-27 08:41:16
 //  Problem: P1326 足球
 //  Contest: Luogu
 //  URL: https://www.luogu.com.cn/problem/P1326
@@ -7,7 +7,7 @@
 //  Time Limit: 1000 ms
 //  Interactive: false
 //  Test Type: single
-//  Batch ID: 0b787017-a99d-442d-8b6c-6d10323aa0d1
+//  Batch ID: 09c5cb5e-c56c-43a5-bda5-11e3aee00f05
 //
 //  Algorithm: 
 //  Complexity: O()
