@@ -1,11 +1,11 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int N = 1e3 + 5;
-int n, k;
-string id[N], sc[N];
+const int N = 1e2 + 5;
+int n, p[N];
+long long id[N];
+string sc[N];
 double v[N];
-int p[N];
 
 bool cmp(int x, int y) {
     if (v[x] != v[y]) {
