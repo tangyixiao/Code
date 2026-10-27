@@ -3,10 +3,19 @@ using namespace std;
 
 const int N = 1e3 + 5;
 int n, c[N], d[N];
-long long best = -1;
+long long best, val[N];
 int bk;
 
+void rd() {
+    freopen("launch.in", "r", stdin);
+}
+
+void wr() {
+    freopen("launch.out", "w", stdout);
+}
+
 signed main() {
+    rd(), wr();
     cin >> n;
     for (int i = 1; i <= n; i++) {
         cin >> c[i];
@@ -14,8 +23,8 @@ signed main() {
     for (int i = 1; i <= n; i++) {
         cin >> d[i];
     }
+    best = -1;
     for (int k = 1; k <= n; k++) {
-        long long val[N];
         for (int i = 1; i <= n; i++) {
             val[i] = c[i] - (long long)(k - 1) * d[i];
         }
@@ -25,8 +34,7 @@ signed main() {
             s += val[i];
         }
         if (s >= best) {
-            best = s;
-            bk = k;
+            best = s, bk = k;
         }
     }
     cout << best << "\n"
