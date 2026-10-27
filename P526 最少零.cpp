@@ -11,11 +11,15 @@ signed main() {
     for (int i = 1; i <= n; i++) {
         for (int j = 1; j <= n; j++) {
             cin >> a[i][j];
-            f2[i][j] = INF, f5[i][j] = INF;
         }
+    }
+    for (int i = 0; i <= n + 1; i++) {
+        f2[0][i] = f2[i][0] = INF;
+        f5[0][i] = f5[i][0] = INF;
     }
     for (int i = 1; i <= n; i++) {
         for (int j = 1; j <= n; j++) {
+            f2[i][j] = f5[i][j] = INF;
             if (a[i][j] == 0) {
                 continue;
             }
