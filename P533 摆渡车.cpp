@@ -60,6 +60,10 @@ inline void solve() {
 }
 
 signed main() {
+    if (fopen("bus.in", "r")) {
+        freopen("bus.in", "r", stdin);
+        freopen("bus.out", "w", stdout);
+    }
     ios::sync_with_stdio(false);
     cin.tie(0);
     input();
