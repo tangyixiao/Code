@@ -30,7 +30,7 @@ signed main() {
     ans = 0;
     for (i = p; i <= n; i++) {
         s += b[i];
-        ans += c[i % 2][s + N];
+        ans += c[(i % 2) ^ 1][s + N];
     }
     printf("%lld\n", ans);
     return 0;
