@@ -1,0 +1,31 @@
+{
+  "url": "https://www.luogu.com.cn/problem/P5960", 
+  "batch": {
+    "id": "790a6a4d-c2ae-4fbb-93e3-27f4d770af94", 
+    "size": 1
+  }, 
+  "name": "P5960 【模板】差分约束", 
+  "tests": [
+    {
+      "input": "3 3\n1 2 3\n2 3 -2\n1 3 1\n", 
+      "output": "5 3 5\n"
+    }
+  ], 
+  "output": {
+    "type": "stdout"
+  }, 
+  "group": "Luogu", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "interactive": false, 
+  "memoryLimit": 128, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P5960"
+    }
+  }
+}
