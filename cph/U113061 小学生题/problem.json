@@ -1,0 +1,31 @@
+{
+  "url": "https://www.luogu.com.cn/problem/U113061?contestId=368717", 
+  "batch": {
+    "id": "dae8deb5-ffbb-45b8-bc24-ac26afcee5fa", 
+    "size": 1
+  }, 
+  "name": "U113061 小学生题", 
+  "tests": [
+    {
+      "input": "110\n", 
+      "output": "10\n"
+    }
+  ], 
+  "output": {
+    "type": "stdout"
+  }, 
+  "group": "Luogu - SXYZ 训练赛⑤", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "timeLimit": 100, 
+  "testType": "single", 
+  "interactive": false, 
+  "memoryLimit": 125, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "U113061"
+    }
+  }
+}
