@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
+
 const int M = 3e6 + 5;
 const int SZ = 1e5 + 5;
 int phi[M], pr[M / 10], pc;
@@ -61,11 +62,13 @@ long long cntp(long long x) {
 }
 
 signed main() {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cin >> n;
+    if (freopen("cyj.in", "r", stdin) == NULL) {
+        freopen("cyj00.in", "r", stdin);
+        freopen("cyj00.out", "w", stdout);
+    }
+    scanf("%lld", &n);
     if (n < 1) {
-        cout << 0 << "\n";
+        printf("0\n");
         return 0;
     }
     build();
@@ -94,6 +97,6 @@ signed main() {
             ans += (4 * S(q) - 2) * c;
         }
     }
-    cout << ans << "\n";
+    printf("%lld\n", ans);
     return 0;
 }
