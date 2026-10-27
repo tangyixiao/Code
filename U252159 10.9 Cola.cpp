@@ -602,7 +602,7 @@ const int N = 1e3 + 5, M = 1e2 + 5;
 int n, m, k, a[M], b[N], c[25], ans[N];
 string s;
 
-inline void solve() {
+inline void solve(int Task_Id) {
     cin >> n >> m >> k >> s;
     for (int i = 1; i <= m; i++) {
         cin >> a[i];
