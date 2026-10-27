@@ -7,6 +7,10 @@ int n, k, a, cnt[N], freq[N], cstar, res;
 long long g[N], s[N], num, sum;
 
 signed main() {
+    if (fopen("most.in", "r")) {
+        freopen("most.in", "r", stdin);
+        freopen("most.out", "w", stdout);
+    }
     cin >> n >> k;
     for (int i = 1; i <= n; i++) {
         cin >> a;
