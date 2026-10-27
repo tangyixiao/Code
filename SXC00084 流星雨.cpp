@@ -10,6 +10,10 @@ int dx[5] = {1, -1, 0, 0, 0};
 int dy[5] = {0, 0, 1, -1, 0};
 
 signed main() {
+    if (fopen("meteor.in", "r")) {
+        freopen("meteor.in", "r", stdin);
+        freopen("meteor.out", "w", stdout);
+    }
     for (i = 0; i < N; i++) {
         for (j = 0; j < N; j++) {
             mt[i][j] = 1e9;
