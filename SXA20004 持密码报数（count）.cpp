@@ -1,13 +1,16 @@
 #include <bits/stdc++.h>
 using namespace std;
+
 const int N = 1e2 + 5;
+
 int n, m, i, j, sz, cur, idx;
 int pw[N], pe[N];
+
 signed main() {
     cin >> n;
-    for (i = 1; i <= n; i++) {
+    for (i = 0; i < n; i++) {
         cin >> pw[i];
-        pe[i] = i;
+        pe[i] = i + 1;
     }
     cin >> m;
     sz = n;
@@ -18,9 +21,10 @@ signed main() {
             cout << " ";
         }
         cout << pe[idx];
-        m = pw[pe[idx]];
+        m = pw[idx];
         for (i = idx; i < sz - 1; i++) {
             pe[i] = pe[i + 1];
+            pw[i] = pw[i + 1];
         }
         sz--;
         if (sz > 0) {
