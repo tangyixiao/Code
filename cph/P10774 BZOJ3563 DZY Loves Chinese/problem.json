@@ -1,0 +1,31 @@
+{
+  "url": "https://www.luogu.com.cn/problem/P10774", 
+  "batch": {
+    "id": "7f32ee99-c672-40cc-b5bf-d7842abc7486", 
+    "size": 1
+  }, 
+  "name": "P10774 BZOJ3563 DZY Loves Chinese", 
+  "tests": [
+    {
+      "input": "5 10\n2 1\n3 2\n4 2\n5 1\n5 3\n4 1\n4 3\n5 2\n3 1\n5 4\n5\n1 1\n2 7 0 3\n6 0 7 4 6\n1 2 7\n0 5 0 2 13\n", 
+      "output": "Connected\nConnected\nConnected\nConnected\nDisconnected\n"
+    }
+  ], 
+  "output": {
+    "type": "stdout"
+  }, 
+  "group": "Luogu", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "interactive": false, 
+  "memoryLimit": 512, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P10774BZOJ3563DZYLovesChinese"
+    }
+  }
+}
