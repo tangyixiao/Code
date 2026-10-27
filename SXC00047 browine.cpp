@@ -24,6 +24,9 @@ bool feas(int l, int r, long long x) {
 }
 
 bool check(long long x) {
+    if (x == 0) {
+        return true;
+    }
     int r = 1;
     for (int l = 1; l <= n; l++) {
         if (r < l) {
