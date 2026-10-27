@@ -1,29 +1,36 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-char s[305], st[305];
-int k, i, top, del;
+const int N = 3e2 + 5;
+
+char s[N], st[N];
+int sn, k, top, i;
 
 signed main() {
-    cin >> s >> k;
+    scanf("%s %d", s, &k);
+    sn = strlen(s);
     top = 0;
-    del = k;
-    for (i = 0; s[i]; i++) {
-        while (top > 0 && del > 0 && st[top - 1] > s[i]) {
+    for (i = 0; i < sn; i++) {
+        while (top > 0 && k > 0 && st[top - 1] < s[i]) {
             top--;
-            del--;
+            k--;
         }
         st[top] = s[i];
         top++;
     }
-    int keep = top - del;
-    int p = 0;
-    while (p < keep - 1 && st[p] == '0') {
-        p++;
+    top -= k;
+    for (i = 0; i < top; i++) {
+        if (st[i] != '0') {
+            break;
+        }
     }
-    for (i = p; i < keep; i++) {
-        cout << st[i];
+    if (i >= top) {
+        printf("0\n");
+    } else {
+        for (; i < top; i++) {
+            printf("%c", st[i]);
+        }
+        printf("\n");
     }
-    cout << "\n";
     return 0;
 }
