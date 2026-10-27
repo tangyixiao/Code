@@ -1,0 +1,31 @@
+{
+  "timeLimit": 1000, 
+  "group": "Luogu", 
+  "batch": {
+    "id": "867bab1e-0551-410f-b401-0bb936dbc98c", 
+    "size": 1
+  }, 
+  "name": "B3615 测测你的矩阵乘法", 
+  "tests": [
+    {
+      "output": "8126464\n14942208\n33554432\n...(省略506行)\n29097984\n146800640\n148570112\n", 
+      "input": "0 0\n"
+    }
+  ], 
+  "languages": {
+    "java": {
+      "taskClass": "B3615", 
+      "mainClass": "Main"
+    }
+  }, 
+  "interactive": false, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/B3615", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "memoryLimit": 128, 
+  "testType": "single"
+}
