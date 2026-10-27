@@ -1,14 +1,13 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int N = 6500 + 5;
-const int T = 105;
+const int N = 1e4 + 5;
+const int T = 1e2 + 5;
+const long long NEG = -1e18;
 
-int n, m, t;
-int a[N][T];
-int head[N], nxt[N * 3 + 5], to[N * 3 + 5], ecnt;
-long long dp[N];
-int best[N];
+int n, m, t, ec, on;
+int he[N], nx[N * 3], to[N * 3], ind[N], ord[N], que[N];
+long long a[N][T], f[N], d[N], ans;
 
 signed main() {
     ios::sync_with_stdio(false);
@@ -19,44 +18,52 @@ signed main() {
             cin >> a[i][j];
         }
     }
-    ecnt = 0;
-    for (int i = 1; i <= n; i++) {
-        head[i] = -1;
-        best[i] = -1e9;
-    }
     for (int i = 1; i <= m; i++) {
         int u, v;
         cin >> u >> v;
-        to[ecnt] = v;
-        nxt[ecnt] = head[u];
-        head[u] = ecnt;
-        ecnt++;
+        ec++, to[ec] = v, nx[ec] = he[u], he[u] = ec, ind[v]++;
     }
-    best[1] = 0;
+    int hd = 1, tl = 0;
+    for (int i = 1; i <= n; i++) {
+        if (!ind[i]) {
+            que[++tl] = i;
+        }
+    }
+    for (; hd <= tl;) {
+        int u = que[hd++];
+        ord[++on] = u;
+        for (int e = he[u]; e; e = nx[e]) {
+            if (--ind[to[e]] == 0) {
+                que[++tl] = to[e];
+            }
+        }
+    }
+    for (int i = 1; i <= n; i++) {
+        f[i] = NEG;
+    }
+    f[1] = 0;
     for (int j = 1; j <= t; j++) {
         for (int i = 1; i <= n; i++) {
-            dp[i] = (long long)best[i] + a[i][j];
+            d[i] = f[i] + a[i][j];
         }
-        int changed = 1;
-        for (; changed;) {
-            changed = 0;
-            for (int u = 1; u <= n; u++) {
-                if (dp[u] <= -1e17) {
-                    continue;
-                }
-                for (int e = head[u]; e != -1; e = nxt[e]) {
-                    int v = to[e];
-                    if (dp[v] < dp[u]) {
-                        dp[v] = dp[u];
-                        changed = 1;
-                    }
+        for (int p = 1; p <= on; p++) {
+            int u = ord[p];
+            if (d[u] <= NEG / 2) {
+                continue;
+            }
+            for (int e = he[u]; e; e = nx[e]) {
+                if (d[u] + a[to[e]][j] > d[to[e]]) {
+                    d[to[e]] = d[u] + a[to[e]][j];
                 }
             }
         }
         for (int i = 1; i <= n; i++) {
-            best[i] = (int)dp[i];
+            f[i] = d[i];
+        }
+        if (f[n] > ans) {
+            ans = f[n];
         }
     }
-    cout << best[n] << "\n";
+    cout << ans << "\n";
     return 0;
 }
