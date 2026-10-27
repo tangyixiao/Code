@@ -603,8 +603,8 @@ inline void solve(int Task_Id) {
         if (!n) {
             cout << "0 0\n";
         } else {
-            a = n - 1 + min(s, n - 1) << 1, b = n + 2 - min(t, n - 1);
-            if (s >= t) { a = max(a, n + min(s - t, n) << 1); }
+            a = n - 1 + (min(s, n - 1) << 1), b = n + 2 - min(t, n - 1);
+            if (s >= t) { a = max(a, n + (min(s - t, n) << 1)); }
             if (t >= s) { b = min(b, n - min(t - s, n)); }
             cout << a << " " << b << "\n";
         }
