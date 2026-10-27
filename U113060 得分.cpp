@@ -193,6 +193,10 @@ struct MMap_Input {
     inline bool read_int(T &x) { typedef typename Unsigned_Of<T>::type U; if (!p) { return false; } bool neg = false; U v = 0; for (; p < e && *p <= ' '; p++) {} if (p == e) { return false; } if (*p == '-') { neg = true, p++; } for (; p < e && *p >= '0' && *p <= '9'; p++) { v = (v << 3) + (v << 1) + U(*p - '0'); } x = neg && v ? T(-T(v - 1) - 1) : T(v); return true; }
 };
 #endif
+Fread_Input in;
+Fwrite_Output out;
+inline bool read(ll &s, ll &t, ll &n) { return in.read_int(s) && in.read_int(t) && in.read_int(n); }
+inline void write(ll a, ll b) { out.write_int(a, ' '), out.write_int(b), out.write_string("\n"); }
 } // namespace IO
 using namespace IO;
 #pragma endregion IO
@@ -599,14 +603,14 @@ signed main() {
 namespace TANGYIXIAO {
 ll s, t, n, a, b;
 inline void solve(int Task_Id) {
-    for (; cin >> s >> t >> n;) {
+    for (; read(s, t, n);) {
         if (!n) {
-            cout << "0 0\n";
+            write(0, 0);
         } else {
             a = n - 1 + (min(s, n - 1) << 1), b = n + 2 - min(t, n - 1);
             if (s >= t) { a = max(a, n + (min(s - t, n) << 1)); }
             if (t >= s) { b = min(b, n - min(t - s, n)); }
-            cout << a << " " << b << "\n";
+            write(a, b);
         }
     }
     return;
