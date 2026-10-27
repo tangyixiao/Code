@@ -2,17 +2,24 @@
 using namespace std;
 
 signed main() {
-    long long x, y, v, tu = 0, tr = 0, m = 0;
+    long long x, y;
     cin >> x >> y;
-    v = y;
-    for (; tu < tr || m == 0;) {
-        m++;
-        tu += x;
-        tr += v;
-        if (v - 2 >= x) {
-            v -= 2;
-        }
+    if (x >= y) {
+        cout << 1 << "\n";
+        return 0;
     }
-    cout << m << "\n";
+    long long k = (y - x) / 2 + 1, f = y - 2 * k;
+    long long m0 = y - x + 1;
+    if (m0 <= k) {
+        cout << m0 << "\n";
+        return 0;
+    }
+    long long sk = k * y - k * (k - 1);
+    long long num = sk - k * f, den = x - f;
+    long long ans = (num + den - 1) / den;
+    if (ans < k) {
+        ans = k;
+    }
+    cout << ans << "\n";
     return 0;
 }
