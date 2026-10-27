@@ -46,10 +46,8 @@ signed main() {
         for (i = n; i >= 0; i--) {
             if (s.substr(n - i) == g.substr(0, i)) {
                 if (i == n) {
-                    if (s == g) {
-                        ans = 0;
-                    }
-                    continue;
+                    ans = 0;
+                    break;
                 }
                 if (ok(s.substr(0, n - i), g.substr(i))) {
                     ans = 2 * (n - i);
