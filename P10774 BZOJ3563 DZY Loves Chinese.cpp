@@ -597,8 +597,40 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 1e5 + 5, M = 5e5 + 5, K = 2e1 + 5;
+int n, m, q, k, la, ans, cc, cnt, x, y, u[M], v[M], fa[N], sz[N], c[K];
+bool del[M];
+string s;
+istringstream ss;
+inline int find(int x) {
+    for (; x != fa[x]; x = fa[x]) { fa[x] = fa[fa[x]]; }
+    return x;
+}
 inline void solve(int Task_Id) {
-
+    cin >> n >> m;
+    for (int i = 1; i <= m; i++) { cin >> u[i] >> v[i]; }
+    cin >> q, getline(cin, s);
+    for (int i = 1; i <= q; i++) {
+        getline(cin, s), ss.clear(), ss.str(s), cnt = 0;
+        ss >> k;
+        for (; ss >> x;) { c[++cnt] = x; }
+        la = k ^ cnt;
+        if (i > 1) { cout << (la > ans ? "Connected\n" : "Disconnected\n"); }
+        ans = la;
+    }
+    for (int i = 1; i <= cnt; i++) { del[c[i] ^ ans] = true; }
+    for (int i = 1; i <= n; i++) { fa[i] = i, sz[i] = 1; }
+    cc = n;
+    for (int i = 1; i <= m; i++) {
+        if (!del[i]) {
+            x = find(u[i]), y = find(v[i]);
+            if (x != y) {
+                if (sz[x] < sz[y]) { swap(x, y); }
+                fa[y] = x, sz[x] += sz[y], cc--;
+            }
+        }
+    }
+    cout << (cc == 1 ? "Connected\n" : "Disconnected\n");
     return;
 }
 } // namespace TANGYIXIAO
