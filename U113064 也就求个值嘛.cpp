@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 03f57db3-8b95-460c-b005-5bb559717514
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,50 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 5e4 + 5, M = 1e6 + 5;
+int t, cnt, pr[N];
+ll s, x, y, k, p;
+bool vis[N], v[M];
+inline void init() {
+    for (int i = 2; i < N; i++) {
+        if (!vis[i]) {
+            pr[++cnt] = i;
+            if (1LL * i * i < N) {
+                for (int j = i * i; j < N; j += i) { vis[j] = true; }
+            }
+        }
+    }
+    return;
+}
+inline ll kth(ll l, ll r, ll k) {
+    if (k > r - l + 1) { return 0; }
+    if (r - l < 512) {
+        for (ll i = max(2LL, l); i <= r; i++) {
+            if ((i < N ? !vis[i] : MATH::Miller_Rabin(i)) && !--k) { return i; }
+        }
+        return 0;
+    }
+    for (int i = 0; i <= r - l; i++) { v[i] = false; }
+    for (int i = 1; i <= cnt && 1LL * pr[i] * pr[i] <= r; i++) {
+        for (ll j = max(1LL * pr[i] * pr[i], (l + pr[i] - 1) / pr[i] * pr[i]); j <= r; j += pr[i]) { v[j - l] = true; }
+    }
+    for (ll i = max(2LL, l); i <= r; i++) {
+        if (!v[i - l] && !--k) { return i; }
+    }
+    return 0;
+}
 inline void solve(int Task_Id) {
-    // do something here
+    init();
+    cin >> t;
+    for (int i = 1; i <= t; i++) {
+        cin >> s >> x >> y >> k;
+        p = kth(x, y, k);
+        if (p) {
+            cout << s / p % p << "\n";
+        } else {
+            cout << "ERR\n";
+        }
+    }
     return;
 }
 } // namespace TANGYIXIAO
