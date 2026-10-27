@@ -598,7 +598,76 @@ signed main() {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 inline void solve(int Task_Id) {
-    // do something here
+
     return;
 }
 } // namespace TANGYIXIAO
+/*
+
+namespace TANGYIXIAO {
+const int N = 1e5 + 5, M = 5e5 + 5;
+int n, m, q, cnt, cc, ans, u[M], v[M], fa[N], pe[N], o[N];
+vector<int> g[N];
+bool t[M];
+ull w[M], d[N], b[64];
+inline void bfs(int s) {
+    fa[s] = -1, o[++cnt] = s;
+    for (int i = cnt; i <= cnt; i++) {
+        int x = o[i];
+        for (int e : g[x]) {
+            int y = u[e] ^ v[e] ^ x;
+            if (!fa[y]) { fa[y] = x, pe[y] = e, t[e] = true, o[++cnt] = y; }
+        }
+    }
+}
+inline bool ins(ull x) {
+    for (int i = 63; i >= 0; i--) {
+        if ((x >> i) & 1) {
+            if (!b[i]) {
+                b[i] = x;
+                return true;
+            }
+            x ^= b[i];
+        }
+    }
+    return false;
+}
+inline void solve(int Task_Id) {
+    cin >> n >> m;
+    for (int i = 1; i <= m; i++) {
+        cin >> u[i] >> v[i];
+        g[u[i]].push_back(i), g[v[i]].push_back(i);
+    }
+    for (int i = 1; i <= n; i++) {
+        if (!fa[i]) { cc++, bfs(i); }
+    }
+    for (int i = 1; i <= m; i++) {
+        if (!t[i]) { w[i] = RANDOM::next_u64(), d[u[i]] ^= w[i], d[v[i]] ^= w[i]; }
+    }
+    for (int i = cnt; i >= 1; i--) {
+        int x = o[i];
+        if (fa[x] > 0) { w[pe[x]] = d[x], d[fa[x]] ^= d[x]; }
+    }
+    cin >> q;
+    for (int i = 1; i <= q; i++) {
+        int k, x;
+        cin >> k;
+        k ^= ans;
+        fill(b, b + 64, 0);
+        bool ok = cc == 1;
+        for (int j = 1; j <= k; j++) {
+            cin >> x;
+            x ^= ans;
+            if (ok && !ins(w[x])) { ok = false; }
+        }
+        if (ok) {
+            cout << "Connected\n", ans++;
+        } else {
+            cout << "Disconnected\n";
+        }
+    }
+    return;
+}
+} // namespace TANGYIXIAO
+
+*/
