@@ -1,0 +1,31 @@
+{
+  "timeLimit": 1000, 
+  "group": "Luogu", 
+  "batch": {
+    "id": "74f31c6e-b621-4fd0-9658-e2aff926a06e", 
+    "size": 1
+  }, 
+  "name": "B3614 【模板】栈", 
+  "tests": [
+    {
+      "output": "2\n1\nAnguei!\nEmpty\nAnguei!\n0\n", 
+      "input": "2\n5\npush 2\nquery\nsize\npop\nquery\n3\npop\nquery\nsize\n"
+    }
+  ], 
+  "languages": {
+    "java": {
+      "taskClass": "B3614", 
+      "mainClass": "Main"
+    }
+  }, 
+  "interactive": false, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/B3614", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "memoryLimit": 512, 
+  "testType": "single"
+}
