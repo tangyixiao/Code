@@ -43,7 +43,15 @@ signed main() {
             cin >> a[i][j];
         }
     }
-    int lo = 0, hi = 1000, ans = 1000;
+    int lo = 0, hi = 0, ans = 0;
+    for (i = 1; i <= n; i++) {
+        for (j = 1; j <= m; j++) {
+            if (a[i][j] > hi) {
+                hi = a[i][j];
+            }
+        }
+    }
+    ans = hi;
     while (lo <= hi) {
         int mid = (lo + hi) / 2;
         if (check(mid) == 1) {
