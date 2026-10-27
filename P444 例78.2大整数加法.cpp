@@ -6,8 +6,6 @@ int c[N];
 
 signed main() {
     string s1, s2;
-    freopen("ybtbas.in", "r", stdin);
-    freopen("ybtbas.out", "w", stdout);
     cin >> s1 >> s2;
     int la = s1.size(), lb = s2.size(), l = max(la, lb);
     for (int i = 0; i < l; i++) {
