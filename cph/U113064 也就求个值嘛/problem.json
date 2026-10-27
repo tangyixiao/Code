@@ -1,0 +1,31 @@
+{
+  "url": "https://www.luogu.com.cn/problem/U113064?contestId=368717", 
+  "batch": {
+    "id": "03f57db3-8b95-460c-b005-5bb559717514", 
+    "size": 1
+  }, 
+  "name": "U113064 也就求个值嘛", 
+  "tests": [
+    {
+      "input": "3\n6 3 5 1\n8 2 6 3\n8 6 9 10\n", 
+      "output": "2\n1\nERR\n"
+    }
+  ], 
+  "output": {
+    "type": "stdout"
+  }, 
+  "group": "Luogu - SXYZ 训练赛⑤", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "timeLimit": 200, 
+  "testType": "single", 
+  "interactive": false, 
+  "memoryLimit": 125, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "U113064"
+    }
+  }
+}
