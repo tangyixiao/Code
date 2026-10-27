@@ -7,10 +7,7 @@ signed main() {
         for (j = 0; j < n; j++) {
             d = min(min(i, j), min(n - 1 - i, n - 1 - j));
             v = (n + 1) / 2 - d;
-            if (j) {
-                printf(" ");
-            }
-            printf("%d", v);
+            printf("%2d", v);
         }
         printf("\n");
     }
