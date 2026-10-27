@@ -1,57 +1,46 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+const int N = 1e2 + 5;
 int k, cnt, wn;
-string s, cur;
-string cache[105];
+string all, cache[N], cur;
+
+void flush() {
+    if (cur.empty()) {
+        return;
+    }
+    for (int j = 0; j < wn; j++) {
+        if (cache[j] == cur) {
+            cur = "";
+            return;
+        }
+    }
+    cnt++;
+    if (wn < k) {
+        cache[wn++] = cur;
+    } else {
+        for (int j = 1; j < wn; j++) {
+            cache[j - 1] = cache[j];
+        }
+        cache[wn - 1] = cur;
+    }
+    cur = "";
+}
 
 signed main() {
-    cin >> k;
-    cin >> ws;
-    getline(cin, s);
-    wn = 0;
-    cnt = 0;
-    for (int i = 0; i < (int)s.size(); i++) {
-        char ch = s[i];
-        if (isalpha(ch)) {
-            cur += (char)tolower(ch);
-            continue;
-        }
-        if (cur.size() > 0) {
-            bool hit = false;
-            for (int j = 0; j < wn; j++) {
-                if (cache[j] == cur) {
-                    hit = true;
-                }
-            }
-            if (!hit) {
-                cnt++;
-                if (wn < k) {
-                    cache[wn++] = cur;
-                } else {
-                    for (int j = 1; j < wn; j++) {
-                        cache[j - 1] = cache[j];
-                    }
-                    cache[wn - 1] = cur;
-                }
-            }
-            cur = "";
-        }
-        if (ch == '.') {
-            break;
+    scanf("%d", &k);
+    char ch;
+    while ((ch = getchar()) != EOF) {
+        all += ch;
+    }
+    for (int i = 0; i < (int)all.size(); i++) {
+        if (isalpha((unsigned char)all[i])) {
+            cur += (char)tolower((unsigned char)all[i]);
+        } else {
+            flush();
         }
     }
-    if (cur.size() > 0) {
-        bool hit = false;
-        for (int j = 0; j < wn; j++) {
-            if (cache[j] == cur) {
-                hit = true;
-            }
-        }
-        if (!hit) {
-            cnt++;
-        }
-    }
-    cout << cnt << "\n";
+    flush();
+    printf("%d\n", cnt);
     return 0;
 }
