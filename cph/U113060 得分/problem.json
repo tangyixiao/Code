@@ -1,0 +1,31 @@
+{
+  "url": "https://www.luogu.com.cn/problem/U113060?contestId=368717", 
+  "batch": {
+    "id": "3e9f2726-9773-4042-8113-7c7b97941951", 
+    "size": 1
+  }, 
+  "name": "U113060 得分", 
+  "tests": [
+    {
+      "input": "1 1 1\n1 1 2\n", 
+      "output": "1 1\n3 2\n"
+    }
+  ], 
+  "output": {
+    "type": "stdout"
+  }, 
+  "group": "Luogu - SXYZ 训练赛⑤", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "timeLimit": 100, 
+  "testType": "single", 
+  "interactive": false, 
+  "memoryLimit": 125, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "U113060"
+    }
+  }
+}
