@@ -1,0 +1,31 @@
+{
+  "url": "https://www.luogu.com.cn/problem/P1326", 
+  "batch": {
+    "id": "0b787017-a99d-442d-8b6c-6d10323aa0d1", 
+    "size": 1
+  }, 
+  "name": "P1326 足球", 
+  "tests": [
+    {
+      "input": "1 1 1\n1 1 2\n", 
+      "output": "1 1\n3 2\n"
+    }
+  ], 
+  "output": {
+    "type": "stdout"
+  }, 
+  "group": "Luogu", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "interactive": false, 
+  "memoryLimit": 125, 
+  "languages": {
+    "java": {
+      "mainClass": "Main", 
+      "taskClass": "P1326"
+    }
+  }
+}
