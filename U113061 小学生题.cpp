@@ -608,6 +608,7 @@ inline ll s(ll x) {
     return cnt;
 }
 inline void solve(int Task_Id) {
+    cin >> n;
     for (ll i = sqrt(n), j = 1; i >= 1 && j <= 200; i--, j++) {
         if (i * i + s(i) * i == n) {
             cout << i << "\n";
