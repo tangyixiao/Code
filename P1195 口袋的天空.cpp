@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: a00cc5e0-bd87-4bff-94cd-5c4ed6b12899
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,55 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 1e3 + 5, M = 1e4 + 5;
+struct node {
+    int u, v, w;
+    bool operator<(const node A) const {
+        return w < A.w;
+    }
+} e[M];
+int n, m, k, fa[N], sz[N], cnt, ans;
+inline int find(int x) {
+    if (fa[x] == x) {
+        return x;
+    }
+    return fa[x] = find(fa[x]);
+}
+inline bool merge(int x, int y) {
+    int fx = find(x), fy = find(y);
+    if (fx == fy) {
+        return false;
+    }
+    if (sz[fx] < sz[fy]) {
+        swap(fx, fy);
+    }
+    sz[fx] += sz[fy];
+    fa[fy] = fx;
+    return true;
+}
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> m >> k;
+    for (int i = 1; i <= n; i++) {
+        fa[i] = i, sz[i] = 1;
+    }
+    for (int i = 1; i <= m; i++) {
+        cin >> e[i].u >> e[i].v >> e[i].w;
+    }
+    sort(e + 1, e + 1 + m);
+    for (int i = 1; i <= m; i++) {
+        if (cnt >= n - k) {
+            break;
+        }
+        if (merge(e[i].u, e[i].v)) {
+            cnt++, ans += e[i].w;
+        }
+    }
+    if (cnt >= n - k) {
+        cout << ans << "\n";
+    } else {
+        cout << "No Answer\n";
+    }
+
     return;
 }
 } // namespace TANGYIXIAO
