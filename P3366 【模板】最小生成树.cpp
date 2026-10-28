@@ -598,8 +598,52 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int M = 2e5 + 5, N = 5e3 + 5;
+struct edge {
+    int u, v, w;
+    bool operator<(const edge A) const {
+        return w < A.w;
+    }
+} e[M];
+int n, m, fa[N], sz[N], ans, cnt;
+inline int find(int x) {
+    if (fa[x] == x) {
+        return x;
+    }
+    return fa[x] = find(fa[x]);
+}
+inline bool merge(int x, int y) {
+    int fx = find(x), fy = find(y);
+    if (fx == fy) {
+        return false;
+    }
+    if (sz[fx] < sz[fy]) {
+        swap(fx, fy);
+    }
+    sz[fx] += sz[fy];
+    fa[fy] = fx;
+    return true;
+}
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> m;
+    for (int i = 1; i <= n; i++) {
+        fa[i] = i;
+        sz[i] = 1;
+    }
+    for (int i = 1; i <= m; i++) {
+        cin >> e[i].u >> e[i].v >> e[i].w;
+    }
+    sort(e + 1, e + 1 + m);
+    for (int i = 1; i <= m; i++) {
+        if (cnt >= n - 1) {
+            break;
+        }
+        if (merge(e[i].u, e[i].v)) {
+            ans += e[i].w;
+            cnt++;
+        }
+    }
+    cout << (cnt == n - 1 ? ans : -1) << "\n";
     return;
 }
 } // namespace TANGYIXIAO
