@@ -1,31 +1,45 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int N = 1e5 + 5;
-
-int n, i;
+const int N = 2e5 + 5;
+int n, a[N];
 long long k, s;
-int a[N];
+
+void rd() {
+    freopen("xmul.in", "r", stdin);
+}
+
+void wr() {
+    freopen("xmul.out", "w", stdout);
+}
 
 signed main() {
+    rd(), wr();
+    ios::sync_with_stdio(false);
+    cin.tie(0);
     int t;
     cin >> t;
     while (t--) {
         cin >> n >> k;
         s = 0;
-        for (i = 0; i < n; i++) {
+        for (int i = 0; i < n; i++) {
             cin >> a[i];
             s ^= a[i];
         }
-        if (k % 2 == 0) {
-            for (i = 0; i < n; i++) {
-                cout << a[i] << (i + 1 == n ? "\n" : " ");
+        bool same = (n % 2 == 0 && k % 2 == 0);
+        for (int i = 0; i < n; i++) {
+            long long v;
+            if (same) {
+                v = a[i];
+            } else {
+                v = s ^ a[i];
             }
-            continue;
+            cout << v;
+            if (i + 1 < n) {
+                cout << " ";
+            }
         }
-        for (i = 0; i < n; i++) {
-            cout << (s ^ a[i]) << (i + 1 == n ? "\n" : " ");
-        }
+        cout << "\n";
     }
     return 0;
 }

@@ -1,33 +1,21 @@
 #include <bits/stdc++.h>
 using namespace std;
-const int N = 1e5 + 5;
-int n, a[N], b[N];
 
-inline void input() {
-    cin >> n;
-    for (int i = 1; i <= n; i++) {
-        cin >> a[i];
-    }
-}
+const int N = 1e6 + 5;
 
-inline void solve() {
-    sort(a + 1, a + n + 1);
-    int mx = 0, r = 0, c = 0;
-    for (int i = 1; i <= n; i++) {
-        if (i > 1 && a[i] == a[i - 1]) {
-            c++;
-        } else {
-            c = 1;
-        }
-        if (c > mx) {
-            mx = c, r = a[i];
-        }
-    }
-    cout << r << "\n";
-    return;
-}
+int n, x, best, cnt, c[1005];
 
 signed main() {
-    input(), solve();
+    cin >> n;
+    for (int i = 1; i <= n; i++) {
+        cin >> x;
+        c[x]++;
+    }
+    for (int i = 0; i <= 1000; i++) {
+        if (c[i] > cnt) {
+            cnt = c[i], best = i;
+        }
+    }
+    cout << best << "\n";
     return 0;
 }

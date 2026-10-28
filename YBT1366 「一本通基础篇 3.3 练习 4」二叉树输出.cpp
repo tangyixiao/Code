@@ -1,38 +1,44 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int N = 1e2 + 5;
+const int N = 1e3 + 5;
 char s[N], t[N];
-int po[128], m, cur;
+int po[256], L[256], R[256], len[256], m, cur;
 
-inline void input() { cin >> s >> t; }
-
-inline void dfs(int l, int r) {
+int build(int l, int r) {
     if (l > r) {
-        return;
+        return 0;
     }
-    char c = s[cur++];
+    int c = s[cur++];
     int k = po[c];
-    dfs(l, k - 1);
-    dfs(k + 1, r);
-    for (int i = 1; i <= r - l + 1; ++i) {
-        cout << c;
+    L[c] = build(l, k - 1);
+    R[c] = build(k + 1, r);
+    if (L[c] == 0 && R[c] == 0) {
+        len[c] = 1;
+    } else {
+        len[c] = len[L[c]] + len[R[c]];
     }
-    cout << "\n";
-    return;
+    return c;
 }
 
-inline void solve() {
-    m = strlen(s);
-    for (int i = 0; i < m; ++i) {
-        po[t[i]] = i;
+void out(int c) {
+    if (c == 0) {
+        return;
     }
-    dfs(0, m - 1);
-    return;
+    for (int i = 1; i <= len[c]; i++) {
+        cout << (char)c;
+    }
+    cout << "\n";
+    out(L[c]);
+    out(R[c]);
 }
 
 signed main() {
-    input();
-    solve();
+    cin >> s >> t;
+    m = strlen(s);
+    for (int i = 0; i < m; i++) {
+        po[(int)t[i]] = i;
+    }
+    out(build(0, m - 1));
     return 0;
 }

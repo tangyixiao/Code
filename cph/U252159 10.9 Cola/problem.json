@@ -1,0 +1,31 @@
+{
+  "name": "U252159 10.9 Cola",
+  "group": "Luogu - SXYZ 训练赛⑤",
+  "url": "https://www.luogu.com.cn/problem/U252159?contestId=368717",
+  "interactive": false,
+  "memoryLimit": 128,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "4 3 3\nSSRS\n3 0 2\n",
+      "output": "2 2 3 2\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "U252159109Cola"
+    }
+  },
+  "batch": {
+    "id": "997f1fe5-bd13-42ac-92da-ceb43896de56",
+    "size": 1
+  }
+}

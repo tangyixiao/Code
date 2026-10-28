@@ -1,0 +1,35 @@
+{
+  "name": "U252857 10.12 Op",
+  "group": "Luogu - SXYZ 训练赛⑤",
+  "url": "https://www.luogu.com.cn/problem/U252857?contestId=368717",
+  "interactive": false,
+  "memoryLimit": 512,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "7\nShe w*7s *7 *2 wom*7n. #\nwonderful#\nEveryone loved her *5.#\nSome text #\nvery much#\nAnother text *4#\na#\n",
+      "output": "She was a wonderful woman.\n"
+    },
+    {
+      "input": "3\n*3*2 a#\n*3#\nb#\n",
+      "output": "bb a\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "U2528571012Op"
+    }
+  },
+  "batch": {
+    "id": "41a0e75b-edb3-43f5-8ac4-65b3ef65436c",
+    "size": 1
+  }
+}

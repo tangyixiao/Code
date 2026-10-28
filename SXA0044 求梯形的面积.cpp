@@ -1,0 +1,10 @@
+#include <bits/stdc++.h>
+using namespace std;
+signed main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int a, b, h;
+    cin >> a >> b >> h;
+    cout << fixed << setprecision(1) << (a + b) * h / 2.0 << "\n";
+    return 0;
+}

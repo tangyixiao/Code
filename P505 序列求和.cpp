@@ -2,19 +2,20 @@
 using namespace std;
 
 const int N = 1e5 + 5;
-
-int n, a[N];
-long long s, m, t;
+long long n, x, s, m, t;
 
 signed main() {
-    cin >> n;
-    s = 0, m = 0, t = 0;
-    for (int i = 1; i <= n; i++) {
-        cin >> a[i];
-        s += a[i];
-        t = max(t + a[i], 0ll);
-        m = max(m, t);
+    freopen("wrs.in", "r", stdin);
+    freopen("wrs.out", "w", stdout);
+    scanf("%lld", &n);
+    for (long long i = 1; i <= n; i++) {
+        scanf("%lld", &x);
+        s += x;
+        t = t + x > 0 ? t + x : 0;
+        if (t > m) {
+            m = t;
+        }
     }
-    cout << 2 * m - s << "\n";
+    printf("%lld\n", 2 * m - s);
     return 0;
 }

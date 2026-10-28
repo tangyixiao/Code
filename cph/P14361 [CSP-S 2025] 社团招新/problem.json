@@ -1,0 +1,31 @@
+{
+  "name": "P14361 [CSP-S 2025] 社团招新",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P14361",
+  "interactive": false,
+  "memoryLimit": 512,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "3\n4\n4 2 1\n3 2 4\n5 3 4\n3 5 1\n4\n0 1 0\n0 1 0\n0 2 0\n0 2 0\n2\n10 9 8\n4 0 0\n",
+      "output": "18\n4\n13\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P14361CSPS2025"
+    }
+  },
+  "batch": {
+    "id": "7b928305-4eb4-4989-a5ab-8a2f651668a1",
+    "size": 1
+  }
+}
