@@ -1,79 +1,53 @@
-#include <algorithm>
-#include <cstring>
-#include <deque>
-#include <iostream>
-#include <vector>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-const int MAXN = 1010;
-const int MAXP = 10010;
-const int INF = 0x3f3f3f3f;
-
-struct Edge {
-    int to, weight;
-};
+const int N = 1e3 + 5;
 
 int n, p, k;
-vector<Edge> graph[MAXN];
-int dist[MAXN];
+vector<pair<int, int>> g[N];
+int d[N];
 
-// 0-1 BFS求最短路，边权为0或1
 bool check(int x) {
-    // 初始化距离数组
-    memset(dist, 0x3f, sizeof(dist));
-    dist[1] = 0;
-
-    // 双端队列
-    deque<int> dq;
-    dq.push_front(1);
-
-    while (!dq.empty()) {
-        int u = dq.front();
-        dq.pop_front();
-
-        for (const Edge &e : graph[u]) {
-            int v = e.to;
-            int w = (e.weight > x) ? 1 : 0; // 边权转换
-
-            if (dist[v] > dist[u] + w) {
-                dist[v] = dist[u] + w;
-                if (w == 0) {
-                    dq.push_front(v); // 权值为0，从前面入队
+    memset(d, 0x3f, sizeof(d));
+    deque<int> q;
+    d[1] = 0;
+    q.push_front(1);
+    for (; !q.empty();) {
+        int u = q.front();
+        q.pop_front();
+        for (pair<int, int> e : g[u]) {
+            int v = e.first, w = e.second > x ? 1 : 0;
+            if (d[v] > d[u] + w) {
+                d[v] = d[u] + w;
+                if (w) {
+                    q.push_back(v);
                 } else {
-                    dq.push_back(v); // 权值为1，从后面入队
+                    q.push_front(v);
                 }
             }
         }
     }
-
-    return dist[n] <= k;
+    return d[n] <= k;
 }
 
-int main() {
+signed main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
     cin >> n >> p >> k;
-
-    for (int i = 0; i < p; i++) {
-        int a, b, l;
+    for (int i = 1, a, b, l; i <= p; i++) {
         cin >> a >> b >> l;
-        graph[a].push_back({b, l});
-        graph[b].push_back({a, l});
+        g[a].push_back({b, l});
+        g[b].push_back({a, l});
     }
-
-    // 二分答案
-    int left = 0, right = 1000000, ans = -1;
-
-    while (left <= right) {
-        int mid = (left + right) / 2;
-
+    int l = 0, r = 1e6, ans = -1;
+    for (; l <= r;) {
+        int mid = (l + r) / 2;
         if (check(mid)) {
-            ans = mid;
-            right = mid - 1; // 尝试更小的花费
+            ans = mid, r = mid - 1;
         } else {
-            left = mid + 1; // 需要更大的花费
+            l = mid + 1;
         }
     }
-
-    cout << ans << endl;
+    cout << ans << "\n";
     return 0;
 }
