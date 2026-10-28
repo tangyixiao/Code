@@ -654,23 +654,27 @@ bitset<N> num;
 vector<int> prime;
 inline void init() {
     for (int i = 2; i <= n; ++i) {
-        if (!num[i])
+        if (!num[i]) {
             prime.push_back(i);
+        }
         for (int j = 0; j < prime.size(); ++j) {
-            if (i * prime[j] >= n)
+            if (i * prime[j] >= n) {
                 break;
+            }
             num[i * prime[j]] = 1;
-            if (i % prime[j] == 0)
+            if (!(i % prime[j])) {
                 break;
+            }
         }
     }
+    return;
 }
 inline void solve(int Task_Id) {
-    scanf("%d %d", &n, &q);
+    cin >> n >> q;
     init();
-    while (q--) {
-        scanf("%d", &x);
-        printf("%d\n", prime[x - 1]);
+    for (; q--;) {
+        cin >> x;
+        cout << prime[x - 1] << "\n";
     }
     return;
 }

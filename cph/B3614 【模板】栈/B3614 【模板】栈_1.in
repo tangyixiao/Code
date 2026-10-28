@@ -1,0 +1,11 @@
+2
+5
+push 2
+query
+size
+pop
+query
+3
+pop
+query
+size

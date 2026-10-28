@@ -1,0 +1,31 @@
+{
+  "timeLimit": 1000, 
+  "group": "Luogu", 
+  "batch": {
+    "id": "6af793eb-a84b-4390-81ca-a23e77fc4c8d", 
+    "size": 1
+  }, 
+  "name": "P1177 【模板】排序", 
+  "tests": [
+    {
+      "output": "1 2 4 4 5\n", 
+      "input": "5\n4 2 4 5 1\n"
+    }
+  ], 
+  "languages": {
+    "java": {
+      "taskClass": "P1177", 
+      "mainClass": "Main"
+    }
+  }, 
+  "interactive": false, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P1177", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "memoryLimit": 256, 
+  "testType": "single"
+}

@@ -1,0 +1,31 @@
+{
+  "url": "https://www.luogu.com.cn/problem/P3383", 
+  "timeLimit": 3000, 
+  "name": "P3383 【模板】线性筛素数", 
+  "batch": {
+    "size": 1, 
+    "id": "7fe6a697-3bd4-45e6-9afe-e6c7a5b807cb"
+  }, 
+  "tests": [
+    {
+      "output": "2\n3\n5\n7\n11\n", 
+      "input": "100 5\n1\n2\n3\n4\n5\n"
+    }
+  ], 
+  "languages": {
+    "java": {
+      "taskClass": "P3383", 
+      "mainClass": "Main"
+    }
+  }, 
+  "interactive": false, 
+  "testType": "single", 
+  "memoryLimit": 512, 
+  "group": "Luogu", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }
+}

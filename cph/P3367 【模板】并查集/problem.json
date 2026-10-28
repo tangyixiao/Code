@@ -1,0 +1,31 @@
+{
+  "name": "P3367 【模板】并查集",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P3367",
+  "interactive": false,
+  "memoryLimit": 512,
+  "timeLimit": 2000,
+  "tests": [
+    {
+      "input": "4 7\n2 1 2\n1 1 2\n2 1 2\n1 3 4\n2 1 4\n1 2 3\n2 1 4\n",
+      "output": "N\nY\nN\nY\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P3367"
+    }
+  },
+  "batch": {
+    "id": "c8c89c7f-07ce-43fe-befe-8d06925bddc8",
+    "size": 1
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "timeLimit": 1000, 
+  "group": "Luogu", 
+  "batch": {
+    "id": "a00e0073-c9a5-454a-b153-880290c14a94", 
+    "size": 1
+  }, 
+  "name": "B3616 【模板】队列", 
+  "tests": [
+    {
+      "output": "2\n1\n2\n233\n0\nERR_CANNOT_QUERY\nERR_CANNOT_POP\n144\n", 
+      "input": "13\n1 2\n3\n4\n1 233\n3\n2\n3\n2\n4\n3\n2\n1 144\n3\n"
+    }
+  ], 
+  "languages": {
+    "java": {
+      "taskClass": "B3616", 
+      "mainClass": "Main"
+    }
+  }, 
+  "interactive": false, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/B3616", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "memoryLimit": 128, 
+  "testType": "single"
+}

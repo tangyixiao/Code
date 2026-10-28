@@ -1,77 +1,55 @@
-#include <algorithm>
-#include <iostream>
-#include <unordered_map>
-#include <vector>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-const int MAXN = 200005;
+const int N = 2e5 + 5;
 
-int parent[MAXN];
+int t, n, fa[N];
 
 int find(int x) {
-    if (parent[x] != x)
-        parent[x] = find(parent[x]);
-    return parent[x];
+    if (fa[x] != x) {
+        fa[x] = find(fa[x]);
+    }
+    return fa[x];
 }
 
-void unite(int x, int y) {
-    x = find(x);
-    y = find(y);
-    if (x != y)
-        parent[x] = y;
-}
-
-int main() {
+signed main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-
-    int t;
     cin >> t;
-    while (t--) {
-        int n;
+    for (; t--;) {
         cin >> n;
-
         vector<pair<int, int>> eq, neq;
-        vector<int> vals;
-
-        for (int i = 0; i < n; ++i) {
-            int a, b, e;
+        vector<int> v;
+        for (int i = 1, a, b, e; i <= n; i++) {
             cin >> a >> b >> e;
-            vals.push_back(a);
-            vals.push_back(b);
-            if (e == 1)
+            v.push_back(a), v.push_back(b);
+            if (e) {
                 eq.push_back({a, b});
-            else
+            } else {
                 neq.push_back({a, b});
+            }
         }
-
-        sort(vals.begin(), vals.end());
-        vals.erase(unique(vals.begin(), vals.end()), vals.end());
-        unordered_map<int, int> mp;
-        for (size_t i = 0; i < vals.size(); ++i) {
-            mp[vals[i]] = i + 1;
+        sort(v.begin(), v.end());
+        v.erase(unique(v.begin(), v.end()), v.end());
+        unordered_map<int, int> id;
+        for (int i = 0; i < (int)v.size(); i++) {
+            id[v[i]] = i + 1;
         }
-        int m = vals.size();
-        for (int i = 1; i <= m; ++i)
-            parent[i] = i;
-
-        for (auto &p : eq) {
-            int u = mp[p.first], v = mp[p.second];
-            unite(u, v);
+        int m = v.size();
+        for (int i = 1; i <= m; i++) {
+            fa[i] = i;
         }
-
+        for (pair<int, int> p : eq) {
+            fa[find(id[p.first])] = find(id[p.second]);
+        }
         bool ok = true;
-        for (auto &p : neq) {
-            int u = mp[p.first], v = mp[p.second];
-            if (find(u) == find(v)) {
+        for (pair<int, int> p : neq) {
+            if (find(id[p.first]) == find(id[p.second])) {
                 ok = false;
                 break;
             }
         }
-
-        cout << (ok ? "YES" : "NO") << '\n';
+        cout << (ok ? "YES" : "NO") << "\n";
     }
-
     return 0;
 }

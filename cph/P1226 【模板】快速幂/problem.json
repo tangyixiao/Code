@@ -1,0 +1,31 @@
+{
+  "url": "https://www.luogu.com.cn/problem/P1226", 
+  "timeLimit": 1000, 
+  "name": "P1226 【模板】快速幂", 
+  "batch": {
+    "size": 1, 
+    "id": "8cbf59ff-6210-48de-bdb7-f6e28b2f4f2f"
+  }, 
+  "tests": [
+    {
+      "output": "2^10 mod 9=7\n", 
+      "input": "2 10 9\n"
+    }
+  ], 
+  "languages": {
+    "java": {
+      "taskClass": "P1226", 
+      "mainClass": "Main"
+    }
+  }, 
+  "interactive": false, 
+  "testType": "single", 
+  "memoryLimit": 128, 
+  "group": "Luogu", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }
+}
