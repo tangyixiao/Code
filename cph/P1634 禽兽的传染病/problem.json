@@ -1,0 +1,31 @@
+{
+  "url": "https://www.luogu.com.cn/problem/P1634", 
+  "timeLimit": 1000, 
+  "name": "P1634 禽兽的传染病", 
+  "batch": {
+    "size": 1, 
+    "id": "e9328fb1-f582-46db-b253-3ee1af9da8cc"
+  }, 
+  "tests": [
+    {
+      "output": "121\n", 
+      "input": "10 2\n"
+    }
+  ], 
+  "languages": {
+    "java": {
+      "taskClass": "P1634", 
+      "mainClass": "Main"
+    }
+  }, 
+  "interactive": false, 
+  "testType": "single", 
+  "memoryLimit": 125, 
+  "group": "Luogu", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }
+}
