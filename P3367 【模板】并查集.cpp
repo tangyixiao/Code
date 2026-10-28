@@ -625,13 +625,14 @@ inline void solve(int Task_Id) {
         sz[i] = 1;
     }
     for (int i = 1, op, x, y; i <= m; i++) {
+        cin >> op >> x >> y;
         if (op == 1) {
             merge(x, y);
         } else {
             if (find(x) == find(y)) {
-                cout << "Yes\n";
+                cout << "Y\n";
             } else {
-                cout << "No\n";
+                cout << "N\n";
             }
         }
     }
