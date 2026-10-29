@@ -614,7 +614,7 @@ inline void lcs() {
         for (j = 1; s >> j; j++) {}
         p = s ^ (1 << (j - 1)), f[s + 1] = n + 1;
         if (f[p + 1] <= n) {
-            auto it = lower_bound(a + 1, a + n + 1, pair<int, int>(b[j], f[p + 1] + 1));
+            auto it = lower_bound(a + 1, a + 1 + n, pair<int, int>(b[j], f[p + 1] + 1));
             if (it != a + n + 1 && it->first == b[j]) {
                 f[s + 1] = it->second, cnt = 0;
                 for (int i = 1; i <= k; i++) {
