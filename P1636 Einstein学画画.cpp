@@ -1,79 +1,42 @@
-#include <iostream>
-#include <vector>
+#include <bits/stdc++.h>
 using namespace std;
 
-const int MAXN = 1005;
+const int N = 1e3 + 5;
 
-int parent[MAXN];
-int degree[MAXN];
-
-
-void init(int n) {
-    for (int i = 1; i <= n; i++) {
-        parent[i] = i;
-        degree[i] = 0;
-    }
-}
-
+int n, m, fa[N], deg[N], odd[N], vis[N];
 
 int find(int x) {
-    if (parent[x] != x) {
-        parent[x] = find(parent[x]);
+    if (fa[x] != x) {
+        fa[x] = find(fa[x]);
     }
-    return parent[x];
+    return fa[x];
 }
 
-
-void unite(int x, int y) {
-    int rootX = find(x);
-    int rootY = find(y);
-    if (rootX != rootY) {
-        parent[rootY] = rootX;
-    }
-}
-
-int main() {
-    int n, m;
+signed main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
     cin >> n >> m;
-
-    init(n);
-
-    
-    for (int i = 0; i < m; i++) {
-        int a, b;
+    for (int i = 1; i <= n; i++) {
+        fa[i] = i;
+    }
+    for (int i = 1, a, b; i <= m; i++) {
         cin >> a >> b;
-        degree[a]++;
-        degree[b]++;
-        unite(a, b);
+        deg[a]++, deg[b]++, fa[find(a)] = find(b);
     }
-
-    
-    vector<int> oddCount(n + 1, 0);     
-    vector<bool> hasEdge(n + 1, false); 
-
     for (int i = 1; i <= n; i++) {
-        int root = find(i);
-        if (degree[i] % 2 == 1) {
-            oddCount[root]++;
+        if (deg[i] & 1) {
+            odd[find(i)]++;
         }
-        if (degree[i] > 0) {
-            hasEdge[root] = true; 
+        if (deg[i] > 0) {
+            vis[find(i)] = 1;
         }
     }
-
-    
-    int result = 0;
+    int ans = 0;
     for (int i = 1; i <= n; i++) {
-        if (parent[i] == i && hasEdge[i]) { 
-            if (oddCount[i] == 0) {
-                result += 1; 
-            } else {
-                result += oddCount[i] / 2; 
-            }
+        if (fa[i] == i && vis[i]) {
+            ans += odd[i] == 0 ? 1 : odd[i] / 2;
         }
     }
-
-    cout << result << endl;
-
+    cout << ans << "\n";
     return 0;
 }
