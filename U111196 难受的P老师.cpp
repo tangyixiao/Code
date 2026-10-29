@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 06222dd1-96e4-4bca-8364-aba0214de5a7
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -601,41 +601,39 @@ const int N = 1e5 + 5;
 int n;
 long long a[N], m, sum, l, r, mid, cnt;
 queue<int> q;
+inline bool check() {
+    for (int i = 1; i <= n; i++) { cnt += min(a[i], mid); }
+    return cnt <= m;
+}
 inline void solve(int Task_Id) {
-    cin >> n >> m, sum = 0;
+    cin >> n >> m, r = m;
     for (int i = 1; i <= n; i++) {
-        cin >> a[i];
-        sum += min(a[i], m - sum);
+        cin >> a[i], sum += min(a[i], m - sum);
     }
     if (sum < m) {
-        cout << -1 << "\n";
+        cout << "-1\n";
         return;
     }
-    l = 0, r = m;
-    for (; l < r;) {
-        mid = (l + r + 1) / 2, cnt = 0;
-        for (int i = 1; i <= n; i++) { cnt += min(a[i], mid); }
-        if (cnt <= m) {
+    for (; l < r; cnt = 0) {
+        mid = (l + r + 1) >> 1;
+        if (check()) {
             l = mid;
         } else {
             r = mid - 1;
         }
     }
-    cnt = 0;
     for (int i = 1; i <= n; i++) {
         cnt += min(a[i], l);
         if (a[i] > l) { q.push(i); }
     }
-    for (; cnt < m; cnt++) {
-        int x = q.front();
+    for (int x; cnt < m; cnt++) {
+        x = q.front();
         q.pop();
         if (a[x] > l + 1) { q.push(x); }
     }
     for (; !q.empty();) {
-        cout << q.front(), q.pop();
-        if (!q.empty()) { cout << " "; }
+        cout << q.front() << " ", q.pop();
     }
-    cout << "\n";
     return;
 }
 } // namespace TANGYIXIAO
