@@ -627,30 +627,6 @@ struct Treap {
     inline bool empty() const { return rt == 0; }
     inline void clear() { rt = tot = 0; return; }
 };
-template<class T, int N, class Compare = less<T>>
-struct FHQ_Treap {
-    struct Node {
-        T key;
-        ull pri = 0;
-        int l = 0, r = 0, sz = 0;
-    } tr[N + 1];
-    int rt = 0, tot = 0;
-    Compare cmp;
-    inline int size(int p) const { return p ? tr[p].sz : 0; }
-    inline void pull(int p) { tr[p].sz = size(tr[p].l) + size(tr[p].r) + 1; return; }
-    inline bool leq(const T &a, const T &b) const { return !cmp(b, a); }
-    inline int new_node(const T &x) { int p = ++tot; tr[p].key = x; tr[p].pri = RANDOM::next_u64(); tr[p].l = tr[p].r = 0; tr[p].sz = 1; return p; }
-    inline void split(int p, const T &x, int &a, int &b) { if (!p) { a = b = 0; return; } if (leq(tr[p].key, x)) { a = p; split(tr[p].r, x, tr[p].r, b); pull(a); } else { b = p; split(tr[p].l, x, a, tr[p].l); pull(b); } return; }
-    inline int merge(int a, int b) { if (!a || !b) { return a | b; } if (tr[a].pri > tr[b].pri) { tr[a].r = merge(tr[a].r, b); pull(a); return a; } tr[b].l = merge(a, tr[b].l); pull(b); return b; }
-    inline void insert(const T &x) { int a, b; split(rt, x, a, b); rt = merge(merge(a, new_node(x)), b); return; }
-    inline bool erase(const T &x) { int a = 0, b = 0, c = 0; split_less(rt, x, a, b); split(b, x, b, c); if (!b) { rt = merge(a, c); return false; } b = merge(tr[b].l, tr[b].r); rt = merge(merge(a, b), c); return true; }
-    inline void split_less(int p, const T &x, int &a, int &b) { if (!p) { a = b = 0; return; } if (cmp(tr[p].key, x)) { a = p; split_less(tr[p].r, x, tr[p].r, b); pull(a); } else { b = p; split_less(tr[p].l, x, a, tr[p].l); pull(b); } return; }
-    inline int rank(const T &x) { int a, b; split_less(rt, x, a, b); int r = size(a) + 1; rt = merge(a, b); return r; }
-    inline const T &kth(int k) const { int p = rt; for (;;) { int lsz = size(tr[p].l); if (k == lsz + 1) { return tr[p].key; } if (k <= lsz) { p = tr[p].l; } else { k -= lsz + 1; p = tr[p].r; } } }
-    inline int size() const { return size(rt); }
-    inline bool empty() const { return rt == 0; }
-    inline void clear() { rt = tot = 0; return; }
-};
 template<class T, int N>
 struct Link_Cut_Tree {
     int ch[N + 1][2], fa[N + 1], stk[N + 1];
@@ -715,7 +691,6 @@ inline void solve(int Task_Id) {
 } // namespace TANGYIXIAO
 
 /*
-namespace TANGYIXIAO {
 const int N = 1e3 + 5;
 int n, len, a[N], b[N];
 inline void mul() {
@@ -747,5 +722,4 @@ inline void solve(int Task_Id) {
     cout << "\n";
     return;
 }
-} // namespace TANGYIXIAO
 */
