@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 0d8258eb-f52a-405d-9cd2-63f98cc91502
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -604,7 +604,7 @@ inline void solve(int Task_Id) {
     for (; p > 0; p >>= 1) { s += char('0' + (p & 1)); }
     s += '0';
     reverse(s.begin(), s.end());
-    if (!next_permutation(s.begin(), s.end())) { return; }
+    next_permutation(s.begin(), s.end());
     for (char c : s) { q = (q << 1) + c - '0'; }
     cout << q << "\n";
     return;

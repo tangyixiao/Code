@@ -1,0 +1,31 @@
+{
+  "languages": {
+    "java": {
+      "taskClass": "P11232CSPS2024", 
+      "mainClass": "Main"
+    }
+  }, 
+  "timeLimit": 2000, 
+  "interactive": false, 
+  "name": "P11232 [CSP-S 2024] 超速检测", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu", 
+  "tests": [
+    {
+      "input": "1\n5 5 15 3\n0 3 0\n12 4 0\n1 1 4\n5 5 -2\n6 4 -4\n2 5 8 9 15\n", 
+      "output": "3 3\n"
+    }
+  ], 
+  "output": {
+    "type": "stdout"
+  }, 
+  "testType": "single", 
+  "batch": {
+    "size": 1, 
+    "id": "13873e17-53d5-4a3e-a205-01dd325bb542"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P11232", 
+  "memoryLimit": 512
+}
