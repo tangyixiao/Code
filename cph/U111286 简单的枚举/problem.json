@@ -1,0 +1,31 @@
+{
+  "input": {
+    "type": "stdin"
+  }, 
+  "name": "U111286 简单的枚举", 
+  "group": "Luogu - SXYZ 训练赛⑥", 
+  "tests": [
+    {
+      "input": "2\n10 10 10 10\n73 1 98 196\n", 
+      "output": "1\n3\n"
+    }
+  ], 
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "url": "https://www.luogu.com.cn/problem/U111286?contestId=368711", 
+  "batch": {
+    "size": 1, 
+    "id": "8557e549-3ffb-49ad-9375-20eac4d7d145"
+  }, 
+  "memoryLimit": 512, 
+  "interactive": false, 
+  "languages": {
+    "java": {
+      "taskClass": "U111286", 
+      "mainClass": "Main"
+    }
+  }, 
+  "output": {
+    "type": "stdout"
+  }
+}

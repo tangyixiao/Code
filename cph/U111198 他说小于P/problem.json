@@ -1,0 +1,31 @@
+{
+  "input": {
+    "type": "stdin"
+  }, 
+  "name": "U111198 他说小于P", 
+  "group": "Luogu - SXYZ 训练赛⑥", 
+  "tests": [
+    {
+      "input": "22\n3\n7\n0\n1\n", 
+      "output": "110\n"
+    }
+  ], 
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "url": "https://www.luogu.com.cn/problem/U111198?contestId=368711", 
+  "batch": {
+    "size": 1, 
+    "id": "376a0acd-89ab-4330-8ef7-dcf7c37d38e7"
+  }, 
+  "memoryLimit": 4, 
+  "interactive": false, 
+  "languages": {
+    "java": {
+      "taskClass": "U111198P", 
+      "mainClass": "Main"
+    }
+  }, 
+  "output": {
+    "type": "stdout"
+  }
+}

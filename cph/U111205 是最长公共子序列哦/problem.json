@@ -1,0 +1,31 @@
+{
+  "input": {
+    "type": "stdin"
+  }, 
+  "name": "U111205 是最长公共子序列哦", 
+  "group": "Luogu - SXYZ 训练赛⑥", 
+  "tests": [
+    {
+      "input": "10\n5 1 4 3 2 6 5 5 0 7\n5\n1 5\n1 10\n4 5 0 4 7\n5 4 1 2 3 5\n5 2 6 5 0 7\n", 
+      "output": "1 5\n0\n3 5 0 7\n3 1 2 5\n5 2 6 5 0 7\n"
+    }
+  ], 
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "url": "https://www.luogu.com.cn/problem/U111205?contestId=368711", 
+  "batch": {
+    "size": 1, 
+    "id": "32e8fd26-71bd-4aba-819c-77a6aec8425a"
+  }, 
+  "memoryLimit": 125, 
+  "interactive": false, 
+  "languages": {
+    "java": {
+      "taskClass": "U111205", 
+      "mainClass": "Main"
+    }
+  }, 
+  "output": {
+    "type": "stdout"
+  }
+}

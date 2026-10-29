@@ -1,0 +1,31 @@
+{
+  "input": {
+    "type": "stdin"
+  }, 
+  "name": "U111203 题面越来越短了", 
+  "group": "Luogu - SXYZ 训练赛⑥", 
+  "tests": [
+    {
+      "input": "2\n", 
+      "output": "19\n"
+    }
+  ], 
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "url": "https://www.luogu.com.cn/problem/U111203?contestId=368711", 
+  "batch": {
+    "size": 1, 
+    "id": "37e3ffd5-7ea0-49df-bf98-cd06fb7bbf25"
+  }, 
+  "memoryLimit": 125, 
+  "interactive": false, 
+  "languages": {
+    "java": {
+      "taskClass": "U111203", 
+      "mainClass": "Main"
+    }
+  }, 
+  "output": {
+    "type": "stdout"
+  }
+}

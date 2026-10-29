@@ -1,0 +1,35 @@
+{
+  "url": "https://www.luogu.com.cn/problem/P17019", 
+  "timeLimit": 2000, 
+  "name": "P17019 [ROI 2026 Day1] 泰莫利亚的调查", 
+  "batch": {
+    "size": 1, 
+    "id": "8d73fbeb-7256-4208-8f17-182d130cb16a"
+  }, 
+  "tests": [
+    {
+      "output": "6\n", 
+      "input": "5 1\n1 2 1\n1 3 1\n3 4 1\n3 5 1\n"
+    }, 
+    {
+      "output": "86\n85\n", 
+      "input": "10 2\n1 2 10\n2 3 6\n3 4 8\n4 6 5\n6 10 7\n4 8 6\n3 7 6\n1 5 4\n1 9 9\n"
+    }
+  ], 
+  "languages": {
+    "java": {
+      "taskClass": "P17019ROI2026Day1", 
+      "mainClass": "Main"
+    }
+  }, 
+  "interactive": false, 
+  "testType": "single", 
+  "memoryLimit": 1024, 
+  "group": "Luogu", 
+  "output": {
+    "type": "stdout"
+  }, 
+  "input": {
+    "type": "stdin"
+  }
+}

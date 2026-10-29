@@ -1,0 +1,31 @@
+{
+  "input": {
+    "type": "stdin"
+  }, 
+  "name": "B3743 [语言月赛202304] 扶苏与 0", 
+  "group": "Luogu", 
+  "tests": [
+    {
+      "input": "123456789\n", 
+      "output": "5\n"
+    }
+  ], 
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "url": "https://www.luogu.com.cn/problem/B3743", 
+  "batch": {
+    "size": 1, 
+    "id": "fe116da2-2036-4aa5-b796-f7701c44e6f8"
+  }, 
+  "memoryLimit": 256, 
+  "interactive": false, 
+  "languages": {
+    "java": {
+      "taskClass": "B37432023040", 
+      "mainClass": "Main"
+    }
+  }, 
+  "output": {
+    "type": "stdout"
+  }
+}

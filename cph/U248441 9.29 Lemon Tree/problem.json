@@ -1,0 +1,31 @@
+{
+  "input": {
+    "type": "stdin"
+  }, 
+  "name": "U248441 9.29 Lemon Tree", 
+  "group": "Luogu - SXYZ 训练赛⑥", 
+  "tests": [
+    {
+      "input": "5 4\n1 2 11 2\n3 2 9 0\n4 2 20 10\n5 2 5 4\n", 
+      "output": "27\n"
+    }
+  ], 
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "url": "https://www.luogu.com.cn/problem/U248441?contestId=368711", 
+  "batch": {
+    "size": 1, 
+    "id": "d21cb2b6-3b4a-43c9-bce1-5be0b073776e"
+  }, 
+  "memoryLimit": 128, 
+  "interactive": false, 
+  "languages": {
+    "java": {
+      "taskClass": "U248441929LemonTree", 
+      "mainClass": "Main"
+    }
+  }, 
+  "output": {
+    "type": "stdout"
+  }
+}
