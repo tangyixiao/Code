@@ -1,0 +1,31 @@
+{
+  "languages": {
+    "java": {
+      "taskClass": "U111197P", 
+      "mainClass": "Main"
+    }
+  }, 
+  "timeLimit": 1000, 
+  "interactive": false, 
+  "name": "U111197 他说大于P", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu - SXYZ 训练赛⑥", 
+  "tests": [
+    {
+      "input": "7\n", 
+      "output": "11\n"
+    }
+  ], 
+  "output": {
+    "type": "stdout"
+  }, 
+  "testType": "single", 
+  "batch": {
+    "size": 1, 
+    "id": "0d8258eb-f52a-405d-9cd2-63f98cc91502"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/U111197?contestId=368711", 
+  "memoryLimit": 125
+}
