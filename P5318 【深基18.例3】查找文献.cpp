@@ -635,9 +635,9 @@ inline void solve(int Task_Id) {
     for (int i = 1; i <= n; i++) {
         sort(g[i].begin(), g[i].end());
     }
-    dfs(1);
+    vis[1] = true, dfs(1);
     cout << "\n";
-    for (int i = 1; i <= n; i++) {
+    for (int i = 2; i <= n; i++) {
         vis[i] = false;
     }
     bfs();
