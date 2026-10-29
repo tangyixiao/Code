@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 3817ce4a-dd30-4257-a029-a704d3ba8587
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,59 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 1e6 + 5, K = 15, S = 45;
+int n, m, k, len, b[K], f[S], c[K], ans[K];
+pair<int, int> a[N];
+inline bool cmp() {
+    for (int i = 1; i <= len; i++) {
+        if (c[i] != ans[i]) {
+            return c[i] < ans[i];
+        }
+    }
+    return false;
+}
+inline void lcs() {
+    len = f[1] = 0;
+    for (int s = 1, j, p, cnt; s < (1 << k); s++) {
+        for (j = 1; s >> j; j++) {}
+        p = s ^ (1 << (j - 1)), f[s + 1] = n + 1;
+        if (f[p + 1] <= n) {
+            auto it = lower_bound(a + 1, a + n + 1, pair<int, int>(b[j], f[p + 1] + 1));
+            if (it != a + n + 1 && it->first == b[j]) {
+                f[s + 1] = it->second, cnt = 0;
+                for (int i = 1; i <= k; i++) {
+                    if (s & (1 << (i - 1))) {
+                        c[++cnt] = b[i];
+                    }
+                }
+                if (cnt > len || (cnt == len && cmp())) {
+                    len = cnt;
+                    for (int i = 1; i <= len; i++) {
+                        ans[i] = c[i];
+                    }
+                }
+            }
+        }
+    }
+    return;
+}
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n;
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i].first, a[i].second = i;
+    }
+    sort(a + 1, a + 1 + n), cin >> m;
+    for (int i = 1; i <= m; i++) {
+        cin >> k;
+        for (int j = 1; j <= k; j++) {
+            cin >> b[j];
+        }
+        lcs(), cout << len;
+        for (int j = 1; j <= len; j++) {
+            cout << " " << ans[j];
+        }
+        cout << "\n";
+    }
     return;
 }
 } // namespace TANGYIXIAO
