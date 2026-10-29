@@ -1,0 +1,31 @@
+{
+  "name": "P3368 【模板】树状数组 2",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P3368",
+  "interactive": false,
+  "memoryLimit": 125,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "5 5\n1 5 4 2 3\n1 2 4 2\n2 3\n1 1 5 -1\n1 3 5 7\n2 4\n",
+      "output": "6\n10\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P33682"
+    }
+  },
+  "batch": {
+    "id": "0fa836a8-f63d-4eec-96dc-227176f94a08",
+    "size": 1
+  }
+}
