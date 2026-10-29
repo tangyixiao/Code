@@ -643,7 +643,11 @@ inline void solve(int Task_Id) {
             cnt++;
         }
     }
-    cout << (cnt == n - 1 ? ans : -1) << "\n";
+    if (cnt == n - 1) {
+        cout << ans << "\n";
+    } else {
+        cout << "orz\n";
+    }
     return;
 }
 } // namespace TANGYIXIAO
