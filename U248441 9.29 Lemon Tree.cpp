@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: e4c8bdee-fafd-42b7-a7f3-cef2b508cd29
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,54 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 1e5 + 5;
+struct edge {
+    int v, a, b;
+};
+int n, m, tot, fa[N], a[N], b[N], mx[N], d[N], id[N], l, r, mid;
+vector<edge> g[N];
+queue<int> q;
+inline void init() {
+    q.push(1);
+    for (int u; !q.empty();) {
+        u = q.front(), q.pop(), id[++tot] = u;
+        for (auto e : g[u]) {
+            if (e.v != fa[u]) {
+                fa[e.v] = u, a[e.v] = e.a, b[e.v] = e.b, q.push(e.v);
+            }
+        }
+    }
+    for (int i = n, u; i >= 2; i--) {
+        u = id[i], mx[fa[u]] = max(mx[fa[u]], a[u] + mx[u]);
+    }
+    return;
+}
+inline bool check(int x) {
+    d[1] = 0;
+    for (int i = 2, sum = 0, u, t; i <= n; i++) {
+        u = id[i], t = min(a[u] - b[u], max(0, d[fa[u]] + a[u] + mx[u] - x));
+        sum += t, d[u] = d[fa[u]] + a[u] - t;
+        if (sum > m || d[u] > x) {
+            return false;
+        }
+    }
+    return true;
+}
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> m;
+    for (int i = 1, u, v, x, y; i < n; i++) {
+        cin >> u >> v >> x >> y, g[u].push_back({v, x, y}), g[v].push_back({u, x, y});
+    }
+    init(), r = mx[1];
+    for (; l < r;) {
+        mid = (l + r) >> 1;
+        if (check(mid)) {
+            r = mid;
+        } else {
+            l = mid + 1;
+        }
+    }
+    cout << l << "\n";
     return;
 }
 } // namespace TANGYIXIAO
