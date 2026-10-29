@@ -598,8 +598,35 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 5e5 + 5;
+int n, m, a[N], c[N];
+inline void add(int x, int w) {
+    for (; x <= n; x += lowbit(x)) {
+        c[x] += w;
+    }
+    return;
+}
+inline int query(int id) {
+    int res = 0;
+    for (; id; id -= lowbit(id)) {
+        res += c[id];
+    }
+    return res;
+}
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> m;
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i];
+        add(i, a[i]);
+    }
+    for (int i = 1, op, x, y; i <= m; i++) {
+        cin >> op >> x >> y;
+        if (op == 1) {
+            add(x, y);
+        } else {
+            cout << query(y) - query(x - 1) << "\n";
+        }
+    }
     return;
 }
 } // namespace TANGYIXIAO
