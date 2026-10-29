@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 5e1072f3-936c-41ca-b7bd-cf83b49ef0ad
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,8 +597,42 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 5e3 + 5;
+struct node {
+    int fa, x, v, r;
+} a[N << 1];
+int m, n, tot;
+bool vis[N];
+set<int> d;
+queue<int> q;
+string ans;
+inline void bfs() {
+    q.push(tot = 1);
+    for (int u, v, r; !q.empty();) {
+        u = q.front();
+        q.pop();
+        for (int x : d) {
+            v = min(m + 1, a[u].v * 10 + x), r = (a[u].r * 10 + x) % m;
+            if ((u != 1 || x) && (v <= m || !vis[r + 1])) {
+                a[++tot] = {u, x, v, r};
+                if (v > m) {
+                    vis[r + 1] = true;
+                    if (!r) {
+                        for (int t = tot; t != 1; t = a[t].fa) { ans += char('0' + a[t].x); }
+                        reverse(ans.begin(), ans.end());
+                        return;
+                    }
+                }
+                q.push(tot);
+            }
+        }
+    }
+    return;
+}
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> m >> n;
+    for (int i = 1, x; i <= n; i++) { cin >> x, d.insert(x); }
+    bfs(), cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO
