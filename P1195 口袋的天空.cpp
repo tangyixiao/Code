@@ -640,7 +640,7 @@ inline void solve(int Task_Id) {
             cnt++, ans += e[i].w;
         }
     }
-    if (cnt >= n - k) {
+    if (cnt == n - k) {
         cout << ans << "\n";
     } else {
         cout << "No Answer\n";

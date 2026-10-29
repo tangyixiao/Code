@@ -1,0 +1,31 @@
+{
+  "languages": {
+    "java": {
+      "taskClass": "U111202", 
+      "mainClass": "Main"
+    }
+  }, 
+  "timeLimit": 1000, 
+  "interactive": false, 
+  "name": "U111202 双端取数", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "group": "Luogu - SXYZ 训练赛⑥", 
+  "tests": [
+    {
+      "input": "4\n12 45 32 21\n", 
+      "output": "119\n"
+    }
+  ], 
+  "output": {
+    "type": "stdout"
+  }, 
+  "testType": "single", 
+  "batch": {
+    "size": 1, 
+    "id": "d0a41910-6575-402c-b012-f8deace595c2"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/U111202?contestId=368711", 
+  "memoryLimit": 125
+}
