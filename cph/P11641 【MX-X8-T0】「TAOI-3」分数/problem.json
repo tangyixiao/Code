@@ -1,0 +1,35 @@
+{
+  "output": {
+    "type": "stdout"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P11641", 
+  "testType": "single", 
+  "memoryLimit": 512, 
+  "tests": [
+    {
+      "input": "4 300\n98 87 56 12\n99 88 87 90\n", 
+      "output": "253\n"
+    }, 
+    {
+      "input": "4 100\n98 87 56 12\n99 88 87 90\n", 
+      "output": "364\n"
+    }
+  ], 
+  "interactive": false, 
+  "group": "Luogu", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "batch": {
+    "id": "21751243-34a0-4938-9d0e-45687c98aef8", 
+    "size": 1
+  }, 
+  "name": "P11641 【MX-X8-T0】「TAOI-3」分数", 
+  "timeLimit": 2000, 
+  "languages": {
+    "java": {
+      "taskClass": "P11641MXX8T0TAOI3", 
+      "mainClass": "Main"
+    }
+  }
+}

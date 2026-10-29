@@ -1,0 +1,31 @@
+{
+  "input": {
+    "type": "stdin"
+  }, 
+  "name": "P3370 【模板】字符串哈希", 
+  "group": "Luogu", 
+  "tests": [
+    {
+      "input": "5\nabc\naaaa\nabc\nabcc\n12345\n", 
+      "output": "4\n"
+    }
+  ], 
+  "timeLimit": 1000, 
+  "testType": "single", 
+  "url": "https://www.luogu.com.cn/problem/P3370", 
+  "batch": {
+    "size": 1, 
+    "id": "44de157e-5677-49d9-b54a-a2a023b12919"
+  }, 
+  "memoryLimit": 128, 
+  "interactive": false, 
+  "languages": {
+    "java": {
+      "taskClass": "P3370", 
+      "mainClass": "Main"
+    }
+  }, 
+  "output": {
+    "type": "stdout"
+  }
+}
