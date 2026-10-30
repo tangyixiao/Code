@@ -1,3 +1,18 @@
+//  Author: Tangyixiao
+//  Time: 2026-10-30 20:45:11
+//  Problem: P2367 语文成绩
+//  Contest: Luogu
+//  URL: https://www.luogu.com.cn/problem/P2367
+//  Memory Limit: 125 MB
+//  Time Limit: 1000 ms
+//  Interactive: false
+//  Test Type: single
+//
+//  Algorithm:
+//  Complexity: O()
+//  Note:
+//
+//  Powered by Visual Studio Code + CPH (Competitive Programming Helper)
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -622,33 +637,22 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-const int MX = 5000005;
-int d[MX];
+const int N = 5e6 + 5;
+int n, m, a[N], c[N], ans;
 inline void solve(int Task_Id) {
-    int n, p;
-    cin >> n >> p;
-    int prev;
-    cin >> prev;
-    d[1] = prev;
-    for (int i = 2; i <= n; ++i) {
-        int cur;
-        cin >> cur;
-        d[i] = cur - prev;
-        prev = cur;
+    cin >> n >> m;
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i];
     }
-    for (int i = 0; i < p; ++i) {
-        int x, y, z;
+    for (int i = 1, x, y, z; i <= m; i++) {
         cin >> x >> y >> z;
-        d[x] += z;
-        d[y + 1] -= z;
+        c[x] += z, c[y] -= z;
     }
-    int cur = 0, ans = 1000000000;
-    for (int i = 1; i <= n; ++i) {
-        cur += d[i];
-        if (cur < ans)
-            ans = cur;
+    for (int i = 1; i <= n; i++) {
+        c[i] += c[i - 1];
+        ans = max(ans, a[i] + c[i]);
     }
-    cout << ans << endl;
+    cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO
