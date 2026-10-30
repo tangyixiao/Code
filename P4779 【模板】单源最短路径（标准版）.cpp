@@ -1,3 +1,19 @@
+//  Author: Tangyixiao
+//  Time: 2026-10-30 21:30:33
+//  Problem: P4779 【模板】单源最短路径（标准版）
+//  Contest: Luogu
+//  URL: https://www.luogu.com.cn/problem/P4779
+//  Memory Limit: 512 MB
+//  Time Limit: 1000 ms
+//  Interactive: false
+//  Test Type: single
+//
+//  Algorithm:
+//  Complexity: O()
+//  Note:
+//
+//  Powered by Visual Studio Code + CPH (Competitive Programming Helper)
+
 #include <bits/stdc++.h>
 #define int long long
 using namespace std;
