@@ -1,0 +1,35 @@
+{
+  "output": {
+    "type": "stdout"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P3390", 
+  "testType": "single", 
+  "memoryLimit": 256, 
+  "tests": [
+    {
+      "input": "2 1\n1 1\n1 1\n", 
+      "output": "1 1\n1 1\n"
+    }, 
+    {
+      "input": "3 5\n1 2 3\n4 5 6\n7 8 9\n", 
+      "output": "121824 149688 177552\n275886 338985 402084\n429948 528282 626616\n"
+    }
+  ], 
+  "interactive": false, 
+  "group": "Luogu", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "batch": {
+    "id": "19d2abf7-f5b8-4b59-a394-6e0281fd0f53", 
+    "size": 1
+  }, 
+  "name": "P3390 【模板】矩阵快速幂", 
+  "timeLimit": 1000, 
+  "languages": {
+    "java": {
+      "taskClass": "P3390", 
+      "mainClass": "Main"
+    }
+  }
+}
