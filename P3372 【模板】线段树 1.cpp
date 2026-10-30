@@ -616,15 +616,13 @@ inline void build(int l, int r, int id) {
     t[id].v = t[id << 1].v + t[id << 1 | 1].v;
     return;
 }
-inline void add(int l, int r, int k, int L, int R) {
+inline void add(int l, int r, int k) {
     if (l > r) {
         return;
     }
     if (l == r) {
     }
-    if (l >= L && r <= R) {
-        return;
-    }
+    
     return;
 }
 inline void solve(int Task_Id) {
