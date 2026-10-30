@@ -1,0 +1,35 @@
+{
+  "name": "B2175 最长公共子序列",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/B2175",
+  "interactive": false,
+  "memoryLimit": 512,
+  "timeLimit": 2000,
+  "tests": [
+    {
+      "input": "7 6\n1 3 4 1 2 8 5\n3 4 1 2 1 5\n",
+      "output": "5\n"
+    },
+    {
+      "input": "3 4\n1 2 3\n4 5 6 7\n",
+      "output": "0\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "B2175"
+    }
+  },
+  "batch": {
+    "id": "d5859549-4b2e-49b3-91b0-2b5a2e10f629",
+    "size": 1
+  }
+}
