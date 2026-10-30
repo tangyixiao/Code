@@ -597,8 +597,48 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+const int N = 1e2 + 5, mod = 1e9 + 7;
+int n;
+ll k, a[N][N], b[N][N], c[N][N];
+inline void mul(ll x[][N], ll y[][N]) {
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= n; j++) {
+            c[i][j] = 0;
+        }
+    }
+    for (int i = 1; i <= n; i++) {
+        for (int t = 1; t <= n; t++) {
+            for (int j = 1; j <= n; j++) {
+                c[i][j] = (c[i][j] + x[i][t] * y[t][j]) % mod;
+            }
+        }
+    }
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= n; j++) {
+            x[i][j] = c[i][j];
+        }
+    }
+}
 inline void solve(int Task_Id) {
-    // do something here
+    cin >> n >> k;
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= n; j++) {
+            cin >> a[i][j];
+            a[i][j] = (a[i][j] % mod + mod) % mod, b[i][j] = (i == j);
+        }
+    }
+    for (; k; k >>= 1) {
+        if (k & 1) {
+            mul(b, a);
+        }
+        mul(a, a);
+    }
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= n; j++) {
+            cout << b[i][j] << " ";
+        }
+        cout << "\n";
+    }
     return;
 }
 } // namespace TANGYIXIAO
