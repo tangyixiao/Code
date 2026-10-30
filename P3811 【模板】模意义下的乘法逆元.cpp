@@ -598,7 +598,10 @@ signed main() {
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
 typedef long long ll;
+const int N = 3e6 + 5;
 ll n, p;
+int f[N];
+Fwrite_Output out;
 inline ll qpow(ll a, ll b) {
     ll res = 1;
     for (; b; b >>= 1) {
@@ -611,9 +614,13 @@ inline ll qpow(ll a, ll b) {
 }
 inline void solve(int Task_Id) {
     cin >> n >> p;
-    for (int i = 1; i <= n; i++) {
-        cout << qpow(i, p - 2) << "\n";
+    f[1] = 1;
+    out.write_int(f[1]), out.write_cstr("\n");
+    for (int i = 2; i <= n; i++) {
+        f[i] = (p - p / i) * f[p % i] % p;
+        out.write_int(f[i]), out.write_cstr("\n");
     }
+    out.flush();
     return;
 }
 } // namespace TANGYIXIAO
