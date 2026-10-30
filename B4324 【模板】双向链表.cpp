@@ -602,7 +602,6 @@ const int N = 5e5 + 5;
 int n, m, l[N], r[N];
 bool d[N];
 inline void solve(int Task_Id) {
-    // do something here
     cin >> n >> m;
     r[0] = 1, l[n + 1] = n;
     for (int i = 1; i <= n; i++) {

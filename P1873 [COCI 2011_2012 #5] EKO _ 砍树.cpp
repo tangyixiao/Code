@@ -618,7 +618,7 @@ inline void solve(int Task_Id) {
     sort(a + 1, a + 1 + n);
     r = a[n];
     for (; l < r;) {
-        mid = (l + r) >> 1;
+        mid = (l + r + 1) >> 1;
         if (check()) {
             l = mid;
         } else {
