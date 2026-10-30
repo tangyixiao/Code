@@ -1,0 +1,31 @@
+{
+  "output": {
+    "type": "stdout"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/B3642", 
+  "testType": "single", 
+  "memoryLimit": 512, 
+  "tests": [
+    {
+      "input": "7\n2 7\n4 0\n0 0\n0 3\n0 0\n0 5\n6 0\n", 
+      "output": "1 2 4 3 7 6 5\n4 3 2 1 6 5 7\n3 4 2 5 6 7 1\n"
+    }
+  ], 
+  "interactive": false, 
+  "group": "Luogu", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "batch": {
+    "id": "765b274e-8c38-497e-86c5-0a86be9bacb3", 
+    "size": 1
+  }, 
+  "name": "B3642 二叉树的遍历", 
+  "timeLimit": 3000, 
+  "languages": {
+    "java": {
+      "taskClass": "B3642", 
+      "mainClass": "Main"
+    }
+  }
+}
