@@ -1,0 +1,31 @@
+{
+  "output": {
+    "type": "stdout"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P3811", 
+  "testType": "single", 
+  "memoryLimit": 125, 
+  "tests": [
+    {
+      "input": "10 13\n", 
+      "output": "1\n7\n9\n10\n8\n11\n2\n5\n3\n4\n"
+    }
+  ], 
+  "interactive": false, 
+  "group": "Luogu", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "batch": {
+    "id": "b2576dc9-cf40-4599-9bbe-099b939943ba", 
+    "size": 1
+  }, 
+  "name": "P3811 【模板】模意义下的乘法逆元", 
+  "timeLimit": 500, 
+  "languages": {
+    "java": {
+      "taskClass": "P3811", 
+      "mainClass": "Main"
+    }
+  }
+}

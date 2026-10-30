@@ -1,0 +1,31 @@
+{
+  "output": {
+    "type": "stdout"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P1886", 
+  "testType": "single", 
+  "memoryLimit": 500, 
+  "tests": [
+    {
+      "input": "8 3\n1 3 -1 -3 5 3 6 7\n", 
+      "output": "-1 -3 -3 -3 3 3\n3 3 5 5 6 7\n"
+    }
+  ], 
+  "interactive": false, 
+  "group": "Luogu", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "batch": {
+    "id": "60a58ea5-e6ce-4b0c-b8ce-a69c0cd5edf8", 
+    "size": 1
+  }, 
+  "name": "P1886 【模板】单调队列 / 滑动窗口", 
+  "timeLimit": 1000, 
+  "languages": {
+    "java": {
+      "taskClass": "P1886", 
+      "mainClass": "Main"
+    }
+  }
+}

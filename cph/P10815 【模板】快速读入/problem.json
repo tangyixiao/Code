@@ -1,0 +1,31 @@
+{
+  "output": {
+    "type": "stdout"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P10815", 
+  "testType": "single", 
+  "memoryLimit": 2048, 
+  "tests": [
+    {
+      "input": "5\n-1 2 -3 4 -5\n", 
+      "output": "-3\n"
+    }
+  ], 
+  "interactive": false, 
+  "group": "Luogu", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "batch": {
+    "id": "e924d937-94d1-4a0e-b580-fa82dd8f8bda", 
+    "size": 1
+  }, 
+  "name": "P10815 【模板】快速读入", 
+  "timeLimit": 2500, 
+  "languages": {
+    "java": {
+      "taskClass": "P10815", 
+      "mainClass": "Main"
+    }
+  }
+}

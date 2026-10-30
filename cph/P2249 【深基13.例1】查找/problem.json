@@ -1,0 +1,31 @@
+{
+  "output": {
+    "type": "stdout"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P2249", 
+  "testType": "single", 
+  "memoryLimit": 125, 
+  "tests": [
+    {
+      "input": "11 3\n1 3 3 3 5 7 9 11 13 15 15\n1 3 6\n", 
+      "output": "1 2 -1\n"
+    }
+  ], 
+  "interactive": false, 
+  "group": "Luogu", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "batch": {
+    "id": "6d97559b-7e10-4d10-af41-6facff4a565c", 
+    "size": 1
+  }, 
+  "name": "P2249 【深基13.例1】查找", 
+  "timeLimit": 1000, 
+  "languages": {
+    "java": {
+      "taskClass": "P2249131", 
+      "mainClass": "Main"
+    }
+  }
+}

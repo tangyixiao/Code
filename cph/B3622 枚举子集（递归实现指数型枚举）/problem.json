@@ -1,0 +1,31 @@
+{
+  "output": {
+    "type": "stdout"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/B3622", 
+  "testType": "single", 
+  "memoryLimit": 128, 
+  "tests": [
+    {
+      "input": "3\n", 
+      "output": "NNN\nNNY\nNYN\nNYY\nYNN\nYNY\nYYN\nYYY\n"
+    }
+  ], 
+  "interactive": false, 
+  "group": "Luogu", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "batch": {
+    "id": "70f5eee1-7fb6-40f5-984b-7ba0e5c3dce2", 
+    "size": 1
+  }, 
+  "name": "B3622 枚举子集（递归实现指数型枚举）", 
+  "timeLimit": 1000, 
+  "languages": {
+    "java": {
+      "taskClass": "B3622", 
+      "mainClass": "Main"
+    }
+  }
+}

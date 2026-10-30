@@ -1,0 +1,31 @@
+{
+  "output": {
+    "type": "stdout"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/P8218", 
+  "testType": "single", 
+  "memoryLimit": 128, 
+  "tests": [
+    {
+      "input": "4\n4 3 2 1\n2\n1 4\n2 3\n", 
+      "output": "10\n5\n"
+    }
+  ], 
+  "interactive": false, 
+  "group": "Luogu", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "batch": {
+    "id": "c9173c79-07ad-4490-ab13-700a76a6c89b", 
+    "size": 1
+  }, 
+  "name": "P8218 【深进1.例1】求区间和", 
+  "timeLimit": 1000, 
+  "languages": {
+    "java": {
+      "taskClass": "P821811", 
+      "mainClass": "Main"
+    }
+  }
+}

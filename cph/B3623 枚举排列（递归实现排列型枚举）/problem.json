@@ -1,0 +1,31 @@
+{
+  "output": {
+    "type": "stdout"
+  }, 
+  "url": "https://www.luogu.com.cn/problem/B3623", 
+  "testType": "single", 
+  "memoryLimit": 128, 
+  "tests": [
+    {
+      "input": "3 2\n", 
+      "output": "1 2\n1 3\n2 1\n2 3\n3 1\n3 2\n"
+    }
+  ], 
+  "interactive": false, 
+  "group": "Luogu", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "batch": {
+    "id": "ce71dc87-86ca-41db-87ae-e000af5a6601", 
+    "size": 1
+  }, 
+  "name": "B3623 枚举排列（递归实现排列型枚举）", 
+  "timeLimit": 1000, 
+  "languages": {
+    "java": {
+      "taskClass": "B3623", 
+      "mainClass": "Main"
+    }
+  }
+}
