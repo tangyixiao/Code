@@ -1,31 +1,31 @@
 {
-  "input": {
-    "type": "stdin"
+  "output": {
+    "type": "stdout"
   }, 
-  "name": "P3370 【模板】字符串哈希", 
-  "group": "Luogu", 
+  "url": "https://www.luogu.com.cn/problem/P3370", 
+  "testType": "single", 
+  "memoryLimit": 128, 
   "tests": [
     {
       "input": "5\nabc\naaaa\nabc\nabcc\n12345\n", 
       "output": "4\n"
     }
   ], 
-  "timeLimit": 1000, 
-  "testType": "single", 
-  "url": "https://www.luogu.com.cn/problem/P3370", 
-  "batch": {
-    "size": 1, 
-    "id": "44de157e-5677-49d9-b54a-a2a023b12919"
-  }, 
-  "memoryLimit": 128, 
   "interactive": false, 
+  "group": "Luogu", 
+  "input": {
+    "type": "stdin"
+  }, 
+  "batch": {
+    "id": "c8eec497-4b5e-41a0-8dfb-b329de5665ba", 
+    "size": 1
+  }, 
+  "name": "P3370 【模板】字符串哈希", 
+  "timeLimit": 1000, 
   "languages": {
     "java": {
       "taskClass": "P3370", 
       "mainClass": "Main"
     }
-  }, 
-  "output": {
-    "type": "stdout"
   }
 }

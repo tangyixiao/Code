@@ -9,9 +9,9 @@
 //  Test Type: single
 //  Batch ID: 44de157e-5677-49d9-b54a-a2a023b12919
 //
-//  Algorithm: 
+//  Algorithm:
 //  Complexity: O()
-//  Note: 
+//  Note:
 
 /*
 Copyright (C) 2026 TangYixiao
@@ -597,9 +597,32 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-    
+const int mod1 = 1e9 + 7, mod2 = 1e9 + 9, N = 1e4 + 5;
+int n, b1, b2, h1[N], h2[N], ans;
+pair<int, int> h[N];
+string s;
+
 inline void solve(int Task_Id) {
-    // do something here
+    mt19937 rng(time(0));
+    b1 = rng() % (mod1 - 257) + 256, b2 = rng() % (mod2 - 257) + 256;
+    cin >> n;
+    for (int i = 1; i <= n; i++) {
+        cin >> s;
+        h1[i] = h2[i] = 0;
+        for (int j = 0; j < s.size(); j++) {
+            h1[i] = (1LL * h1[i] * b1 + s[j]) % mod1;
+            h2[i] = (1LL * h2[i] * b2 + s[j]) % mod2;
+        }
+        h[i] = {h1[i], h2[i]};
+    }
+    sort(h + 1, h + n + 1);
+    ans = 0;
+    for (int i = 1; i <= n; i++) {
+        if (i == 1 || h[i] != h[i - 1]) {
+            ans++;
+        }
+    }
+    cout << ans << "\n";
     return;
 }
 } // namespace TANGYIXIAO
