@@ -1,0 +1,39 @@
+{
+  "group": "Luogu", 
+  "batch": {
+    "size": 1, 
+    "id": "64434306-a1b2-4c16-ab6f-3f2b8753dac4"
+  }, 
+  "name": "P7771 【模板】欧拉路径", 
+  "url": "https://www.luogu.com.cn/problem/P7771", 
+  "timeLimit": 1000, 
+  "interactive": false, 
+  "memoryLimit": 128, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "testType": "single", 
+  "languages": {
+    "java": {
+      "taskClass": "P7771", 
+      "mainClass": "Main"
+    }
+  }, 
+  "tests": [
+    {
+      "output": "1 2 1 3 3 4 2\n", 
+      "input": "4 6\n1 3\n2 1\n4 2\n3 3\n1 2\n3 4\n"
+    }, 
+    {
+      "output": "1 2 3 4 3 5\n", 
+      "input": "5 5\n1 2\n3 5\n4 3\n3 4\n2 3\n"
+    }, 
+    {
+      "output": "No\n", 
+      "input": "4 3\n1 2\n1 3\n1 4\n"
+    }
+  ], 
+  "input": {
+    "type": "stdin"
+  }
+}
