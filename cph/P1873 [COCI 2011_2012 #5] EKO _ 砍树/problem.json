@@ -1,0 +1,35 @@
+{
+  "name": "P1873 [COCI 2011/2012 #5] EKO / 砍树",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P1873",
+  "interactive": false,
+  "memoryLimit": 256,
+  "timeLimit": 1500,
+  "tests": [
+    {
+      "input": "4 7\n20 15 10 17\n",
+      "output": "15\n"
+    },
+    {
+      "input": "5 20\n4 42 40 26 46\n",
+      "output": "36\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P1873COCI201120125EKO"
+    }
+  },
+  "batch": {
+    "id": "cd05c9f8-5d06-4f9f-8005-96c7f2c733b7",
+    "size": 1
+  }
+}

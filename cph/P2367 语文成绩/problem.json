@@ -1,0 +1,31 @@
+{
+  "name": "P2367 语文成绩",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P2367",
+  "interactive": false,
+  "memoryLimit": 125,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "3 2\n1 1 1\n1 2 1\n2 3 1\n",
+      "output": "2\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P2367"
+    }
+  },
+  "batch": {
+    "id": "6c217f68-e8f6-474f-b5d5-49f5c5141fde",
+    "size": 1
+  }
+}

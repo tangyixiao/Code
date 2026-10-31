@@ -1,0 +1,31 @@
+{
+  "name": "P4779 【模板】单源最短路径（标准版）",
+  "group": "Luogu",
+  "url": "https://www.luogu.com.cn/problem/P4779",
+  "interactive": false,
+  "memoryLimit": 512,
+  "timeLimit": 1000,
+  "tests": [
+    {
+      "input": "4 6 1\n1 2 2\n2 3 2\n2 4 1\n1 3 5\n3 4 3\n1 4 4\n",
+      "output": "0 2 4 3\n"
+    }
+  ],
+  "testType": "single",
+  "input": {
+    "type": "stdin"
+  },
+  "output": {
+    "type": "stdout"
+  },
+  "languages": {
+    "java": {
+      "mainClass": "Main",
+      "taskClass": "P4779"
+    }
+  },
+  "batch": {
+    "id": "b145f8da-b980-4c78-9b91-054586016731",
+    "size": 1
+  }
+}
