@@ -598,63 +598,77 @@ signed main() {
 #pragma endregion PREPROCESSOR
 
 namespace TANGYIXIAO {
-using ll = long long;
-using i128 = __int128_t;
-const int M = 100005, N = 200005;
-int n, m, tot, op[M], l[M], r[M], xs[N];
-ll k[M], bit1[N];
-i128 bit2[N];
-
-inline void add(int x, ll v) {
-    int p = lower_bound(xs + 1, xs + tot + 1, x) - xs;
-    for (int i = p; i <= tot; i += i & -i) {
-        bit1[i] += v;
-        bit2[i] += (i128)x * v;
+const int N = 1e5 + 5;
+struct node {
+    ll v, lz;
+} t[N << 2];
+int n, m;
+ll a[N], k;
+inline void build(int l, int r, int id) {
+    if (l > r) {
+        return;
     }
+    t[id].lz = 0;
+    if (l == r) {
+        t[id].v = a[l];
+        return;
+    }
+    build(l, (l + r) >> 1, id << 1);
+    build(((l + r) >> 1) + 1, r, id << 1 | 1);
+    t[id].v = t[id << 1].v + t[id << 1 | 1].v;
+    return;
 }
-
-inline i128 query(int x) {
-    int p = upper_bound(xs + 1, xs + tot + 1, x) - xs - 1;
-    ll s = 0;
-    i128 t = 0;
-    for (int i = p; i; i -= i & -i) {
-        s += bit1[i];
-        t += bit2[i];
-    }
-    return (i128)(x + 1) * s - t;
+inline void put(int l, int r, int id, ll k) {
+    t[id].v += k * (r - l + 1), t[id].lz += k;
+    return;
 }
-
-inline void write(i128 x) {
-    if (x < 0) {
-        cout << '-';
-        x = -x;
+inline void down(int l, int r, int id) {
+    if (l < r && t[id].lz != 0) {
+        put(l, (l + r) >> 1, id << 1, t[id].lz);
+        put(((l + r) >> 1) + 1, r, id << 1 | 1, t[id].lz);
+        t[id].lz = 0;
     }
-    if (x >= 10) {
-        write(x / 10);
-    }
-    cout << char('0' + x % 10);
+    return;
 }
-
+inline void add(int l, int r, int id, int L, int R, ll k) {
+    if (r < L || R < l) {
+        return;
+    }
+    if (L <= l && r <= R) {
+        put(l, r, id, k);
+        return;
+    }
+    down(l, r, id);
+    add(l, (l + r) >> 1, id << 1, L, R, k);
+    add(((l + r) >> 1) + 1, r, id << 1 | 1, L, R, k);
+    t[id].v = t[id << 1].v + t[id << 1 | 1].v;
+    return;
+}
+inline ll query(int l, int r, int id, int L, int R) {
+    if (r < L || R < l) {
+        return 0;
+    }
+    if (L <= l && r <= R) {
+        return t[id].v;
+    }
+    down(l, r, id);
+    return query(l, (l + r) >> 1, id << 1, L, R) + query(((l + r) >> 1) + 1, r, id << 1 | 1, L, R);
+}
 inline void solve(int Task_Id) {
     cin >> n >> m;
-    for (int i = 1; i <= m; i++) {
-        cin >> op[i] >> l[i] >> r[i];
-        if (op[i] == 1) {
-            cin >> k[i];
-            xs[++tot] = l[i];
-            xs[++tot] = r[i] + 1;
-        }
+    for (int i = 1; i <= n; i++) {
+        a[i] = i;
     }
-    sort(xs + 1, xs + tot + 1);
-    tot = unique(xs + 1, xs + tot + 1) - xs - 1;
-    for (int i = 1; i <= m; i++) {
-        if (op[i] == 1) {
-            add(l[i], k[i]);
-            add(r[i] + 1, -k[i]);
+    build(1, n, 1);
+    for (int i = 1, op, x, y; i <= m; i++) {
+        cin >> op >> x >> y;
+        if (op == 1) {
+            cin >> k;
+            add(1, n, 1, x, y, k);
         } else {
-            write((i128)(l[i] + r[i]) * (r[i] - l[i] + 1) / 2 + query(r[i]) - query(l[i] - 1));
-            cout << '\n';
+            cout << query(1, n, 1, x, y) << "\n";
         }
     }
+    return;
 }
 } // namespace TANGYIXIAO

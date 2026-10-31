@@ -598,16 +598,17 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-typedef long ll;
 const int N = 1e5 + 5;
 struct node {
-    int v, lz;
+    ll v, lz;
 } t[N << 2];
-int n, m, a[N];
+int n, m;
+ll a[N], k;
 inline void build(int l, int r, int id) {
     if (l > r) {
         return;
     }
+    t[id].lz = 0;
     if (l == r) {
         t[id].v = a[l];
         return;
@@ -617,26 +618,55 @@ inline void build(int l, int r, int id) {
     t[id].v = t[id << 1].v + t[id << 1 | 1].v;
     return;
 }
-inline void add(int l, int r, int k) {
-    if (l > r) {
-        return;
-    }
-    if (l == r) {
-    }
-
+inline void put(int l, int r, int id, ll k) {
+    t[id].v += k * (r - l + 1), t[id].lz += k;
     return;
 }
-inline inline void solve(int Task_Id) {
+inline void down(int l, int r, int id) {
+    if (l < r && t[id].lz != 0) {
+        put(l, (l + r) >> 1, id << 1, t[id].lz);
+        put(((l + r) >> 1) + 1, r, id << 1 | 1, t[id].lz);
+        t[id].lz = 0;
+    }
+    return;
+}
+inline void add(int l, int r, int id, int L, int R, ll k) {
+    if (r < L || R < l) {
+        return;
+    }
+    if (L <= l && r <= R) {
+        put(l, r, id, k);
+        return;
+    }
+    down(l, r, id);
+    add(l, (l + r) >> 1, id << 1, L, R, k);
+    add(((l + r) >> 1) + 1, r, id << 1 | 1, L, R, k);
+    t[id].v = t[id << 1].v + t[id << 1 | 1].v;
+    return;
+}
+inline ll query(int l, int r, int id, int L, int R) {
+    if (r < L || R < l) {
+        return 0;
+    }
+    if (L <= l && r <= R) {
+        return t[id].v;
+    }
+    down(l, r, id);
+    return query(l, (l + r) >> 1, id << 1, L, R) + query(((l + r) >> 1) + 1, r, id << 1 | 1, L, R);
+}
+inline void solve(int Task_Id) {
     cin >> n >> m;
     for (int i = 1; i <= n; i++) {
         cin >> a[i];
     }
     build(1, n, 1);
-    for (int i = 1, op, x, y, k; i <= m; i++) {
+    for (int i = 1, op, x, y; i <= m; i++) {
         cin >> op >> x >> y;
         if (op == 1) {
             cin >> k;
+            add(1, n, 1, x, y, k);
         } else {
+            cout << query(1, n, 1, x, y) << "\n";
         }
     }
     return;
