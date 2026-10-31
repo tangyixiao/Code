@@ -1,0 +1,31 @@
+{
+  "group": "Luogu", 
+  "batch": {
+    "size": 1, 
+    "id": "aad706f0-d933-4801-9772-9e7dba3a6659"
+  }, 
+  "name": "P1495 【模板】中国剩余定理（CRT）/ 曹冲养猪", 
+  "url": "https://www.luogu.com.cn/problem/P1495", 
+  "timeLimit": 1000, 
+  "interactive": false, 
+  "memoryLimit": 512, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "testType": "single", 
+  "languages": {
+    "java": {
+      "taskClass": "P1495CRT", 
+      "mainClass": "Main"
+    }
+  }, 
+  "tests": [
+    {
+      "output": "16\n", 
+      "input": "3\n3 1\n5 1\n7 2\n"
+    }
+  ], 
+  "input": {
+    "type": "stdin"
+  }
+}

@@ -651,12 +651,6 @@ namespace TANGYIXIAO {
 struct pig {
     int a1, b1;
 } a[11];
-int gcd(int x, int y) {
-    if (x % y == 0)
-        return y;
-    else
-        return gcd(y, x % y);
-}
 inline void solve(int Task_Id) {
     long long n, ans, sum = 1;
     cin >> n;
