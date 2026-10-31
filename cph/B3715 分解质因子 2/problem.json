@@ -1,0 +1,31 @@
+{
+  "group": "Luogu", 
+  "batch": {
+    "size": 1, 
+    "id": "7f2ad5a0-5867-4644-9f4a-a2c896b044f0"
+  }, 
+  "name": "B3715 分解质因子 2", 
+  "url": "https://www.luogu.com.cn/problem/B3715", 
+  "timeLimit": 1000, 
+  "interactive": false, 
+  "memoryLimit": 512, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "testType": "single", 
+  "languages": {
+    "java": {
+      "taskClass": "B37152", 
+      "mainClass": "Main"
+    }
+  }, 
+  "tests": [
+    {
+      "output": "2\n3\n2 2\n5\n2 3\n7\n2 2 2\n3 3\n2 5\n", 
+      "input": "9\n2\n3\n4\n5\n6\n7\n8\n9\n10\n"
+    }
+  ], 
+  "input": {
+    "type": "stdin"
+  }
+}

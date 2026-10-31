@@ -1,0 +1,31 @@
+{
+  "group": "Luogu", 
+  "batch": {
+    "size": 1, 
+    "id": "949b060b-8ef7-4100-a8d3-086ab74b05dd"
+  }, 
+  "name": "B3625 迷宫寻路", 
+  "url": "https://www.luogu.com.cn/problem/B3625", 
+  "timeLimit": 1000, 
+  "interactive": false, 
+  "memoryLimit": 128, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "testType": "single", 
+  "languages": {
+    "java": {
+      "taskClass": "B3625", 
+      "mainClass": "Main"
+    }
+  }, 
+  "tests": [
+    {
+      "output": "Yes\n", 
+      "input": "3 5\n.##.#\n.#...\n...#.\n"
+    }
+  ], 
+  "input": {
+    "type": "stdin"
+  }
+}

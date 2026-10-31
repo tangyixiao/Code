@@ -1,0 +1,31 @@
+{
+  "group": "Luogu", 
+  "batch": {
+    "size": 1, 
+    "id": "4ac0dada-9a61-4ce0-8f43-712fea57681a"
+  }, 
+  "name": "P2280 [HNOI2003] 激光炸弹", 
+  "url": "https://www.luogu.com.cn/problem/P2280", 
+  "timeLimit": 1000, 
+  "interactive": false, 
+  "memoryLimit": 500, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "testType": "single", 
+  "languages": {
+    "java": {
+      "taskClass": "P2280HNOI2003", 
+      "mainClass": "Main"
+    }
+  }, 
+  "tests": [
+    {
+      "output": "1\n", 
+      "input": "2 1\n0 0 1\n1 1 1\n"
+    }
+  ], 
+  "input": {
+    "type": "stdin"
+  }
+}
