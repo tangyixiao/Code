@@ -623,19 +623,17 @@ inline void solve(int Task_Id) {
     init();
     for (cin >> T; T--;) {
         cin >> n;
-        for (int i = 1; i <= szp; i++) {
-            if (n == 1) {
-                cout << "\n";
-                break;
-            }
-            if (!vis[n]) {
-                cout << n << "\n";
-                break;
-            }
+        for (int i = 1; i <= szp && p[i] * p[i] <= n; i++) {
             for (; !(n % p[i]);) {
                 n /= p[i];
                 cout << p[i] << " ";
             }
+        }
+        if (n > 1) {
+            cout << n << "\n";
+        }
+        if (n == 1) {
+            cout << "\n";
         }
     }
     return;
