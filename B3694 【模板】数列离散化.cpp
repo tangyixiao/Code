@@ -664,25 +664,19 @@ signed main(int argc, char *argv[]) {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
-
 const int N = 1e5 + 5;
-
-int n, a[N], b[N];
-
+int n, m, a[N], b[N];
 inline void solve(int Task_Id) {
     cin >> n;
-
     for (int i = 1; i <= n; i++) {
         cin >> a[i], b[i] = a[i];
     }
-
-    sort(b + 1, b + n + 1);
-    int m = unique(b + 1, b + n + 1) - b - 1;
-
+    sort(b + 1, b + 1 + n);
+    m = unique(b + 1, b + 1 + n) - b - 1;
     for (int i = 1; i <= n; i++) {
-        cout << lower_bound(b + 1, b + m + 1, a[i]) - b << " \n"[i == n];
+        cout << lower_bound(b + 1, b + 1 + m, a[i]) - b << " ";
     }
-
+    cout << "\n";
     return;
 }
 } // namespace TANGYIXIAO

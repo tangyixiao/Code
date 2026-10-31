@@ -1,31 +1,31 @@
 {
-  "name": "B3694 【模板】数列离散化",
-  "group": "Luogu",
-  "url": "https://www.luogu.com.cn/problem/B3694",
-  "interactive": false,
-  "memoryLimit": 512,
-  "timeLimit": 1000,
-  "tests": [
-    {
-      "input": "3\n3\n1 2 3\n5\n1 6 2 2 7\n4\n-1 -2 -3 -3\n",
-      "output": "1 2 3\n1 3 2 2 4\n3 2 1 1\n"
-    }
-  ],
-  "testType": "single",
-  "input": {
-    "type": "stdin"
-  },
+  "group": "Luogu", 
+  "batch": {
+    "size": 1, 
+    "id": "ad014f87-cc79-4b4b-8967-746c133ad158"
+  }, 
+  "name": "B3694 【模板】数列离散化", 
+  "url": "https://www.luogu.com.cn/problem/B3694", 
+  "timeLimit": 1000, 
+  "interactive": false, 
+  "memoryLimit": 512, 
   "output": {
     "type": "stdout"
-  },
+  }, 
+  "testType": "single", 
   "languages": {
     "java": {
-      "mainClass": "Main",
-      "taskClass": "B3694"
+      "taskClass": "B3694", 
+      "mainClass": "Main"
     }
-  },
-  "batch": {
-    "id": "571e87d5-7506-4049-8d81-920c1f1be93e",
-    "size": 1
+  }, 
+  "tests": [
+    {
+      "output": "1 2 3\n1 3 2 2 4\n3 2 1 1\n", 
+      "input": "3\n3\n1 2 3\n5\n1 6 2 2 7\n4\n-1 -2 -3 -3\n"
+    }
+  ], 
+  "input": {
+    "type": "stdin"
   }
 }
