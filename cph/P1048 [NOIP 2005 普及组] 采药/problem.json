@@ -1,0 +1,31 @@
+{
+  "group": "Luogu", 
+  "batch": {
+    "size": 1, 
+    "id": "ca0855f8-a3cb-49d0-9ff7-ec556ce952da"
+  }, 
+  "name": "P1048 [NOIP 2005 普及组] 采药", 
+  "url": "https://www.luogu.com.cn/problem/P1048", 
+  "timeLimit": 1000, 
+  "interactive": false, 
+  "memoryLimit": 125, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "testType": "single", 
+  "languages": {
+    "java": {
+      "taskClass": "P1048NOIP2005", 
+      "mainClass": "Main"
+    }
+  }, 
+  "tests": [
+    {
+      "output": "3\n", 
+      "input": "70 3\n71 100\n69 1\n1 2\n"
+    }
+  ], 
+  "input": {
+    "type": "stdin"
+  }
+}
