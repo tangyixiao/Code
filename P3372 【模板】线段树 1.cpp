@@ -598,6 +598,7 @@ signed main() {
 #pragma endregion MAIN
 #pragma endregion PREPROCESSOR
 namespace TANGYIXIAO {
+typedef long ll;
 const int N = 1e5 + 5;
 struct node {
     int v, lz;
@@ -622,10 +623,10 @@ inline void add(int l, int r, int k) {
     }
     if (l == r) {
     }
-    
+
     return;
 }
-inline void solve(int Task_Id) {
+inline inline void solve(int Task_Id) {
     cin >> n >> m;
     for (int i = 1; i <= n; i++) {
         cin >> a[i];
