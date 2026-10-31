@@ -1,0 +1,31 @@
+{
+  "group": "Luogu", 
+  "batch": {
+    "size": 1, 
+    "id": "a453b052-b3de-42b6-95f9-2284b667792f"
+  }, 
+  "name": "P1616 疯狂的采药", 
+  "url": "https://www.luogu.com.cn/problem/P1616", 
+  "timeLimit": 1000, 
+  "interactive": false, 
+  "memoryLimit": 128, 
+  "output": {
+    "type": "stdout"
+  }, 
+  "testType": "single", 
+  "languages": {
+    "java": {
+      "taskClass": "P1616", 
+      "mainClass": "Main"
+    }
+  }, 
+  "tests": [
+    {
+      "output": "140\n", 
+      "input": "70 3\n71 100\n69 1\n1 2\n"
+    }
+  ], 
+  "input": {
+    "type": "stdin"
+  }
+}
