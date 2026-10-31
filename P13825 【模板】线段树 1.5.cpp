@@ -598,35 +598,38 @@ signed main() {
 #pragma endregion PREPROCESSOR
 
 namespace TANGYIXIAO {
-const int N = 1e5 + 5;
+const int N = 6e6 + 5;
 struct node {
-    ll v, lz;
-} t[N << 2];
-int n, m;
-ll a[N], k;
+    i128 v;
+    ll lz;
+    int ls, rs;
+} t[N];
+int n, m, tot;
+ll k;
 inline void build(int l, int r, int id) {
-    if (l > r) {
-        return;
-    }
-    t[id].lz = 0;
-    if (l == r) {
-        t[id].v = a[l];
-        return;
-    }
-    build(l, (l + r) >> 1, id << 1);
-    build(((l + r) >> 1) + 1, r, id << 1 | 1);
-    t[id].v = t[id << 1].v + t[id << 1 | 1].v;
+    t[id].v = 1ll * (l + r) * (r - l + 1) / 2;
+    t[id].lz = 0, t[id].ls = 0, t[id].rs = 0;
     return;
 }
-inline void put(int l, int r, int id, ll k) {
+inline void put(int l, int r, int id, i128 k) {
     t[id].v += k * (r - l + 1), t[id].lz += k;
     return;
 }
 inline void down(int l, int r, int id) {
-    if (l < r && t[id].lz != 0) {
-        put(l, (l + r) >> 1, id << 1, t[id].lz);
-        put(((l + r) >> 1) + 1, r, id << 1 | 1, t[id].lz);
-        t[id].lz = 0;
+    if (l < r) {
+        if (!t[id].ls) {
+            t[id].ls = ++tot;
+            build(l, (l + r) >> 1, t[id].ls);
+        }
+        if (!t[id].rs) {
+            t[id].rs = ++tot;
+            build(((l + r) >> 1) + 1, r, t[id].rs);
+        }
+        if (t[id].lz != 0) {
+            put(l, (l + r) >> 1, t[id].ls, t[id].lz);
+            put(((l + r) >> 1) + 1, r, t[id].rs, t[id].lz);
+            t[id].lz = 0;
+        }
     }
     return;
 }
@@ -639,12 +642,12 @@ inline void add(int l, int r, int id, int L, int R, ll k) {
         return;
     }
     down(l, r, id);
-    add(l, (l + r) >> 1, id << 1, L, R, k);
-    add(((l + r) >> 1) + 1, r, id << 1 | 1, L, R, k);
-    t[id].v = t[id << 1].v + t[id << 1 | 1].v;
+    add(l, (l + r) >> 1, t[id].ls, L, R, k);
+    add(((l + r) >> 1) + 1, r, t[id].rs, L, R, k);
+    t[id].v = t[t[id].ls].v + t[t[id].rs].v;
     return;
 }
-inline ll query(int l, int r, int id, int L, int R) {
+inline i128 query(int l, int r, int id, int L, int R) {
     if (r < L || R < l) {
         return 0;
     }
@@ -652,14 +655,11 @@ inline ll query(int l, int r, int id, int L, int R) {
         return t[id].v;
     }
     down(l, r, id);
-    return query(l, (l + r) >> 1, id << 1, L, R) + query(((l + r) >> 1) + 1, r, id << 1 | 1, L, R);
+    return query(l, (l + r) >> 1, t[id].ls, L, R) + query(((l + r) >> 1) + 1, r, t[id].rs, L, R);
 }
 inline void solve(int Task_Id) {
     cin >> n >> m;
-    for (int i = 1; i <= n; i++) {
-        a[i] = i;
-    }
-    build(1, n, 1);
+    tot = 1, build(1, n, 1);
     for (int i = 1, op, x, y; i <= m; i++) {
         cin >> op >> x >> y;
         if (op == 1) {
